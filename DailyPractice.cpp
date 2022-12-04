@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
-//-------------------------------------------------------------- FIND NODE -------------------------------------------------------------
 
+//----------------------------------------------------- MIN VALUE IN A TREE ------------------------------------------------------
 template <typename T>
 class BTNode
 {
@@ -74,18 +74,37 @@ void printLevelOrder(BTNode<int> *root)
         q.pop();
     }
 }
-bool searchNode(BTNode<int> *root, int key){
-    int smallAnswer;
+int minValueInTree(BTNode<int>  *root, int minValue = INT_MAX){
     if(root == NULL)
-        return false;
-    if(root->data == key)
-        return true;
-    smallAnswer = searchNode(root->left, key);
-    if(smallAnswer) return true;
-    smallAnswer = searchNode(root->right, key);
-    if(smallAnswer) return true;
-    return false;
+        return 0;
+    if(root->data < minValue) 
+        minValue = root->data;
+    if(root->left != NULL) 
+        minValue = minValueInTree(root->left, minValue);
+    if(root->right != NULL) 
+        minValue = minValueInTree(root->right, minValue);
+    return minValue;
 }
+// int minValueInTreeOtherWay(BTNode<int>  *root){
+//     if(root == NULL)
+//         return 0;
+//     int leftTreeMinValue = INT_MAX;
+//     int rightTreeMinValue = INT_MAX;
+//     if(root->left != NULL)
+//         leftTreeMinValue = minValueInTreeOtherWay(root->left);
+//     if(root->right != NULL)
+//         rightTreeMinValue = minValueInTreeOtherWay(root->right);
+//     return min(min(leftTreeMinValue, rightTreeMinValue), root->data);
+// }
+
+int minValueInTreeOtherWay(BTNode<int>  *root){
+    if(root == NULL)
+        return INT_MAX;
+    int leftMin = minValueInTreeOtherWay(root->left);
+    int rightMin = minValueInTreeOtherWay(root->right);
+    return min(root->data, min(leftMin, rightMin));
+}
+
 // 3 9 20 -1 -1  15 7 -1 -1 -1 -1
 // 1 2 3 4 5 6 7 -1 -1 -1 -1 8 9 -1 -1 -1 -1 -1 -1
 // 1 2 3 4 5 6 -1 -1 -1 -1 -1 -1 -1
@@ -93,14 +112,116 @@ bool searchNode(BTNode<int> *root, int key){
 // 1 2 2 3 4 4 3 -1 -1 -1 -1 -1 -1 -1 -1
 // 1 2 2 -1 3 -1 3 -1 -1 -1 -1
 // 7 -64 -64 -1 -90 -90 -6 88 -44 68 -65 -76 68 -44 88 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
-// 1 2 3 4 5 -1 7 -1 -1 -1 6 -1 -1 -1 -1
+// 1 2 3 4 5 -1 7 -1 -1 -1 -6 -1 -1 -1 -1
+// 3 2 1 -1 -1 -1 -1
 int main()
 {
     BTNode<int> *root = takeInputLevelWise();
     cout << "Level Order Travelersal" << endl;
     printLevelOrder(root);
-    cout << "SearchNode : " << searchNode(root, 4);
+    cout << "MIN VALUE IN TREE : " << minValueInTreeOtherWay(root);
 }
+//-------------------------------------------------------------- FIND NODE -------------------------------------------------------------
+
+// template <typename T>
+// class BTNode
+// {
+// public:
+//     T data;
+//     BTNode<T> *left;
+//     BTNode<T> *right;
+//     BTNode(T data)
+//     {
+//         this->data = data;
+//         this->left = NULL;
+//         this->right = NULL;
+//     }
+//     ~BTNode()
+//     {
+//         delete left;
+//         delete right;
+//     }
+// };
+// BTNode<int> *takeInputLevelWise()
+// {
+//     queue<BTNode<int> *> q;
+//     int rootData;
+//     cout << "Enter Root Data : ";
+//     cin >> rootData;
+//     if (rootData == -1)
+//         return NULL;
+//     BTNode<int> *root = new BTNode<int>(rootData);
+//     q.push(root);
+//     while (!q.empty())
+//     {
+//         int leftChild, rightChild;
+//         cout << "Enter left child of " << q.front()->data << " : ";
+//         cin >> leftChild;
+//         cout << "Enter right child of " << q.front()->data << " : ";
+//         cin >> rightChild;
+//         if (leftChild != -1)
+//         {
+//             q.front()->left = new BTNode<int>(leftChild);
+//             q.push(q.front()->left);
+//         }
+//         if (rightChild != -1)
+//         {
+//             q.front()->right = new BTNode<int>(rightChild);
+//             q.push(q.front()->right);
+//         }
+//         q.pop();
+//     }
+//     return root;
+// }
+// void printLevelOrder(BTNode<int> *root)
+// {
+//     queue<BTNode<int> *> q;
+//     if (root != NULL)
+//         q.push(root);
+//     while (!q.empty())
+//     {
+//         cout << q.front()->data << " : ";
+//         if (q.front()->left != NULL)
+//         {
+//             cout << "Left : " << q.front()->left->data << ", ";
+//             q.push(q.front()->left);
+//         }
+//         if (q.front()->right != NULL)
+//         {
+//             cout << "Right : " << q.front()->right->data;
+//             q.push(q.front()->right);
+//         }
+//         cout << endl;
+//         q.pop();
+//     }
+// }
+// bool searchNode(BTNode<int> *root, int key){
+//     int smallAnswer;
+//     if(root == NULL)
+//         return false;
+//     if(root->data == key)
+//         return true;
+//     smallAnswer = searchNode(root->left, key);
+//     if(smallAnswer) return true;
+//     smallAnswer = searchNode(root->right, key);
+//     if(smallAnswer) return true;
+//     return false;
+// }
+// // 3 9 20 -1 -1  15 7 -1 -1 -1 -1
+// // 1 2 3 4 5 6 7 -1 -1 -1 -1 8 9 -1 -1 -1 -1 -1 -1
+// // 1 2 3 4 5 6 -1 -1 -1 -1 -1 -1 -1
+// // 4 7 12 8 -1 -1 7 5 9 -1 -1 -1 6 -1 -1 -1 -1
+// // 1 2 2 3 4 4 3 -1 -1 -1 -1 -1 -1 -1 -1
+// // 1 2 2 -1 3 -1 3 -1 -1 -1 -1
+// // 7 -64 -64 -1 -90 -90 -6 88 -44 68 -65 -76 68 -44 88 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+// // 1 2 3 4 5 -1 7 -1 -1 -1 6 -1 -1 -1 -1
+// int main()
+// {
+//     BTNode<int> *root = takeInputLevelWise();
+//     cout << "Level Order Travelersal" << endl;
+//     printLevelOrder(root);
+//     cout << "SearchNode : " << searchNode(root, 4);
+// }
 //-------------------------------------------------------------- 1704. Determine if String Halves Are Alike -------------------------------------------------------------
 // bool halvesAreAlike(string s)
 // {
