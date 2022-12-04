@@ -1,28 +1,128 @@
 #include <bits/stdc++.h>
 using namespace std;
+//-------------------------------------------------------------- FIND NODE -------------------------------------------------------------
 
-//-------------------------------------------------------------- 1704. Determine if String Halves Are Alike -------------------------------------------------------------
-bool halvesAreAlike(string s)
+template <typename T>
+class BTNode
 {
-    int n = s.size();
-    int leftHalfVowelCount = 0;
-    int rightHalfVowelCount = 0;
-    string lowerCharacterString = "";
-    for (int i = 0; i < s.size(); i++)
-        lowerCharacterString += tolower(s[i]);
-    for (int i = 0; i < n; i++)
+public:
+    T data;
+    BTNode<T> *left;
+    BTNode<T> *right;
+    BTNode(T data)
     {
-        if (lowerCharacterString[i] == 'a' || lowerCharacterString[i] == 'e' || lowerCharacterString[i] == 'i' || lowerCharacterString[i] == 'o' || lowerCharacterString[i] == 'u')
-        {
-            if (i < (n / 2))
-                leftHalfVowelCount++;
-            else
-                rightHalfVowelCount++;
-        }
+        this->data = data;
+        this->left = NULL;
+        this->right = NULL;
     }
-    if(leftHalfVowelCount == rightHalfVowelCount) return true;
+    ~BTNode()
+    {
+        delete left;
+        delete right;
+    }
+};
+BTNode<int> *takeInputLevelWise()
+{
+    queue<BTNode<int> *> q;
+    int rootData;
+    cout << "Enter Root Data : ";
+    cin >> rootData;
+    if (rootData == -1)
+        return NULL;
+    BTNode<int> *root = new BTNode<int>(rootData);
+    q.push(root);
+    while (!q.empty())
+    {
+        int leftChild, rightChild;
+        cout << "Enter left child of " << q.front()->data << " : ";
+        cin >> leftChild;
+        cout << "Enter right child of " << q.front()->data << " : ";
+        cin >> rightChild;
+        if (leftChild != -1)
+        {
+            q.front()->left = new BTNode<int>(leftChild);
+            q.push(q.front()->left);
+        }
+        if (rightChild != -1)
+        {
+            q.front()->right = new BTNode<int>(rightChild);
+            q.push(q.front()->right);
+        }
+        q.pop();
+    }
+    return root;
+}
+void printLevelOrder(BTNode<int> *root)
+{
+    queue<BTNode<int> *> q;
+    if (root != NULL)
+        q.push(root);
+    while (!q.empty())
+    {
+        cout << q.front()->data << " : ";
+        if (q.front()->left != NULL)
+        {
+            cout << "Left : " << q.front()->left->data << ", ";
+            q.push(q.front()->left);
+        }
+        if (q.front()->right != NULL)
+        {
+            cout << "Right : " << q.front()->right->data;
+            q.push(q.front()->right);
+        }
+        cout << endl;
+        q.pop();
+    }
+}
+bool searchNode(BTNode<int> *root, int key){
+    int smallAnswer;
+    if(root == NULL)
+        return false;
+    if(root->data == key)
+        return true;
+    smallAnswer = searchNode(root->left, key);
+    if(smallAnswer) return true;
+    smallAnswer = searchNode(root->right, key);
+    if(smallAnswer) return true;
     return false;
 }
+// 3 9 20 -1 -1  15 7 -1 -1 -1 -1
+// 1 2 3 4 5 6 7 -1 -1 -1 -1 8 9 -1 -1 -1 -1 -1 -1
+// 1 2 3 4 5 6 -1 -1 -1 -1 -1 -1 -1
+// 4 7 12 8 -1 -1 7 5 9 -1 -1 -1 6 -1 -1 -1 -1
+// 1 2 2 3 4 4 3 -1 -1 -1 -1 -1 -1 -1 -1
+// 1 2 2 -1 3 -1 3 -1 -1 -1 -1
+// 7 -64 -64 -1 -90 -90 -6 88 -44 68 -65 -76 68 -44 88 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+// 1 2 3 4 5 -1 7 -1 -1 -1 6 -1 -1 -1 -1
+int main()
+{
+    BTNode<int> *root = takeInputLevelWise();
+    cout << "Level Order Travelersal" << endl;
+    printLevelOrder(root);
+    cout << "SearchNode : " << searchNode(root, 4);
+}
+//-------------------------------------------------------------- 1704. Determine if String Halves Are Alike -------------------------------------------------------------
+// bool halvesAreAlike(string s)
+// {
+//     int n = s.size();
+//     int leftHalfVowelCount = 0;
+//     int rightHalfVowelCount = 0;
+//     string lowerCharacterString = "";
+//     for (int i = 0; i < s.size(); i++)
+//         lowerCharacterString += tolower(s[i]);
+//     for (int i = 0; i < n; i++)
+//     {
+//         if (lowerCharacterString[i] == 'a' || lowerCharacterString[i] == 'e' || lowerCharacterString[i] == 'i' || lowerCharacterString[i] == 'o' || lowerCharacterString[i] == 'u')
+//         {
+//             if (i < (n / 2))
+//                 leftHalfVowelCount++;
+//             else
+//                 rightHalfVowelCount++;
+//         }
+//     }
+//     if(leftHalfVowelCount == rightHalfVowelCount) return true;
+//     return false;
+// }
 //-------------- Wrong Answer--------------
 // bool halvesAreAlike(string s)
 // {
@@ -60,11 +160,11 @@ bool halvesAreAlike(string s)
 //     return true;
 // }
 //------------------------------------
-int main()
-{
-    string str = "book";
-    cout << halvesAreAlike(str);
-}
+// int main()
+// {
+//     string str = "book";
+//     cout << halvesAreAlike(str);
+// }
 
 //--------------------------------------------------------------101. Symmetric Tree -------------------------------------------------------------
 
