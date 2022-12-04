@@ -1,104 +1,137 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//------------------------------------------------------------ Count Leaf Nodes ----------------------------------------------------------
-template <typename T>
-class BTNode
+//------------------------------------------------------------ 2256. Minimum Average Difference ----------------------------------------------------------
+int minimumAverageDifference(vector<int> &nums)
 {
-public:
-    T data;
-    BTNode<T> *left;
-    BTNode<T> *right;
-    BTNode(T data)
-    {
-        this->data = data;
-        this->left = NULL;
-        this->right = NULL;
-    }
-    ~BTNode()
-    {
-        delete left;
-        delete right;
-    }
-};
-BTNode<int> *takeInputLevelWise()
-{
-    queue<BTNode<int> *> q;
-    int rootData;
-    cout << "Enter Root Data : ";
-    cin >> rootData;
-    if (rootData == -1)
-        return NULL;
-    BTNode<int> *root = new BTNode<int>(rootData);
-    q.push(root);
-    while (!q.empty())
-    {
-        int leftChild, rightChild;
-        cout << "Enter left child of " << q.front()->data << " : ";
-        cin >> leftChild;
-        cout << "Enter right child of " << q.front()->data << " : ";
-        cin >> rightChild;
-        if (leftChild != -1)
-        {
-            q.front()->left = new BTNode<int>(leftChild);
-            q.push(q.front()->left);
+    int totalSum = 0;
+    for(auto item : nums)
+        totalSum += item;
+    int n = nums.size();
+    int minimumAverageIndex = 0;
+    int currentMinimumAverage = INT_MAX;
+    int leftSideSum = 0;
+    int rightSideSum = 0;
+    int currentAverage ;
+    for(int i = 0; i < n; i++){
+        leftSideSum += nums[i];
+        rightSideSum = totalSum - leftSideSum;
+        if(rightSideSum == 0){
+            currentAverage = abs(abs(leftSideSum/(i+1)) - rightSideSum);
         }
-        if (rightChild != -1)
-        {
-            q.front()->right = new BTNode<int>(rightChild);
-            q.push(q.front()->right);
+        else{
+            currentAverage = abs(abs(leftSideSum/(i+1)) - abs(rightSideSum / (n-i-1)));
         }
-        q.pop();
+        if(currentAverage < currentMinimumAverage){
+            currentMinimumAverage = currentAverage;
+            minimumAverageIndex = i;
+        }
     }
-    return root;
+    return minimumAverageIndex;
 }
-void printLevelOrder(BTNode<int> *root)
-{
-    queue<BTNode<int> *> q;
-    if (root != NULL)
-        q.push(root);
-    while (!q.empty())
-    {
-        cout << q.front()->data << " : ";
-        if (q.front()->left != NULL)
-        {
-            cout << "Left : " << q.front()->left->data << ", ";
-            q.push(q.front()->left);
-        }
-        if (q.front()->right != NULL)
-        {
-            cout << "Right : " << q.front()->right->data;
-            q.push(q.front()->right);
-        }
-        cout << endl;
-        q.pop();
-    }
-}
-int countLeafNodes(BTNode<int> *root){
-    if(root == NULL)
-        return 0;
-    int leftSubTreeLeafNodes = countLeafNodes(root->left);
-    int rightSubTreeLeafNodes = countLeafNodes(root->right);
-    if(root->left == NULL && root->right == NULL)
-        return 1+leftSubTreeLeafNodes+rightSubTreeLeafNodes;
-    return leftSubTreeLeafNodes+rightSubTreeLeafNodes; 
-}
-// 3 9 20 -1 -1  15 7 -1 -1 -1 -1
-// 1 2 3 4 5 6 7 -1 -1 -1 -1 8 9 -1 -1 -1 -1 -1 -1
-// 1 2 3 4 5 6 -1 -1 -1 -1 -1 -1 -1
-// 4 7 12 8 -1 -1 7 5 9 -1 -1 -1 6 -1 -1 -1 -1
-// 1 2 2 3 4 4 3 -1 -1 -1 -1 -1 -1 -1 -1
-// 1 2 2 -1 3 -1 3 -1 -1 -1 -1
-// 7 -64 -64 -1 -90 -90 -6 88 -44 68 -65 -76 68 -44 88 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
-// 1 2 3 4 5 -1 7 -1 -1 -1 90 -1 -1 -1 -1
-// 3 2 1 -1 -1 -1 -1
 int main()
 {
-    BTNode<int> *root = takeInputLevelWise();
-    cout << "Level Order Travelersal" << endl;
-    printLevelOrder(root);
-    cout << "Count Leaf Node : " << countLeafNodes(root);
+    vector<int> nums {0};
+    cout << minimumAverageDifference(nums);
 }
+//------------------------------------------------------------ Count Leaf Nodes ----------------------------------------------------------
+// template <typename T>
+// class BTNode
+// {
+// public:
+//     T data;
+//     BTNode<T> *left;
+//     BTNode<T> *right;
+//     BTNode(T data)
+//     {
+//         this->data = data;
+//         this->left = NULL;
+//         this->right = NULL;
+//     }
+//     ~BTNode()
+//     {
+//         delete left;
+//         delete right;
+//     }
+// };
+// BTNode<int> *takeInputLevelWise()
+// {
+//     queue<BTNode<int> *> q;
+//     int rootData;
+//     cout << "Enter Root Data : ";
+//     cin >> rootData;
+//     if (rootData == -1)
+//         return NULL;
+//     BTNode<int> *root = new BTNode<int>(rootData);
+//     q.push(root);
+//     while (!q.empty())
+//     {
+//         int leftChild, rightChild;
+//         cout << "Enter left child of " << q.front()->data << " : ";
+//         cin >> leftChild;
+//         cout << "Enter right child of " << q.front()->data << " : ";
+//         cin >> rightChild;
+//         if (leftChild != -1)
+//         {
+//             q.front()->left = new BTNode<int>(leftChild);
+//             q.push(q.front()->left);
+//         }
+//         if (rightChild != -1)
+//         {
+//             q.front()->right = new BTNode<int>(rightChild);
+//             q.push(q.front()->right);
+//         }
+//         q.pop();
+//     }
+//     return root;
+// }
+// void printLevelOrder(BTNode<int> *root)
+// {
+//     queue<BTNode<int> *> q;
+//     if (root != NULL)
+//         q.push(root);
+//     while (!q.empty())
+//     {
+//         cout << q.front()->data << " : ";
+//         if (q.front()->left != NULL)
+//         {
+//             cout << "Left : " << q.front()->left->data << ", ";
+//             q.push(q.front()->left);
+//         }
+//         if (q.front()->right != NULL)
+//         {
+//             cout << "Right : " << q.front()->right->data;
+//             q.push(q.front()->right);
+//         }
+//         cout << endl;
+//         q.pop();
+//     }
+// }
+// int countLeafNodes(BTNode<int> *root){
+//     if(root == NULL)
+//         return 0;
+//     int leftSubTreeLeafNodes = countLeafNodes(root->left);
+//     int rightSubTreeLeafNodes = countLeafNodes(root->right);
+//     if(root->left == NULL && root->right == NULL)
+//         return 1+leftSubTreeLeafNodes+rightSubTreeLeafNodes;
+//     return leftSubTreeLeafNodes+rightSubTreeLeafNodes;
+// }
+// // 3 9 20 -1 -1  15 7 -1 -1 -1 -1
+// // 1 2 3 4 5 6 7 -1 -1 -1 -1 8 9 -1 -1 -1 -1 -1 -1
+// // 1 2 3 4 5 6 -1 -1 -1 -1 -1 -1 -1
+// // 4 7 12 8 -1 -1 7 5 9 -1 -1 -1 6 -1 -1 -1 -1
+// // 1 2 2 3 4 4 3 -1 -1 -1 -1 -1 -1 -1 -1
+// // 1 2 2 -1 3 -1 3 -1 -1 -1 -1
+// // 7 -64 -64 -1 -90 -90 -6 88 -44 68 -65 -76 68 -44 88 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+// // 1 2 3 4 5 -1 7 -1 -1 -1 90 -1 -1 -1 -1
+// // 3 2 1 -1 -1 -1 -1
+// int main()
+// {
+//     BTNode<int> *root = takeInputLevelWise();
+//     cout << "Level Order Travelersal" << endl;
+//     printLevelOrder(root);
+//     cout << "Count Leaf Node : " << countLeafNodes(root);
+// }
 // //------------------------------------------------------------ MAX VALUE IN A TREE ----------------------------------------------------------
 // template <typename T>
 // class BTNode
@@ -280,11 +313,11 @@ int main()
 // int minValueInTree(BTNode<int>  *root, int minValue = INT_MAX){
 //     if(root == NULL)
 //         return 0;
-//     if(root->data < minValue) 
+//     if(root->data < minValue)
 //         minValue = root->data;
-//     if(root->left != NULL) 
+//     if(root->left != NULL)
 //         minValue = minValueInTree(root->left, minValue);
-//     if(root->right != NULL) 
+//     if(root->right != NULL)
 //         minValue = minValueInTree(root->right, minValue);
 //     return minValue;
 // }
