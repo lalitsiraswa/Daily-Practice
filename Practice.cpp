@@ -4,8 +4,169 @@ using namespace std;
 
 int main()
 {
-    cout << max(5, 5);
+    unordered_map<int, int> umap;
+    umap.insert(pair<int, int>(1, 1));
+    umap.insert(pair<int, int>(2, 2));
+    umap.insert(pair<int, int>(3, 3));
+    umap.insert(pair<int, int>(4, 4));
+    umap.erase(3);
+    for (auto item : umap)
+        cout << item.first << " : " << item.second << endl;
 }
+
+//--------------------------------------------------------------------
+// struct Interval
+// {
+//     int start, end;
+// };
+// bool compareInterval(Interval i1, Interval i2)
+// {
+//     return (i1.start < i2.start);
+// }
+// int main()
+// {
+//     Interval arr[] = {{6, 8}, {1, 9}, {2, 4}, {4, 7}};
+//     int n = sizeof(arr) / sizeof(arr[0]);
+//     sort(arr, arr + n, compareInterval);
+//     for (int i = 0; i < n; i++)
+//         cout << arr[i].start << " : " << arr[i].end << endl;
+// }
+//--------------------------------------------------------------------
+
+// int main()
+// {
+//     cout << "Hello World" << endl;;
+//     int limit = 25;
+//     int sum = 60;
+//     int helper = 0;
+//     double randomValue = 2.77;
+//     for(int var = 1; var < limit; var = var + 3){
+//         cout << "randomValue : " << randomValue << endl;
+//         for(int j = 1; j < limit; j = j+2){
+//             sum++;
+//             helper++;
+//         }
+//         cout << "Sum : " << sum << endl;
+//     }
+//     cout << "helper : " << helper << endl;
+// }
+
+//--------------------------------------------------------------------
+// int main()
+// {
+//     set<int> s = {1, 2, 3, 4, 8, 9, 10, 34, 55};
+//     set<int>::iterator current, previous;
+//     for (current = ++s.begin(), previous = s.begin(); current != s.end(); current++, previous++)
+//     {
+//         cout << *previous << "  :  " << *current << endl;
+//     }
+// }
+
+//---------------------------------------------------------------------
+// string sortStr(string str)
+// {
+//     string sortedStr;
+//     int counter[26] = {0};
+//     for (auto &ch : str)
+//         counter[ch - 97]++;
+//     for (int i = 0; i < 26; i++)
+//         sortedStr += string(counter[i], i + 97);
+//     return sortedStr;
+// }
+//---------------------------------------------------------------------
+// int main()
+// {
+//     // string str = "aabbcde";
+//     string str = "wwwbbw";
+//     int n = str.size();
+//     string answer = "";
+//     string challengeToken = "9e3cnrz2s5";
+//     int counter = 1, i;
+//     for (i = 1; i < n; i++)
+//     {
+//         if (str[i - 1] == str[i])
+//             counter++;
+//         else
+//         {
+//             answer.push_back(counter + 48);
+//             answer.push_back(str[i - 1]);
+//             counter = 1;
+//         }
+//     }
+//     answer.push_back(counter + 48);
+//     answer.push_back(str[i - 1]);
+//     answer.append(challengeToken);
+//     counter = 0;
+//     n = answer.length();
+//     string finalOutput = "";
+//     i = 0;
+//     while (i < n)
+//     {
+//         counter++;
+//         if (counter == 4)
+//         {
+//             finalOutput.push_back('_');
+//             counter = 0;
+//         }
+//         else
+//             finalOutput.push_back(answer[i]);
+//         i++;
+//     }
+//     return finalOutput;
+// }
+
+//----------------------------------------------------------------
+// int main()
+// {
+//     string sen = "fun&!! time";
+//     // string sen = "I love dogs";
+//     int n = sen.size();
+//     string previousString = "", currentString = "";
+//     string challengeToken = "9e3cnrz2s5";
+//     for (int i = 0; i < n; i++)
+//     {
+//         if ((sen[i] >= 'a' && sen[i] <= 'z') || (sen[i] >= 'A' && sen[i] <= 'Z') || (sen[i] >= 48 && sen[i] <= 57))
+//             currentString.push_back(sen[i]);
+//         else if (currentString.length() > previousString.length())
+//         {
+//             previousString = currentString;
+//             currentString.clear();
+//         }
+//     }
+//     if (currentString.length() > previousString.length())
+//         previousString = currentString;
+// previousString.append(challengeToken);
+// cout << previousString << endl;
+// int counter = 0;
+// n = previousString.length();
+// string finalOutput = "";
+// int i = 0;
+// while (i < n)
+// {
+//     counter++;
+//     if (counter == 4)
+//     {
+//         finalOutput.push_back('_');
+//         counter = 0;
+//     }
+//     else
+//         finalOutput.push_back(previousString[i]);
+//     i++;
+// }
+// return finalOutput;
+// }
+
+//-----------------------------------------------------
+// int main()
+// {
+//     // int *ptr = new int(10);
+//     int *ptr = new int;
+//     cout << "Address : " << ptr << endl;
+//     cout << "Value : " << *ptr << endl;
+//     *ptr = 10;
+//     cout << "Value : " << *ptr << endl;
+//     cout << "Address : " << ptr << endl;
+// }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 // int main()
