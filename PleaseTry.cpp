@@ -2,35 +2,59 @@
 #include <typeinfo>
 using namespace std;
 
-void findSubSequence(string &s, vector<string> &subSequences)
+// --------------------------------------------------------------- 1539. Kth Missing Positive Number -----------------------------------------------------
+int findKthPositive(vector<int> &nums, int k)
 {
-    int n = s.size();
-    for (int num = 0; num < pow(2, n); num++)
+    int n = nums.size(), targetValue = 1, index = 0, counter = 0;
+    while (1)
     {
-        string subSequence = "";
-        for (int i = 0; i < n; i++)
-        {
-            if (num & (1 << i))
-                subSequence += s[i];
-        }
-        subSequences.push_back(subSequence);
+        if (index < n && targetValue == nums[index])
+            index++;
+        else
+            counter++;
+        if (counter == k)
+            break;
+        targetValue++;
     }
+    return targetValue;
 }
 int main()
 {
-    string s = "ABC";
-    vector<string> subSequences;
-    findSubSequence(s, subSequences);
-    for (int i = 0; i < subSequences.size(); i++)
-    {
-        for (int j = 0; j < subSequences[i].size(); j++)
-        {
-            cout << subSequences[i][j] << " ";
-        }
-        cout << endl;
-    }
+    vector<int> nums = {2, 3, 4, 7, 11};
+    cout << findKthPositive(nums, 5) << endl;
     return 0;
 }
+
+// -----------------------------------------------------------------------------------
+// void findSubSequence(string &s, vector<string> &subSequences)
+// {
+//     int n = s.size();
+//     for (int num = 0; num < pow(2, n); num++)
+//     {
+//         string subSequence = "";
+//         for (int i = 0; i < n; i++)
+//         {
+//             if (num & (1 << i))
+//                 subSequence += s[i];
+//         }
+//         subSequences.push_back(subSequence);
+//     }
+// }
+// int main()
+// {
+//     string s = "ABC";
+//     vector<string> subSequences;
+//     findSubSequence(s, subSequences);
+//     for (int i = 0; i < subSequences.size(); i++)
+//     {
+//         for (int j = 0; j < subSequences[i].size(); j++)
+//         {
+//             cout << subSequences[i][j] << " ";
+//         }
+//         cout << endl;
+//     }
+//     return 0;
+// }
 
 // --------------------------------------------------------------------------------
 // void printAllSubSequences(vector<int> &nums, int index)

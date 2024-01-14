@@ -2009,11 +2009,72 @@ int LongestCommonSubsequenceTabulation(string &str1, string &str2)
     }
     return dp[n][m];
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string str1 = "ace";
+//     string str2 = "abcde";
+//     cout << LongestCommonSubsequenceTabulation(str1, str2) << endl;
+//     cout << string(35, '-') << endl;
+// }
+// -------------------------------------------------------------- Climbing Stairs --------------------------------------------------------------------
+// --------------------- TLE ------------------------
+void ClimbStairsRecursion(int n, int &distinctWays)
+{
+    if (n == 0)
+    {
+        distinctWays++;
+        return;
+    }
+    if (n < 0)
+        return;
+    // Take 1 Step
+    ClimbStairsRecursion(n - 1, distinctWays);
+    // Take 2 Step
+    ClimbStairsRecursion(n - 2, distinctWays);
+}
+int ClimbStairs(int n)
+{
+    int distinctWays = 0;
+    ClimbStairsRecursion(n, distinctWays);
+    return distinctWays;
+}
+// -------------------- MEMOIZATION ------------------------
+int ClimbStairsMemoization(int n, vector<int> &dp)
+{
+    if (n == 0)
+        return 1;
+    if (n < 0)
+        return 0;
+    if (dp[n] != -1)
+        return dp[n];
+    // Take 1 Step
+    // Take 2 Step
+    return dp[n] = ClimbStairsMemoization(n - 1, dp) + ClimbStairsMemoization(n - 2, dp);
+}
+int ClimbStairsMemo(int n)
+{
+    int distinctWays = 0;
+    vector<int> dp(n + 1, -1);
+    return ClimbStairsMemoization(n, dp);
+}
+// ---------------------- TABULATION ----------------------
+int ClimbStairsTabulation(int n)
+{
+    vector<int> dp(n + 1);
+    // Base Cases
+    dp[0] = 1;
+    dp[1] = 1;
+    for (int i = 2; i <= n; i++)
+    {
+        // Take 1 Step + Take 2 Steps
+        dp[i] = dp[i - 1] + dp[i - 2];
+    }
+    return dp[n];
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    string str1 = "ace";
-    string str2 = "abcde";
-    cout << LongestCommonSubsequenceTabulation(str1, str2) << endl;
+    cout << ClimbStairsTabulation(4) << endl;
     cout << string(35, '-') << endl;
 }
