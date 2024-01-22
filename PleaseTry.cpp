@@ -2,28 +2,106 @@
 #include <typeinfo>
 using namespace std;
 
-// --------------------------------------------------------------- 1539. Kth Missing Positive Number -----------------------------------------------------
-int findKthPositive(vector<int> &nums, int k)
+// --------------------------------------------------------------------- 11. Container With Most Water -----------------------------------------------------
+// Brute Force Approach - TLE
+int maxAreaBruteForce(vector<int> &height)
 {
-    int n = nums.size(), targetValue = 1, index = 0, counter = 0;
-    while (1)
+    int maxAmountWater = 0;
+    for (int leftPointer = 0; leftPointer < height.size(); leftPointer++)
     {
-        if (index < n && targetValue == nums[index])
-            index++;
-        else
-            counter++;
-        if (counter == k)
-            break;
-        targetValue++;
+        for (int rightPointer = leftPointer + 1; rightPointer < height.size(); rightPointer++)
+        {
+            int maxWaterCanFillBetween = min(height[leftPointer], height[rightPointer]);
+            int currMaxWater = (rightPointer - leftPointer) * maxWaterCanFillBetween;
+            if (currMaxWater > maxAmountWater)
+                maxAmountWater = currMaxWater;
+        }
     }
-    return targetValue;
+    return maxAmountWater;
+}
+// -----------------------------
+int maxArea(vector<int> &height)
+{
+    int n = height.size(), mostWaterLevel = 0, maxWaterCanFillBetween = 0;
+    int left = 0, right = n - 1;
+    while (left < right)
+    {
+        maxWaterCanFillBetween = min(height[left], height[right]);
+        mostWaterLevel = max(mostWaterLevel, (right - left) * maxWaterCanFillBetween);
+        if (height[left] < height[right])
+            left++;
+        else
+            right--;
+    }
+    return mostWaterLevel;
 }
 int main()
 {
-    vector<int> nums = {2, 3, 4, 7, 11};
-    cout << findKthPositive(nums, 5) << endl;
+    cout << string(35, '-') << endl;
+    vector<int> height = {1, 8, 6, 2, 5, 4, 8, 3, 7};
+    // vector<int> height = {1, 1};
+    cout << "Max Amount Water : " << maxArea(height) << endl;
+    cout << endl
+         << string(35, '-') << endl;
     return 0;
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// void printArray(int n, int *arr)
+// {
+//     for (int i = 0; i < n; i++)
+//         cout << arr[i] << " ";
+// }
+
+// int main()
+// {
+//     int arr[5] = {2, 4, 6, 8, 10};
+//     int n = sizeof(arr) / sizeof(arr[0]);
+//     printArray(n, arr);
+//     return 0;
+// }
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+// int main()
+// {
+//     vector<int> nums[5];
+//     for (int i = 0; i < 5; i++)
+//     {
+//         for (int j = 0; j <= i; j++)
+//             nums[i].push_back(j);
+//     }
+//     for (int i = 0; i < 5; i++)
+//     {
+//         for (auto item : nums[i])
+//             cout << item << " ";
+//         cout << endl;
+//     }
+//     return 0;
+// }
+
+// --------------------------------------------------------------- 1539. Kth Missing Positive Number -----------------------------------------------------
+// int findKthPositive(vector<int> &nums, int k)
+// {
+//     int n = nums.size(), targetValue = 1, index = 0, counter = 0;
+//     while (1)
+//     {
+//         if (index < n && targetValue == nums[index])
+//             index++;
+//         else
+//             counter++;
+//         if (counter == k)
+//             break;
+//         targetValue++;
+//     }
+//     return targetValue;
+// }
+// int main()
+// {
+//     vector<int> nums = {2, 3, 4, 7, 11};
+//     cout << findKthPositive(nums, 5) << endl;
+//     return 0;
+// }
 
 // -----------------------------------------------------------------------------------
 // void findSubSequence(string &s, vector<string> &subSequences)
