@@ -237,7 +237,7 @@ ListNode *findMid(ListNode *head)
     {
         temp = temp->next;
         index_counter++;
-        if(index_counter % 2 != 0)
+        if (index_counter % 2 != 0)
             middleNode = middleNode->next;
     }
     return middleNode;

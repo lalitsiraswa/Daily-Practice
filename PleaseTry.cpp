@@ -2,6 +2,17 @@
 #include <typeinfo>
 using namespace std;
 
+void fun(int *arr)
+{
+    cout << arr[1] << endl;
+}
+int main()
+{
+    int arr[] = {2, 4, 6, 8, 10};
+    fun(arr);
+    return 0;
+}
+
 // --------------------------------------------------------------------- 11. Container With Most Water -----------------------------------------------------
 // Brute Force Approach - TLE
 int maxAreaBruteForce(vector<int> &height)
@@ -35,16 +46,16 @@ int maxArea(vector<int> &height)
     }
     return mostWaterLevel;
 }
-int main()
-{
-    cout << string(35, '-') << endl;
-    vector<int> height = {1, 8, 6, 2, 5, 4, 8, 3, 7};
-    // vector<int> height = {1, 1};
-    cout << "Max Amount Water : " << maxArea(height) << endl;
-    cout << endl
-         << string(35, '-') << endl;
-    return 0;
-}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> height = {1, 8, 6, 2, 5, 4, 8, 3, 7};
+//     // vector<int> height = {1, 1};
+//     cout << "Max Amount Water : " << maxArea(height) << endl;
+//     cout << endl
+//          << string(35, '-') << endl;
+//     return 0;
+// }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
