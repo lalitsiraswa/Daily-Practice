@@ -245,7 +245,7 @@ bool isCycleDirectedGraph(int V, vector<int> *adjacencyList)
     }
     return false;
 }
-// --------------- Cycle Detection - Kahn's Algorithm (Topological Sort | BFS) ---------------- 
+// --------------- Cycle Detection - Kahn's Algorithm (Topological Sort | BFS) ----------------
 vector<char> TOPOLOGICAL_SORT(vector<vector<char>> &dependencies)
 {
     vector<char> sortedOrder = {};
@@ -301,3 +301,53 @@ vector<char> TOPOLOGICAL_SORT(vector<vector<char>> &dependencies)
 //          << string(35, '-');
 //     return 0;
 // }
+// ---------------------------------------------------------------- 743. Network Delay Time ------------------------------------------------------------------
+void bfsCall(vector<vector<pair<int, int>>> &adjacencyList, vector<int> &isVisited, int k)
+{
+    queue<int> que;
+    que.push(k);
+    isVisited[k] = 0;
+    while (!que.empty())
+    {
+        int top = que.front();
+        int distanceTillNow = isVisited[top];
+        que.pop();
+        for (pair<int, int> item : adjacencyList[top])
+        {
+            if (isVisited[item.first] == INT_MAX || (item.second + distanceTillNow) < isVisited[item.first])
+            {
+                que.push(item.first);
+                isVisited[item.first] = min(item.second + distanceTillNow, isVisited[item.first]);
+            }
+        }
+    }
+}
+int networkDelayTime(vector<vector<int>> &times, int n, int k)
+{
+    vector<vector<pair<int, int>>> adjacencyList(n + 1);
+    vector<int> isVisited(n + 1, INT_MAX);
+    for (int i = 0; i < times.size(); i++)
+        adjacencyList[times[i][0]].push_back({make_pair(times[i][1], times[i][2])});
+    bfsCall(adjacencyList, isVisited, k);
+    int maxDistance = INT_MIN;
+    for (int i = 1; i <= n; i++)
+    {
+        if (isVisited[i] == INT_MAX)
+            return -1;
+        maxDistance = max(maxDistance, isVisited[i]);
+    }
+    return maxDistance;
+}
+int main()
+{
+    cout << string(35, '-') << endl;
+    // vector<vector<int>> times = {{2, 1, 1}, {3, 2, 1}, {3, 4, 2}};
+    // vector<vector<int>> times = {{1, 2, 1}, {2, 3, 1}, {3, 5, 2}};
+    // vector<vector<int>> times = {{1, 2, 1}, {2, 3, 2}, {1, 3, 4}};
+    vector<vector<int>> times = {{1, 2, 1}, {2, 1, 3}};
+    int n = 2, k = 2;
+    cout << networkDelayTime(times, n, k);
+    cout << endl
+         << string(35, '-');
+    return 0;
+}

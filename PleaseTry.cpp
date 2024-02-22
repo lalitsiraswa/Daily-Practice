@@ -2,16 +2,32 @@
 #include <typeinfo>
 using namespace std;
 
+int main()
+{
+    string s = "LALIT";
+    cout << s << endl;
+    s.append(" S");
+    cout << s << endl;
+    s.push_back('I');
+    cout << s << endl;
+    cout << s.front() << endl;
+    cout << s.back() << endl;
+    s.pop_back();
+    cout << s << endl;
+    return 0;
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------
 void fun(int *arr)
 {
     cout << arr[1] << endl;
 }
-int main()
-{
-    int arr[] = {2, 4, 6, 8, 10};
-    fun(arr);
-    return 0;
-}
+// int main()
+// {
+//     int arr[] = {2, 4, 6, 8, 10};
+//     fun(arr);
+//     return 0;
+// }
 
 // --------------------------------------------------------------------- 11. Container With Most Water -----------------------------------------------------
 // Brute Force Approach - TLE
