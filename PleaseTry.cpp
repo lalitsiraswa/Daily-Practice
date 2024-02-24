@@ -4,18 +4,40 @@ using namespace std;
 
 int main()
 {
-    string s = "LALIT";
-    cout << s << endl;
-    s.append(" S");
-    cout << s << endl;
-    s.push_back('I');
-    cout << s << endl;
-    cout << s.front() << endl;
-    cout << s.back() << endl;
-    s.pop_back();
-    cout << s << endl;
+    // vector<int> vect = {2, 4, 6, 8, 10};
+    // for (int item : vect)
+    // {
+    //     cout << item << " ";
+    // }
+    // cout << endl;
+    // vector<vector<int>> vect1 = {{1, 2}, {3, 4}};
+    // for (vector<int> item : vect1)
+    // {
+    //     cout << item[0] << "  " << item[1] << endl;
+    // }
+    vector<vector<vector<int>>> vect3 = {{{1, 2}, {3, 4}}, {{4, 5}, {6, 7}}};
+    for (vector<vector<int>> item : vect3)
+    {
+        
+    }
     return 0;
 }
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
+// int main()
+// {
+//     string s = "LALIT";
+//     cout << s << endl;
+//     s.append(" S");
+//     cout << s << endl;
+//     s.push_back('I');
+//     cout << s << endl;
+//     cout << s.front() << endl;
+//     cout << s.back() << endl;
+//     s.pop_back();
+//     cout << s << endl;
+//     return 0;
+// }
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------
 void fun(int *arr)
