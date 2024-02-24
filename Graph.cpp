@@ -301,42 +301,58 @@ vector<char> TOPOLOGICAL_SORT(vector<vector<char>> &dependencies)
 //          << string(35, '-');
 //     return 0;
 // }
-// ---------------------------------------------------------------- 743. Network Delay Time ------------------------------------------------------------------
-void bfsCall(vector<vector<pair<int, int>>> &adjacencyList, vector<int> &isVisited, int k)
+// -------------------------------------------------- Dijkstra's Algorithm - Using Priority Queue - C++ and Java - Part 1------------------------------------
+vector<int> dijkstra(int V, vector<vector<int>> adjacencyList[], int S)
 {
-    queue<int> que;
-    que.push(k);
-    isVisited[k] = 0;
-    while (!que.empty())
+    // Create a priority queue for storing the nodes as a pair {dist,node}
+    // where dist is the distance from source to the node.
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    // Initialising distTo list with a large number to
+    // indicate the nodes are unvisited initially.
+    // This list contains distance from source to the nodes.
+    vector<int> distTo(V, INT_MAX);
+    // Source initialised with dist=0.
+    distTo[S] = 0;
+    pq.push(make_pair(0, S));
+    // Now, pop the minimum distance node first from the min-heap
+    // and traverse for all its adjacent nodes.
+    while (!pq.empty())
     {
-        int top = que.front();
-        int distanceTillNow = isVisited[top];
-        que.pop();
-        for (pair<int, int> item : adjacencyList[top])
+        int node = pq.top().second;
+        int distance = pq.top().first;
+        pq.pop();
+        // Check for all adjacent nodes of the popped out
+        // element whether the prev dist is larger than current or not.
+        for (vector<int> item : adjacencyList[node])
         {
-            if (isVisited[item.first] == INT_MAX || (item.second + distanceTillNow) < isVisited[item.first])
+            int neighbour = item[0];
+            int weight = item[1];
+            if (distance + weight < distTo[neighbour])
             {
-                que.push(item.first);
-                isVisited[item.first] = min(item.second + distanceTillNow, isVisited[item.first]);
+                distTo[neighbour] = weight + distance;
+                // If current distance is smaller,
+                // push it into the queue.
+                pq.push(make_pair(distance + weight, neighbour));
             }
         }
     }
+    // Return the list containing shortest distances
+    // from source to all the nodes.
+    return distTo;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------- 743. Network Delay Time ------------------------------------------------------------------
+void dijkstraCall()
+{
 }
 int networkDelayTime(vector<vector<int>> &times, int n, int k)
 {
-    vector<vector<pair<int, int>>> adjacencyList(n + 1);
-    vector<int> isVisited(n + 1, INT_MAX);
-    for (int i = 0; i < times.size(); i++)
-        adjacencyList[times[i][0]].push_back({make_pair(times[i][1], times[i][2])});
-    bfsCall(adjacencyList, isVisited, k);
-    int maxDistance = INT_MIN;
-    for (int i = 1; i <= n; i++)
-    {
-        if (isVisited[i] == INT_MAX)
-            return -1;
-        maxDistance = max(maxDistance, isVisited[i]);
-    }
-    return maxDistance;
 }
 int main()
 {
