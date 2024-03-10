@@ -2,17 +2,17 @@
 #include <algorithm>
 using namespace std;
 
-int main()
-{
-    unordered_map<int, int> umap;
-    umap.insert(pair<int, int>(1, 1));
-    umap.insert(pair<int, int>(2, 2));
-    umap.insert(pair<int, int>(3, 3));
-    umap.insert(pair<int, int>(4, 4));
-    umap.erase(3);
-    for (auto item : umap)
-        cout << item.first << " : " << item.second << endl;
-}
+// int main()
+// {
+//     unordered_map<int, int> umap;
+//     umap.insert(pair<int, int>(1, 1));
+//     umap.insert(pair<int, int>(2, 2));
+//     umap.insert(pair<int, int>(3, 3));
+//     umap.insert(pair<int, int>(4, 4));
+//     umap.erase(3);
+//     for (auto item : umap)
+//         cout << item.first << " : " << item.second << endl;
+// }
 
 //--------------------------------------------------------------------
 // struct Interval
@@ -3711,3 +3711,69 @@ int main()
 //     for(auto item : vect)
 //         cout << item << "  ";
 // }
+// ---------------------------------------------------------------- 457. Circular Array Loop ----------------------------------------------------------------------
+int NextStep(int pointer, int value, int size)
+{
+    int result = (pointer + value) % size;
+    if (result < 0)
+        result += size;
+    return result;
+}
+
+// A function to detect a cycle doesn't exist
+bool IsNotCycle(vector<int> &nums, bool prev_direction, int pointer)
+{
+    int size = nums.size();
+    // Set current direction to true if current element is positive, set false otherwise.
+    bool curr_direction = nums[pointer] >= 0;
+    // If current direction and previous direction are different or moving a pointer takes back to the same value,
+    // then the cycle is not possible, we return true, otherwise return false.
+    if (prev_direction != curr_direction || abs(nums[pointer] % size) == 0)
+        return true;
+    else
+        return false;
+}
+bool circularArrayLoop(vector<int> &nums)
+{
+    int size = nums.size();
+    // Iterate through each index of the array 'nums'.
+    for (int i = 0; i < size; i++)
+    {
+        // Set slow and fast pointer at current index value.
+        int slow = i, fast = i;
+        // Set true in 'forward' if element is positive, set false otherwise.
+        bool forward = nums[i] > 0;
+        while (true)
+        {
+            // Move slow pointer to one step.
+            slow = NextStep(slow, nums[slow], size);
+            // If cycle is not possible, break the loop and start from next element.
+            if (IsNotCycle(nums, forward, slow))
+                break;
+            // First move of fast pointer.
+            fast = NextStep(fast, nums[fast], size);
+            // If cycle is not possible, break the loop and start from next element.
+            if (IsNotCycle(nums, forward, fast))
+                break;
+            // Second move of fast pointer.
+            fast = NextStep(fast, nums[fast], size);
+            // If cycle is not possible, break the loop and start from next element.
+            if (IsNotCycle(nums, forward, fast))
+                break;
+            // At any point, if fast and slow pointers meet each other,
+            // it indicates that loop has been found, return true.
+            if (slow == fast)
+                return true;
+        }
+    }
+    return false;
+}
+int main()
+{
+    cout << string(35, '-') << endl;
+    // vector<int> nums = {2, -1, 1, 2, 2};
+    // vector<int> nums = {-1, -2, -3, -4, -5, 6};
+    vector<int> nums = {1, -1, 5, 1, 4};
+    cout << circularArrayLoop(nums) << endl;
+    cout << string(35, '-') << endl;
+}

@@ -4,24 +4,43 @@ using namespace std;
 
 int main()
 {
-    // vector<int> vect = {2, 4, 6, 8, 10};
-    // for (int item : vect)
-    // {
-    //     cout << item << " ";
-    // }
-    // cout << endl;
-    // vector<vector<int>> vect1 = {{1, 2}, {3, 4}};
-    // for (vector<int> item : vect1)
-    // {
-    //     cout << item[0] << "  " << item[1] << endl;
-    // }
-    vector<vector<vector<int>>> vect3 = {{{1, 2}, {3, 4}}, {{4, 5}, {6, 7}}};
-    for (vector<vector<int>> item : vect3)
+    set<set<int>> st;
+    st.insert({3, 4, 1});
+    st.insert({7, 4, 8});
+    st.insert({4, 1, 3});
+    set<set<int>>::iterator itr;
+    for (itr = st.begin(); itr != st.end(); itr++)
     {
-        
+        for (auto i = (*itr).begin(); i != (*itr).end(); i++)
+        {
+            cout << *i << " ";
+        }
+        cout << endl;
     }
     return 0;
 }
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
+// int main()
+// {
+//     // vector<int> vect = {2, 4, 6, 8, 10};
+//     // for (int item : vect)
+//     // {
+//     //     cout << item << " ";
+//     // }
+//     // cout << endl;
+//     // vector<vector<int>> vect1 = {{1, 2}, {3, 4}};
+//     // for (vector<int> item : vect1)
+//     // {
+//     //     cout << item[0] << "  " << item[1] << endl;
+//     // }
+//     vector<vector<vector<int>>> vect3 = {{{1, 2}, {3, 4}}, {{4, 5}, {6, 7}}};
+//     for (vector<vector<int>> item : vect3)
+//     {
+
+//     }
+//     return 0;
+// }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // int main()

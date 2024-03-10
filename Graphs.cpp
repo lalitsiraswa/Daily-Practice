@@ -79,39 +79,39 @@ bool detectCycleBfs(int source, map<char, vector<char>> &adjacencyList, map<char
     }
     return false;
 }
-int main()
-{
-    cout << string(35, '-') << endl;
-    map<char, vector<char>> adjacencyList;
-    // adjacencyList['A'] = {'C', 'E'};
-    // adjacencyList['B'] = {'F'};
-    // adjacencyList['C'] = {'B', 'D', 'F'};
-    // adjacencyList['D'] = {'F'};
-    // adjacencyList['E'] = {'F'};
-    // adjacencyList['F'] = {};
-    // ----------------------------
-    // bfs(adjacencyList);
-    // map<char, int> isVisited;
-    // dfs(adjacencyList, isVisited, 'A');
-    // ----------------------------
-    map<char, int> isVisited;
-    map<char, int> isPathVisited;
-    // adjacencyList['A'] = {'B'};
-    // adjacencyList['B'] = {'A', 'C', 'D'};
-    // adjacencyList['C'] = {'B', 'E', 'D'};
-    // adjacencyList['D'] = {'B', 'C'};
-    // adjacencyList['E'] = {'C'};
-    // detectCycleBfs('A', adjacencyList, isVisited);
-    // -------------------------------
-    adjacencyList['A'] = {'B'};
-    adjacencyList['B'] = {'D'};
-    adjacencyList['C'] = {'B', 'E'};
-    adjacencyList['D'] = {'C'};
-    adjacencyList['E'] = {};
-    cout << detectCycle(adjacencyList, isVisited, isPathVisited, 'A');
-    cout << endl
-         << string(35, '-') << endl;
-}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     map<char, vector<char>> adjacencyList;
+//     // adjacencyList['A'] = {'C', 'E'};
+//     // adjacencyList['B'] = {'F'};
+//     // adjacencyList['C'] = {'B', 'D', 'F'};
+//     // adjacencyList['D'] = {'F'};
+//     // adjacencyList['E'] = {'F'};
+//     // adjacencyList['F'] = {};
+//     // ----------------------------
+//     // bfs(adjacencyList);
+//     // map<char, int> isVisited;
+//     // dfs(adjacencyList, isVisited, 'A');
+//     // ----------------------------
+//     map<char, int> isVisited;
+//     map<char, int> isPathVisited;
+//     // adjacencyList['A'] = {'B'};
+//     // adjacencyList['B'] = {'A', 'C', 'D'};
+//     // adjacencyList['C'] = {'B', 'E', 'D'};
+//     // adjacencyList['D'] = {'B', 'C'};
+//     // adjacencyList['E'] = {'C'};
+//     // detectCycleBfs('A', adjacencyList, isVisited);
+//     // -------------------------------
+//     adjacencyList['A'] = {'B'};
+//     adjacencyList['B'] = {'D'};
+//     adjacencyList['C'] = {'B', 'E'};
+//     adjacencyList['D'] = {'C'};
+//     adjacencyList['E'] = {};
+//     cout << detectCycle(adjacencyList, isVisited, isPathVisited, 'A');
+//     cout << endl
+//          << string(35, '-') << endl;
+// }
 // -------------------------------------------------- Dijkstra's Algorithm - Using Priority Queue - C++ and Java - Part 1------------------------------------
 vector<int> dijkstraUsingPQ(int V, vector<vector<int>> adjacencyList[], int S)
 {
@@ -340,15 +340,217 @@ int networkDelayTime(vector<vector<int>> &times, int n, int k)
     }
     return totalMaximumTime;
 }
+// -----------------
+int NetworkDelayTimeOtherWay(vector<vector<int>> &times, int n, int k)
+{
+    unordered_map<int, vector<pair<int, int>>> adjacency;
+    for (auto &time : times)
+    {
+        int src = time[0];
+        int dst = time[1];
+        int t = time[2];
+        adjacency[src].push_back({dst, t});
+    }
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    pq.push({0, k});
+    unordered_set<int> visited;
+    int delays = 0;
+    while (!pq.empty())
+    {
+        int time = pq.top().first;
+        int node = pq.top().second;
+        pq.pop();
+        if (visited.count(node))
+            continue;
+        visited.insert(node);
+        delays = max(delays, time);
+        vector<pair<int, int>> &neighbors = adjacency[node];
+        for (auto &neighbor : neighbors)
+        {
+            int neighborNode = neighbor.first;
+            int neighborTime = neighbor.second;
+            if (!visited.count(neighborNode))
+            {
+                int newTime = time + neighborTime;
+                pq.push({newTime, neighborNode});
+            }
+        }
+    }
+    if (visited.size() == n)
+        return delays;
+    return -1;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // vector<vector<int>> times = {{2, 1, 1}, {3, 2, 1}, {3, 4, 2}};
+//     vector<vector<int>> times = {{1, 2, 1}, {2, 3, 1}, {3, 5, 2}};
+//     // vector<vector<int>> times = {{1, 2, 1}, {2, 3, 2}, {1, 3, 4}};
+//     // vector<vector<int>> times = {{1, 2, 1}, {2, 1, 3}};
+//     int n = 5, k = 1;
+//     cout << networkDelayTime(times, n, k);
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------- Paths in Maze That Lead to Same Room ------------------------------------------------------------------
+int IntersectionLength(unordered_set<int> &set1, unordered_set<int> &set2)
+{
+    int count = 0;
+    for (int element : set1)
+    {
+        if (set2.find(element) != set2.end())
+        {
+            count++;
+        }
+    }
+    return count;
+}
+int NumberOfPaths(int n, vector<vector<int>> &corridors)
+{
+    unordered_map<int, unordered_set<int>> neighbors;
+    int cycles = 0;
+    for (vector<int> &coridor : corridors)
+    {
+        int room1 = coridor[0];
+        int room2 = coridor[1];
+        neighbors[room1].insert(room2);
+        neighbors[room2].insert(room1);
+        cycles += IntersectionLength(neighbors[room1], neighbors[room2]);
+    }
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<vector<int>> corridors = {{1, 2}, {5, 2}, {4, 1}, {2, 4}, {3, 1}, {3, 4}};
+//     int n = 5;
+//     cout << NumberOfPaths(n, corridors) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------ 133. Clone Graph -------------------------------------------------------------------------------
+class Node
+{
+public:
+    int val;
+    vector<Node *> neighbors;
+    Node()
+    {
+        val = 0;
+        neighbors = vector<Node *>();
+    }
+    Node(int _val)
+    {
+        val = _val;
+        neighbors = vector<Node *>();
+    }
+    Node(int _val, vector<Node *> _neighbors)
+    {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+Node *cloneGraphBFS(Node *node)
+{
+    if (node == NULL)
+        return NULL;
+    unordered_map<int, Node *> isVisited;
+    Node *newNode = new Node(node->val);
+    isVisited[newNode->val] = newNode;
+    queue<Node *> q;
+    q.push(node);
+    while (!q.empty())
+    {
+        Node *topNode = q.front();
+        q.pop();
+        for (Node *item : topNode->neighbors)
+        {
+            if (!isVisited[item->val])
+            {
+                Node *neighbour = new Node(item->val);
+                isVisited[neighbour->val] = neighbour;
+                isVisited[topNode->val]->neighbors.push_back(neighbour);
+                q.push(item);
+            }
+            else
+            {
+                isVisited[topNode->val]->neighbors.push_back(isVisited[item->val]);
+            }
+        }
+    }
+    return newNode;
+}
+// -----------------
+Node *cloneGraphDFSCall(Node *node, unordered_map<int, Node *> &isVisited)
+{
+    Node *newNode = new Node(node->val);
+    isVisited[newNode->val] = newNode;
+    for (Node *item : node->neighbors)
+    {
+        if (!isVisited[item->val])
+        {
+            Node *neighbor = cloneGraphDFSCall(item, isVisited);
+            // newNode->neighbors.push_back(neighbor);
+            isVisited[newNode->val]->neighbors.push_back(neighbor);
+        }
+        else
+        {
+            // newNode->neighbors.push_back(isVisited[item->val]);
+            isVisited[newNode->val]->neighbors.push_back(isVisited[item->val]);
+        }
+    }
+    return newNode;
+}
+Node *cloneGraphDFS(Node *node)
+{
+    if (node == NULL)
+        return NULL;
+    unordered_map<int, Node *> isVisited;
+    return cloneGraphDFSCall(node, isVisited);
+}
+// -------------
+Node *CloneHelper(Node *root, unordered_map<Node *, Node *> &nodesCompleted)
+{
+    if (root == nullptr)
+        return nullptr;
+    Node *cloneNode = new Node(root->val);
+    nodesCompleted[root] = cloneNode;
+    for (Node *p : root->neighbors)
+    {
+        Node *x = nodesCompleted[p];
+        if (x == nullptr)
+        {
+            cloneNode->neighbors.push_back(CloneHelper(p, nodesCompleted));
+        }
+        else
+        {
+            cloneNode->neighbors.push_back(x);
+        }
+    }
+    return cloneNode;
+}
+Node *cloneGraphDfs(Node *root)
+{
+    unordered_map<Node *, Node *> nodesCompleted;
+    return CloneHelper(root, nodesCompleted);
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    // vector<vector<int>> times = {{2, 1, 1}, {3, 2, 1}, {3, 4, 2}};
-    vector<vector<int>> times = {{1, 2, 1}, {2, 3, 1}, {3, 5, 2}};
-    // vector<vector<int>> times = {{1, 2, 1}, {2, 3, 2}, {1, 3, 4}};
-    // vector<vector<int>> times = {{1, 2, 1}, {2, 1, 3}};
-    int n = 5, k = 1;
-    cout << networkDelayTime(times, n, k);
+    Node *one = new Node(1);
+    Node *two = new Node(2);
+    Node *three = new Node(3);
+    Node *four = new Node(4);
+    one->neighbors.push_back(two);
+    one->neighbors.push_back(four);
+    two->neighbors.push_back(one);
+    two->neighbors.push_back(three);
+    three->neighbors.push_back(two);
+    three->neighbors.push_back(four);
+    four->neighbors.push_back(one);
+    four->neighbors.push_back(three);
+    Node *cloneNode = cloneGraphDFS(one);
     cout << endl
          << string(35, '-');
     return 0;

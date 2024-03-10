@@ -199,18 +199,18 @@ bool isCycleDFS(int V, vector<int> *adjacencyList)
     }
     return false;
 }
-// int main()
-// {
-//     cout << string(35, '-') << endl;
-//     vector<int> adjacencyList[] = {{}, {2, 3}, {1, 5}, {1, 4, 6}, {3}, {2, 7}, {3, 7}, {5, 6}};
-//     // vector<int> adjacencyList[] = {{0, 1}, {1, 2}, {1, 4}, {2, 3}, {3, 4}};
-//     int V = 8;
-//     cout << isCycleDFS(V, adjacencyList) << endl;
-//     cout << endl
-//          << string(35, '-');
-//     return 0;
-// }
-// ---------------------------------------------------------- Detect A Cycle In A UnDirected Grph Using DFS ----------------------------------------------------
+int main()
+{
+    cout << string(35, '-') << endl;
+    vector<int> adjacencyList[] = {{}, {2, 3}, {1, 5}, {1, 4, 6}, {3}, {2, 7}, {3, 7}, {5, 6}};
+    // vector<int> adjacencyList[] = {{0, 1}, {1, 2}, {1, 4}, {2, 3}, {3, 4}};
+    int V = 8;
+    cout << isCycleDFS(V, adjacencyList) << endl;
+    cout << endl
+         << string(35, '-');
+    return 0;
+}
+// ---------------------------------------------------------- Detect A Cycle In A Directed Grph Using DFS ----------------------------------------------------
 bool dfsCheck(int source, vector<int> *adjacencyList, int *isVisited, int *pathVisited)
 {
     isVisited[source] = 1;
