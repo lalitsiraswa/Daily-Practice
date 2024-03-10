@@ -535,22 +535,140 @@ Node *cloneGraphDfs(Node *root)
     unordered_map<Node *, Node *> nodesCompleted;
     return CloneHelper(root, nodesCompleted);
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     Node *one = new Node(1);
+//     Node *two = new Node(2);
+//     Node *three = new Node(3);
+//     Node *four = new Node(4);
+//     one->neighbors.push_back(two);
+//     one->neighbors.push_back(four);
+//     two->neighbors.push_back(one);
+//     two->neighbors.push_back(three);
+//     three->neighbors.push_back(two);
+//     three->neighbors.push_back(four);
+//     four->neighbors.push_back(one);
+//     four->neighbors.push_back(three);
+//     Node *cloneNode = cloneGraphDFS(one);
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// -------------------------------------------------------------- Graph Valid Tree ------------------------------------------------------------------
+// For the graph to be a valid tree, the number of edges must equal n−1.If the total number of edges is less than n−1, not all of the graph nodes
+// are connected, which defies the property of a tree.Similarly, more edges will mean that there is a cycle in the graph;hence, it is not a tree.
+bool isCycleDFSCall(int parent, int node, vector<int> &isVisited, vector<vector<int>> &adjacencyList)
+{
+    isVisited[node] = 1;
+    for (int neighbour : adjacencyList[node])
+    {
+        if (!isVisited[neighbour])
+        {
+            if (isCycleDFSCall(node, neighbour, isVisited, adjacencyList))
+                return true;
+        }
+        else if (parent != neighbour)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+bool validTree(int n, vector<vector<int>> &edges)
+{
+    vector<int> isVisited(n, 0);
+    vector<vector<int>> adjacencyList(n);
+    for (vector<int> edge : edges)
+    {
+        adjacencyList[edge[0]].push_back(edge[1]);
+        adjacencyList[edge[1]].push_back(edge[0]);
+    }
+    bool isCycle = isCycleDFSCall(-1, 0, isVisited, adjacencyList);
+    for (int i = 0; i < n; i++)
+    {
+        if (isVisited[i] == 0)
+            return false;
+    }
+    return !isCycle;
+}
+bool ValidTreeOtherWay(int n, vector<vector<int>> &edges)
+{
+    if (edges.size() != n - 1)
+    {
+        return false;
+    }
+    vector<vector<int>> adjacency(n);
+    for (const auto &edge : edges)
+    {
+        int x = edge[0];
+        int y = edge[1];
+        adjacency[x].push_back(y);
+        adjacency[y].push_back(x);
+    }
+    unordered_set<int> visited;
+    stack<int> stack;
+    visited.insert(0);
+    stack.push(0);
+    while (!stack.empty())
+    {
+        int node = stack.top();
+        stack.pop();
+        for (int neighbor : adjacency[node])
+        {
+            if (visited.count(neighbor) > 0)
+            {
+                continue;
+            }
+            visited.insert(neighbor);
+            stack.push(neighbor);
+        }
+    }
+    return visited.size() == n;
+}
+// -----------------------------
+bool validTreeBFS(int n, vector<vector<int>> &edges)
+{
+    vector<int> isVisited(n, 0);
+    vector<vector<int>> adjacencyList(n);
+    for (vector<int> edge : edges)
+    {
+        adjacencyList[edge[0]].push_back(edge[1]);
+        adjacencyList[edge[1]].push_back(edge[0]);
+    }
+    queue<pair<int, int>> q;
+    isVisited[0] = 1;
+    q.push(make_pair(0, -1));
+    while (!q.empty())
+    {
+        int node = q.front().first;
+        int parent = q.front().second;
+        q.pop();
+        for (int neighbour : adjacencyList[node])
+        {
+            if (!isVisited[neighbour])
+            {
+                isVisited[neighbour] = 1;
+                q.push(make_pair(neighbour, node));
+            }
+            else if (parent != neighbour)
+                return false;
+        }
+    }
+    for (int i = 0; i < n; i++)
+    {
+        if (isVisited[i] == 0)
+            return false;
+    }
+    return true;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    Node *one = new Node(1);
-    Node *two = new Node(2);
-    Node *three = new Node(3);
-    Node *four = new Node(4);
-    one->neighbors.push_back(two);
-    one->neighbors.push_back(four);
-    two->neighbors.push_back(one);
-    two->neighbors.push_back(three);
-    three->neighbors.push_back(two);
-    three->neighbors.push_back(four);
-    four->neighbors.push_back(one);
-    four->neighbors.push_back(three);
-    Node *cloneNode = cloneGraphDFS(one);
+    int n = 5;
+    // vector<vector<int>> edges = {{0, 1}, {0, 2}, {0, 3}, {3, 4}};
+    vector<vector<int>> edges = {{0, 1}, {0, 2}, {0, 3}, {0, 4}, {3, 4}};
+    cout << validTreeBFS(n, edges) << endl;
     cout << endl
          << string(35, '-');
     return 0;
