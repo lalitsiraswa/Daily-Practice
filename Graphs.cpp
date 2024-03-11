@@ -592,40 +592,6 @@ bool validTree(int n, vector<vector<int>> &edges)
     }
     return !isCycle;
 }
-bool ValidTreeOtherWay(int n, vector<vector<int>> &edges)
-{
-    if (edges.size() != n - 1)
-    {
-        return false;
-    }
-    vector<vector<int>> adjacency(n);
-    for (const auto &edge : edges)
-    {
-        int x = edge[0];
-        int y = edge[1];
-        adjacency[x].push_back(y);
-        adjacency[y].push_back(x);
-    }
-    unordered_set<int> visited;
-    stack<int> stack;
-    visited.insert(0);
-    stack.push(0);
-    while (!stack.empty())
-    {
-        int node = stack.top();
-        stack.pop();
-        for (int neighbor : adjacency[node])
-        {
-            if (visited.count(neighbor) > 0)
-            {
-                continue;
-            }
-            visited.insert(neighbor);
-            stack.push(neighbor);
-        }
-    }
-    return visited.size() == n;
-}
 // -----------------------------
 bool validTreeBFS(int n, vector<vector<int>> &edges)
 {
@@ -662,6 +628,42 @@ bool validTreeBFS(int n, vector<vector<int>> &edges)
     }
     return true;
 }
+// -------------
+bool ValidTreeOtherWay(int n, vector<vector<int>> &edges)
+{
+    if (edges.size() != n - 1)
+    {
+        return false;
+    }
+    vector<vector<int>> adjacency(n);
+    for (const auto &edge : edges)
+    {
+        int x = edge[0];
+        int y = edge[1];
+        adjacency[x].push_back(y);
+        adjacency[y].push_back(x);
+    }
+    unordered_set<int> visited;
+    stack<int> stack;
+    visited.insert(0);
+    stack.push(0);
+    while (!stack.empty())
+    {
+        int node = stack.top();
+        stack.pop();
+        for (int neighbor : adjacency[node])
+        {
+            if (visited.count(neighbor) > 0)
+            {
+                continue;
+            }
+            visited.insert(neighbor);
+            stack.push(neighbor);
+        }
+    }
+    return visited.size() == n;
+}
+
 int main()
 {
     cout << string(35, '-') << endl;
