@@ -4,19 +4,7 @@ using namespace std;
 
 int main()
 {
-    set<set<int>> st;
-    st.insert({3, 4, 1});
-    st.insert({7, 4, 8});
-    st.insert({4, 1, 3});
-    set<set<int>>::iterator itr;
-    for (itr = st.begin(); itr != st.end(); itr++)
-    {
-        for (auto i = (*itr).begin(); i != (*itr).end(); i++)
-        {
-            cout << *i << " ";
-        }
-        cout << endl;
-    }
+    deque<int> dque; 
     return 0;
 }
 
