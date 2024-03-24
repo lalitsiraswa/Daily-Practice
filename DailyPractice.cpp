@@ -5,35 +5,39 @@ using namespace std;
 int minimumAverageDifference(vector<int> &nums)
 {
     int totalSum = 0;
-    for(auto item : nums)
+    for (auto item : nums)
         totalSum += item;
     int n = nums.size();
     int minimumAverageIndex = 0;
     int currentMinimumAverage = INT_MAX;
     int leftSideSum = 0;
     int rightSideSum = 0;
-    int currentAverage ;
-    for(int i = 0; i < n; i++){
+    int currentAverage;
+    for (int i = 0; i < n; i++)
+    {
         leftSideSum += nums[i];
         rightSideSum = totalSum - leftSideSum;
-        if(rightSideSum == 0){
-            currentAverage = abs(abs(leftSideSum/(i+1)) - rightSideSum);
+        if (rightSideSum == 0)
+        {
+            currentAverage = abs(abs(leftSideSum / (i + 1)) - rightSideSum);
         }
-        else{
-            currentAverage = abs(abs(leftSideSum/(i+1)) - abs(rightSideSum / (n-i-1)));
+        else
+        {
+            currentAverage = abs(abs(leftSideSum / (i + 1)) - abs(rightSideSum / (n - i - 1)));
         }
-        if(currentAverage < currentMinimumAverage){
+        if (currentAverage < currentMinimumAverage)
+        {
             currentMinimumAverage = currentAverage;
             minimumAverageIndex = i;
         }
     }
     return minimumAverageIndex;
 }
-int main()
-{
-    vector<int> nums {0};
-    cout << minimumAverageDifference(nums);
-}
+// int main()
+// {
+//     vector<int> nums{0};
+//     cout << minimumAverageDifference(nums);
+// }
 //------------------------------------------------------------ Count Leaf Nodes ----------------------------------------------------------
 // template <typename T>
 // class BTNode
@@ -2529,3 +2533,74 @@ int main()
 //     for (auto item : result)
 //         cout << item << "  ";
 // }
+// ----------------------------------------------------------- 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit --------------------------------------
+// ------------------- TLE ----------------------
+int longestSubarray(vector<int> &nums, int limit)
+{
+    int n = nums.size();
+    int subArrayLength = 0;
+    for (int i = 0; i < n; i++)
+    {
+        int maxElement = INT_MIN;
+        int minElement = INT_MAX;
+        for (int j = i; j < n; j++)
+        {
+            minElement = min(minElement, nums[j]);
+            maxElement = max(maxElement, nums[j]);
+            int absDifference = abs(maxElement - minElement);
+            if (absDifference <= limit)
+            {
+                int currLength = (j - i) + 1;
+                if (currLength > subArrayLength)
+                    subArrayLength = currLength;
+            }
+            // the current subarray exceeds the limit value
+            else
+            {
+                break;
+            }
+        }
+    }
+    return subArrayLength;
+}
+// ---------------------
+int longestSubarrayOtherWay(vector<int> &nums, int limit)
+{
+    int n = nums.size();
+    deque<int> maxQueue, minQueue;
+    int maxLength = 0;
+    int left = 0, right = 0;
+    while (right < n)
+    {
+        // Update maxQueue
+        while (!maxQueue.empty() && nums[right] >= nums[maxQueue.back()])
+            maxQueue.pop_back();
+        maxQueue.push_back(right);
+        // Update minQueue
+        while (!minQueue.empty() && nums[right] <= nums[minQueue.back()])
+            minQueue.pop_back();
+        minQueue.push_back(right);
+        // Check if the difference exceeds limit
+        while (nums[maxQueue.front()] - nums[minQueue.front()] > limit)
+        {
+            left++;
+            if (maxQueue.front() < left)
+                maxQueue.pop_front();
+            if (minQueue.front() < left)
+                minQueue.pop_front();
+        }
+        // Update maxLength
+        maxLength = max(maxLength, right - left + 1);
+        right++;
+    }
+    return maxLength;
+}
+int main()
+{
+    cout << string(35, '-') << endl;
+    vector<int> nums = {10, 1, 2, 4, 7, 2};
+    cout << longestSubarrayOtherWay(nums, 5) << endl;
+    cout << endl
+         << string(35, '-');
+    return 0;
+}
