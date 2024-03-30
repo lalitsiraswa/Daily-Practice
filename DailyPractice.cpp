@@ -2595,12 +2595,12 @@ int longestSubarrayOtherWay(vector<int> &nums, int limit)
     }
     return maxLength;
 }
-int main()
-{
-    cout << string(35, '-') << endl;
-    vector<int> nums = {10, 1, 2, 4, 7, 2};
-    cout << longestSubarrayOtherWay(nums, 5) << endl;
-    cout << endl
-         << string(35, '-');
-    return 0;
-}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {10, 1, 2, 4, 7, 2};
+//     cout << longestSubarrayOtherWay(nums, 5) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }

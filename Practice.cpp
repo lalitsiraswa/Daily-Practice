@@ -3768,12 +3768,12 @@ bool circularArrayLoop(vector<int> &nums)
     }
     return false;
 }
-int main()
-{
-    cout << string(35, '-') << endl;
-    // vector<int> nums = {2, -1, 1, 2, 2};
-    // vector<int> nums = {-1, -2, -3, -4, -5, 6};
-    vector<int> nums = {1, -1, 5, 1, 4};
-    cout << circularArrayLoop(nums) << endl;
-    cout << string(35, '-') << endl;
-}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // vector<int> nums = {2, -1, 1, 2, 2};
+//     // vector<int> nums = {-1, -2, -3, -4, -5, 6};
+//     vector<int> nums = {1, -1, 5, 1, 4};
+//     cout << circularArrayLoop(nums) << endl;
+//     cout << string(35, '-') << endl;
+// }

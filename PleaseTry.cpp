@@ -4,7 +4,6 @@ using namespace std;
 
 int main()
 {
-    deque<int> dque; 
     return 0;
 }
 
