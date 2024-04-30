@@ -102,17 +102,80 @@ public:
         buckets[hashKey].remove(key);
     }
 };
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     MyHashMap hashMap;
+//     hashMap.put(1, 1);
+//     hashMap.put(2, 2);
+//     cout << hashMap.get(1) << endl;
+//     cout << hashMap.get(3) << endl;
+//     hashMap.put(2070, 1);
+//     cout << hashMap.get(2) << endl;
+//     hashMap.remove(2);
+//     cout << hashMap.get(2) << endl;
+//     cout << string(35, '-');
+// }
+// ------------------------------------------------------------------------
+class HashMap
+{
+    vector<vector<pair<int, int>>> buckets;
+    const int size = 2069;
+
+public:
+    /** Initialize your data structure here. */
+    HashMap()
+    {
+        buckets.resize(size);
+    }
+    /** value will always be non-negative. */
+    void put(int key, int value)
+    {
+        int index = key % size;
+        vector<pair<int, int>> &bucket = buckets[index];
+        for (auto itr = bucket.begin(); itr != bucket.end(); itr++)
+        {
+            if (itr->first == key)
+            {
+                itr->second = value;
+                return;
+            }
+        }
+        bucket.push_back(make_pair(key, value));
+    }
+    /** Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key */
+    int get(int key)
+    {
+        int index = key % size;
+        vector<pair<int, int>> &bucket = buckets[index];
+        for (auto itr = bucket.begin(); itr != bucket.end(); itr++)
+        {
+            if (itr->first == key)
+            {
+                return itr->second;
+            }
+        }
+        return -1;
+    }
+    /** Removes the mapping of the specified value key if this map contains a mapping for the key */
+    void remove(int key)
+    {
+        int index = key % size;
+        vector<pair<int, int>> &bucket = buckets[index];
+        for (auto itr = bucket.begin(); itr != bucket.end(); itr++)
+        {
+            if (itr->first == key)
+            {
+                bucket.erase(itr);
+                return;
+            }
+        }
+    }
+};
+
 int main()
 {
     cout << string(35, '-') << endl;
-    MyHashMap hashMap;
-    hashMap.put(1, 1);
-    hashMap.put(2, 2);
-    cout << hashMap.get(1) << endl;
-    cout << hashMap.get(3) << endl;
-    hashMap.put(2, 1);
-    cout << hashMap.get(2) << endl;
-    hashMap.remove(2);
-    cout << hashMap.get(2) << endl;
     cout << string(35, '-');
+    return 0;
 }

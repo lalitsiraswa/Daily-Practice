@@ -4,6 +4,14 @@ using namespace std;
 
 int main()
 {
+    unordered_map<int, int> mp;
+    mp.insert(pair<int, int>(1, 2));
+    mp.insert(pair<int, int>(2, 3));
+    unordered_map<int, int>::iterator itr;
+    for (itr = mp.begin(); itr != mp.end(); itr++)
+    {
+        cout << itr->first << ",  " << itr->second << endl;
+    }
     return 0;
 }
 
