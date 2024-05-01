@@ -88,11 +88,83 @@ int removeElement_2(vector<int> &nums, int val)
     }
     return index;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {0, 1, 2, 2, 3, 0, 4, 2};
+//     cout << removeElement_2(nums, 2) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------ 153. Find Minimum in Rotated Sorted Array -------------------------------------------------------------
+int findMin(vector<int> &nums)
+{
+    int left = 0;
+    int right = nums.size() - 1;
+    int minValue = INT_MAX;
+    while (left <= right)
+    {
+        int mid = (left + right) / 2;
+        // if left part is sorted:
+        if (nums[left] <= nums[mid])
+        {
+            // keep the minimum:
+            minValue = min(minValue, nums[left]);
+            // Eliminate left half:
+            left = mid + 1;
+        }
+        // if right part is sorted:
+        else
+        {
+            // keep the minimum:
+            minValue = min(minValue, nums[mid]);
+            // Eliminate right half:
+            right = mid - 1;
+        }
+    }
+    return minValue;
+}
+// --------------------
+int findMin_2(vector<int> &nums)
+{
+    int left = 0;
+    int right = nums.size() - 1;
+    int minValue = INT_MAX;
+    while (left <= right)
+    {
+        int mid = (left + right) / 2;
+        // search space is already sorted
+        // then arr[low] will always be
+        // the minimum in that search space:
+        if (nums[left] <= nums[right])
+        {
+            minValue = min(minValue, nums[left]);
+            break;
+        }
+        // if left part is sorted:
+        if (nums[left] <= nums[mid])
+        {
+            // keep the minimum:
+            minValue = min(minValue, nums[left]);
+            // Eliminate left half:
+            left = mid + 1;
+        }
+        // if right part is sorted:
+        else
+        {
+            // keep the minimum:
+            minValue = min(minValue, nums[mid]);
+            // Eliminate right half:
+            right = mid - 1;
+        }
+    }
+    return minValue;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> nums = {0, 1, 2, 2, 3, 0, 4, 2};
-    cout << removeElement_2(nums, 2) << endl;
+    vector<int> nums = {11, 13, 15, 17};
+    cout << findMin(nums) << endl;
     cout << string(35, '-');
     return 0;
 }
