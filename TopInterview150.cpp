@@ -39,16 +39,60 @@ void merge_2(vector<int> &nums1, int m, vector<int> &nums2, int n)
         nums1[p--] = nums2[p2--];
     }
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums1 = {2, 0};
+//     vector<int> nums2 = {1};
+//     int m = 1, n = 1;
+//     merge(nums1, m, nums2, n);
+//     for (auto item : nums1)
+//         cout << item << " ";
+//     cout << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// -------------------------------------------------------------- 27. Remove Element -----------------------------------------------------------------------
+int removeElement(vector<int> &nums, int val)
+{
+    int n = nums.size();
+    if (n == 0)
+        return 0;
+    int left = 0, right = n - 1;
+    while (left < right)
+    {
+        if (nums[left] != val)
+            left++;
+        else if (nums[right] == val)
+            right--;
+        if (nums[left] == val && nums[right] != val)
+        {
+            swap(nums[left], nums[right]);
+            left++;
+            right--;
+        }
+    }
+    return (nums[left] != val) ? left + 1 : left;
+}
+// -------------------
+int removeElement_2(vector<int> &nums, int val)
+{
+    int index = 0;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        if (nums[i] != val)
+        {
+            nums[index] = nums[i];
+            index++;
+        }
+    }
+    return index;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> nums1 = {2, 0};
-    vector<int> nums2 = {1};
-    int m = 1, n = 1;
-    merge(nums1, m, nums2, n);
-    for (auto item : nums1)
-        cout << item << " ";
-    cout << endl;
+    vector<int> nums = {0, 1, 2, 2, 3, 0, 4, 2};
+    cout << removeElement_2(nums, 2) << endl;
     cout << string(35, '-');
     return 0;
 }
