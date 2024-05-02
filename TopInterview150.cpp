@@ -97,6 +97,7 @@ int removeElement_2(vector<int> &nums, int val)
 //     return 0;
 // }
 // ------------------------------------------------------------ 153. Find Minimum in Rotated Sorted Array -------------------------------------------------------------
+// Key Observation: If an array is rotated and sorted, we already know that for every index, one of the 2 halves of the array will always be sorted.
 int findMin(vector<int> &nums)
 {
     int left = 0;
