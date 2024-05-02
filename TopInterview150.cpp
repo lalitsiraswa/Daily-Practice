@@ -161,11 +161,57 @@ int findMin_2(vector<int> &nums)
     }
     return minValue;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {11, 13, 15, 17};
+//     cout << findMin(nums) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------- 33. Search in Rotated Sorted Array ----------------------------------------------------------
+// Key Observation: If an array is rotated and sorted, we already know that for every index, one of the 2 halves of the array will always be sorted.
+int search(vector<int> &nums, int target)
+{
+    int left = 0, right = nums.size() - 1;
+    while (left <= right)
+    {
+        int mid = (left + right) / 2;
+        if (nums[mid] == target)
+        {
+            return mid;
+        }
+        if (nums[left] <= nums[mid])
+        {
+            if (nums[left] <= target && target <= nums[mid])
+            {
+                right = mid - 1;
+            }
+            else
+            {
+                left = mid + 1;
+            }
+        }
+        else if (nums[mid] <= nums[right])
+        {
+            if (nums[mid] <= target && target <= nums[right])
+            {
+                left = mid + 1;
+            }
+            else
+            {
+                right = mid - 1;
+            }
+        }
+    }
+    return -1;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> nums = {11, 13, 15, 17};
-    cout << findMin(nums) << endl;
-    cout << string(35, '-');
+    vector<int> nums = {1};
+    cout << search(nums, 3) << endl;
+    cout << endl
+         << string(35, '-');
     return 0;
 }
