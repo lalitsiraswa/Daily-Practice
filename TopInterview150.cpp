@@ -249,11 +249,63 @@ int removeDuplicates_2(vector<int> &nums)
     }
     return (index == 0) ? 1 : index;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
+//     cout << removeDuplicates_2(nums) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------- 169. Majority Element -------------------------------------------------------------
+int majorityElement(vector<int> &nums)
+{
+    unordered_map<int, int> frequencyMap;
+    for (auto item : nums)
+    {
+        frequencyMap[item] += 1;
+    }
+    int maxFreq = INT_MIN;
+    int majorElement;
+    for (auto item : frequencyMap)
+    {
+        if (item.second > maxFreq)
+        {
+            maxFreq = item.second;
+            majorElement = item.first;
+        }
+    }
+    return majorElement;
+}
+// ------------------------------------
+//--- Using Boyer-Moore Majority Voting Algorithm ----
+int majorityElement_2(vector<int> &nums)
+{
+    int n = nums.size();
+    int majority_element = nums[0];
+    int counter = 1;
+    for (int i = 1; i < n; i++)
+    {
+        if (nums[i] == majority_element)
+            counter++;
+        else
+        {
+            counter--;
+            if (counter == 0)
+            {
+                majority_element = nums[i];
+                counter = 1;
+            }
+        }
+    }
+    return majority_element;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> nums = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
-    cout << removeDuplicates_2(nums) << endl;
+    vector<int> nums = {6, 5, 5};
+    cout << majorityElement(nums) << endl;
     cout << endl
          << string(35, '-');
     return 0;
