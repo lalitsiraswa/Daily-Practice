@@ -206,11 +206,54 @@ int search(vector<int> &nums, int target)
     }
     return -1;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {1};
+//     cout << search(nums, 3) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------- 26. Remove Duplicates from Sorted Array -----------------------------------------------------
+int removeDuplicates(vector<int> &nums)
+{
+    int index = 0, i;
+    for (i = 1; i < nums.size(); i++)
+    {
+        if (nums[i] != nums[i - 1])
+        {
+            nums[index++] = nums[i - 1];
+        }
+    }
+    if (index > 0 && nums[index - 1] != nums[i - 1])
+    {
+        nums[index++] = nums[i - 1];
+    }
+    return (index == 0) ? 1 : index;
+}
+// ----------------
+int removeDuplicates_2(vector<int> &nums)
+{
+    int index = 0, i;
+    for (i = 0; i < nums.size() - 1; i++)
+    {
+        if (nums[i] != nums[i + 1])
+        {
+            nums[index++] = nums[i];
+        }
+    }
+    if (index > 0 && nums[index - 1] != nums[i])
+    {
+        nums[index++] = nums[i];
+    }
+    return (index == 0) ? 1 : index;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> nums = {1};
-    cout << search(nums, 3) << endl;
+    vector<int> nums = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
+    cout << removeDuplicates_2(nums) << endl;
     cout << endl
          << string(35, '-');
     return 0;
