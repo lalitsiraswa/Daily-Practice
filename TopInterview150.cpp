@@ -301,11 +301,71 @@ int majorityElement_2(vector<int> &nums)
     }
     return majority_element;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {2, 2, 1, 1, 1, 2, 2};
+//     cout << majorityElement(nums) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------- 14. Longest Common Prefix ----------------------------------------------------------
+string longestCommonPrefix(vector<string> &strs)
+{
+    string longestCommonPrefix;
+    for (int i = 0; i < strs[0].size(); i++)
+    {
+        for (int j = 1; j < strs.size(); j++)
+        {
+            if (strs[j].size() - 1 >= i)
+            {
+                if (strs[j][i] != strs[0][i])
+                    return longestCommonPrefix;
+            }
+            else
+                return longestCommonPrefix;
+        }
+        longestCommonPrefix.push_back(strs[0][i]);
+    }
+    return longestCommonPrefix;
+}
+// ----------------
+string longestCommonPrefix_2(vector<string> &strs)
+{
+    string longestCommonPrefix = "";
+    sort(strs.begin(), strs.end());
+    string firstString = strs[0];
+    string lastString = strs[strs.size() - 1];
+    for (int i = 0; i < firstString.size(); i++)
+    {
+        if (firstString[i] != lastString[i])
+            return longestCommonPrefix;
+        longestCommonPrefix.push_back(firstString[i]);
+    }
+    return longestCommonPrefix;
+}
+// ----------------
+string longestCommonPrefix_3(vector<string> &strs)
+{
+    string longestCommonPrefix = "";
+    for (int i = 0; i < strs[0].size(); i++)
+    {
+        char ch = strs[0][i];
+        for (int j = 1; j < strs.size(); j++)
+        {
+            if (ch != strs[j][i])
+                return longestCommonPrefix;
+        }
+        longestCommonPrefix.push_back(ch);
+    }
+    return longestCommonPrefix;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> nums = {6, 5, 5};
-    cout << majorityElement(nums) << endl;
+    vector<string> strs = {"flower", "flow", "flowerable"};
+    cout << longestCommonPrefix_3(strs) << endl;
     cout << endl
          << string(35, '-');
     return 0;
