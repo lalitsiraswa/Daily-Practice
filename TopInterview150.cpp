@@ -249,6 +249,19 @@ int removeDuplicates_2(vector<int> &nums)
     }
     return (index == 0) ? 1 : index;
 }
+// ---------------------
+int removeDuplicates_3(vector<int> &nums)
+{
+    int index = 0;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        if (index < 1 || nums[i] != nums[index - 1])
+        {
+            nums[index++] = nums[i];
+        }
+    }
+    return index;
+}
 // int main()
 // {
 //     cout << string(35, '-') << endl;
@@ -361,11 +374,33 @@ string longestCommonPrefix_3(vector<string> &strs)
     }
     return longestCommonPrefix;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<string> strs = {"flower", "flow", "flowerable"};
+//     cout << longestCommonPrefix_3(strs) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------- 80. Remove Duplicates from Sorted Array II --------------------------------------------------------
+int removeDuplicates2(vector<int> &nums)
+{
+    int index = 0;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        if (index < 2 || nums[i] != nums[index - 2])
+        {
+            nums[index++] = nums[i];
+        }
+    }
+    return index;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<string> strs = {"flower", "flow", "flowerable"};
-    cout << longestCommonPrefix_3(strs) << endl;
+    vector<int> nums = {1, 1, 1, 2, 2, 3};
+    cout << removeDuplicates2(nums) << endl;
     cout << endl
          << string(35, '-');
     return 0;
