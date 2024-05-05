@@ -396,11 +396,83 @@ int removeDuplicates2(vector<int> &nums)
     }
     return index;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {1, 1, 1, 2, 2, 3};
+//     cout << removeDuplicates2(nums) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------------ 189. Rotate Array ------------------------------------------------------------------
+void rotate(vector<int> &nums, int k)
+{
+    int n = nums.size();
+    vector<int> rotatedVect(n);
+    for (int i = 0; i < n; i++)
+    {
+        rotatedVect[(i + k) % n] = nums[i];
+    }
+    nums = rotatedVect;
+}
+// ------- TLE -------
+void rotate_2(vector<int> &nums, int k)
+{
+    int n = nums.size();
+    for (int i = 0; i < k; i++)
+    {
+        int temp = nums[n - 1];
+        for (int j = n - 2; j >= 0; j--)
+        {
+            nums[(j + 1) % n] = nums[j];
+        }
+        nums[0] = temp;
+    }
+}
+// ---------- USING "reverse()" -----------
+void rotate_3(vector<int> &nums, int k)
+{
+    int n = nums.size();
+    k = k % n;
+    reverse(nums.begin(), nums.end());
+    reverse(nums.begin(), nums.begin() + k);
+    reverse(nums.begin() + k, nums.end());
+}
+// ------------ Reverse Manually ------------
+void rotate_4(vector<int> &nums, int k)
+{
+    int n = nums.size();
+    k = k % n;
+    int left = 0, right = n - 1;
+    while (left < right)
+    {
+        int temp = nums[left];
+        nums[left++] = nums[right];
+        nums[right--] = temp;
+    }
+    left = 0, right = k - 1;
+    while (left < right)
+    {
+        int temp = nums[left];
+        nums[left++] = nums[right];
+        nums[right--] = temp;
+    }
+    left = k, right = n - 1;
+    while (left < right)
+    {
+        int temp = nums[left];
+        nums[left++] = nums[right];
+        nums[right--] = temp;
+    }
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> nums = {1, 1, 1, 2, 2, 3};
-    cout << removeDuplicates2(nums) << endl;
+    vector<int> nums = {1, 2, 3, 4, 5, 6, 7};
+    rotate_2(nums, 3);
+    for (auto num : nums)
+        cout << num << " ";
     cout << endl
          << string(35, '-');
     return 0;
