@@ -538,7 +538,7 @@ int maxProfit_3(vector<int> &prices)
     return maxSoFar;
 }
 // -------------- DP ----------------
-int maxProfit_3(vector<int> &prices)
+int maxProfit_4(vector<int> &prices)
 {
     int maxProfit = 0;
     int minPrice = prices[0];
@@ -550,11 +550,56 @@ int maxProfit_3(vector<int> &prices)
     }
     return maxProfit;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> prices = {7, 1, 5, 3, 6, 4};
+//     cout << maxProfit_3(prices) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------------- 58. Length of Last Word --------------------------------------------------------------
+int lengthOfLastWord(string s)
+{
+    int n = s.size();
+    int right = n - 1;
+    bool isWordStart = false;
+    int lastWordIndex = right;
+    while (right >= 0)
+    {
+        if (s[right] != ' ' && !isWordStart)
+        {
+            isWordStart = true;
+            lastWordIndex = right;
+        }
+        if (isWordStart && s[right] == ' ')
+            break;
+        right--;
+    }
+    return lastWordIndex - right;
+}
+// --------------------
+int lengthOfLastWord2(string s)
+{
+    int right = s.size() - 1;
+    while (right >= 0 && s[right] == ' ')
+    {
+        right--;
+    }
+    int wordLength = 0;
+    while (right >= 0 && s[right] != ' ')
+    {
+        wordLength++;
+        right--;
+    }
+    return wordLength;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> prices = {7, 1, 5, 3, 6, 4};
-    cout << maxProfit_3(prices) << endl;
+    string s = "Hello World";
+    cout << lengthOfLastWord(s) << endl;
     cout << endl
          << string(35, '-');
     return 0;
