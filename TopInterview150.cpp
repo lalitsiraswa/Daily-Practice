@@ -466,13 +466,95 @@ void rotate_4(vector<int> &nums, int k)
         nums[right--] = temp;
     }
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {1, 2, 3, 4, 5, 6, 7};
+//     rotate_2(nums, 3);
+//     for (auto num : nums)
+//         cout << num << " ";
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// -------------------------------------------------------------- 121. Best Time to Buy and Sell Stock ------------------------------------------------------------
+int maxProfit(vector<int> &prices)
+{
+    int n = prices.size();
+    vector<int> buy(n);
+    vector<int> sell(n);
+    buy[0] = prices[0];
+    for (int i = 1; i < n; i++)
+    {
+        buy[i] = min(buy[i - 1], prices[i]);
+    }
+    sell[n - 1] = prices[n - 1];
+    for (int i = n - 2; i >= 0; i--)
+    {
+        sell[i] = max(sell[i + 1], prices[i]);
+    }
+    int maxProfit = sell[0] - buy[0];
+    for (int i = 1; i < n; i++)
+    {
+        maxProfit = max(maxProfit, sell[i] - buy[i]);
+    }
+    return maxProfit;
+}
+// -------- USING TWO POINTER -----------
+int maxProfit_2(vector<int> &prices)
+{
+    int n = prices.size();
+    int buyPtr = 0, sellPtr = 0, maxProfit = INT_MIN;
+    while (sellPtr < n)
+    {
+        int currentProfit = prices[sellPtr] - prices[buyPtr];
+        if (currentProfit < 0)
+        {
+            buyPtr = sellPtr;
+        }
+        else if (currentProfit > maxProfit)
+        {
+            maxProfit = currentProfit;
+            sellPtr++;
+        }
+        else
+        {
+            sellPtr++;
+        }
+    }
+    return maxProfit;
+}
+// -------- Kadane's Algorithm -----------
+int maxProfit_3(vector<int> &prices)
+{
+    int maxCurr = 0, maxSoFar = 0;
+    for (int i = 1; i < prices.size(); i++)
+    {
+        int currProfit = prices[i] - prices[i - 1];
+        maxCurr += currProfit;
+        maxCurr = max(0, maxCurr);
+        maxSoFar = max(maxCurr, maxSoFar);
+    }
+    return maxSoFar;
+}
+// -------------- DP ----------------
+int maxProfit_3(vector<int> &prices)
+{
+    int maxProfit = 0;
+    int minPrice = prices[0];
+    for (int i = 1; i < prices.size(); i++)
+    {
+        int currProfit = prices[i] - minPrice;
+        maxProfit = max(maxProfit, currProfit);
+        minPrice = min(minPrice, prices[i]);
+    }
+    return maxProfit;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> nums = {1, 2, 3, 4, 5, 6, 7};
-    rotate_2(nums, 3);
-    for (auto num : nums)
-        cout << num << " ";
+    vector<int> prices = {7, 1, 5, 3, 6, 4};
+    cout << maxProfit_3(prices) << endl;
     cout << endl
          << string(35, '-');
     return 0;
