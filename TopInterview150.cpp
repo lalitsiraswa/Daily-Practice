@@ -595,11 +595,98 @@ int lengthOfLastWord2(string s)
     }
     return wordLength;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string s = "Hello World";
+//     cout << lengthOfLastWord(s) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------- 122. Best Time to Buy and Sell Stock II -------------------------------------------
+long getResult(vector<int> &prices, int index, int buy, int n, vector<vector<long>> &dp)
+{
+    // Base case: When we reach the end of the array, there are no more decisions to make.
+    if (index == n)
+    {
+        return 0;
+    }
+    // If the result for this state has already been calculated, return it
+    if (dp[index][buy] != -1)
+    {
+        return dp[index][buy];
+    }
+    long profit = 0;
+    // We can buy the stock
+    if (buy == 0)
+    {
+        long notBuyStock = 0 + getResult(prices, index + 1, 0, n, dp);
+        long buyStock = -prices[index] + getResult(prices, index + 1, 1, n, dp);
+        profit = max(notBuyStock, buyStock);
+    }
+    // We can sell the stock
+    if (buy == 1)
+    {
+        long notSellStock = 0 + getResult(prices, index + 1, 1, n, dp);
+        long sellStock = prices[index] + getResult(prices, index + 1, 0, n, dp);
+        profit = max(notSellStock, sellStock);
+    }
+    // Store the calculated profit in the DP table and return it
+    return dp[index][buy] = profit;
+}
+int maxProfitMomoization(vector<int> &prices)
+{
+    int n = prices.size();
+    // Create a DP table to memoize results
+    vector<vector<long>> dp(n, vector<long>(2, -1));
+    if (n == 0)
+    {
+        return 0;
+    }
+    long maxProfit = getResult(prices, 0, 0, n, dp);
+    return maxProfit;
+}
+// --------------------
+int maxProfitTabulation(vector<int> &prices)
+{
+    int n = prices.size();
+    // Create a DP table to memoize results
+    vector<vector<long>> dp(n + 1, vector<long>(2, -1));
+    // Base condition: When we have no stocks left, the profit is 0.
+    dp[n][0] = dp[n][1] = 0;
+    long profit;
+    // Loop through the array in reverse order
+    for (int index = n - 1; index >= 0; index--)
+    {
+        for (int buy = 0; buy <= 1; buy++)
+        {
+            // We can buy the stock
+            if (buy == 0)
+            {
+                long notBuyStock = 0 + dp[index + 1][0];
+                long buyStock = -prices[index] + dp[index + 1][1];
+                profit = max(notBuyStock, buyStock);
+            }
+            // We can sell the stock
+            if (buy == 1)
+            {
+                long notSellStock = 0 + dp[index + 1][1];
+                long sellStock = prices[index] + dp[index + 1][0];
+                profit = max(notSellStock, sellStock);
+            }
+            // Store the calculated profit in the DP table and return it
+            dp[index][buy] = profit;
+        }
+    }
+    // The maximum profit is stored in dp[0][0] after all calculations
+    return dp[0][0];
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    string s = "Hello World";
-    cout << lengthOfLastWord(s) << endl;
+    vector<int> prices = {7, 1, 5, 3, 6, 4};
+    cout << maxProfitMomoization(prices) << endl;
     cout << endl
          << string(35, '-');
     return 0;
