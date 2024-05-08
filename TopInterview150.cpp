@@ -682,11 +682,106 @@ int maxProfitTabulation(vector<int> &prices)
     // The maximum profit is stored in dp[0][0] after all calculations
     return dp[0][0];
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> prices = {7, 1, 5, 3, 6, 4};
+//     cout << maxProfitMomoization(prices) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------------------- 55. Jump Game -------------------------------------------------------------------------
+// ------- Memoization ---------
+bool canJumpHelper(vector<int> &nums, int n, int index, vector<int> &dp)
+{
+    if (index >= n - 1)
+    {
+        return true;
+    }
+    if (nums[index] == 0)
+    {
+        return 0;
+    }
+    if (dp[index] != -1)
+    {
+        return dp[index];
+    }
+    for (int i = 1; i <= nums[index]; i++)
+    {
+        bool answer = canJumpHelper(nums, n, index + i, dp);
+        if (answer == true)
+            return true;
+    }
+    return dp[index] = false;
+}
+bool canJump(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> dp(n, -1);
+    if (n == 0)
+        return 1;
+    return canJumpHelper(nums, n, 0, dp);
+}
+// ---------------------
+bool canJumpOtherWay(vector<int> &nums)
+{
+    int n = nums.size();
+    if (n == 1)
+    {
+        return true;
+    }
+    vector<int> isVisited(n, 0);
+    for (int index = 0; index < n; index++)
+    {
+        if (nums[index] == 0 && isVisited[index + 1] == 0)
+        {
+            return false;
+        }
+        for (int i = 0; i <= nums[index] && (index + i) < n; i++)
+        {
+            isVisited[index + i] = 1;
+        }
+        if (isVisited[n - 1] == 1)
+            break;
+    }
+    return true;
+}
+// ------- Valley peak approach --------
+bool canJumpValleyPeakApproach(vector<int> &nums)
+{
+    int n = nums.size();
+    int reachable = 0;
+    for (int index = 0; index < n; index++)
+    {
+        if (reachable < index)
+            return false;
+        reachable = max(reachable, nums[index] + index);
+    }
+    return true;
+}
+// ---------------------
+bool canJump3(vector<int> &nums)
+{
+    int targetIndex = nums.size() - 1;
+    for (int index = nums.size() - 2; index >= 0; index--)
+    {
+        if (targetIndex <= nums[index] + index)
+        {
+            targetIndex = index;
+        }
+    }
+    if (targetIndex == 0)
+    {
+        return true;
+    }
+    return false;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> prices = {7, 1, 5, 3, 6, 4};
-    cout << maxProfitMomoization(prices) << endl;
+    vector<int> nums = {3, 0, 8, 2, 0, 0, 1};
+    cout << canJumpOtherWay(nums) << endl;
     cout << endl
          << string(35, '-');
     return 0;
