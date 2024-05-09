@@ -777,11 +777,96 @@ bool canJump3(vector<int> &nums)
     }
     return false;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {3, 0, 8, 2, 0, 0, 1};
+//     cout << canJumpOtherWay(nums) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 45. Jump Game II -----------------------------------------------------------------------------
+// ------- Valley peak approach --------
+int minJumpValleyPeakApproach(vector<int> &nums)
+{
+    int jumps = 0;
+    int currEnd = 0;
+    int currFarthest = 0;
+    for (int index = 0; index < nums.size() - 1; index++)
+    {
+        currFarthest = max(currFarthest, nums[index] + index);
+        if (index == currEnd)
+        {
+            jumps++;
+            currEnd = currFarthest;
+        }
+    }
+    return jumps;
+}
+// -------------- TLE ---------------
+int minRequiredJump(vector<int> &nums, int index)
+{
+    if (index >= nums.size() - 1)
+    {
+        return 0;
+    }
+    if (nums[index] == 0)
+    {
+        return INT_MAX;
+    }
+    int minJumps = INT_MAX;
+    for (int i = index + 1; i <= index + nums[index] && i < nums.size(); i++)
+    {
+        int jumps = minRequiredJump(nums, i);
+        if (jumps != INT_MAX && jumps + 1 < minJumps)
+        {
+            minJumps = jumps + 1;
+        }
+    }
+    return minJumps;
+}
+int jump(vector<int> &nums)
+{
+    return minRequiredJump(nums, 0);
+}
+// ----------------- Memoization -------------------
+int minRequiredJumpMemo(vector<int> &nums, int index, vector<int> &dp)
+{
+    if (index >= nums.size() - 1)
+    {
+        return 0;
+    }
+    if (nums[index] == 0)
+    {
+        return INT_MAX;
+    }
+    if (dp[index] != -1)
+    {
+        return dp[index];
+    }
+    int minJumps = INT_MAX;
+    for (int i = index + 1; i <= index + nums[index] && i < nums.size(); i++)
+    {
+        int jumps = minRequiredJumpMemo(nums, i, dp);
+        if (jumps != INT_MAX && jumps + 1 < minJumps)
+        {
+            minJumps = jumps + 1;
+        }
+    }
+    return dp[index] = minJumps;
+}
+int jumpMemoization(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> dp(n, -1);
+    return minRequiredJumpMemo(nums, 0, dp);
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> nums = {3, 0, 8, 2, 0, 0, 1};
-    cout << canJumpOtherWay(nums) << endl;
+    vector<int> nums = {2, 3, 1, 1, 4};
+    cout << jump(nums) << endl;
     cout << endl
          << string(35, '-');
     return 0;
