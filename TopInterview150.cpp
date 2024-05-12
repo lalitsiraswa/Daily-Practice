@@ -862,12 +862,87 @@ int jumpMemoization(vector<int> &nums)
     vector<int> dp(n, -1);
     return minRequiredJumpMemo(nums, 0, dp);
 }
-int main()
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {2, 3, 1, 1, 4};
+//     cout << jump(nums) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 274. H-Index -------------------------------------------------------------------------
+int hIndex(vector<int> &citations)
 {
-    cout << string(35, '-') << endl;
-    vector<int> nums = {2, 3, 1, 1, 4};
-    cout << jump(nums) << endl;
-    cout << endl
-         << string(35, '-');
-    return 0;
+    int n = citations.size();
+    int hInd = 0;
+    for (int i = 1; i <= n; i++)
+    {
+        int count = 0;
+        for (int j = 0; j < n; j++)
+        {
+            if (citations[j] >= i)
+            {
+                count++;
+            }
+        }
+        if (count >= i) // (i > hInd) The i will always be greater here so no need to check
+        {
+            hInd = i;
+        }
+    }
+    return hInd;
 }
+// ------- Using sort() and binary search ------
+int hIndex(vector<int> &citations)
+{
+    sort(citations.begin(), citations.end());
+    int n = citations.size();
+    int left = 0, right = n - 1, mid = 0;
+    while (left <= right)
+    {
+        mid = (left + right) / 2;
+        if (citations[mid] == (n - mid))
+            return citations[mid];
+        else if (citations[mid] > (n - mid))
+            right = mid - 1;
+        else
+            left = left + 1;
+    }
+    return (n - left);
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {3, 0, 6, 1, 5};
+//     cout << hIndex(nums) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------------------- 275. H-Index II --------------------------------------------------------------------------
+int hIndex(vector<int> &citations)
+{
+    int n = citations.size();
+    int left = 0, right = n - 1, mid = 0;
+    while (left <= right)
+    {
+        mid = (left + right) / 2;
+        if (citations[mid] == (n - mid))
+            return citations[mid];
+        else if (citations[mid] > (n - mid))
+            right = mid - 1;
+        else
+            left = mid + 1;
+    }
+    return n - left;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {0, 1, 3, 5, 6};
+//     cout << hIndex(nums) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
