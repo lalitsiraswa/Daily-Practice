@@ -872,7 +872,7 @@ int jumpMemoization(vector<int> &nums)
 //     return 0;
 // }
 // --------------------------------------------------------------------- 274. H-Index -------------------------------------------------------------------------
-int hIndex(vector<int> &citations)
+int hIndex1(vector<int> &citations)
 {
     int n = citations.size();
     int hInd = 0;
@@ -894,7 +894,7 @@ int hIndex(vector<int> &citations)
     return hInd;
 }
 // ------- Using sort() and binary search ------
-int hIndex(vector<int> &citations)
+int hIndex01(vector<int> &citations)
 {
     sort(citations.begin(), citations.end());
     int n = citations.size();
@@ -921,7 +921,7 @@ int hIndex(vector<int> &citations)
 //     return 0;
 // }
 // ----------------------------------------------------------------------- 275. H-Index II --------------------------------------------------------------------------
-int hIndex(vector<int> &citations)
+int hIndex2(vector<int> &citations)
 {
     int n = citations.size();
     int left = 0, right = n - 1, mid = 0;
@@ -946,3 +946,101 @@ int hIndex(vector<int> &citations)
 //          << string(35, '-');
 //     return 0;
 // }
+// ------------------------------------------------------------- 238. Product of Array Except Self -------------------------------------------------------------
+vector<int> productExceptSelf(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> prefixProduct(n);
+    vector<int> suffixProduct(n);
+    prefixProduct[0] = nums[0];
+    for (int i = 1; i < n; i++)
+    {
+        prefixProduct[i] = nums[i] * prefixProduct[i - 1];
+    }
+    suffixProduct[n - 1] = nums[n - 1];
+    for (int i = n - 2; i >= 0; i--)
+    {
+        suffixProduct[i] = nums[i] * suffixProduct[i + 1];
+    }
+    vector<int> result(n);
+    for (int i = 0; i < n; i++)
+    {
+        if (i == 0)
+        {
+            result[i] = suffixProduct[i + 1];
+        }
+        else if (i == n - 1)
+        {
+            result[i] = prefixProduct[n - 2];
+        }
+        else
+        {
+            result[i] = prefixProduct[i - 1] * suffixProduct[i + 1];
+        }
+    }
+    return result;
+}
+// -----------------------------------
+vector<int> productExceptSelf2(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> suffixProduct(n);
+    suffixProduct[n - 1] = nums[n - 1];
+    for (int i = n - 2; i >= 0; i--)
+    {
+        suffixProduct[i] = nums[i] * suffixProduct[i + 1];
+    }
+    vector<int> result(n);
+    result[0] = suffixProduct[1];
+    int prefixProduct = nums[0];
+    for (int i = 1; i < n; i++)
+    {
+        if (i == n - 1)
+        {
+            result[i] = prefixProduct;
+        }
+        else
+        {
+            result[i] = prefixProduct * suffixProduct[i + 1];
+        }
+        prefixProduct *= nums[i];
+    }
+    return result;
+}
+// ------------------------------
+vector<int> productExceptSelf3(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> leftToRight(n);
+    int product = 1;
+    for (int i = 0; i < n; i++)
+        leftToRight[i] = (product *= nums[i]);
+    product = 1;
+    for (int i = n - 1; i >= 0; i--)
+    {
+        if (i == n - 1)
+        {
+            leftToRight[i] = leftToRight[n - 2];
+            product *= nums[i];
+        }
+        else if (i == 0)
+            leftToRight[i] = product;
+        else
+        {
+            leftToRight[i] = leftToRight[i - 1] * product;
+            product *= nums[i];
+        }
+    }
+    return leftToRight;
+}
+int main()
+{
+    cout << string(35, '-') << endl;
+    vector<int> nums = {1, 2, 3, 4};
+    vector<int> product = productExceptSelf2(nums);
+    for (auto item : product)
+        cout << item << " ";
+    cout << endl
+         << string(35, '-');
+    return 0;
+}
