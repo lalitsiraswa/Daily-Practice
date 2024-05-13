@@ -83,9 +83,9 @@ class CustomPrintConsumer<T> implements Consumer<T> {
     }
 }
 
-class PrintEvenNumber<Integer> implements Consumer<Integer> {
+class PrintEvenNumber<T> implements Consumer<T> {
     @Override
-    public void accept(Integer t) {
+    public void accept(T t) {
         if ((int) t % 2 == 0) {
             System.out.println(t);
         }

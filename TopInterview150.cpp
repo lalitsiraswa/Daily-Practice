@@ -1143,8 +1143,7 @@ public:
 int main()
 {
     cout << string(35, '-') << endl;
-    unordered_set<int> set;
-    set.insert(1);
+    cout << rand();
     cout << endl
          << string(35, '-');
     return 0;
