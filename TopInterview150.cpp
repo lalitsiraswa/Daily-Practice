@@ -1063,13 +1063,88 @@ vector<int> productExceptSelf4(vector<int> &nums)
     }
     return suffixProduct;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {1, 2, 3, 4};
+//     vector<int> product = productExceptSelf4(nums);
+//     for (auto item : product)
+//         cout << item << " ";
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 380. Insert Delete GetRandom O(1) ----------------------------------------------------------
+class RandomizedSet
+{
+    // Average Time O(1) & Auxiliary Space O(N)
+public:
+    vector<int> nums;             // array vector
+    unordered_map<int, int> umap; // // Unordered Map does searching, insertion & deletion of element in average O(1) time
+    /** Initialize your data structure here. */
+    RandomizedSet()
+    {
+        // No need to initialise nums & umap as they are initialised automatically
+        // to 0 as and when their container size increases.
+    }
+    /** Inserts a value to the array vector. Returns true if the array did not already contain the specified element. */
+    bool insert(int val)
+    {
+        if (umap.find(val) != umap.end())
+        {
+            // If val is not already present in the map, find() function
+            // returns an iterator(m.end()) pointing to the successive memory location
+            // from the last element of the map. Otherwise, find() returns an iterator
+            // pointing to val which was already present in the map.
+            return false;
+        }
+        else
+        {
+            nums.push_back(val);         // insert val at the end of the array
+            umap[val] = nums.size() - 1; // unordered_map[key]=value stores the array element and
+                                         // its index as key=array element & value=array element index
+            return true;
+        }
+    }
+    /** Removes a value from the array vector. Returns true if the array contained the specified element. */
+    bool remove(int val)
+    {
+        if (umap.find(val) == umap.end()) // val not present in the array vector
+            return false;
+        else
+        {
+            // val present in the array vector
+            // For example: a=[8,4,3,2], m={[8,0],[4,1],[3,2],[2,3]}, val=4, lastValue=2
+            // After a[m[val]]=a.back(); a=[8,2,3,2], m={[8,0],[4,1],[3,2],[2,3]}
+            // After a.pop_back(); a=[8,2,3], m={[8,0],[4,1],[3,2],[2,3]}
+            // After m[last]=m[val]; a=[8,2,3], m={[8,0],[4,1],[3,2],[2,1]}
+            // After m.erase(val); a=[8,2,3], m={[8,0],[3,2],[2,1]}
+            int lastValue = nums.back(); // back() fetches last element of the array vector
+            nums[umap[val]] = lastValue; // m[val] locates the index of val in the array vector.
+                                         // Then we copy array last element value to the val location in the array
+
+            nums.pop_back();             // Delete the last element of the array
+            umap[lastValue] = umap[val]; // In hashmap, assign index of val in array to the index of the last element
+            umap.erase(val);             // Delete the val entry from map
+            return true;
+        }
+    }
+    /** Get a random element from the array vector */
+    int getRandom()
+    {
+        // rand() function gives random value in the range of 0 to RAND_MAX(whose value is 32767). x%y gives
+        // remainder when x is divided by y and this remainder is in the range of 0 to y-1.
+        // rand()%a.size() gives random value in the range of (0 to a.size()-1).
+        // a[rand()%a.size()] will give random value of array in the range of a[0] to a[a.size()-1].
+        return nums[rand() % nums.size()];
+    }
+};
+
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> nums = {1, 2, 3, 4};
-    vector<int> product = productExceptSelf4(nums);
-    for (auto item : product)
-        cout << item << " ";
+    unordered_set<int> set;
+    set.insert(1);
     cout << endl
          << string(35, '-');
     return 0;
