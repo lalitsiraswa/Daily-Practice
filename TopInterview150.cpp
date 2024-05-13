@@ -1033,11 +1033,41 @@ vector<int> productExceptSelf3(vector<int> &nums)
     }
     return leftToRight;
 }
+// ------------------------------
+vector<int> productExceptSelf4(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> suffixProduct(n);
+    suffixProduct[n - 1] = nums[n - 1];
+    for (int i = n - 2; i >= 0; i--)
+    {
+        suffixProduct[i] = nums[i] * suffixProduct[i + 1];
+    }
+    int product = 1;
+    for (int i = 0; i < n; i++)
+    {
+        if (i == 0)
+        {
+            suffixProduct[i] = suffixProduct[i + 1];
+            product *= nums[i];
+        }
+        else if (i == n - 1)
+        {
+            suffixProduct[i] = product;
+        }
+        else
+        {
+            suffixProduct[i] = product * suffixProduct[i + 1];
+            product *= nums[i];
+        }
+    }
+    return suffixProduct;
+}
 int main()
 {
     cout << string(35, '-') << endl;
     vector<int> nums = {1, 2, 3, 4};
-    vector<int> product = productExceptSelf2(nums);
+    vector<int> product = productExceptSelf4(nums);
     for (auto item : product)
         cout << item << " ";
     cout << endl
