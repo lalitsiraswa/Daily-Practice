@@ -1140,10 +1140,48 @@ public:
     }
 };
 
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     cout << rand();
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 134. Gas Station -------------------------------------------------------------------------
+int canCompleteCircuit(vector<int> &gas, vector<int> &cost)
+{
+    int n = gas.size();
+    int current = 0;
+    int total_fuel = 0;
+    int total_cost = 0;
+    int startGasStatition = 0;
+    for (int i = 0; i < n; i++)
+    {
+        total_fuel += gas[i];
+        total_cost += cost[i];
+    }
+    if (total_fuel < total_cost)
+    {
+        return -1;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        current += gas[i] - cost[i];
+        if (current < 0)
+        {
+            startGasStatition = i + 1;
+            current = 0;
+        }
+    }
+    return startGasStatition;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    cout << rand();
+    vector<int> gas = {1, 2, 3, 4, 5};
+    vector<int> cost = {3, 4, 5, 1, 2};
+    cout << canCompleteCircuit(gas, cost) << endl;
     cout << endl
          << string(35, '-');
     return 0;
