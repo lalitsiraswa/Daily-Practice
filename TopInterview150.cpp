@@ -1176,12 +1176,97 @@ int canCompleteCircuit(vector<int> &gas, vector<int> &cost)
     }
     return startGasStatition;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> gas = {1, 2, 3, 4, 5};
+//     vector<int> cost = {3, 4, 5, 1, 2};
+//     cout << canCompleteCircuit(gas, cost) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 42. Trapping Rain Water -------------------------------------------------------------------------
+int trap(vector<int> &height)
+{
+    vector<vector<int>> tracker;
+    int max_left = height[0], max_right = height[height.size() - 1];
+    for (int index = 0; index < height.size(); index++)
+    {
+        if (index > 0)
+            max_left = max(height.at(index), max_left);
+        tracker.push_back({max_left, height.at(index), 0});
+    }
+    for (int index = height.size() - 1; index >= 0; index--)
+    {
+        if (index < height.size() - 1)
+            max_right = max(height.at(index), max_right);
+        tracker.at(index)[2] = max_right;
+    }
+    int maxWaterTrap = 0;
+    for (int index = 0; index < tracker.size(); index++)
+    {
+        int maxWaterFilled = min(tracker.at(index)[0], tracker.at(index)[2]);
+        int waterTrapForSingleBar = maxWaterFilled - tracker.at(index)[1];
+        maxWaterTrap += (waterTrapForSingleBar <= 0) ? 0 : waterTrapForSingleBar;
+    }
+    return maxWaterTrap;
+}
+// ------------------------
+int trap2(vector<int> &height)
+{
+    int n = height.size();
+    int waterTrapped = 0;
+    int prefix[n], suffix[n];
+    prefix[0] = height[0];
+    for (int index = 1; index < n; index++)
+    {
+        prefix[index] = max(prefix[index - 1], height[index]);
+    }
+    suffix[n - 1] = height[n - 1];
+    for (int index = n - 2; index >= 0; index--)
+    {
+        suffix[index] = max(suffix[index + 1], height[index]);
+    }
+    for (int index = 0; index < n; index++)
+    {
+        waterTrapped += min(prefix[index], suffix[index]) - height[index];
+    }
+    return waterTrapped;
+}
+// ---------------
+int trap3(vector<int> &height)
+{
+    int n = height.size();
+    int waterTrapped = 0;
+    int leftPointer = 0, rightPointer = n - 1;
+    int leftMax = 0, rightMax = 0;
+    while (leftPointer <= rightPointer)
+    {
+        if (height[leftPointer] <= height[rightPointer])
+        {
+            if (leftMax <= height[leftPointer])
+                leftMax = height[leftPointer];
+            else
+                waterTrapped += leftMax - height[leftPointer];
+            leftPointer++;
+        }
+        else
+        {
+            if (rightMax <= height[rightPointer])
+                rightMax = height[rightPointer];
+            else
+                waterTrapped += rightMax - height[rightPointer];
+            rightPointer--;
+        }
+    }
+    return waterTrapped;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> gas = {1, 2, 3, 4, 5};
-    vector<int> cost = {3, 4, 5, 1, 2};
-    cout << canCompleteCircuit(gas, cost) << endl;
+    vector<int> height = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
+    cout << trap(height) << endl;
     cout << endl
          << string(35, '-');
     return 0;
