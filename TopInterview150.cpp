@@ -1262,12 +1262,109 @@ int trap3(vector<int> &height)
     }
     return waterTrapped;
 }
-int main()
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> height = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
+//     cout << trap(height) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------------- 13. Roman to Integer ----------------------------------------------------------------------------
+int romanToInt(string s)
 {
-    cout << string(35, '-') << endl;
-    vector<int> height = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
-    cout << trap(height) << endl;
-    cout << endl
-         << string(35, '-');
-    return 0;
+    int n = s.size();
+    map<char, int> mp;
+    mp.insert(make_pair('I', 1));
+    mp.insert(make_pair('V', 5));
+    mp.insert(pair<char, int>('X', 10));
+    mp.insert(pair<char, int>('L', 50));
+    mp.insert({'C', 100});
+    mp.insert({'D', 500});
+    mp.insert({'M', 1000});
+    int integerValue = 0;
+    int i = 0;
+    while (i < n)
+    {
+        if (mp[s[i]] < mp[s[i + 1]] && i < n - 1)
+        {
+            integerValue += mp[s[i + 1]] - mp[s[i]];
+            i += 2;
+        }
+        else
+        {
+            integerValue += mp[s[i]];
+            i += 1;
+        }
+    }
+    return integerValue;
 }
+// -----------------
+int romanToInt2(string s)
+{
+    int roman2Int[26] = {0};
+    roman2Int['I' - 65] = 1;
+    roman2Int['V' - 65] = 5;
+    roman2Int['X' - 65] = 10;
+    roman2Int['L' - 65] = 50;
+    roman2Int['C' - 65] = 100;
+    roman2Int['D' - 65] = 500;
+    roman2Int['M' - 65] = 1000;
+    int result = 0;
+    for (int i = 0; i < s.size(); i++)
+    {
+        // Roman numerals are usually written largest to smallest from left to right.
+        if ((i + 1) < s.size() && roman2Int[s[i] - 65] < roman2Int[s[i + 1] - 65])
+        {
+            result += roman2Int[s[i + 1] - 65] - roman2Int[s[i] - 65];
+            i++;
+        }
+        else
+            result += roman2Int[s[i] - 65];
+    }
+    return result;
+}
+// ----------------
+int romanToInt3(string s)
+{
+    int roman2Int[26] = {0};
+    roman2Int['I' - 65] = 1;
+    roman2Int['V' - 65] = 5;
+    roman2Int['X' - 65] = 10;
+    roman2Int['L' - 65] = 50;
+    roman2Int['C' - 65] = 100;
+    roman2Int['D' - 65] = 500;
+    roman2Int['M' - 65] = 1000;
+    int result = 0;
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (s[i] == 'I' && (i + 1) < s.size() && ((s[i + 1] == 'V') || (s[i + 1] == 'X')))
+        {
+            result += roman2Int[s[i + 1] - 65] - roman2Int[s[i] - 65];
+            i++;
+        }
+        else if (s[i] == 'X' && (i + 1) < s.size() && ((s[i + 1] == 'L') || (s[i + 1] == 'C')))
+        {
+            result += roman2Int[s[i + 1] - 65] - roman2Int[s[i] - 65];
+            i++;
+        }
+        else if (s[i] == 'C' && (i + 1) < s.size() && ((s[i + 1] == 'D') || (s[i + 1] == 'M')))
+        {
+            result += roman2Int[s[i + 1] - 65] - roman2Int[s[i] - 65];
+            i++;
+        }
+        else
+            result += roman2Int[s[i] - 65];
+    }
+    return result;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string s = "III";
+//     cout << romanToInt(s) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
