@@ -1403,3 +1403,46 @@ int candy(vector<int> &ratings)
 //          << string(35, '-');
 //     return 0;
 // }
+// ----------------------------------------------------------------------- 151. Reverse Words in a String ------------------------------------------------------------
+string reverseWords(string s)
+{
+    int n = s.size();
+    string word;
+    string reverseWordsString;
+    for (int i = 0; i < n; i++)
+    {
+        if (s[i] != ' ')
+        {
+            word += s[i];
+        }
+        if ((s[i] == ' ' && !word.empty()) || (i == n - 1 && !word.empty()))
+        {
+            if (reverseWordsString.empty())
+                reverseWordsString = word;
+            else
+                reverseWordsString = word + ' ' + reverseWordsString;
+            word.clear();
+        }
+    }
+    // -----------------------------------------------------
+    // if (!word.empty())
+    // {
+    //     if (reverseWordsString.empty())
+    //         reverseWordsString = word;
+    //     else
+    //         reverseWordsString = word + ' ' + reverseWordsString;
+    // }
+    // -----------------------------------------------------
+    return reverseWordsString;
+}
+int main()
+{
+    cout << string(35, '-') << endl;
+    // string s = "the sky is blue";
+    // string s = "  hello world  ";
+    string s = "  hello world  ";
+    cout << reverseWords(s) << endl;
+    cout << endl
+         << string(35, '-');
+    return 0;
+}
