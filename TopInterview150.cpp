@@ -1435,13 +1435,86 @@ string reverseWords(string s)
     // -----------------------------------------------------
     return reverseWordsString;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // string s = "the sky is blue";
+//     // string s = "  hello world  ";
+//     string s = "  hello world  ";
+//     cout << reverseWords(s) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------------------- 6. Zigzag Conversion ------------------------------------------------------------
+string convert(string s, int numRows)
+{
+    int n = s.size();
+    vector<vector<char>> matrix(numRows, vector<char>(n, '@'));
+    int i = 0, j = 0;
+    int index = 0;
+    while (index < n)
+    {
+        int flag = 0;
+        for (i = 0; i < numRows; i++)
+        {
+            matrix[i][j] = s[index++];
+            if (index >= n)
+            {
+                flag = 1;
+                break;
+            }
+        }
+        if (flag)
+            break;
+        for (i = numRows - 2; i > 0; i--)
+        {
+            matrix[i][++j] = s[index++];
+            if (index >= n)
+            {
+                flag = 1;
+                break;
+            }
+        }
+        if (flag)
+            break;
+        ++j;
+    }
+    string result;
+    for (i = 0; i < numRows; i++)
+    {
+        for (int k = 0; k <= j; k++)
+        {
+            if (matrix[i][k] != '@')
+                result += matrix[i][k];
+        }
+    }
+    return result;
+}
+// -------------------------------------
+string convert2(string s, int numRows)
+{
+    if (numRows == 1)
+        return s;
+    int n = s.size();
+    string result;
+    for (int row = 0; row < numRows; row++)
+    {
+        int increment = 2 * (numRows - 1);
+        for (int i = row; i < n; i += increment)
+        {
+            result += s[i];
+            if (row > 0 && row < numRows - 1 && (i + increment - 2 * row) < n)
+                result += s[i + increment - 2 * row];
+        }
+    }
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    // string s = "the sky is blue";
-    // string s = "  hello world  ";
-    string s = "  hello world  ";
-    cout << reverseWords(s) << endl;
+    string s = "PAYPALISHIRING";
+    cout << convert2(s, 4) << endl;
     cout << endl
          << string(35, '-');
     return 0;
