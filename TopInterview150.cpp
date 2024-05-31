@@ -1687,11 +1687,90 @@ int strStr3(string haystack, string needle)
     }
     return -1;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     Solution *sol = new Solution();
+//     cout << sol->strStr("abxabcabcaby", "abcaby") << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------------ 125. Valid Palindrome -----------------------------------------------------------------
+bool isPalindrome(string s)
+{
+    int n = s.size();
+    string str;
+    for (int i = 0; i < n; i++)
+    {
+        if ((s[i] >= 97 && s[i] <= 122) || (s[i] >= 48 && s[i] <= 57))
+        {
+            str += s[i];
+        }
+        if ((s[i] >= 65 && s[i] <= 90))
+        {
+            str += (s[i]) + 32;
+        }
+    }
+    int left = 0, right = str.size() - 1;
+    while (left < right)
+    {
+        if (str[left] != str[right])
+            return false;
+        left++;
+        right--;
+    }
+    return true;
+}
+// -----------------------------------
+bool isPalindrome2(string s)
+{
+    int n = s.size();
+    int left = 0, right = n - 1;
+    while (left <= right)
+    {
+        if (s[left] >= 65 && s[left] <= 90)
+        {
+            s[left] = s[left] + 32;
+        }
+        if (s[right] >= 65 && s[right] <= 90)
+        {
+            s[right] = s[right] + 32;
+        }
+        left++;
+        right--;
+    }
+    left = 0, right = n - 1;
+    while (left < right)
+    {
+        if (!((s[left] >= 97 && s[left] <= 122) || (s[left] >= 48 && s[left] <= 57)))
+        {
+            left++;
+        }
+        else if (!((s[right] >= 97 && s[right] <= 122) || (s[right] >= 48 && s[right] <= 57)))
+        {
+            right--;
+        }
+        else if (s[left] != s[right])
+        {
+            return false;
+        }
+        else
+        {
+            left++;
+            right--;
+        }
+    }
+    return true;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    Solution *sol = new Solution();
-    cout << sol->strStr("abxabcabcaby", "abcaby") << endl;
+    // string s = "A man, a plan, a canal: Panama";
+    // string s = "race a car";
+    // string s = " ";
+    string s = "0P";
+    cout << isPalindrome2(s) << endl;
     cout << endl
          << string(35, '-');
     return 0;
