@@ -1690,7 +1690,8 @@ int strStr3(string haystack, string needle)
 int main()
 {
     cout << string(35, '-') << endl;
-    cout << strStr3("sadbutsad", "sad") << endl;
+    Solution *sol = new Solution();
+    cout << sol->strStr("abxabcabcaby", "abcaby") << endl;
     cout << endl
          << string(35, '-');
     return 0;
