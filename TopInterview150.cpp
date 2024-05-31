@@ -1510,11 +1510,187 @@ string convert2(string s, int numRows)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string s = "PAYPALISHIRING";
+//     cout << convert2(s, 4) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------- 28. Find the Index of the First Occurrence in a String --------------------------------------------------
+int strStr(string haystack, string needle)
+{
+    int m = haystack.size();
+    int n = needle.size();
+    int wordLastIndex = n - 1;
+    int wordIndex = 0;
+    int startingIndex = 0;
+    bool isStartingSelected = false;
+    if (n > m)
+        return -1;
+    int i = 0;
+    while (i < m)
+    {
+        if (haystack[i] == needle[wordIndex])
+        {
+            if (!isStartingSelected)
+            {
+                isStartingSelected = true;
+                startingIndex = i;
+            }
+            wordIndex++;
+            i++;
+        }
+        else
+        {
+            i = startingIndex + 1;
+            startingIndex = i;
+            wordIndex = 0;
+            isStartingSelected = false;
+        }
+        if (wordIndex == n)
+            break;
+    }
+    return wordIndex == n ? startingIndex : -1;
+}
+// -----------------------
+int strStr2(string haystack, string needle)
+{
+    int m = haystack.size();
+    int n = needle.size();
+    if (n > m)
+        return -1;
+    int wordIndex = 0;
+    int i = 0;
+    while (i < m)
+    {
+        if (haystack[i] == needle[wordIndex])
+        {
+            int startingIndex = i;
+            int wordLastIndex = n - 1;
+            while (true)
+            {
+                if ((startingIndex + n - 1 - wordIndex) < m)
+                {
+                    if (haystack[i] == needle[wordIndex] && haystack[startingIndex + n - 1 - wordIndex] == needle[wordLastIndex - wordIndex])
+                    {
+                        i++;
+                        wordIndex++;
+                    }
+                    else
+                    {
+                        i = startingIndex + 1;
+                        wordIndex = 0;
+                        break;
+                    }
+                    if (wordIndex > (n / 2))
+                        return startingIndex;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+        }
+        else
+            i++;
+    }
+    return -1;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string haystack = "babba";
+//     string needle = "bbb";
+//     cout << strStr2(haystack, needle) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------ KMP Algorithm -----------
+class Solution
+{
+public:
+    void calculateLongestPrefixSuffix(string &needle, int m, vector<int> &lps)
+    {
+        int left = 0, right = 1;
+        while (right < m)
+        {
+            // If Right-th char matches with Left-th char
+            if (needle[left] == needle[right])
+            {
+                lps[right] = left + 1;
+                left++;
+                right++;
+            }
+            else
+            {
+                if (left > 0)
+                    left = lps[left - 1];
+                else
+                    right++;
+            }
+        }
+    }
+    int patternMatcher(string &haystack, int n, string &needle, int m, vector<int> &lps)
+    {
+        int haystack_pos = 0;
+        int needle_pos = 0;
+        while (needle_pos < m && haystack_pos < n)
+        {
+            // If current char in pattern & text both match
+            if (haystack[haystack_pos] == needle[needle_pos])
+            {
+                haystack_pos++;
+                needle_pos++;
+            }
+            // Check if the pattern has been found
+            if (needle_pos == m)
+                return haystack_pos - m; // return starting pos of pattern
+            if (haystack[haystack_pos] != needle[needle_pos])
+            {
+                if (needle_pos > 0)
+                    needle_pos = lps[needle_pos - 1];
+                else
+                    haystack_pos++;
+            }
+        }
+        return -1;
+    }
+    int strStr(string haystack, string needle)
+    {
+        int n = haystack.size();
+        int m = needle.size();
+        if (m > n)
+            return -1;
+        vector<int> lps(m, 0); // longest prefix suffix
+        calculateLongestPrefixSuffix(needle, m, lps);
+        return patternMatcher(haystack, n, needle, m, lps);
+    }
+};
+// ------------------------------------------
+int strStr3(string haystack, string needle)
+{
+    int m = haystack.size();
+    int n = needle.size();
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (haystack[i + j] != needle[j])
+                break;
+            if (j == n - 1)
+                return i;
+        }
+    }
+    return -1;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    string s = "PAYPALISHIRING";
-    cout << convert2(s, 4) << endl;
+    cout << strStr3("sadbutsad", "sad") << endl;
     cout << endl
          << string(35, '-');
     return 0;
