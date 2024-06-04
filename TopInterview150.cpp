@@ -1889,7 +1889,7 @@ vector<int> twoSum2(vector<int> &numbers, int target)
 // ------------------------
 vector<int> twoSum(vector<int> &numbers, int target)
 {
-    int left = 0, right = numbers.size();
+    int left = 0, right = numbers.size() - 1;
     while (numbers[left] + numbers[right] != target)
     {
         if (numbers[left] + numbers[right] < target)
