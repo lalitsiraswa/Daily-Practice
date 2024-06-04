@@ -1763,14 +1763,92 @@ bool isPalindrome2(string s)
     }
     return true;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // string s = "A man, a plan, a canal: Panama";
+//     // string s = "race a car";
+//     // string s = " ";
+//     string s = "0P";
+//     cout << isPalindrome2(s) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------------------- 392. Is Subsequence ----------------------------------------------------------------
+bool isSubsequence(string s, string t)
+{
+    int m = s.size();
+    int n = t.size();
+    if (m > n)
+        return false;
+    int j = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (t[i] == s[j])
+            j++;
+        if (j == m)
+            return true;
+    }
+    return j == m ? true : false;
+}
+// ---------------------
+bool isSubsequence2(string s, string t)
+{
+    int m = s.size();
+    int n = t.size();
+    if (m > n)
+        return false;
+    int left = 0, right = n - 1;
+    int i = 0, j = m - 1;
+    while (left <= right && i <= j)
+    {
+        if (t[left] == s[i])
+        {
+            left++;
+            i++;
+        }
+        else
+        {
+            left++;
+        }
+        if (left > right && i <= j)
+            return false;
+        if (t[right] == s[j])
+        {
+            j--;
+            right--;
+        }
+        else
+        {
+            right--;
+        }
+    }
+    return i > j ? true : false;
+}
+// ------------------------
+bool isSubs(string &s, string &t, int m, int n)
+{
+    if (m == 0)
+        return true;
+    if (n == 0)
+        return false;
+    // If last characters of two strings are matching
+    if (s[m - 1] == t[n - 1])
+        return isSubs(s, t, m - 1, n - 1);
+    // If last characters are not matching
+    return isSubs(s, t, m, n - 1);
+}
+bool isSubsequence3(string s, string t)
+{
+    if (isSubs(s, t, s.size(), t.size()))
+        return true;
+    return false;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    // string s = "A man, a plan, a canal: Panama";
-    // string s = "race a car";
-    // string s = " ";
-    string s = "0P";
-    cout << isPalindrome2(s) << endl;
+    cout << isSubsequence2("abbc", "ahbdc") << endl;
     cout << endl
          << string(35, '-');
     return 0;
