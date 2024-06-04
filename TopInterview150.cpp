@@ -1845,11 +1845,67 @@ bool isSubsequence3(string s, string t)
         return true;
     return false;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     cout << isSubsequence2("abbc", "ahbdc") << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------- 167. Two Sum II - Input Array Is Sorted -----------------------------------------------------------
+vector<int> twoSum(vector<int> &numbers, int target)
+{
+    int n = numbers.size();
+    int left = 0, right = n - 1;
+    while (left < right)
+    {
+        int sum = numbers[left] + numbers[right];
+        if (sum == target)
+            break;
+        else if (sum > target)
+            right--;
+        else
+            left++;
+    }
+    return {left + 1, right + 1};
+}
+// ----------------------
+vector<int> twoSum2(vector<int> &numbers, int target)
+{
+    int n = numbers.size();
+    unordered_map<int, int> umap;
+    umap[numbers[0]] = 1;
+    for (int i = 1; i < n; i++)
+    {
+        int difference = target - numbers[i];
+        if (umap.find(difference) != umap.end())
+            return {umap[difference], i + 1};
+        else
+            umap[numbers[i]] = i + 1;
+    }
+    return {};
+}
+// ------------------------
+vector<int> twoSum(vector<int> &numbers, int target)
+{
+    int left = 0, right = numbers.size();
+    while (numbers[left] + numbers[right] != target)
+    {
+        if (numbers[left] + numbers[right] < target)
+            left++;
+        else
+            right--;
+    }
+
+    return {left + 1, right + 1};
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    cout << isSubsequence2("abbc", "ahbdc") << endl;
-    cout << endl
-         << string(35, '-');
+    vector<int> numbers = {-1, 0};
+    vector<int> result = twoSum2(numbers, -1);
+    cout << result[0] << " " << result[1] << endl;
+    cout << string(35, '-');
     return 0;
 }
