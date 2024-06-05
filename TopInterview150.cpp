@@ -1900,12 +1900,70 @@ vector<int> twoSum(vector<int> &numbers, int target)
 
     return {left + 1, right + 1};
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> numbers = {-1, 0};
+//     vector<int> result = twoSum2(numbers, -1);
+//     cout << result[0] << " " << result[1] << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------- 11. Container With Most Water ------------------------------------------------------------------
+// ------------- TLE -------------
+int maxArea(vector<int> &height)
+{
+    int maxAmountWater = 0;
+    for (int leftPointer = 0; leftPointer < height.size(); leftPointer)
+    {
+        for (int rightPointer = leftPointer + 1; rightPointer < height.size(); rightPointer++)
+        {
+            int maxWaterCanFillBetween = min(height[leftPointer], height[rightPointer]);
+            int currMaxWater = (rightPointer - leftPointer) * maxWaterCanFillBetween;
+            maxAmountWater = max(maxAmountWater, currMaxWater);
+        }
+    }
+    return maxAmountWater;
+}
+// --------------------
+int maxArea(vector<int> &height)
+{
+    int n = height.size();
+    int mostWaterLevel = 0;
+    int left = 0, right = n - 1;
+    while (left < right)
+    {
+        int maxWaterCanFillBetween = min(height[left], height[right]);
+        int currMaxWater = (right - left) * maxWaterCanFillBetween;
+        mostWaterLevel = max(mostWaterLevel, currMaxWater);
+        if (height[left] < height[right])
+            left++;
+        else
+            right--;
+    }
+    return mostWaterLevel;
+}
+// --------------------
+int maxArea(vector<int> &height)
+{
+    int n = height.size();
+    int mostWaterLevel = 0;
+    int left = 0, right = n - 1;
+    while (left < right)
+    {
+        int maxWaterCanFillBetween = min(height[left], height[right]);
+        int currMaxWater = (right - left) * maxWaterCanFillBetween;
+        mostWaterLevel = max(mostWaterLevel, currMaxWater);
+        while (height[left] <= maxWaterCanFillBetween && left < right)
+            left++;
+        while (height[right] <= maxWaterCanFillBetween && left < right)
+            right--;
+    }
+    return mostWaterLevel;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> numbers = {-1, 0};
-    vector<int> result = twoSum2(numbers, -1);
-    cout << result[0] << " " << result[1] << endl;
     cout << string(35, '-');
     return 0;
 }
