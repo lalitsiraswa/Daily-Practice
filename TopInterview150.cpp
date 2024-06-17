@@ -2120,9 +2120,89 @@ vector<vector<int>> threeSum_TUF_OtherWay(vector<int> &nums)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// -------------------------------------------------------- ORACLE TEST - Count of substrings having all distinct characters -----------------------------------------------------
+int countSubstrings(string str)
+{
+    int n = str.size();
+    long long int result = 0;
+    int counter[26] = {0};
+    memset(counter, 0, sizeof(counter));
+    int i = 0;
+    int j = 0;
+    while (j < n)
+    {
+        if (j < n && (counter[str[j] - 'a'] == 0))
+        {
+            counter[str[j] - 'a']++;
+            result += (j - i + 1);
+            j++;
+        }
+        else
+        {
+            counter[str[i] - 'a']--;
+            i++;
+        }
+    }
+    return result;
+}
+// ------------
+int countSubstrings2(string str)
+{
+    int n = str.size();
+    int count = 0;
+    unordered_set<char> charSet;
+    int left = 0;
+    int right = 0;
+    while (right < n)
+    {
+        // If the character at right is not in the set, add it and expand the window
+        if (charSet.find(str[right]) == charSet.end())
+        {
+            charSet.insert(str[right]);
+            count += (right - left + 1);
+            right++;
+        }
+        // If the character at right is a duplicate, shrink the window from the left
+        else
+        {
+            charSet.erase(str[left]);
+            left++;
+        }
+    }
+    return count;
+}
+// ------------
+int countSubstrings3(string str)
+{
+    int n = str.size();
+    if (n == 0)
+        return 0;
+    unordered_map<char, int> lastIndexMap;
+    int left = 0;
+    int count = 0;
+    for (int right = 0; right < n; right++)
+    {
+        if (lastIndexMap.find(str[right]) != lastIndexMap.end() && lastIndexMap[str[right]] >= left)
+        {
+            left = lastIndexMap[str[right]] + 1;
+        }
+        lastIndexMap[str[right]] = right;
+        count += (right - left + 1);
+    }
+    return count;
+}
 int main()
 {
     cout << string(35, '-') << endl;
+    // string str = "abac";
+    string str = "gffg";
+    cout << countSubstrings3(str) << endl;
     cout << string(35, '-');
     return 0;
 }
