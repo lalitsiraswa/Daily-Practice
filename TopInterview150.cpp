@@ -2197,12 +2197,95 @@ int countSubstrings3(string str)
     }
     return count;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // string str = "abac";
+//     string str = "gffg";
+//     cout << countSubstrings3(str) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------- 209. Minimum Size Subarray Sum -------------------------------------------------------------
+int minSubArrayLen(int target, vector<int> &nums)
+{
+    int n = nums.size();
+    int sum = 0;
+    int right = 0;
+    while (right < n)
+    {
+        sum += nums[right++];
+        if (sum >= target)
+            break;
+    }
+    if (sum < target)
+        return 0;
+    int left = 0;
+    while (left < n)
+    {
+        if ((sum - nums[left]) < target)
+            break;
+        sum -= nums[left++];
+    }
+    int minLength = right - left;
+    while (right < n)
+    {
+        sum += nums[right++];
+        while (left < n)
+        {
+            if ((sum - nums[left]) < target)
+                break;
+            sum -= nums[left++];
+            minLength = min((right - left), minLength);
+        }
+    }
+    return minLength;
+}
+// ------------
+int minSubArrayLen2(int target, vector<int> &nums)
+{
+    int n = nums.size();
+    int sum = 0;
+    int left = 0;
+    int minSubArrayLength = INT_MAX;
+    for (int right = 0; right < n; right++)
+    {
+        sum += nums[right];
+        while (left < n && (sum - nums[left]) >= target)
+        {
+            sum -= nums[left];
+            left++;
+        }
+        // [1,2,3,4,5] -> target = 15
+        if (sum >= target)
+            minSubArrayLength = min((right - left) + 1, minSubArrayLength);
+    }
+    return minSubArrayLength == INT_MAX ? 0 : minSubArrayLength;
+}
+// ------------
+int minSubArrayLen3(int target, vector<int> &nums)
+{
+    int n = nums.size();
+    int left = 0;
+    int sum = 0;
+    int minLengthSubArray = INT_MAX;
+    for (int right = 0; right < n; right++)
+    {
+        sum += nums[right];
+        while (sum >= target)
+        {
+            minLengthSubArray = min((right - left) + 1, minLengthSubArray);
+            sum -= nums[left];
+            left++;
+        }
+    }
+    return minLengthSubArray == INT_MAX ? 0 : minLengthSubArray;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    // string str = "abac";
-    string str = "gffg";
-    cout << countSubstrings3(str) << endl;
+    vector<int> nums = {5, 1, 3, 5, 10, 7, 4, 9, 2, 8};
+    cout << minSubArrayLen3(15, nums) << endl;
     cout << string(35, '-');
     return 0;
 }
