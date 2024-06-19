@@ -2,6 +2,20 @@
 #include <algorithm>
 using namespace std;
 
+int main()
+{
+    unordered_map<char, int> umap;
+    umap['a'] = 10;
+    umap['d'] = 20;
+    unordered_map<char, int> umap2;
+    umap2['a'] = 10;
+    umap2['d'] = 30;
+    if (umap == umap2)
+        cout << "Hey, I am here!";
+    return 0;
+}
+
+// ------------------------------------------------------------------
 // int main()
 // {
 //     unordered_map<int, int> umap;

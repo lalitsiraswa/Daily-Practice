@@ -2281,11 +2281,166 @@ int minSubArrayLen3(int target, vector<int> &nums)
     }
     return minLengthSubArray == INT_MAX ? 0 : minLengthSubArray;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {5, 1, 3, 5, 10, 7, 4, 9, 2, 8};
+//     cout << minSubArrayLen3(15, nums) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------- 3. Longest Substring Without Repeating Characters -----------------------------------------------------------
+int lengthOfLongestSubstring(string s)
+{
+    int n = s.size();
+    int maxLength = 0;
+    unordered_map<char, int> charMap;
+    int left = 0;
+    int right = 0;
+    for (right; right < n; right++)
+    {
+        if (charMap[s[right]] == 1)
+        {
+            maxLength = max((right - left), maxLength);
+            while (s[left] != s[right])
+            {
+                charMap[s[left]] = 0;
+                left++;
+            }
+            charMap[s[left]] = 0;
+            left++;
+        }
+        charMap[s[right]] = 1;
+    }
+    maxLength = max((right - left), maxLength);
+    return maxLength;
+}
+// -------------------------
+int lengthOfLongestSubstring2(string s)
+{
+    int n = s.size();
+    unordered_set<char> charSet;
+    int maxLength = 0;
+    int left = 0;
+    int right = 0;
+    for (right; right < n; right++)
+    {
+        if (charSet.find(s[right]) != charSet.end())
+        {
+            maxLength = max((right - left), maxLength);
+            while (s[left] != s[right])
+            {
+                charSet.erase(s[left]);
+                left++;
+            }
+            charSet.erase(s[left]);
+            left++;
+        }
+        charSet.insert(s[right]);
+    }
+    maxLength = max((right - left), maxLength);
+    return maxLength;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string s = "abcabcbb";
+//     cout << lengthOfLongestSubstring2(s) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------ 76. Minimum Window Substring ---------------------------------------------------------------------
+// ------------- WRONG -----------
+// string minWindow(string s, string t)
+// {
+//     int m = s.size();
+//     int n = t.size();
+//     if (n > m)
+//         return "";
+//     unordered_map<char, int> tMap;
+//     for (int i = 0; i < n; i++)
+//         tMap[t[i]]++;
+//     string minWindowString = "";
+//     for (int i = 0; i < m; i++)
+//     {
+//         int j = i;
+//         unordered_map<char, int> sMap;
+//         string currWindowString = "";
+//         while (j < m)
+//         {
+//             if (tMap.find(s[j]) != tMap.end())
+//             {
+//                 sMap[s[j]]++;
+//             }
+//             j++;
+//             int k = 0;
+//             for (k; k < n; k++)
+//             {
+//                 if (sMap[t[k]] < tMap[t[k]])
+//                     break;
+//             }
+//             if (k == n)
+//             {
+//                 currWindowString = s.substr(i, (j - i) + 1);
+//                 if (minWindowString == "")
+//                     minWindowString = currWindowString;
+//                 else
+//                     minWindowString = (minWindowString.size() > currWindowString.size()) ? currWindowString : minWindowString;
+//                 break;
+//             }
+//         }
+//     }
+//     return (minWindowString == "") ? "" : minWindowString;
+// }
+// ------------------
+
+string minWindow(string s, string t)
+{
+    if (t == "")
+        return "";
+    unordered_map<char, int> reqCount;
+    unordered_map<char, int> window;
+    for (int i = 0; i < t.size(); i++)
+        reqCount[t.at(i)]++;
+    int required = reqCount.size();
+    int current = 0;
+    int resLen = INT_MAX;
+    int left = 0;
+    vector<int> res = {-1, -1};
+    for (int right = 0; right < s.size(); right++)
+    {
+        char c = s.at(right);
+        if (reqCount[c])
+            window[c]++;
+        if (reqCount[c] && reqCount[c] == window[c])
+            current++;
+        while (current == required)
+        {
+            if (right - left + 1 < resLen)
+            {
+                res = {left, right};
+                resLen = right - left + 1;
+            }
+            char c = s.at(left);
+            if (reqCount[c] > 0)
+                window[c]--;
+            if (reqCount[c] && window[c] < reqCount[c])
+                current--;
+            left++;
+        }
+    }
+    int leftIndex = res.at(0);
+    return resLen != INT_MAX ? s.substr(leftIndex, resLen) : "";
+}
+
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> nums = {5, 1, 3, 5, 10, 7, 4, 9, 2, 8};
-    cout << minSubArrayLen3(15, nums) << endl;
+    // string s = "ADOBECODEBANC";
+    // string t = "ABC";
+    string s = "DDDAAABBCA";
+    string t = "ABC";
+    cout << minWindow(s, t) << endl;
     cout << string(35, '-');
     return 0;
 }
