@@ -2433,14 +2433,132 @@ string minWindow(string s, string t)
     return resLen != INT_MAX ? s.substr(leftIndex, resLen) : "";
 }
 
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // string s = "ADOBECODEBANC";
+//     // string t = "ABC";
+//     string s = "DDDAAABBCA";
+//     string t = "ABC";
+//     cout << minWindow(s, t) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 36. Valid Sudoku --------------------------------------------------------------------------
+bool isMatrixValid(vector<vector<char>> &board, int index)
+{
+    unordered_set<char> matrixValidate;
+    for (int i = index; i < index + 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            char ch = board[i][j];
+            if (ch == '.')
+                continue;
+            if (matrixValidate.find(ch) == matrixValidate.end())
+                matrixValidate.insert(ch);
+            else
+                return false;
+        }
+    }
+    matrixValidate.clear();
+    for (int i = index; i < index + 3; i++)
+    {
+        for (int j = 3; j < 6; j++)
+        {
+            char ch = board[i][j];
+            if (ch == '.')
+                continue;
+            if (matrixValidate.find(ch) == matrixValidate.end())
+                matrixValidate.insert(ch);
+            else
+                return false;
+        }
+    }
+    matrixValidate.clear();
+    for (int i = index; i < index + 3; i++)
+    {
+        for (int j = 6; j < 9; j++)
+        {
+            char ch = board[i][j];
+            if (ch == '.')
+                continue;
+            if (matrixValidate.find(ch) == matrixValidate.end())
+                matrixValidate.insert(ch);
+            else
+                return false;
+        }
+    }
+    return true;
+}
+bool isValidSudoku(vector<vector<char>> &board)
+{
+    for (int i = 0; i < 9; i++)
+    {
+        unordered_set<char> rowValidate;
+        for (int j = 0; j < 9; j++)
+        {
+            char ch = board[i][j];
+            if (ch == '.')
+                continue;
+            if (rowValidate.find(ch) == rowValidate.end())
+                rowValidate.insert(ch);
+            else
+                return false;
+        }
+        unordered_set<char> columnValidate;
+        for (int k = 0; k < 9; k++)
+        {
+            char ch = board[k][i];
+            if (ch == '.')
+                continue;
+            if (columnValidate.find(ch) == columnValidate.end())
+                columnValidate.insert(ch);
+            else
+                return false;
+        }
+    }
+    if ((!isMatrixValid(board, 0)) || (!isMatrixValid(board, 3)) || (!isMatrixValid(board, 6)))
+        return false;
+    return true;
+}
+// -------------------------
+bool isValidSudoku2(vector<vector<char>> &board)
+{
+    int n = 9;
+    unordered_set<char> rowSet[n];
+    unordered_set<char> colSet[n];
+    unordered_set<char> squareSet[n];
+    for (int row = 0; row < n; row++)
+    {
+        for (int col = 0; col < n; col++)
+        {
+            char val = board[row][col];
+            if (val == '.')
+                continue;
+            int sPos = (row / 3) * 3 + col / 3;
+            if (rowSet[row].count(val) || colSet[col].count(val) || squareSet[sPos].count(val))
+                return false;
+            rowSet[row].insert(val);
+            colSet[col].insert(val);
+            squareSet[sPos].insert(val);
+        }
+    }
+    return true;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    // string s = "ADOBECODEBANC";
-    // string t = "ABC";
-    string s = "DDDAAABBCA";
-    string t = "ABC";
-    cout << minWindow(s, t) << endl;
+    vector<vector<char>> board = {{'.', '.', '.', '.', '5', '.', '.', '1', '.'},
+                                  {'.', '4', '.', '3', '.', '.', '.', '.', '.'},
+                                  {'.', '.', '.', '.', '.', '3', '.', '.', '1'},
+                                  {'8', '.', '.', '.', '.', '.', '.', '2', '.'},
+                                  {'.', '.', '2', '.', '7', '.', '.', '.', '.'},
+                                  {'.', '1', '5', '.', '.', '.', '.', '.', '.'},
+                                  {'.', '.', '.', '.', '.', '2', '.', '.', '.'},
+                                  {'.', '2', '.', '9', '.', '.', '.', '.', '.'},
+                                  {'.', '.', '4', '.', '.', '.', '.', '.', '.'}};
+    cout << isValidSudoku2(board) << endl;
     cout << string(35, '-');
     return 0;
 }

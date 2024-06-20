@@ -4,14 +4,18 @@ using namespace std;
 
 int main()
 {
-    unordered_map<char, int> umap;
-    umap['a'] = 10;
-    umap['d'] = 20;
-    unordered_map<char, int> umap2;
-    umap2['a'] = 10;
-    umap2['d'] = 30;
-    if (umap == umap2)
-        cout << "Hey, I am here!";
+    int n = 9;
+    unordered_set<char> st[n];
+    unordered_set<char>::iterator itr;
+    st[4].insert('a');
+    st[5].insert('z');
+    int count = 0;
+    cout << st->count('z') << endl;
+    for (itr = st->begin(); itr != st->end(); itr++)
+    {
+        cout << count << "  :  " << *itr << endl;
+        count++;
+    }
     return 0;
 }
 
