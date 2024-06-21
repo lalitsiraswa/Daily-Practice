@@ -2603,18 +2603,65 @@ vector<int> spiralOrder(vector<vector<int>> &matrix)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // vector<vector<int>> matrix = {
+//     //     {1, 2, 3, 4, 5},
+//     //     {16, 17, 18, 19, 6},
+//     //     {15, 24, 25, 20, 7},
+//     //     {14, 23, 22, 21, 8},
+//     //     {13, 12, 11, 10, 9}};
+//     // vector<vector<int>> matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+//     vector<vector<int>> matrix = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
+//     vector<int> result = spiralOrder(matrix);
+//     cout << string(35, '-');
+//     return 0;
+// }
+// -------------------------------------------------------------- 48. Rotate Image -----------------------------------------------------------------------------
+
+void rotate(vector<vector<int>> &matrix)
+{
+    int m = matrix.size(), n = matrix[0].size();
+    // SWAP DIAGONAL RIGHT ELEMENTS WITH LEFT ELEMENTS
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = row; column < n; column++)
+        {
+            int temp = matrix[row][column];
+            matrix[row][column] = matrix[column][row];
+            matrix[column][row] = temp;
+        }
+    }
+    // OR
+
+    // SWAP DIAGONAL LEFT ELEMENTS WITH RIGHT ELEMENTS
+    // for (int row = 0; row < m; row++)
+    // {
+    //     for (int column = 0; column < row; column++)
+    //     {
+    //         int temp = matrix[row][column];
+    //         matrix[row][column] = matrix[column][row];
+    //         matrix[column][row] = temp;
+    //     }
+    // }
+
+    // SWAP VERICALLY MIDDLE LEFT ELEMENTS WITH RIGHT ELEMENTS
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n / 2; column++)
+        {
+            int temp = matrix[row][column];
+            matrix[row][column] = matrix[row][(n - 1) - column];
+            matrix[row][(n - 1) - column] = temp;
+        }
+    }
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    // vector<vector<int>> matrix = {
-    //     {1, 2, 3, 4, 5},
-    //     {16, 17, 18, 19, 6},
-    //     {15, 24, 25, 20, 7},
-    //     {14, 23, 22, 21, 8},
-    //     {13, 12, 11, 10, 9}};
-    // vector<vector<int>> matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-    vector<vector<int>> matrix = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
-    vector<int> result = spiralOrder(matrix);
+    vector<vector<int>> matrix = {{5, 1, 9, 11}, {2, 4, 8, 10}, {13, 3, 6, 7}, {15, 14, 12, 16}};
+    rotate(matrix);
     cout << string(35, '-');
     return 0;
 }
