@@ -2546,19 +2546,75 @@ bool isValidSudoku2(vector<vector<char>> &board)
     }
     return true;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<vector<char>> board = {{'.', '.', '.', '.', '5', '.', '.', '1', '.'},
+//                                   {'.', '4', '.', '3', '.', '.', '.', '.', '.'},
+//                                   {'.', '.', '.', '.', '.', '3', '.', '.', '1'},
+//                                   {'8', '.', '.', '.', '.', '.', '.', '2', '.'},
+//                                   {'.', '.', '2', '.', '7', '.', '.', '.', '.'},
+//                                   {'.', '1', '5', '.', '.', '.', '.', '.', '.'},
+//                                   {'.', '.', '.', '.', '.', '2', '.', '.', '.'},
+//                                   {'.', '2', '.', '9', '.', '.', '.', '.', '.'},
+//                                   {'.', '.', '4', '.', '.', '.', '.', '.', '.'}};
+//     cout << isValidSudoku2(board) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------------- 54. Spiral Matrix ----------------------------------------------------------------------------
+vector<int> spiralOrder(vector<vector<int>> &matrix)
+{
+    int rowCount = matrix.size();
+    int columnCount = matrix[0].size();
+    int topRow = 0, bottomRow = rowCount - 1;
+    int leftColumn = 0, rightColumn = columnCount - 1;
+    vector<int> result;
+    while (1)
+    {
+        for (int col = leftColumn; col <= rightColumn; col++)
+        {
+            result.push_back(matrix[topRow][col]);
+        }
+        topRow++;
+        if (topRow > bottomRow)
+            break;
+        for (int row = topRow; row <= bottomRow; row++)
+        {
+            result.push_back(matrix[row][rightColumn]);
+        }
+        rightColumn--;
+        if (leftColumn > rightColumn)
+            break;
+        for (int col = rightColumn; col >= leftColumn; col--)
+        {
+            result.push_back(matrix[bottomRow][col]);
+        }
+        bottomRow--;
+        if (topRow > bottomRow)
+            break;
+        for (int row = bottomRow; row >= topRow; row--)
+        {
+            result.push_back(matrix[row][leftColumn]);
+        }
+        leftColumn++;
+        if (leftColumn > rightColumn)
+            break;
+    }
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<vector<char>> board = {{'.', '.', '.', '.', '5', '.', '.', '1', '.'},
-                                  {'.', '4', '.', '3', '.', '.', '.', '.', '.'},
-                                  {'.', '.', '.', '.', '.', '3', '.', '.', '1'},
-                                  {'8', '.', '.', '.', '.', '.', '.', '2', '.'},
-                                  {'.', '.', '2', '.', '7', '.', '.', '.', '.'},
-                                  {'.', '1', '5', '.', '.', '.', '.', '.', '.'},
-                                  {'.', '.', '.', '.', '.', '2', '.', '.', '.'},
-                                  {'.', '2', '.', '9', '.', '.', '.', '.', '.'},
-                                  {'.', '.', '4', '.', '.', '.', '.', '.', '.'}};
-    cout << isValidSudoku2(board) << endl;
+    // vector<vector<int>> matrix = {
+    //     {1, 2, 3, 4, 5},
+    //     {16, 17, 18, 19, 6},
+    //     {15, 24, 25, 20, 7},
+    //     {14, 23, 22, 21, 8},
+    //     {13, 12, 11, 10, 9}};
+    // vector<vector<int>> matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    vector<vector<int>> matrix = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
+    vector<int> result = spiralOrder(matrix);
     cout << string(35, '-');
     return 0;
 }
