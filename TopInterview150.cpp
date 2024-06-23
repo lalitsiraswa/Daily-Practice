@@ -2657,11 +2657,171 @@ void rotate(vector<vector<int>> &matrix)
         }
     }
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<vector<int>> matrix = {{5, 1, 9, 11}, {2, 4, 8, 10}, {13, 3, 6, 7}, {15, 14, 12, 16}};
+//     rotate(matrix);
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------- 73. Set Matrix Zeroes ----------------------------------------------------------------------------
+void setZeroes(vector<vector<int>> &matrix)
+{
+    int m = matrix.size(), n = matrix[0].size();
+    vector<vector<int>> matrixCopy = matrix;
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            if (matrix[row][column] == 0)
+            {
+                for (int rw = 0; rw < m; rw++)
+                    matrixCopy[rw][column] = 0;
+                for (int col = 0; col < n; col++)
+                    matrixCopy[row][col] = 0;
+            }
+        }
+    }
+    matrix = matrixCopy;
+}
+// ------------------
+void setZeroes2(vector<vector<int>> &matrix)
+{
+    int rowCount = matrix.size();
+    int columnCount = matrix[0].size();
+    vector<int> isRowZero;
+    vector<int> isColumnZero;
+    for (int row = 0; row < rowCount; row++)
+    {
+        for (int col = 0; col < columnCount; col++)
+        {
+            if (matrix[row][col] == 0)
+            {
+                isRowZero.push_back(row);
+                isColumnZero.push_back(col);
+            }
+        }
+    }
+    for (int row : isRowZero)
+    {
+        for (int col = 0; col < columnCount; col++)
+        {
+            matrix[row][col] = 0;
+        }
+    }
+    for (int col : isColumnZero)
+    {
+        for (int row = 0; row < rowCount; row++)
+        {
+            matrix[row][col] = 0;
+        }
+    }
+}
+// -------- BRUTE FORCE APPROACH (NOT EXCEPTED) ----------
+void markRow(vector<vector<int>> &matrix, int row)
+{
+    int columnCount = matrix[0].size();
+    for (int col = 0; col < columnCount; col++)
+    {
+        if (matrix[row][col] != 0)
+            matrix[row][col] = -1;
+    }
+}
+void markColumn(vector<vector<int>> &matrix, int column)
+{
+    int rowCount = matrix.size();
+    for (int row = 0; row < rowCount; row++)
+    {
+        if (matrix[row][column] != 0)
+            matrix[row][column] = -1;
+    }
+}
+void setZeroes3(vector<vector<int>> &matrix)
+{
+    int rowCount = matrix.size();
+    int columnCount = matrix[0].size();
+    for (int row = 0; row < rowCount; row++)
+    {
+        for (int col = 0; col < columnCount; col++)
+        {
+            if (matrix[row][col] == 0)
+            {
+                markRow(matrix, row);
+                markColumn(matrix, col);
+            }
+        }
+    }
+    for (int row = 0; row < rowCount; row++)
+    {
+        for (int col = 0; col < columnCount; col++)
+        {
+            if (matrix[row][col] == -1)
+                matrix[row][col] = 0;
+        }
+    }
+}
+// -----------------------
+void setZeroes4(vector<vector<int>> &matrix)
+{
+    int rowCount = matrix.size();
+    int columnCount = matrix[0].size();
+    // int row[rowCount] = {0}; --> matrix[..][0]
+    // int col[columnCount] = {0}; --> matrix[0][..]
+    int col0 = 1;
+    // step: 1: Traverse the matrix amd
+    // mark 1st row & col accordingly:
+    for (int row = 0; row < rowCount; row++)
+    {
+        for (int column = 0; column < columnCount; column++)
+        {
+            if (matrix[row][column] == 0)
+            {
+                // mark i-th row
+                matrix[row][0] = 0;
+                // mark j-th column
+                if (column != 0)
+                    matrix[0][column] = 0;
+                else
+                    col0 = 0;
+            }
+        }
+    }
+
+    // Step 2: Mark with 0 from (1, 1) to (rowCount-1, columnCount-1):
+    for (int row = 1; row < rowCount; row++)
+    {
+        for (int column = 1; column < columnCount; column++)
+        {
+            if (matrix[row][column] != 0)
+            {
+                // check for row & column
+                if (matrix[row][0] == 0 || matrix[0][column] == 0)
+                    matrix[row][column] = 0;
+            }
+        }
+    }
+    // Step 3: Finally mark the 1st column and then 1st row:
+    if (matrix[0][0] == 0)
+    {
+        for (int column = 0; column < columnCount; column++)
+        {
+            matrix[0][column] = 0;
+        }
+    }
+    if (col0 == 0)
+    {
+        for (int row = 0; row < rowCount; row++)
+        {
+            matrix[row][0] = 0;
+        }
+    }
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<vector<int>> matrix = {{5, 1, 9, 11}, {2, 4, 8, 10}, {13, 3, 6, 7}, {15, 14, 12, 16}};
-    rotate(matrix);
+    vector<vector<int>> matrix = {{0, 1, 2, 0}, {3, 4, 5, 2}, {1, 3, 1, 5}};
+    setZeroes4(matrix);
     cout << string(35, '-');
     return 0;
 }
