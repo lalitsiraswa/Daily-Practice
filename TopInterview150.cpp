@@ -2817,11 +2817,180 @@ void setZeroes4(vector<vector<int>> &matrix)
         }
     }
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<vector<int>> matrix = {{0, 1, 2, 0}, {3, 4, 5, 2}, {1, 3, 1, 5}};
+//     setZeroes4(matrix);
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------- 289. Game of Life --------------------------------------------------------------------------
+// --------- BRUTE FORCE APPROACH ----------
+void gameOfLife(vector<vector<int>> &board)
+{
+    int rowCount = board.size();
+    int columnCount = board[0].size();
+    vector<vector<int>> boardCopy = board;
+    for (int row = 0; row < rowCount; row++)
+    {
+        for (int column = 0; column < columnCount; column++)
+        {
+            int neighbourCount = 0;
+            // Top
+            if (row > 0)
+            {
+                neighbourCount += board[row - 1][column];
+            }
+            // Bottom
+            if (row < rowCount - 1)
+            {
+                neighbourCount += board[row + 1][column];
+            }
+            // Left
+            if (column > 0)
+            {
+                neighbourCount += board[row][column - 1];
+            }
+            // Right
+            if (column < columnCount - 1)
+            {
+                neighbourCount += board[row][column + 1];
+            }
+            // Top-Left
+            if (row > 0 && column > 0)
+            {
+                neighbourCount += board[row - 1][column - 1];
+            }
+            // Top-Right
+            if (row > 0 && column < columnCount - 1)
+            {
+                neighbourCount += board[row - 1][column + 1];
+            }
+            // Bottom-Left
+            if (row < rowCount - 1 && column > 0)
+            {
+                neighbourCount += board[row + 1][column - 1];
+            }
+            // Bottom-Right
+            if (row < rowCount - 1 && column < columnCount - 1)
+            {
+                neighbourCount += board[row + 1][column + 1];
+            }
+            if (board[row][column] == 1)
+            {
+                // Any live cell with fewer than two live neighbors dies as if caused by under-population.
+                if (neighbourCount < 2)
+                    boardCopy[row][column] = 0;
+                // Any live cell with two or three live neighbors lives on to the next generation.
+                // Any live cell with more than three live neighbors dies, as if by over-population.
+                if (neighbourCount > 3)
+                    boardCopy[row][column] = 0;
+            }
+            // Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
+            else if (neighbourCount == 3)
+            {
+                boardCopy[row][column] = 1;
+            }
+        }
+    }
+    board = boardCopy;
+}
+// ------------- Without Using Extra Space -----------
+void gameOfLife2(vector<vector<int>> &board)
+{
+    int rowCount = board.size();
+    int columnCount = board[0].size();
+    for (int row = 0; row < rowCount; row++)
+    {
+        for (int column = 0; column < columnCount; column++)
+        {
+            int neighbourCount = 0;
+            // Top
+            if (row > 0 && abs(board[row - 1][column]) == 1)
+            {
+                neighbourCount++;
+            }
+            // Bottom
+            if (row < rowCount - 1 && abs(board[row + 1][column]) == 1)
+            {
+                neighbourCount++;
+            }
+            // Left
+            if (column > 0 && abs(board[row][column - 1]) == 1)
+            {
+                neighbourCount++;
+            }
+            // Right
+            if (column < columnCount - 1 && abs(board[row][column + 1]) == 1)
+            {
+                neighbourCount++;
+            }
+            // Top-Left
+            if (row > 0 && column > 0 && abs(board[row - 1][column - 1]) == 1)
+            {
+                neighbourCount++;
+            }
+            // Top-Right
+            if (row > 0 && column < columnCount - 1 && abs(board[row - 1][column + 1]) == 1)
+            {
+                neighbourCount++;
+            }
+            // Bottom-Left
+            if (row < rowCount - 1 && column > 0 && abs(board[row + 1][column - 1]) == 1)
+            {
+                neighbourCount++;
+            }
+            // Bottom-Right
+            if (row < rowCount - 1 && column < columnCount - 1 && abs(board[row + 1][column + 1]) == 1)
+            {
+                neighbourCount++;
+            }
+            if (board[row][column] == 1)
+            {
+                // Any live cell with fewer than two live neighbors dies as if caused by under-population.
+                if (neighbourCount < 2)
+                    board[row][column] = -1;
+                // Any live cell with two or three live neighbors lives on to the next generation.
+                // Any live cell with more than three live neighbors dies, as if by over-population.
+                if (neighbourCount > 3)
+                    board[row][column] = -1;
+            }
+            // Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
+            else if (neighbourCount == 3)
+            {
+                board[row][column] = 2;
+            }
+        }
+    }
+    for (int row = 0; row < rowCount; row++)
+    {
+        for (int column = 0; column < columnCount; column++)
+        {
+            if (board[row][column] >= 1)
+                board[row][column] = 1;
+            else
+                board[row][column] = 0;
+        }
+    }
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<vector<int>> matrix = {{0, 1, 2, 0}, {3, 4, 5, 2}, {1, 3, 1, 5}};
-    setZeroes4(matrix);
+    vector<vector<int>> board = {{0, 1, 0},
+                                 {0, 0, 1},
+                                 {1, 1, 1},
+                                 {0, 0, 0}};
+    // vector<vector<int>> board = {{1, 1}, {1, 0}};
+    gameOfLife2(board);
+    for (int row = 0; row < board.size(); row++)
+    {
+        for (int column = 0; column < board[0].size(); column++)
+        {
+            cout << board[row][column] << "  ";
+        }
+        cout << endl;
+    }
     cout << string(35, '-');
     return 0;
 }
