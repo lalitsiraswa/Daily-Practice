@@ -3038,7 +3038,7 @@ bool canConstruct2(string ransomNote, string magazine)
 bool canConstruct3(string ransomNote, string magazine)
 {
     // Initialize an array of count with the size 26.
-    int magazineCharCounter[26];
+    int magazineCharCounter[26] = {0};
     // Traverse a loop through the entire String of magazine where char ch stores the char at the index of magazine.
     for (char ch : magazine)
         magazineCharCounter[ch - 97]++;
@@ -3052,12 +3052,79 @@ bool canConstruct3(string ransomNote, string magazine)
     // If nothing goes wrong, return true.
     return true;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string ransomNote = "abcabc";
+//     string magazine = "abcdefabc";
+//     cout << canConstruct3(ransomNote, magazine) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------- 205. Isomorphic Strings ---------------------------------------------------------------------
+// --------- Brute Force Approach ---------
+bool isIsomorphic(string s, string t)
+{
+    if (s.size() != t.size())
+        return false;
+    unordered_map<char, vector<int>> sTracker;
+    unordered_map<char, vector<int>> tTracker;
+    for (int i = 0; i < s.size(); i++)
+    {
+        sTracker[s[i]].push_back(i);
+        tTracker[t[i]].push_back(i);
+    }
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (sTracker[s[i]] != tTracker[t[i]])
+            return false;
+    }
+    return true;
+}
+// -------------------------------------------
+// Check for the last Index
+bool isIsomorphic2(string s, string t)
+{
+    if (s.size() != t.size())
+        return false;
+    unordered_map<char, int> sLastIndexTracker;
+    unordered_map<char, int> tLastIndexTracker;
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (sLastIndexTracker[s[i]] != tLastIndexTracker[t[i]])
+            return false;
+        // s = "ab"
+        // t = "aa"
+        // Dry run to understand why +1.
+        sLastIndexTracker[s[i]] = i + 1;
+        tLastIndexTracker[t[i]] = i + 1;
+    }
+    return true;
+}
+// -----------------------------------
+bool isIsomorphic3(string s, string t)
+{
+    if (s.size() != t.size())
+        return false;
+    unordered_map<char, int> sTracker;
+    unordered_map<char, int> tTracker;
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (sTracker[s[i]] && sTracker[s[i]] != t[i])
+            return false;
+        if (tTracker[t[i]] && tTracker[t[i]] != s[i])
+            return false;
+        sTracker[s[i]] = t[i];
+        tTracker[t[i]] = s[i];
+    }
+    return true;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    string ransomNote = "chejaccdae";
-    string magazine = "geceeibccchjejhdd";
-    cout << canConstruct3(ransomNote, magazine) << endl;
+    string s = "paper";
+    string t = "title";
+    cout << isIsomorphic2(s, t) << endl;
     cout << string(35, '-');
     return 0;
 }
