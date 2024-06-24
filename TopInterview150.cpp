@@ -2974,23 +2974,90 @@ void gameOfLife2(vector<vector<int>> &board)
         }
     }
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<vector<int>> board = {{0, 1, 0},
+//                                  {0, 0, 1},
+//                                  {1, 1, 1},
+//                                  {0, 0, 0}};
+//     // vector<vector<int>> board = {{1, 1}, {1, 0}};
+//     gameOfLife2(board);
+//     for (int row = 0; row < board.size(); row++)
+//     {
+//         for (int column = 0; column < board[0].size(); column++)
+//         {
+//             cout << board[row][column] << "  ";
+//         }
+//         cout << endl;
+//     }
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 383. Ransom Note ------------------------------------------------------------------
+bool canConstruct(string ransomNote, string magazine)
+{
+    unordered_map<char, int> ransomNoteCharFrequency;
+    unordered_map<char, int> magazineCharFrequency;
+    for (char ch : ransomNote)
+        ransomNoteCharFrequency[ch]++;
+    for (char ch : magazine)
+        magazineCharFrequency[ch]++;
+    for (char ch : ransomNote)
+    {
+        if (ransomNoteCharFrequency[ch] > magazineCharFrequency[ch])
+            return false;
+    }
+    return true;
+}
+// ---------------
+bool canConstruct2(string ransomNote, string magazine)
+{
+    int ransomNoteSize = ransomNote.size();
+    unordered_map<char, int> magazineCharFrequency;
+    sort(ransomNote.begin(), ransomNote.end());
+    for (char ch : magazine)
+        magazineCharFrequency[ch]++;
+    int frequencyCounter = 1;
+    for (int i = 1; i < ransomNoteSize; i++)
+    {
+        if (ransomNote[i] == ransomNote[i - 1])
+            frequencyCounter++;
+        else
+        {
+            if (frequencyCounter > magazineCharFrequency[ransomNote[i - 1]])
+                return false;
+            frequencyCounter = 1;
+        }
+    }
+    if (frequencyCounter > magazineCharFrequency[ransomNote[ransomNoteSize - 1]])
+        return false;
+    return true;
+}
+// ---------------
+bool canConstruct3(string ransomNote, string magazine)
+{
+    // Initialize an array of count with the size 26.
+    int magazineCharCounter[26];
+    // Traverse a loop through the entire String of magazine where char ch stores the char at the index of magazine.
+    for (char ch : magazine)
+        magazineCharCounter[ch - 97]++;
+    // Run another for loop for ransomNote.
+    for (char ch : ransomNote)
+    {
+        // If the charachter doesn't exists in magazineCharCounter ('magazine') for ransomNote, we return false.
+        if (magazineCharCounter[ch - 97]-- <= 0)
+            return false;
+    }
+    // If nothing goes wrong, return true.
+    return true;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<vector<int>> board = {{0, 1, 0},
-                                 {0, 0, 1},
-                                 {1, 1, 1},
-                                 {0, 0, 0}};
-    // vector<vector<int>> board = {{1, 1}, {1, 0}};
-    gameOfLife2(board);
-    for (int row = 0; row < board.size(); row++)
-    {
-        for (int column = 0; column < board[0].size(); column++)
-        {
-            cout << board[row][column] << "  ";
-        }
-        cout << endl;
-    }
+    string ransomNote = "chejaccdae";
+    string magazine = "geceeibccchjejhdd";
+    cout << canConstruct3(ransomNote, magazine) << endl;
     cout << string(35, '-');
     return 0;
 }
