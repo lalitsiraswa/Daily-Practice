@@ -3219,12 +3219,76 @@ bool wordPattern3(string pattern, string s)
     }
     return index == s.size() ? true : false;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string pattern = "he";
+//     string s = "unit";
+//     cout << wordPattern3(pattern, s) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------- 242. Valid Anagram ------------------------------------------------------------------------
+bool isAnagram(string s, string t)
+{
+    if (s.size() != t.size())
+        return false;
+    unordered_map<char, int> sCharFrequency;
+    unordered_map<char, int> tCharFrequency;
+    int n = s.size();
+    for (int i = 0; i < n; i++)
+    {
+        sCharFrequency[s[i]]++;
+        tCharFrequency[t[i]]++;
+    }
+    for (char ch : t)
+    {
+        if (tCharFrequency[ch] != sCharFrequency[ch])
+            return false;
+    }
+    return true;
+}
+// -------------------
+bool isAnagram2(string s, string t)
+{
+    if (s.size() != t.size())
+        return false;
+    unordered_map<char, int> sCharFrequency;
+    for (char ch : s)
+    {
+        sCharFrequency[ch]++;
+    }
+    for (char ch : t)
+    {
+        if (sCharFrequency[ch]-- <= 0)
+            return false;
+    }
+    return true;
+}
+// ------------------------
+bool isAnagram3(string s, string t)
+{
+    if (s.size() != t.size())
+        return false;
+    int characterCounter[26] = {0};
+    for (int i = 0; i < s.size(); i++)
+    {
+        characterCounter[s[i] - 97]++;
+        characterCounter[t[i] - 97]--;
+    }
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (characterCounter[s[i] - 97] != 0)
+            return false;
+    }
+    return true;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    string pattern = "he";
-    string s = "unit";
-    cout << wordPattern3(pattern, s) << endl;
+    string s = "anagram";
+    string t = "nagaram";
+    cout << isAnagram3(s, t) << endl;
     cout << string(35, '-');
     return 0;
 }
