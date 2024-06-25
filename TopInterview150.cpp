@@ -3119,12 +3119,112 @@ bool isIsomorphic3(string s, string t)
     }
     return true;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string s = "paper";
+//     string t = "title";
+//     cout << isIsomorphic2(s, t) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------- 290. Word Pattern ---------------------------------------------------------------------------
+bool wordPattern(string pattern, string s)
+{
+    vector<string> wordVector;
+    string word = "";
+    for (char ch : s)
+    {
+        if (ch != ' ')
+            word += ch;
+        else if (!word.empty())
+        {
+            wordVector.push_back(word);
+            word.clear();
+        }
+    }
+    if (!word.empty())
+        wordVector.push_back(word);
+    if (pattern.size() != wordVector.size())
+        return false;
+    unordered_map<char, string> patternTracker;
+    unordered_map<string, char> wordTracker;
+    for (int i = 0; i < pattern.size(); i++)
+    {
+        if (patternTracker.find(pattern[i]) != patternTracker.end() && patternTracker[pattern[i]] != wordVector[i])
+            return false;
+        if (wordTracker.find(wordVector[i]) != wordTracker.end() && wordTracker[wordVector[i]] != pattern[i])
+            return false;
+        patternTracker[pattern[i]] = wordVector[i];
+        wordTracker[wordVector[i]] = pattern[i];
+    }
+    return true;
+}
+// -------------------
+// Tracking last index
+bool wordPattern2(string pattern, string s)
+{
+    vector<string> wordVector;
+    string word = "";
+    for (char ch : s)
+    {
+        if (ch != ' ')
+            word += ch;
+        else if (!word.empty())
+        {
+            wordVector.push_back(word);
+            word.clear();
+        }
+    }
+    if (!word.empty())
+        wordVector.push_back(word);
+    if (pattern.size() != wordVector.size())
+        return false;
+    unordered_map<char, int> patternTracker;
+    unordered_map<string, int> wordTracker;
+    for (int i = 0; i < pattern.size(); i++)
+    {
+        if (patternTracker[pattern[i]] != wordTracker[wordVector[i]])
+            return false;
+        patternTracker[pattern[i]] = i + 1;
+        wordTracker[wordVector[i]] = i + 1;
+    }
+    return true;
+}
+// --------------------------
+bool wordPattern3(string pattern, string s)
+{
+    unordered_map<char, string> patternTracker;
+    unordered_map<string, char> wordTracker;
+    int index = 0;
+    int i = 0;
+    for (int i = 0; i < pattern.size(); i++)
+    {
+        // pattern = "he" // pattern = "abc"
+        // s = "unit"     // s = "dog cat ball call"
+        // Dry Run This
+        if (index == s.size())
+            return false;
+        while (index < s.size() && s[index] == ' ')
+            index++;
+        string word;
+        while (index < s.size() && s[index] != ' ')
+            word += s[index++];
+        if (patternTracker.find(pattern[i]) != patternTracker.end() && patternTracker[pattern[i]] != word)
+            return false;
+        if (wordTracker.find(word) != wordTracker.end() && wordTracker[word] != pattern[i])
+            return false;
+        patternTracker[pattern[i]] = word;
+        wordTracker[word] = pattern[i];
+    }
+    return index == s.size() ? true : false;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    string s = "paper";
-    string t = "title";
-    cout << isIsomorphic2(s, t) << endl;
+    string pattern = "he";
+    string s = "unit";
+    cout << wordPattern3(pattern, s) << endl;
     cout << string(35, '-');
     return 0;
 }
