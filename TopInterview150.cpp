@@ -3283,12 +3283,75 @@ bool isAnagram3(string s, string t)
     }
     return true;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string s = "anagram";
+//     string t = "nagaram";
+//     cout << isAnagram3(s, t) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------ 49. Group Anagrams -----------------------------------------------------------------------
+vector<vector<string>> groupAnagrams(vector<string> &strs)
+{
+    unordered_map<string, vector<string>> anagramMapper;
+    for (string word : strs)
+    {
+        string temp = word;
+        sort(word.begin(), word.end());
+        anagramMapper[word].push_back(temp);
+    }
+    vector<vector<string>> result;
+    for (auto itr : anagramMapper)
+    {
+        result.push_back(itr.second);
+    }
+    return result;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<string> strs = {"eat", "tea", "tan", "ate", "nat", "bat"};
+//     vector<vector<string>> result = groupAnagrams(strs);
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------------- 70. Climbing Stairs -------------------------------------------------------------------------
+int climbStairs(int n)
+{
+    if (n == 1 || n == 0)
+        return 1;
+    int oneStep = climbStairs(n - 1);
+    int twoStep = 0;
+    if (n >= 2)
+        twoStep = climbStairs(n - 2);
+    return oneStep + twoStep;
+}
+// ---------- Memoisation -----------
+int climbStairsHelper(int n, vector<int> &dp)
+{
+    if (n == 0)
+        return 1;
+    if (dp[n] != -1)
+        return dp[n];
+    int oneStep = climbStairsHelper(n - 1, dp);
+    int twoStep = 0;
+    if (n >= 2)
+        twoStep = climbStairsHelper(n - 2, dp);
+    return dp[n] = oneStep + twoStep;
+}
+int climbStairs2(int n)
+{
+    vector<int> dp(n + 1, -1);
+    climbStairsHelper(n, dp);
+    return dp[n];
+}
 int main()
 {
+
     cout << string(35, '-') << endl;
-    string s = "anagram";
-    string t = "nagaram";
-    cout << isAnagram3(s, t) << endl;
+    cout << climbStairs2(3) << endl;
     cout << string(35, '-');
     return 0;
 }
