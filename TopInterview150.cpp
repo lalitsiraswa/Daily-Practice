@@ -3365,13 +3365,38 @@ vector<vector<string>> groupAnagrams2(vector<string> &strs)
         anagramsGroup.push_back(item.second);
     return anagramsGroup;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // vector<string> strs = {"eat", "tea", "tan", "ate", "nat", "bat"};
+//     // vector<vector<string>> result = groupAnagrams(strs);
+//     string result = strSort("fedcba");
+//     cout << result << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 1. Two Sum --------------------------------------------------------------------------
+vector<int> twoSum_01(vector<int> &nums, int target)
+{
+    unordered_map<int, int> umap;
+    int n = nums.size();
+    for (int i = 0; i < n; i++)
+    {
+        int remaining = target - nums[i];
+        if (umap[remaining])
+        {
+            return {umap[remaining] - 1, i};
+        }
+        umap[nums[i]] = i + 1;
+    }
+    return {0, 0};
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    // vector<string> strs = {"eat", "tea", "tan", "ate", "nat", "bat"};
-    // vector<vector<string>> result = groupAnagrams(strs);
-    string result = strSort("fedcba");
-    cout << result << endl;
+    vector<int> nums = {2, 7, 11, 15};
+    vector<int> result = twoSum_01(nums, 9);
+    cout << result[0] << ", " << result[1] << endl;
     cout << string(35, '-');
     return 0;
 }
