@@ -3292,31 +3292,6 @@ bool isAnagram3(string s, string t)
 //     cout << string(35, '-');
 //     return 0;
 // }
-// ------------------------------------------------------------------ 49. Group Anagrams -----------------------------------------------------------------------
-vector<vector<string>> groupAnagrams(vector<string> &strs)
-{
-    unordered_map<string, vector<string>> anagramMapper;
-    for (string word : strs)
-    {
-        string temp = word;
-        sort(word.begin(), word.end());
-        anagramMapper[word].push_back(temp);
-    }
-    vector<vector<string>> result;
-    for (auto itr : anagramMapper)
-    {
-        result.push_back(itr.second);
-    }
-    return result;
-}
-// int main()
-// {
-//     cout << string(35, '-') << endl;
-//     vector<string> strs = {"eat", "tea", "tan", "ate", "nat", "bat"};
-//     vector<vector<string>> result = groupAnagrams(strs);
-//     cout << string(35, '-');
-//     return 0;
-// }
 // ----------------------------------------------------------------- 70. Climbing Stairs -------------------------------------------------------------------------
 int climbStairs(int n)
 {
@@ -3347,11 +3322,53 @@ int climbStairs2(int n)
     climbStairsHelper(n, dp);
     return dp[n];
 }
+
+// ------------------------------------------------------------------ 49. Group Anagrams -----------------------------------------------------------------------
+vector<vector<string>> groupAnagrams(vector<string> &strs)
+{
+    int n = strs.size();
+    unordered_map<string, vector<string>> umap;
+    vector<vector<string>> anagramsGroup;
+    // use auto& rather then auto to avoid unnecessary copy
+    for (auto &str : strs)
+    {
+        string helper = str;
+        sort(helper.begin(), helper.end());
+        umap[helper].push_back(str);
+    }
+    for (auto &item : umap)
+        anagramsGroup.push_back(item.second);
+    return anagramsGroup;
+}
+// --------------------------
+string strSort(string s)
+{
+    int counter[26] = {0};
+    for (char ch : s)
+        counter[ch - 97]++;
+    string str;
+    for (int i = 0; i < 26; i++)
+    {
+        str += string(counter[i], i + 97);
+    }
+    return str;
+}
+vector<vector<string>> groupAnagrams2(vector<string> &strs)
+{
+    int n = strs.size();
+    unordered_map<string, vector<string>> umap;
+    for (string &str : strs)
+        umap[strSort(str)].push_back(str);
+    vector<vector<string>> anagramsGroup;
+    for (auto &item : umap)
+        anagramsGroup.push_back(item.second);
+    return anagramsGroup;
+}
 int main()
 {
-
     cout << string(35, '-') << endl;
-    cout << climbStairs2(3) << endl;
+    vector<string> strs = {"eat", "tea", "tan", "ate", "nat", "bat"};
+    vector<vector<string>> result = groupAnagrams(strs);
     cout << string(35, '-');
     return 0;
 }
