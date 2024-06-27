@@ -3341,6 +3341,7 @@ vector<vector<string>> groupAnagrams(vector<string> &strs)
     return anagramsGroup;
 }
 // --------------------------
+// Counting Sort
 string strSort(string s)
 {
     int counter[26] = {0};
@@ -3367,8 +3368,10 @@ vector<vector<string>> groupAnagrams2(vector<string> &strs)
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<string> strs = {"eat", "tea", "tan", "ate", "nat", "bat"};
-    vector<vector<string>> result = groupAnagrams(strs);
+    // vector<string> strs = {"eat", "tea", "tan", "ate", "nat", "bat"};
+    // vector<vector<string>> result = groupAnagrams(strs);
+    string result = strSort("fedcba");
+    cout << result << endl;
     cout << string(35, '-');
     return 0;
 }
