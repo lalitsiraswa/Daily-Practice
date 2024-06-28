@@ -3391,12 +3391,70 @@ vector<int> twoSum_01(vector<int> &nums, int target)
     }
     return {0, 0};
 }
-int main()
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {2, 7, 11, 15};
+//     vector<int> result = twoSum_01(nums, 9);
+//     cout << result[0] << ", " << result[1] << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------------- 202. Happy Number ---------------------------------------------------------------------------
+bool isHappy(int n)
 {
-    cout << string(35, '-') << endl;
-    vector<int> nums = {2, 7, 11, 15};
-    vector<int> result = twoSum_01(nums, 9);
-    cout << result[0] << ", " << result[1] << endl;
-    cout << string(35, '-');
-    return 0;
+    unordered_map<int, int> occured;
+    int remainder = 0, sumOfProduct = 0;
+    while (n)
+    {
+        sumOfProduct = 0;
+        while (n)
+        {
+            remainder = n % 10;
+            n = n / 10;
+            sumOfProduct += (remainder * remainder);
+        }
+        if (sumOfProduct == 1)
+            return 1;
+        if (occured[sumOfProduct])
+            return false;
+        occured[sumOfProduct] = 1;
+        n = sumOfProduct;
+    }
+    return false;
 }
+// ---------------------------
+int sumOfSquaredDigits(int number)
+{
+    int totalSum = 0;
+    while (number > 0)
+    {
+        int remainder = number % 10;
+        number = floor(number / 10);
+        totalSum += remainder * remainder;
+    }
+    return totalSum;
+}
+bool isHappy2(int n)
+{
+    int slowPointer = n;
+    int fastPointer = sumOfSquaredDigits(n);
+    while (fastPointer != 1 && slowPointer != fastPointer)
+    {
+        slowPointer = sumOfSquaredDigits(slowPointer);
+        fastPointer = sumOfSquaredDigits(sumOfSquaredDigits(fastPointer));
+    }
+    if (fastPointer == 1)
+        return true;
+    return false;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // int n = 19;
+//     int n = 2;
+//     // int n = 1;
+//     cout << isHappy2(n) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
