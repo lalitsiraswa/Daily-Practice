@@ -3458,3 +3458,59 @@ bool isHappy2(int n)
 //     cout << string(35, '-');
 //     return 0;
 // }
+// ----------------------------------------------------------------- 219. Contains Duplicate II ---------------------------------------------------------------------------
+bool containsNearbyDuplicate(vector<int> &nums, int k)
+{
+    unordered_map<int, int> umap;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        if (umap.find(nums[i]) != umap.end())
+        {
+            int distance = abs(umap[nums[i]] - i);
+            if (distance <= k)
+                return true;
+        }
+        umap[nums[i]] = i;
+    }
+    return false;
+}
+// -------------
+bool containsNearbyDuplicate2(vector<int> &nums, int k)
+{
+    unordered_map<int, int> umap;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        if (umap[nums[i]])
+        {
+            int distance = abs((umap[nums[i]] - 1) - i);
+            if (distance <= k)
+                return true;
+        }
+        umap[nums[i]] = i + 1;
+    }
+    return false;
+}
+// ---------------
+bool containsNearbyDuplicate3(vector<int> &nums, int k)
+{
+    unordered_map<int, int> umap;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        if (umap.count(nums[i]))
+        {
+            if (abs(umap[nums[i]] - 1) <= k)
+                return true;
+        }
+        umap[nums[i]] = i;
+    }
+    return false;
+}
+int main()
+{
+    cout << string(35, '-') << endl;
+    vector<int> nums = {1, 0, 1, 1};
+    int k = 1;
+    cout << containsNearbyDuplicate2(nums, k) << endl;
+    cout << string(35, '-');
+    return 0;
+}
