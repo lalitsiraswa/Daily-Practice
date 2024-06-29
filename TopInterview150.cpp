@@ -3505,12 +3505,106 @@ bool containsNearbyDuplicate3(vector<int> &nums, int k)
     }
     return false;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {1, 0, 1, 1};
+//     int k = 1;
+//     cout << containsNearbyDuplicate2(nums, k) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------- 128. Longest Consecutive Sequence ------------------------------------------------------------------
+// -------- Brute Force Approach --------
+int longestConsecutive(vector<int> &nums)
+{
+    int longestLength = INT_MIN;
+    int currentLongestLength = 1;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        int nextElement = nums[i] + 1;
+        while (1)
+        {
+            bool elementFound = false;
+            for (int i = 0; i < nums.size(); i++)
+            {
+                if (nums[i] == nextElement)
+                {
+                    currentLongestLength++;
+                    nextElement++;
+                    elementFound = true;
+                    break;
+                }
+            }
+            if (!elementFound)
+            {
+                longestLength = max(longestLength, currentLongestLength);
+                currentLongestLength = 1;
+                break;
+            }
+        }
+    }
+    return longestLength;
+}
+// ---------------------
+int longestConsecutive2(vector<int> &nums)
+{
+    if (nums.size() == 0)
+        return 0;
+    sort(nums.begin(), nums.end());
+    int longestLength = INT_MIN;
+    int currentLongestLength = 1;
+    for (int i = 1; i < nums.size(); i++)
+    {
+        if (nums[i] == nums[i - 1])
+            continue;
+        else if (nums[i] == (nums[i - 1] + 1))
+            currentLongestLength++;
+        else
+        {
+            longestLength = max(longestLength, currentLongestLength);
+            currentLongestLength = 1;
+        }
+    }
+    longestLength = max(longestLength, currentLongestLength);
+    return longestLength;
+}
+// --------- TUF ------------
+int longestConsecutiveTuf(vector<int> &nums)
+{
+    int n = nums.size();
+    if (n == 0)
+        return 0;
+    int longest = 1;
+    unordered_set<int> st;
+    // put all the array elements into set:
+    for (int i = 0; i < n; i++)
+        st.insert(nums[i]);
+    // Find the longest sequence:
+    for (auto &item : st)
+    {
+        // if 'it' is a starting number:
+        if (st.find(item - 1) == st.end())
+        {
+            // find consecutive numbers:
+            int count = 1;
+            int x = item;
+            while (st.find(x + 1) != st.end())
+            {
+                x = x + 1;
+                count++;
+            }
+            longest = max(longest, count);
+        }
+    }
+    return longest;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> nums = {1, 0, 1, 1};
-    int k = 1;
-    cout << containsNearbyDuplicate2(nums, k) << endl;
+    // vector<int> nums = {0, 3, 7, 2, 5, 8, 4, 6, 0, 1};
+    vector<int> nums = {102, 4, 100, 1, 101, 3, 2, 1, 1};
+    cout << longestConsecutiveTuf(nums) << endl;
     cout << string(35, '-');
     return 0;
 }
