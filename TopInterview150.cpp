@@ -3599,12 +3599,52 @@ int longestConsecutiveTuf(vector<int> &nums)
     }
     return longest;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // vector<int> nums = {0, 3, 7, 2, 5, 8, 4, 6, 0, 1};
+//     vector<int> nums = {102, 4, 100, 1, 101, 3, 2, 1, 1};
+//     cout << longestConsecutiveTuf(nums) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// -------------------------------------------------------------------- 228. Summary Ranges ------------------------------------------------------------------------
+vector<string> summaryRanges(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<string> rangeSummary;
+    if (n == 0)
+        return rangeSummary;
+    int startRange = nums[0];
+    int endRange = nums[0];
+    for (int i = 1; i < n; i++)
+    {
+        if (nums[i] == endRange + 1)
+            endRange = nums[i];
+        else
+        {
+            if (startRange == endRange)
+                rangeSummary.push_back(to_string(startRange));
+            else
+                rangeSummary.push_back(to_string(startRange) + "->" + to_string(endRange));
+            startRange = nums[i];
+            endRange = nums[i];
+        }
+    }
+    if (startRange == endRange)
+        rangeSummary.push_back(to_string(startRange));
+    else
+        rangeSummary.push_back(to_string(startRange) + "->" + to_string(endRange));
+    return rangeSummary;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    // vector<int> nums = {0, 3, 7, 2, 5, 8, 4, 6, 0, 1};
-    vector<int> nums = {102, 4, 100, 1, 101, 3, 2, 1, 1};
-    cout << longestConsecutiveTuf(nums) << endl;
+    // vector<int> nums = {0, 2, 3, 4, 6, 8, 9};
+    vector<int> nums = {0, 1, 2, 4, 5, 7};
+    vector<string> rangeSummary = summaryRanges(nums);
+    for (auto range : rangeSummary)
+        cout << range << endl;
     cout << string(35, '-');
     return 0;
 }
