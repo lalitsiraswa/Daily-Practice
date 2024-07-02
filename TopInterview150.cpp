@@ -3637,14 +3637,78 @@ vector<string> summaryRanges(vector<int> &nums)
         rangeSummary.push_back(to_string(startRange) + "->" + to_string(endRange));
     return rangeSummary;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // vector<int> nums = {0, 2, 3, 4, 6, 8, 9};
+//     vector<int> nums = {0, 1, 2, 4, 5, 7};
+//     vector<string> rangeSummary = summaryRanges(nums);
+//     for (auto range : rangeSummary)
+//         cout << range << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 56. Merge Intervals ------------------------------------------------------------------------
+vector<vector<int>> merge(vector<vector<int>> &intervals)
+{
+    vector<vector<int>> result;
+    int n = intervals.size();
+    sort(intervals.begin(), intervals.end());
+    vector<int> interval = {intervals[0][0], intervals[0][1]};
+    for (int i = 1; i < n; i++)
+    {
+        if (intervals[i][0] <= interval[1])
+        {
+            if (intervals[i][1] >= interval[1])
+                interval[1] = intervals[i][1];
+        }
+        else
+        {
+            result.push_back(interval);
+            interval[0] = intervals[i][0];
+            interval[1] = intervals[i][1];
+        }
+    }
+    result.push_back(interval);
+    return result;
+}
+// -------------
+vector<vector<int>> merge2(vector<vector<int>> &intervals)
+{
+    vector<vector<int>> result;
+    int n = intervals.size();
+    sort(intervals.begin(), intervals.end());
+    vector<int> interval = {intervals[0][0], intervals[0][1]};
+    for (int i = 1; i < n; i++)
+    {
+        if (intervals[i][0] <= interval[1])
+        {
+            interval[0] = min(interval[0], intervals[i][0]);
+            interval[1] = max(interval[1], intervals[i][1]);
+        }
+        else
+        {
+            result.push_back(interval);
+            interval[0] = intervals[i][0];
+            interval[1] = intervals[i][1];
+        }
+    }
+    result.push_back(interval);
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    // vector<int> nums = {0, 2, 3, 4, 6, 8, 9};
-    vector<int> nums = {0, 1, 2, 4, 5, 7};
-    vector<string> rangeSummary = summaryRanges(nums);
-    for (auto range : rangeSummary)
-        cout << range << endl;
+    // vector<vector<int>> intervals = {{1, 3}, {2, 6}, {8, 10}, {15, 18}};
+    // vector<vector<int>> intervals = {{1, 4}, {4, 5}};
+    // vector<vector<int>> intervals = {{1, 4}, {0, 4}};
+    // vector<vector<int>> intervals = {{1, 4}, {2, 3}};
+    vector<vector<int>> intervals = {{1, 4}, {0, 5}};
+    vector<vector<int>> result = merge(intervals);
+    for (vector<int> vect : result)
+    {
+        cout << vect[0] << ", " << vect[1] << endl;
+    }
     cout << string(35, '-');
     return 0;
 }
