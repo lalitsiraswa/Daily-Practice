@@ -3696,6 +3696,27 @@ vector<vector<int>> merge2(vector<vector<int>> &intervals)
     result.push_back(interval);
     return result;
 }
+// ------------------
+vector<vector<int>> merge3(vector<vector<int>> &intervals)
+{
+    vector<vector<int>> answer;
+    sort(intervals.begin(), intervals.end());
+    vector<int> newInterval = intervals[0];
+    int i = 1, n = intervals.size();
+    while (i < n)
+    {
+        if (intervals[i][0] <= newInterval[1])
+            newInterval[1] = max(intervals[i][1], newInterval[1]);
+        else if (intervals[i][0] > newInterval[1])
+        {
+            answer.push_back(newInterval);
+            newInterval = intervals[i];
+        }
+        i++;
+    }
+    answer.push_back(newInterval);
+    return answer;
+}
 int main()
 {
     cout << string(35, '-') << endl;
