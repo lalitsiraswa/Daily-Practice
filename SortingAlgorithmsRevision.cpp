@@ -22,12 +22,28 @@ void bubbleSort(int *array, int n)
             break;
     }
 }
+// Insertion Sort Algorithm
+void insertionSort(int array[], int n)
+{
+    int key;
+    for (int i = 1; i < n; i++)
+    {
+        key = array[i];
+        int j = i - 1;
+        while (j >= 0 && array[j] > key)
+        {
+            array[j + 1] = array[j];
+            j = j - 1;
+        }
+        array[j + 1] = key;
+    }
+}
 int main()
 {
     cout << string(20, '-') << endl;
     int array[] = {6, 5, 4, 3, 2, 1};
     int n = sizeof(array) / sizeof(int);
-    bubbleSort(array, n);
+    insertionSort(array, n);
     for (auto element : array)
         cout << element << " ";
     cout << endl
