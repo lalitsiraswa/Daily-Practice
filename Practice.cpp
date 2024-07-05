@@ -2,6 +2,32 @@
 #include <algorithm>
 using namespace std;
 
+int main()
+{
+    if ("lalit" == "lalit")
+        cout << "Hello World!";
+    return 0;
+}
+
+// ----------------------------------------------
+// int main()
+// {
+//     int n = 9;
+//     unordered_set<char> st[n];
+//     unordered_set<char>::iterator itr;
+//     st[4].insert('a');
+//     st[5].insert('z');
+//     int count = 0;
+//     cout << st->count('z') << endl;
+//     for (itr = st->begin(); itr != st->end(); itr++)
+//     {
+//         cout << count << "  :  " << *itr << endl;
+//         count++;
+//     }
+//     return 0;
+// }
+
+// ------------------------------------------------------------------
 // int main()
 // {
 //     unordered_map<int, int> umap;

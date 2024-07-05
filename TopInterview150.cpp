@@ -1763,15 +1763,1973 @@ bool isPalindrome2(string s)
     }
     return true;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // string s = "A man, a plan, a canal: Panama";
+//     // string s = "race a car";
+//     // string s = " ";
+//     string s = "0P";
+//     cout << isPalindrome2(s) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------------------- 392. Is Subsequence ----------------------------------------------------------------
+bool isSubsequence(string s, string t)
+{
+    int m = s.size();
+    int n = t.size();
+    if (m > n)
+        return false;
+    int j = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (t[i] == s[j])
+            j++;
+        if (j == m)
+            return true;
+    }
+    return j == m ? true : false;
+}
+// ---------------------
+bool isSubsequence2(string s, string t)
+{
+    int m = s.size();
+    int n = t.size();
+    if (m > n)
+        return false;
+    int left = 0, right = n - 1;
+    int i = 0, j = m - 1;
+    while (left <= right && i <= j)
+    {
+        if (t[left] == s[i])
+        {
+            left++;
+            i++;
+        }
+        else
+        {
+            left++;
+        }
+        if (left > right && i <= j)
+            return false;
+        if (t[right] == s[j])
+        {
+            j--;
+            right--;
+        }
+        else
+        {
+            right--;
+        }
+    }
+    return i > j ? true : false;
+}
+// ------------------------
+bool isSubs(string &s, string &t, int m, int n)
+{
+    if (m == 0)
+        return true;
+    if (n == 0)
+        return false;
+    // If last characters of two strings are matching
+    if (s[m - 1] == t[n - 1])
+        return isSubs(s, t, m - 1, n - 1);
+    // If last characters are not matching
+    return isSubs(s, t, m, n - 1);
+}
+bool isSubsequence3(string s, string t)
+{
+    if (isSubs(s, t, s.size(), t.size()))
+        return true;
+    return false;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     cout << isSubsequence2("abbc", "ahbdc") << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------- 167. Two Sum II - Input Array Is Sorted -----------------------------------------------------------
+vector<int> twoSum(vector<int> &numbers, int target)
+{
+    int n = numbers.size();
+    int left = 0, right = n - 1;
+    while (left < right)
+    {
+        int sum = numbers[left] + numbers[right];
+        if (sum == target)
+            break;
+        else if (sum > target)
+            right--;
+        else
+            left++;
+    }
+    return {left + 1, right + 1};
+}
+// ----------------------
+vector<int> twoSum2(vector<int> &numbers, int target)
+{
+    int n = numbers.size();
+    unordered_map<int, int> umap;
+    umap[numbers[0]] = 1;
+    for (int i = 1; i < n; i++)
+    {
+        int difference = target - numbers[i];
+        if (umap.find(difference) != umap.end())
+            return {umap[difference], i + 1};
+        else
+            umap[numbers[i]] = i + 1;
+    }
+    return {};
+}
+// ------------------------
+vector<int> twoSum3(vector<int> &numbers, int target)
+{
+    int left = 0, right = numbers.size() - 1;
+    while (numbers[left] + numbers[right] != target)
+    {
+        if (numbers[left] + numbers[right] < target)
+            left++;
+        else
+            right--;
+    }
+
+    return {left + 1, right + 1};
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> numbers = {-1, 0};
+//     vector<int> result = twoSum2(numbers, -1);
+//     cout << result[0] << " " << result[1] << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------- 11. Container With Most Water ------------------------------------------------------------------
+// ------------- TLE -------------
+int maxArea(vector<int> &height)
+{
+    int maxAmountWater = 0;
+    for (int leftPointer = 0; leftPointer < height.size(); leftPointer)
+    {
+        for (int rightPointer = leftPointer + 1; rightPointer < height.size(); rightPointer++)
+        {
+            int maxWaterCanFillBetween = min(height[leftPointer], height[rightPointer]);
+            int currMaxWater = (rightPointer - leftPointer) * maxWaterCanFillBetween;
+            maxAmountWater = max(maxAmountWater, currMaxWater);
+        }
+    }
+    return maxAmountWater;
+}
+// --------------------
+int maxArea2(vector<int> &height)
+{
+    int n = height.size();
+    int mostWaterLevel = 0;
+    int left = 0, right = n - 1;
+    while (left < right)
+    {
+        int maxWaterCanFillBetween = min(height[left], height[right]);
+        int currMaxWater = (right - left) * maxWaterCanFillBetween;
+        mostWaterLevel = max(mostWaterLevel, currMaxWater);
+        if (height[left] < height[right])
+            left++;
+        else
+            right--;
+    }
+    return mostWaterLevel;
+}
+// --------------------
+int maxArea3(vector<int> &height)
+{
+    int n = height.size();
+    int mostWaterLevel = 0;
+    int left = 0, right = n - 1;
+    while (left < right)
+    {
+        int maxWaterCanFillBetween = min(height[left], height[right]);
+        int currMaxWater = (right - left) * maxWaterCanFillBetween;
+        mostWaterLevel = max(mostWaterLevel, currMaxWater);
+        while (height[left] <= maxWaterCanFillBetween && left < right)
+            left++;
+        while (height[right] <= maxWaterCanFillBetween && left < right)
+            right--;
+    }
+    return mostWaterLevel;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------------ 15. 3Sum ----------------------------------------------------------------------
+// --------- TUF Solution ---------
+vector<vector<int>> threeSum(vector<int> &nums)
+{
+    sort(nums.begin(), nums.end()); // Sorted Array
+    if (nums.size() < 3)
+    { // Base case 1
+        return {};
+    }
+    if (nums[0] > 0)
+    { // Base case 2
+        return {};
+    }
+    vector<vector<int>> answer;
+    for (int i = 0; i < nums.size(); ++i)
+    { // Traversing the array to fix the number.
+        if (nums[i] > 0)
+        { // If number fixed is +ve, stop there because we can't make it zero by searching after it.
+            break;
+        }
+        if (i > 0 && nums[i] == nums[i - 1])
+        { // If number is getting repeated, ignore the lower loop and continue.
+            continue;
+        }
+        int low = i + 1, high = nums.size() - 1; // Make two pointers high and low, and initialize sum as 0.
+        int sum = 0;
+        while (low < high)
+        { // Search between two pointers, just similiar to binary search.
+            sum = nums[i] + nums[low] + nums[high];
+            if (sum > 0)
+            { // If sum is +ve, means, we need more -ve numbers to make it 0, decreament high (high--).
+                high--;
+            }
+            else if (sum < 0)
+            { // If sum is -ve, means, we need more +ve numbers to make it 0, increament low (low++).
+                low++;
+            }
+            else
+            {
+                answer.push_back({nums[i], nums[low], nums[high]});                   // we have found the required triplet, push it in answer vector
+                int last_low_occurence = nums[low], last_high_occurence = nums[high]; // Now again, to avoid duplicate triplets, we have to navigate to last occurences of num[low] and num[high] respectively
+                while (low < high && nums[low] == last_low_occurence)
+                { // Update the low and high with last occurences of low and high.
+                    low++;
+                }
+                while (low < high && nums[high] == last_high_occurence)
+                {
+                    high--;
+                }
+            }
+        }
+    }
+    return answer; // Return the answer vector.
+}
+// ---------------------
+vector<vector<int>> threeSum2(vector<int> &nums)
+{
+    sort(nums.begin(), nums.end()); // Sorted Array
+    if (nums.size() < 3)
+    { // Base Case 1
+        return {};
+    }
+    if (nums[0] > 0)
+    { // Base Case 2
+        return {};
+    }
+    unordered_map<int, int> hashMap;
+    for (int i = 0; i < nums.size(); ++i)
+    { // Hashing of Indices
+        hashMap[nums[i]] = i;
+    }
+    vector<vector<int>> answer;
+    for (int i = 0; i < nums.size() - 2; ++i)
+    { // Traversing the array to fix the number.
+        if (nums[i] > 0)
+        { // If number fixed is +ve, stop there because we can't make it zero by searching after it.
+            break;
+        }
+        for (int j = i + 1; j < nums.size() - 1; ++j)
+        {                                            // Fixing another number after first number
+            int required = -1 * (nums[i] + nums[j]); // To make sum 0, we would require the -ve sum of both fixed numbers.
+            if (hashMap.count(required) && hashMap.find(required)->second > j)
+            { // If it exists in hashmap and its last occurrence index > 2nd fixed index, we found our triplet.
+                answer.push_back({nums[i], nums[j], required});
+            }
+            j = hashMap.find(nums[j])->second; // Update j to last occurence of 2nd fixed number to avoid duplicate triplets.
+        }
+        i = hashMap.find(nums[i])->second; // Update i to last occurence of 1st fixed number to avoid duplicate triplets.
+    }
+    return answer; // Return answer vector.
+}
+// ------- TLE --------
+vector<vector<int>> threeSum_TUF(vector<int> &nums)
+{
+    int n = nums.size();
+    set<vector<int>> st;
+    for (int i = 0; i < n; i++)
+    {
+        set<int> hashset;
+        for (int j = i + 1; j < n; j++)
+        {
+            // Calculate the 3rd element:
+            int third = -(nums[i] + nums[j]);
+            // Find the element in the set:
+            if (hashset.find(third) != hashset.end())
+            {
+                vector<int> temp = {nums[i], nums[j], third};
+                sort(temp.begin(), temp.end());
+                st.insert(temp);
+            }
+            hashset.insert(nums[j]);
+        }
+    }
+    // store the set in the answer:
+    vector<vector<int>> result(st.begin(), st.end());
+    return result;
+}
+// ----------------
+vector<vector<int>> threeSum_TUF_OtherWay(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<vector<int>> result;
+    sort(nums.begin(), nums.end());
+    for (int i = 0; i < n; i++)
+    {
+        // remove duplicates:
+        if (i != 0 && nums[i] == nums[i - 1])
+            continue;
+        // moving 2 pointers:
+        int j = i + 1;
+        int k = n - 1;
+        while (j < k)
+        {
+            int sum = nums[i] + nums[j] + nums[k];
+            if (sum < 0)
+                j++;
+            else if (sum > 0)
+                k--;
+            else
+            {
+                result.push_back({nums[i], nums[j], nums[k]});
+                j++;
+                k--;
+                // skip the duplicates:
+                while (j < k && nums[j] == nums[j - 1])
+                    j++;
+                while (j < k && nums[k] == nums[k + 1])
+                    k--;
+            }
+        }
+    }
+    return result;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// -------------------------------------------------------- ORACLE TEST - Count of substrings having all distinct characters -----------------------------------------------------
+int countSubstrings(string str)
+{
+    int n = str.size();
+    long long int result = 0;
+    int counter[26] = {0};
+    memset(counter, 0, sizeof(counter));
+    int i = 0;
+    int j = 0;
+    while (j < n)
+    {
+        if (j < n && (counter[str[j] - 'a'] == 0))
+        {
+            counter[str[j] - 'a']++;
+            result += (j - i + 1);
+            j++;
+        }
+        else
+        {
+            counter[str[i] - 'a']--;
+            i++;
+        }
+    }
+    return result;
+}
+// ------------
+int countSubstrings2(string str)
+{
+    int n = str.size();
+    int count = 0;
+    unordered_set<char> charSet;
+    int left = 0;
+    int right = 0;
+    while (right < n)
+    {
+        // If the character at right is not in the set, add it and expand the window
+        if (charSet.find(str[right]) == charSet.end())
+        {
+            charSet.insert(str[right]);
+            count += (right - left + 1);
+            right++;
+        }
+        // If the character at right is a duplicate, shrink the window from the left
+        else
+        {
+            charSet.erase(str[left]);
+            left++;
+        }
+    }
+    return count;
+}
+// ------------
+int countSubstrings3(string str)
+{
+    int n = str.size();
+    if (n == 0)
+        return 0;
+    unordered_map<char, int> lastIndexMap;
+    int left = 0;
+    int count = 0;
+    for (int right = 0; right < n; right++)
+    {
+        if (lastIndexMap.find(str[right]) != lastIndexMap.end() && lastIndexMap[str[right]] >= left)
+        {
+            left = lastIndexMap[str[right]] + 1;
+        }
+        lastIndexMap[str[right]] = right;
+        count += (right - left + 1);
+    }
+    return count;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // string str = "abac";
+//     string str = "gffg";
+//     cout << countSubstrings3(str) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------- 209. Minimum Size Subarray Sum -------------------------------------------------------------
+int minSubArrayLen(int target, vector<int> &nums)
+{
+    int n = nums.size();
+    int sum = 0;
+    int right = 0;
+    while (right < n)
+    {
+        sum += nums[right++];
+        if (sum >= target)
+            break;
+    }
+    if (sum < target)
+        return 0;
+    int left = 0;
+    while (left < n)
+    {
+        if ((sum - nums[left]) < target)
+            break;
+        sum -= nums[left++];
+    }
+    int minLength = right - left;
+    while (right < n)
+    {
+        sum += nums[right++];
+        while (left < n)
+        {
+            if ((sum - nums[left]) < target)
+                break;
+            sum -= nums[left++];
+            minLength = min((right - left), minLength);
+        }
+    }
+    return minLength;
+}
+// ------------
+int minSubArrayLen2(int target, vector<int> &nums)
+{
+    int n = nums.size();
+    int sum = 0;
+    int left = 0;
+    int minSubArrayLength = INT_MAX;
+    for (int right = 0; right < n; right++)
+    {
+        sum += nums[right];
+        while (left < n && (sum - nums[left]) >= target)
+        {
+            sum -= nums[left];
+            left++;
+        }
+        // [1,2,3,4,5] -> target = 15
+        if (sum >= target)
+            minSubArrayLength = min((right - left) + 1, minSubArrayLength);
+    }
+    return minSubArrayLength == INT_MAX ? 0 : minSubArrayLength;
+}
+// ------------
+int minSubArrayLen3(int target, vector<int> &nums)
+{
+    int n = nums.size();
+    int left = 0;
+    int sum = 0;
+    int minLengthSubArray = INT_MAX;
+    for (int right = 0; right < n; right++)
+    {
+        sum += nums[right];
+        while (sum >= target)
+        {
+            minLengthSubArray = min((right - left) + 1, minLengthSubArray);
+            sum -= nums[left];
+            left++;
+        }
+    }
+    return minLengthSubArray == INT_MAX ? 0 : minLengthSubArray;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {5, 1, 3, 5, 10, 7, 4, 9, 2, 8};
+//     cout << minSubArrayLen3(15, nums) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------- 3. Longest Substring Without Repeating Characters -----------------------------------------------------------
+int lengthOfLongestSubstring(string s)
+{
+    int n = s.size();
+    int maxLength = 0;
+    unordered_map<char, int> charMap;
+    int left = 0;
+    int right = 0;
+    for (right; right < n; right++)
+    {
+        if (charMap[s[right]] == 1)
+        {
+            maxLength = max((right - left), maxLength);
+            while (s[left] != s[right])
+            {
+                charMap[s[left]] = 0;
+                left++;
+            }
+            charMap[s[left]] = 0;
+            left++;
+        }
+        charMap[s[right]] = 1;
+    }
+    maxLength = max((right - left), maxLength);
+    return maxLength;
+}
+// -------------------------
+int lengthOfLongestSubstring2(string s)
+{
+    int n = s.size();
+    unordered_set<char> charSet;
+    int maxLength = 0;
+    int left = 0;
+    int right = 0;
+    for (right; right < n; right++)
+    {
+        if (charSet.find(s[right]) != charSet.end())
+        {
+            maxLength = max((right - left), maxLength);
+            while (s[left] != s[right])
+            {
+                charSet.erase(s[left]);
+                left++;
+            }
+            charSet.erase(s[left]);
+            left++;
+        }
+        charSet.insert(s[right]);
+    }
+    maxLength = max((right - left), maxLength);
+    return maxLength;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string s = "abcabcbb";
+//     cout << lengthOfLongestSubstring2(s) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------ 76. Minimum Window Substring ---------------------------------------------------------------------
+// ------------- WRONG -----------
+// string minWindow(string s, string t)
+// {
+//     int m = s.size();
+//     int n = t.size();
+//     if (n > m)
+//         return "";
+//     unordered_map<char, int> tMap;
+//     for (int i = 0; i < n; i++)
+//         tMap[t[i]]++;
+//     string minWindowString = "";
+//     for (int i = 0; i < m; i++)
+//     {
+//         int j = i;
+//         unordered_map<char, int> sMap;
+//         string currWindowString = "";
+//         while (j < m)
+//         {
+//             if (tMap.find(s[j]) != tMap.end())
+//             {
+//                 sMap[s[j]]++;
+//             }
+//             j++;
+//             int k = 0;
+//             for (k; k < n; k++)
+//             {
+//                 if (sMap[t[k]] < tMap[t[k]])
+//                     break;
+//             }
+//             if (k == n)
+//             {
+//                 currWindowString = s.substr(i, (j - i) + 1);
+//                 if (minWindowString == "")
+//                     minWindowString = currWindowString;
+//                 else
+//                     minWindowString = (minWindowString.size() > currWindowString.size()) ? currWindowString : minWindowString;
+//                 break;
+//             }
+//         }
+//     }
+//     return (minWindowString == "") ? "" : minWindowString;
+// }
+// ------------------
+
+string minWindow(string s, string t)
+{
+    if (t == "")
+        return "";
+    unordered_map<char, int> reqCount;
+    unordered_map<char, int> window;
+    for (int i = 0; i < t.size(); i++)
+        reqCount[t.at(i)]++;
+    int required = reqCount.size();
+    int current = 0;
+    int resLen = INT_MAX;
+    int left = 0;
+    vector<int> res = {-1, -1};
+    for (int right = 0; right < s.size(); right++)
+    {
+        char c = s.at(right);
+        if (reqCount[c])
+            window[c]++;
+        if (reqCount[c] && reqCount[c] == window[c])
+            current++;
+        while (current == required)
+        {
+            if (right - left + 1 < resLen)
+            {
+                res = {left, right};
+                resLen = right - left + 1;
+            }
+            char c = s.at(left);
+            if (reqCount[c] > 0)
+                window[c]--;
+            if (reqCount[c] && window[c] < reqCount[c])
+                current--;
+            left++;
+        }
+    }
+    int leftIndex = res.at(0);
+    return resLen != INT_MAX ? s.substr(leftIndex, resLen) : "";
+}
+
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // string s = "ADOBECODEBANC";
+//     // string t = "ABC";
+//     string s = "DDDAAABBCA";
+//     string t = "ABC";
+//     cout << minWindow(s, t) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 36. Valid Sudoku --------------------------------------------------------------------------
+bool isMatrixValid(vector<vector<char>> &board, int index)
+{
+    unordered_set<char> matrixValidate;
+    for (int i = index; i < index + 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            char ch = board[i][j];
+            if (ch == '.')
+                continue;
+            if (matrixValidate.find(ch) == matrixValidate.end())
+                matrixValidate.insert(ch);
+            else
+                return false;
+        }
+    }
+    matrixValidate.clear();
+    for (int i = index; i < index + 3; i++)
+    {
+        for (int j = 3; j < 6; j++)
+        {
+            char ch = board[i][j];
+            if (ch == '.')
+                continue;
+            if (matrixValidate.find(ch) == matrixValidate.end())
+                matrixValidate.insert(ch);
+            else
+                return false;
+        }
+    }
+    matrixValidate.clear();
+    for (int i = index; i < index + 3; i++)
+    {
+        for (int j = 6; j < 9; j++)
+        {
+            char ch = board[i][j];
+            if (ch == '.')
+                continue;
+            if (matrixValidate.find(ch) == matrixValidate.end())
+                matrixValidate.insert(ch);
+            else
+                return false;
+        }
+    }
+    return true;
+}
+bool isValidSudoku(vector<vector<char>> &board)
+{
+    for (int i = 0; i < 9; i++)
+    {
+        unordered_set<char> rowValidate;
+        for (int j = 0; j < 9; j++)
+        {
+            char ch = board[i][j];
+            if (ch == '.')
+                continue;
+            if (rowValidate.find(ch) == rowValidate.end())
+                rowValidate.insert(ch);
+            else
+                return false;
+        }
+        unordered_set<char> columnValidate;
+        for (int k = 0; k < 9; k++)
+        {
+            char ch = board[k][i];
+            if (ch == '.')
+                continue;
+            if (columnValidate.find(ch) == columnValidate.end())
+                columnValidate.insert(ch);
+            else
+                return false;
+        }
+    }
+    if ((!isMatrixValid(board, 0)) || (!isMatrixValid(board, 3)) || (!isMatrixValid(board, 6)))
+        return false;
+    return true;
+}
+// -------------------------
+bool isValidSudoku2(vector<vector<char>> &board)
+{
+    int n = 9;
+    unordered_set<char> rowSet[n];
+    unordered_set<char> colSet[n];
+    unordered_set<char> squareSet[n];
+    for (int row = 0; row < n; row++)
+    {
+        for (int col = 0; col < n; col++)
+        {
+            char val = board[row][col];
+            if (val == '.')
+                continue;
+            int sPos = (row / 3) * 3 + col / 3;
+            if (rowSet[row].count(val) || colSet[col].count(val) || squareSet[sPos].count(val))
+                return false;
+            rowSet[row].insert(val);
+            colSet[col].insert(val);
+            squareSet[sPos].insert(val);
+        }
+    }
+    return true;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<vector<char>> board = {{'.', '.', '.', '.', '5', '.', '.', '1', '.'},
+//                                   {'.', '4', '.', '3', '.', '.', '.', '.', '.'},
+//                                   {'.', '.', '.', '.', '.', '3', '.', '.', '1'},
+//                                   {'8', '.', '.', '.', '.', '.', '.', '2', '.'},
+//                                   {'.', '.', '2', '.', '7', '.', '.', '.', '.'},
+//                                   {'.', '1', '5', '.', '.', '.', '.', '.', '.'},
+//                                   {'.', '.', '.', '.', '.', '2', '.', '.', '.'},
+//                                   {'.', '2', '.', '9', '.', '.', '.', '.', '.'},
+//                                   {'.', '.', '4', '.', '.', '.', '.', '.', '.'}};
+//     cout << isValidSudoku2(board) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------------- 54. Spiral Matrix ----------------------------------------------------------------------------
+vector<int> spiralOrder(vector<vector<int>> &matrix)
+{
+    int rowCount = matrix.size();
+    int columnCount = matrix[0].size();
+    int topRow = 0, bottomRow = rowCount - 1;
+    int leftColumn = 0, rightColumn = columnCount - 1;
+    vector<int> result;
+    while (1)
+    {
+        for (int col = leftColumn; col <= rightColumn; col++)
+        {
+            result.push_back(matrix[topRow][col]);
+        }
+        topRow++;
+        if (topRow > bottomRow)
+            break;
+        for (int row = topRow; row <= bottomRow; row++)
+        {
+            result.push_back(matrix[row][rightColumn]);
+        }
+        rightColumn--;
+        if (leftColumn > rightColumn)
+            break;
+        for (int col = rightColumn; col >= leftColumn; col--)
+        {
+            result.push_back(matrix[bottomRow][col]);
+        }
+        bottomRow--;
+        if (topRow > bottomRow)
+            break;
+        for (int row = bottomRow; row >= topRow; row--)
+        {
+            result.push_back(matrix[row][leftColumn]);
+        }
+        leftColumn++;
+        if (leftColumn > rightColumn)
+            break;
+    }
+    return result;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // vector<vector<int>> matrix = {
+//     //     {1, 2, 3, 4, 5},
+//     //     {16, 17, 18, 19, 6},
+//     //     {15, 24, 25, 20, 7},
+//     //     {14, 23, 22, 21, 8},
+//     //     {13, 12, 11, 10, 9}};
+//     // vector<vector<int>> matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+//     vector<vector<int>> matrix = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
+//     vector<int> result = spiralOrder(matrix);
+//     cout << string(35, '-');
+//     return 0;
+// }
+// -------------------------------------------------------------- 48. Rotate Image -----------------------------------------------------------------------------
+
+void rotate(vector<vector<int>> &matrix)
+{
+    int m = matrix.size(), n = matrix[0].size();
+    // SWAP DIAGONAL RIGHT ELEMENTS WITH LEFT ELEMENTS
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = row; column < n; column++)
+        {
+            int temp = matrix[row][column];
+            matrix[row][column] = matrix[column][row];
+            matrix[column][row] = temp;
+        }
+    }
+    // OR
+
+    // SWAP DIAGONAL LEFT ELEMENTS WITH RIGHT ELEMENTS
+    // for (int row = 0; row < m; row++)
+    // {
+    //     for (int column = 0; column < row; column++)
+    //     {
+    //         int temp = matrix[row][column];
+    //         matrix[row][column] = matrix[column][row];
+    //         matrix[column][row] = temp;
+    //     }
+    // }
+
+    // SWAP VERICALLY MIDDLE LEFT ELEMENTS WITH RIGHT ELEMENTS
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n / 2; column++)
+        {
+            int temp = matrix[row][column];
+            matrix[row][column] = matrix[row][(n - 1) - column];
+            matrix[row][(n - 1) - column] = temp;
+        }
+    }
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<vector<int>> matrix = {{5, 1, 9, 11}, {2, 4, 8, 10}, {13, 3, 6, 7}, {15, 14, 12, 16}};
+//     rotate(matrix);
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------- 73. Set Matrix Zeroes ----------------------------------------------------------------------------
+void setZeroes(vector<vector<int>> &matrix)
+{
+    int m = matrix.size(), n = matrix[0].size();
+    vector<vector<int>> matrixCopy = matrix;
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            if (matrix[row][column] == 0)
+            {
+                for (int rw = 0; rw < m; rw++)
+                    matrixCopy[rw][column] = 0;
+                for (int col = 0; col < n; col++)
+                    matrixCopy[row][col] = 0;
+            }
+        }
+    }
+    matrix = matrixCopy;
+}
+// ------------------
+void setZeroes2(vector<vector<int>> &matrix)
+{
+    int rowCount = matrix.size();
+    int columnCount = matrix[0].size();
+    vector<int> isRowZero;
+    vector<int> isColumnZero;
+    for (int row = 0; row < rowCount; row++)
+    {
+        for (int col = 0; col < columnCount; col++)
+        {
+            if (matrix[row][col] == 0)
+            {
+                isRowZero.push_back(row);
+                isColumnZero.push_back(col);
+            }
+        }
+    }
+    for (int row : isRowZero)
+    {
+        for (int col = 0; col < columnCount; col++)
+        {
+            matrix[row][col] = 0;
+        }
+    }
+    for (int col : isColumnZero)
+    {
+        for (int row = 0; row < rowCount; row++)
+        {
+            matrix[row][col] = 0;
+        }
+    }
+}
+// -------- BRUTE FORCE APPROACH (NOT EXCEPTED) ----------
+void markRow(vector<vector<int>> &matrix, int row)
+{
+    int columnCount = matrix[0].size();
+    for (int col = 0; col < columnCount; col++)
+    {
+        if (matrix[row][col] != 0)
+            matrix[row][col] = -1;
+    }
+}
+void markColumn(vector<vector<int>> &matrix, int column)
+{
+    int rowCount = matrix.size();
+    for (int row = 0; row < rowCount; row++)
+    {
+        if (matrix[row][column] != 0)
+            matrix[row][column] = -1;
+    }
+}
+void setZeroes3(vector<vector<int>> &matrix)
+{
+    int rowCount = matrix.size();
+    int columnCount = matrix[0].size();
+    for (int row = 0; row < rowCount; row++)
+    {
+        for (int col = 0; col < columnCount; col++)
+        {
+            if (matrix[row][col] == 0)
+            {
+                markRow(matrix, row);
+                markColumn(matrix, col);
+            }
+        }
+    }
+    for (int row = 0; row < rowCount; row++)
+    {
+        for (int col = 0; col < columnCount; col++)
+        {
+            if (matrix[row][col] == -1)
+                matrix[row][col] = 0;
+        }
+    }
+}
+// -----------------------
+void setZeroes4(vector<vector<int>> &matrix)
+{
+    int rowCount = matrix.size();
+    int columnCount = matrix[0].size();
+    // int row[rowCount] = {0}; --> matrix[..][0]
+    // int col[columnCount] = {0}; --> matrix[0][..]
+    int col0 = 1;
+    // step: 1: Traverse the matrix amd
+    // mark 1st row & col accordingly:
+    for (int row = 0; row < rowCount; row++)
+    {
+        for (int column = 0; column < columnCount; column++)
+        {
+            if (matrix[row][column] == 0)
+            {
+                // mark i-th row
+                matrix[row][0] = 0;
+                // mark j-th column
+                if (column != 0)
+                    matrix[0][column] = 0;
+                else
+                    col0 = 0;
+            }
+        }
+    }
+
+    // Step 2: Mark with 0 from (1, 1) to (rowCount-1, columnCount-1):
+    for (int row = 1; row < rowCount; row++)
+    {
+        for (int column = 1; column < columnCount; column++)
+        {
+            if (matrix[row][column] != 0)
+            {
+                // check for row & column
+                if (matrix[row][0] == 0 || matrix[0][column] == 0)
+                    matrix[row][column] = 0;
+            }
+        }
+    }
+    // Step 3: Finally mark the 1st column and then 1st row:
+    if (matrix[0][0] == 0)
+    {
+        for (int column = 0; column < columnCount; column++)
+        {
+            matrix[0][column] = 0;
+        }
+    }
+    if (col0 == 0)
+    {
+        for (int row = 0; row < rowCount; row++)
+        {
+            matrix[row][0] = 0;
+        }
+    }
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<vector<int>> matrix = {{0, 1, 2, 0}, {3, 4, 5, 2}, {1, 3, 1, 5}};
+//     setZeroes4(matrix);
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------- 289. Game of Life --------------------------------------------------------------------------
+// --------- BRUTE FORCE APPROACH ----------
+void gameOfLife(vector<vector<int>> &board)
+{
+    int rowCount = board.size();
+    int columnCount = board[0].size();
+    vector<vector<int>> boardCopy = board;
+    for (int row = 0; row < rowCount; row++)
+    {
+        for (int column = 0; column < columnCount; column++)
+        {
+            int neighbourCount = 0;
+            // Top
+            if (row > 0)
+            {
+                neighbourCount += board[row - 1][column];
+            }
+            // Bottom
+            if (row < rowCount - 1)
+            {
+                neighbourCount += board[row + 1][column];
+            }
+            // Left
+            if (column > 0)
+            {
+                neighbourCount += board[row][column - 1];
+            }
+            // Right
+            if (column < columnCount - 1)
+            {
+                neighbourCount += board[row][column + 1];
+            }
+            // Top-Left
+            if (row > 0 && column > 0)
+            {
+                neighbourCount += board[row - 1][column - 1];
+            }
+            // Top-Right
+            if (row > 0 && column < columnCount - 1)
+            {
+                neighbourCount += board[row - 1][column + 1];
+            }
+            // Bottom-Left
+            if (row < rowCount - 1 && column > 0)
+            {
+                neighbourCount += board[row + 1][column - 1];
+            }
+            // Bottom-Right
+            if (row < rowCount - 1 && column < columnCount - 1)
+            {
+                neighbourCount += board[row + 1][column + 1];
+            }
+            if (board[row][column] == 1)
+            {
+                // Any live cell with fewer than two live neighbors dies as if caused by under-population.
+                if (neighbourCount < 2)
+                    boardCopy[row][column] = 0;
+                // Any live cell with two or three live neighbors lives on to the next generation.
+                // Any live cell with more than three live neighbors dies, as if by over-population.
+                if (neighbourCount > 3)
+                    boardCopy[row][column] = 0;
+            }
+            // Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
+            else if (neighbourCount == 3)
+            {
+                boardCopy[row][column] = 1;
+            }
+        }
+    }
+    board = boardCopy;
+}
+// ------------- Without Using Extra Space -----------
+void gameOfLife2(vector<vector<int>> &board)
+{
+    int rowCount = board.size();
+    int columnCount = board[0].size();
+    for (int row = 0; row < rowCount; row++)
+    {
+        for (int column = 0; column < columnCount; column++)
+        {
+            int neighbourCount = 0;
+            // Top
+            if (row > 0 && abs(board[row - 1][column]) == 1)
+            {
+                neighbourCount++;
+            }
+            // Bottom
+            if (row < rowCount - 1 && abs(board[row + 1][column]) == 1)
+            {
+                neighbourCount++;
+            }
+            // Left
+            if (column > 0 && abs(board[row][column - 1]) == 1)
+            {
+                neighbourCount++;
+            }
+            // Right
+            if (column < columnCount - 1 && abs(board[row][column + 1]) == 1)
+            {
+                neighbourCount++;
+            }
+            // Top-Left
+            if (row > 0 && column > 0 && abs(board[row - 1][column - 1]) == 1)
+            {
+                neighbourCount++;
+            }
+            // Top-Right
+            if (row > 0 && column < columnCount - 1 && abs(board[row - 1][column + 1]) == 1)
+            {
+                neighbourCount++;
+            }
+            // Bottom-Left
+            if (row < rowCount - 1 && column > 0 && abs(board[row + 1][column - 1]) == 1)
+            {
+                neighbourCount++;
+            }
+            // Bottom-Right
+            if (row < rowCount - 1 && column < columnCount - 1 && abs(board[row + 1][column + 1]) == 1)
+            {
+                neighbourCount++;
+            }
+            if (board[row][column] == 1)
+            {
+                // Any live cell with fewer than two live neighbors dies as if caused by under-population.
+                if (neighbourCount < 2)
+                    board[row][column] = -1;
+                // Any live cell with two or three live neighbors lives on to the next generation.
+                // Any live cell with more than three live neighbors dies, as if by over-population.
+                if (neighbourCount > 3)
+                    board[row][column] = -1;
+            }
+            // Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
+            else if (neighbourCount == 3)
+            {
+                board[row][column] = 2;
+            }
+        }
+    }
+    for (int row = 0; row < rowCount; row++)
+    {
+        for (int column = 0; column < columnCount; column++)
+        {
+            if (board[row][column] >= 1)
+                board[row][column] = 1;
+            else
+                board[row][column] = 0;
+        }
+    }
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<vector<int>> board = {{0, 1, 0},
+//                                  {0, 0, 1},
+//                                  {1, 1, 1},
+//                                  {0, 0, 0}};
+//     // vector<vector<int>> board = {{1, 1}, {1, 0}};
+//     gameOfLife2(board);
+//     for (int row = 0; row < board.size(); row++)
+//     {
+//         for (int column = 0; column < board[0].size(); column++)
+//         {
+//             cout << board[row][column] << "  ";
+//         }
+//         cout << endl;
+//     }
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 383. Ransom Note ------------------------------------------------------------------
+bool canConstruct(string ransomNote, string magazine)
+{
+    unordered_map<char, int> ransomNoteCharFrequency;
+    unordered_map<char, int> magazineCharFrequency;
+    for (char ch : ransomNote)
+        ransomNoteCharFrequency[ch]++;
+    for (char ch : magazine)
+        magazineCharFrequency[ch]++;
+    for (char ch : ransomNote)
+    {
+        if (ransomNoteCharFrequency[ch] > magazineCharFrequency[ch])
+            return false;
+    }
+    return true;
+}
+// ---------------
+bool canConstruct2(string ransomNote, string magazine)
+{
+    int ransomNoteSize = ransomNote.size();
+    unordered_map<char, int> magazineCharFrequency;
+    sort(ransomNote.begin(), ransomNote.end());
+    for (char ch : magazine)
+        magazineCharFrequency[ch]++;
+    int frequencyCounter = 1;
+    for (int i = 1; i < ransomNoteSize; i++)
+    {
+        if (ransomNote[i] == ransomNote[i - 1])
+            frequencyCounter++;
+        else
+        {
+            if (frequencyCounter > magazineCharFrequency[ransomNote[i - 1]])
+                return false;
+            frequencyCounter = 1;
+        }
+    }
+    if (frequencyCounter > magazineCharFrequency[ransomNote[ransomNoteSize - 1]])
+        return false;
+    return true;
+}
+// ---------------
+bool canConstruct3(string ransomNote, string magazine)
+{
+    // Initialize an array of count with the size 26.
+    int magazineCharCounter[26] = {0};
+    // Traverse a loop through the entire String of magazine where char ch stores the char at the index of magazine.
+    for (char ch : magazine)
+        magazineCharCounter[ch - 97]++;
+    // Run another for loop for ransomNote.
+    for (char ch : ransomNote)
+    {
+        // If the charachter doesn't exists in magazineCharCounter ('magazine') for ransomNote, we return false.
+        if (magazineCharCounter[ch - 97]-- <= 0)
+            return false;
+    }
+    // If nothing goes wrong, return true.
+    return true;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string ransomNote = "abcabc";
+//     string magazine = "abcdefabc";
+//     cout << canConstruct3(ransomNote, magazine) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------- 205. Isomorphic Strings ---------------------------------------------------------------------
+// --------- Brute Force Approach ---------
+bool isIsomorphic(string s, string t)
+{
+    if (s.size() != t.size())
+        return false;
+    unordered_map<char, vector<int>> sTracker;
+    unordered_map<char, vector<int>> tTracker;
+    for (int i = 0; i < s.size(); i++)
+    {
+        sTracker[s[i]].push_back(i);
+        tTracker[t[i]].push_back(i);
+    }
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (sTracker[s[i]] != tTracker[t[i]])
+            return false;
+    }
+    return true;
+}
+// -------------------------------------------
+// Check for the last Index
+bool isIsomorphic2(string s, string t)
+{
+    if (s.size() != t.size())
+        return false;
+    unordered_map<char, int> sLastIndexTracker;
+    unordered_map<char, int> tLastIndexTracker;
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (sLastIndexTracker[s[i]] != tLastIndexTracker[t[i]])
+            return false;
+        // s = "ab"
+        // t = "aa"
+        // Dry run to understand why +1.
+        sLastIndexTracker[s[i]] = i + 1;
+        tLastIndexTracker[t[i]] = i + 1;
+    }
+    return true;
+}
+// -----------------------------------
+bool isIsomorphic3(string s, string t)
+{
+    if (s.size() != t.size())
+        return false;
+    unordered_map<char, int> sTracker;
+    unordered_map<char, int> tTracker;
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (sTracker[s[i]] && sTracker[s[i]] != t[i])
+            return false;
+        if (tTracker[t[i]] && tTracker[t[i]] != s[i])
+            return false;
+        sTracker[s[i]] = t[i];
+        tTracker[t[i]] = s[i];
+    }
+    return true;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string s = "paper";
+//     string t = "title";
+//     cout << isIsomorphic2(s, t) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------- 290. Word Pattern ---------------------------------------------------------------------------
+bool wordPattern(string pattern, string s)
+{
+    vector<string> wordVector;
+    string word = "";
+    for (char ch : s)
+    {
+        if (ch != ' ')
+            word += ch;
+        else if (!word.empty())
+        {
+            wordVector.push_back(word);
+            word.clear();
+        }
+    }
+    if (!word.empty())
+        wordVector.push_back(word);
+    if (pattern.size() != wordVector.size())
+        return false;
+    unordered_map<char, string> patternTracker;
+    unordered_map<string, char> wordTracker;
+    for (int i = 0; i < pattern.size(); i++)
+    {
+        if (patternTracker.find(pattern[i]) != patternTracker.end() && patternTracker[pattern[i]] != wordVector[i])
+            return false;
+        if (wordTracker.find(wordVector[i]) != wordTracker.end() && wordTracker[wordVector[i]] != pattern[i])
+            return false;
+        patternTracker[pattern[i]] = wordVector[i];
+        wordTracker[wordVector[i]] = pattern[i];
+    }
+    return true;
+}
+// -------------------
+// Tracking last index
+bool wordPattern2(string pattern, string s)
+{
+    vector<string> wordVector;
+    string word = "";
+    for (char ch : s)
+    {
+        if (ch != ' ')
+            word += ch;
+        else if (!word.empty())
+        {
+            wordVector.push_back(word);
+            word.clear();
+        }
+    }
+    if (!word.empty())
+        wordVector.push_back(word);
+    if (pattern.size() != wordVector.size())
+        return false;
+    unordered_map<char, int> patternTracker;
+    unordered_map<string, int> wordTracker;
+    for (int i = 0; i < pattern.size(); i++)
+    {
+        if (patternTracker[pattern[i]] != wordTracker[wordVector[i]])
+            return false;
+        patternTracker[pattern[i]] = i + 1;
+        wordTracker[wordVector[i]] = i + 1;
+    }
+    return true;
+}
+// --------------------------
+bool wordPattern3(string pattern, string s)
+{
+    unordered_map<char, string> patternTracker;
+    unordered_map<string, char> wordTracker;
+    int index = 0;
+    int i = 0;
+    for (int i = 0; i < pattern.size(); i++)
+    {
+        // pattern = "he" // pattern = "abc"
+        // s = "unit"     // s = "dog cat ball call"
+        // Dry Run This
+        if (index == s.size())
+            return false;
+        while (index < s.size() && s[index] == ' ')
+            index++;
+        string word;
+        while (index < s.size() && s[index] != ' ')
+            word += s[index++];
+        if (patternTracker.find(pattern[i]) != patternTracker.end() && patternTracker[pattern[i]] != word)
+            return false;
+        if (wordTracker.find(word) != wordTracker.end() && wordTracker[word] != pattern[i])
+            return false;
+        patternTracker[pattern[i]] = word;
+        wordTracker[word] = pattern[i];
+    }
+    return index == s.size() ? true : false;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string pattern = "he";
+//     string s = "unit";
+//     cout << wordPattern3(pattern, s) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------- 242. Valid Anagram ------------------------------------------------------------------------
+bool isAnagram(string s, string t)
+{
+    if (s.size() != t.size())
+        return false;
+    unordered_map<char, int> sCharFrequency;
+    unordered_map<char, int> tCharFrequency;
+    int n = s.size();
+    for (int i = 0; i < n; i++)
+    {
+        sCharFrequency[s[i]]++;
+        tCharFrequency[t[i]]++;
+    }
+    for (char ch : t)
+    {
+        if (tCharFrequency[ch] != sCharFrequency[ch])
+            return false;
+    }
+    return true;
+}
+// -------------------
+bool isAnagram2(string s, string t)
+{
+    if (s.size() != t.size())
+        return false;
+    unordered_map<char, int> sCharFrequency;
+    for (char ch : s)
+    {
+        sCharFrequency[ch]++;
+    }
+    for (char ch : t)
+    {
+        if (sCharFrequency[ch]-- <= 0)
+            return false;
+    }
+    return true;
+}
+// ------------------------
+bool isAnagram3(string s, string t)
+{
+    if (s.size() != t.size())
+        return false;
+    int characterCounter[26] = {0};
+    for (int i = 0; i < s.size(); i++)
+    {
+        characterCounter[s[i] - 97]++;
+        characterCounter[t[i] - 97]--;
+    }
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (characterCounter[s[i] - 97] != 0)
+            return false;
+    }
+    return true;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string s = "anagram";
+//     string t = "nagaram";
+//     cout << isAnagram3(s, t) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------------- 70. Climbing Stairs -------------------------------------------------------------------------
+int climbStairs(int n)
+{
+    if (n == 1 || n == 0)
+        return 1;
+    int oneStep = climbStairs(n - 1);
+    int twoStep = 0;
+    if (n >= 2)
+        twoStep = climbStairs(n - 2);
+    return oneStep + twoStep;
+}
+// ---------- Memoisation -----------
+int climbStairsHelper(int n, vector<int> &dp)
+{
+    if (n == 0)
+        return 1;
+    if (dp[n] != -1)
+        return dp[n];
+    int oneStep = climbStairsHelper(n - 1, dp);
+    int twoStep = 0;
+    if (n >= 2)
+        twoStep = climbStairsHelper(n - 2, dp);
+    return dp[n] = oneStep + twoStep;
+}
+int climbStairs2(int n)
+{
+    vector<int> dp(n + 1, -1);
+    climbStairsHelper(n, dp);
+    return dp[n];
+}
+
+// ------------------------------------------------------------------ 49. Group Anagrams -----------------------------------------------------------------------
+vector<vector<string>> groupAnagrams(vector<string> &strs)
+{
+    int n = strs.size();
+    unordered_map<string, vector<string>> umap;
+    vector<vector<string>> anagramsGroup;
+    // use auto& rather then auto to avoid unnecessary copy
+    for (auto &str : strs)
+    {
+        string helper = str;
+        sort(helper.begin(), helper.end());
+        umap[helper].push_back(str);
+    }
+    for (auto &item : umap)
+        anagramsGroup.push_back(item.second);
+    return anagramsGroup;
+}
+// --------------------------
+// Counting Sort
+string strSort(string s)
+{
+    int counter[26] = {0};
+    for (char ch : s)
+        counter[ch - 97]++;
+    string str;
+    for (int i = 0; i < 26; i++)
+    {
+        str += string(counter[i], i + 97);
+    }
+    return str;
+}
+vector<vector<string>> groupAnagrams2(vector<string> &strs)
+{
+    int n = strs.size();
+    unordered_map<string, vector<string>> umap;
+    for (string &str : strs)
+        umap[strSort(str)].push_back(str);
+    vector<vector<string>> anagramsGroup;
+    for (auto &item : umap)
+        anagramsGroup.push_back(item.second);
+    return anagramsGroup;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // vector<string> strs = {"eat", "tea", "tan", "ate", "nat", "bat"};
+//     // vector<vector<string>> result = groupAnagrams(strs);
+//     string result = strSort("fedcba");
+//     cout << result << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 1. Two Sum --------------------------------------------------------------------------
+vector<int> twoSum_01(vector<int> &nums, int target)
+{
+    unordered_map<int, int> umap;
+    int n = nums.size();
+    for (int i = 0; i < n; i++)
+    {
+        int remaining = target - nums[i];
+        if (umap[remaining])
+        {
+            return {umap[remaining] - 1, i};
+        }
+        umap[nums[i]] = i + 1;
+    }
+    return {0, 0};
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {2, 7, 11, 15};
+//     vector<int> result = twoSum_01(nums, 9);
+//     cout << result[0] << ", " << result[1] << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------------- 202. Happy Number ---------------------------------------------------------------------------
+bool isHappy(int n)
+{
+    unordered_map<int, int> occured;
+    int remainder = 0, sumOfProduct = 0;
+    while (n)
+    {
+        sumOfProduct = 0;
+        while (n)
+        {
+            remainder = n % 10;
+            n = n / 10;
+            sumOfProduct += (remainder * remainder);
+        }
+        if (sumOfProduct == 1)
+            return 1;
+        if (occured[sumOfProduct])
+            return false;
+        occured[sumOfProduct] = 1;
+        n = sumOfProduct;
+    }
+    return false;
+}
+// ---------------------------
+int sumOfSquaredDigits(int number)
+{
+    int totalSum = 0;
+    while (number > 0)
+    {
+        int remainder = number % 10;
+        number = floor(number / 10);
+        totalSum += remainder * remainder;
+    }
+    return totalSum;
+}
+bool isHappy2(int n)
+{
+    int slowPointer = n;
+    int fastPointer = sumOfSquaredDigits(n);
+    while (fastPointer != 1 && slowPointer != fastPointer)
+    {
+        slowPointer = sumOfSquaredDigits(slowPointer);
+        fastPointer = sumOfSquaredDigits(sumOfSquaredDigits(fastPointer));
+    }
+    if (fastPointer == 1)
+        return true;
+    return false;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // int n = 19;
+//     int n = 2;
+//     // int n = 1;
+//     cout << isHappy2(n) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------------- 219. Contains Duplicate II ---------------------------------------------------------------------------
+bool containsNearbyDuplicate(vector<int> &nums, int k)
+{
+    unordered_map<int, int> umap;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        if (umap.find(nums[i]) != umap.end())
+        {
+            int distance = abs(umap[nums[i]] - i);
+            if (distance <= k)
+                return true;
+        }
+        umap[nums[i]] = i;
+    }
+    return false;
+}
+// -------------
+bool containsNearbyDuplicate2(vector<int> &nums, int k)
+{
+    unordered_map<int, int> umap;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        if (umap[nums[i]])
+        {
+            int distance = abs((umap[nums[i]] - 1) - i);
+            if (distance <= k)
+                return true;
+        }
+        umap[nums[i]] = i + 1;
+    }
+    return false;
+}
+// ---------------
+bool containsNearbyDuplicate3(vector<int> &nums, int k)
+{
+    unordered_map<int, int> umap;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        if (umap.count(nums[i]))
+        {
+            if (abs(umap[nums[i]] - 1) <= k)
+                return true;
+        }
+        umap[nums[i]] = i;
+    }
+    return false;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {1, 0, 1, 1};
+//     int k = 1;
+//     cout << containsNearbyDuplicate2(nums, k) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------- 128. Longest Consecutive Sequence ------------------------------------------------------------------
+// -------- Brute Force Approach --------
+int longestConsecutive(vector<int> &nums)
+{
+    int longestLength = INT_MIN;
+    int currentLongestLength = 1;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        int nextElement = nums[i] + 1;
+        while (1)
+        {
+            bool elementFound = false;
+            for (int i = 0; i < nums.size(); i++)
+            {
+                if (nums[i] == nextElement)
+                {
+                    currentLongestLength++;
+                    nextElement++;
+                    elementFound = true;
+                    break;
+                }
+            }
+            if (!elementFound)
+            {
+                longestLength = max(longestLength, currentLongestLength);
+                currentLongestLength = 1;
+                break;
+            }
+        }
+    }
+    return longestLength;
+}
+// ---------------------
+int longestConsecutive2(vector<int> &nums)
+{
+    if (nums.size() == 0)
+        return 0;
+    sort(nums.begin(), nums.end());
+    int longestLength = INT_MIN;
+    int currentLongestLength = 1;
+    for (int i = 1; i < nums.size(); i++)
+    {
+        if (nums[i] == nums[i - 1])
+            continue;
+        else if (nums[i] == (nums[i - 1] + 1))
+            currentLongestLength++;
+        else
+        {
+            longestLength = max(longestLength, currentLongestLength);
+            currentLongestLength = 1;
+        }
+    }
+    longestLength = max(longestLength, currentLongestLength);
+    return longestLength;
+}
+// --------- TUF ------------
+int longestConsecutiveTuf(vector<int> &nums)
+{
+    int n = nums.size();
+    if (n == 0)
+        return 0;
+    int longest = 1;
+    unordered_set<int> st;
+    // put all the array elements into set:
+    for (int i = 0; i < n; i++)
+        st.insert(nums[i]);
+    // Find the longest sequence:
+    for (auto &item : st)
+    {
+        // if 'it' is a starting number:
+        if (st.find(item - 1) == st.end())
+        {
+            // find consecutive numbers:
+            int count = 1;
+            int x = item;
+            while (st.find(x + 1) != st.end())
+            {
+                x = x + 1;
+                count++;
+            }
+            longest = max(longest, count);
+        }
+    }
+    return longest;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // vector<int> nums = {0, 3, 7, 2, 5, 8, 4, 6, 0, 1};
+//     vector<int> nums = {102, 4, 100, 1, 101, 3, 2, 1, 1};
+//     cout << longestConsecutiveTuf(nums) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// -------------------------------------------------------------------- 228. Summary Ranges ------------------------------------------------------------------------
+vector<string> summaryRanges(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<string> rangeSummary;
+    if (n == 0)
+        return rangeSummary;
+    int startRange = nums[0];
+    int endRange = nums[0];
+    for (int i = 1; i < n; i++)
+    {
+        if (nums[i] == endRange + 1)
+            endRange = nums[i];
+        else
+        {
+            if (startRange == endRange)
+                rangeSummary.push_back(to_string(startRange));
+            else
+                rangeSummary.push_back(to_string(startRange) + "->" + to_string(endRange));
+            startRange = nums[i];
+            endRange = nums[i];
+        }
+    }
+    if (startRange == endRange)
+        rangeSummary.push_back(to_string(startRange));
+    else
+        rangeSummary.push_back(to_string(startRange) + "->" + to_string(endRange));
+    return rangeSummary;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // vector<int> nums = {0, 2, 3, 4, 6, 8, 9};
+//     vector<int> nums = {0, 1, 2, 4, 5, 7};
+//     vector<string> rangeSummary = summaryRanges(nums);
+//     for (auto range : rangeSummary)
+//         cout << range << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 56. Merge Intervals ------------------------------------------------------------------------
+vector<vector<int>> merge(vector<vector<int>> &intervals)
+{
+    vector<vector<int>> result;
+    int n = intervals.size();
+    sort(intervals.begin(), intervals.end());
+    vector<int> interval = {intervals[0][0], intervals[0][1]};
+    for (int i = 1; i < n; i++)
+    {
+        if (intervals[i][0] <= interval[1])
+        {
+            if (intervals[i][1] >= interval[1])
+                interval[1] = intervals[i][1];
+        }
+        else
+        {
+            result.push_back(interval);
+            interval[0] = intervals[i][0];
+            interval[1] = intervals[i][1];
+        }
+    }
+    result.push_back(interval);
+    return result;
+}
+// -------------
+vector<vector<int>> merge2(vector<vector<int>> &intervals)
+{
+    vector<vector<int>> result;
+    int n = intervals.size();
+    sort(intervals.begin(), intervals.end());
+    vector<int> interval = {intervals[0][0], intervals[0][1]};
+    for (int i = 1; i < n; i++)
+    {
+        if (intervals[i][0] <= interval[1])
+        {
+            interval[0] = min(interval[0], intervals[i][0]);
+            interval[1] = max(interval[1], intervals[i][1]);
+        }
+        else
+        {
+            result.push_back(interval);
+            interval[0] = intervals[i][0];
+            interval[1] = intervals[i][1];
+        }
+    }
+    result.push_back(interval);
+    return result;
+}
+// ------------------
+vector<vector<int>> merge3(vector<vector<int>> &intervals)
+{
+    vector<vector<int>> answer;
+    sort(intervals.begin(), intervals.end());
+    vector<int> newInterval = intervals[0];
+    int i = 1, n = intervals.size();
+    while (i < n)
+    {
+        if (intervals[i][0] <= newInterval[1])
+            newInterval[1] = max(intervals[i][1], newInterval[1]);
+        else if (intervals[i][0] > newInterval[1])
+        {
+            answer.push_back(newInterval);
+            newInterval = intervals[i];
+        }
+        i++;
+    }
+    answer.push_back(newInterval);
+    return answer;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    // string s = "A man, a plan, a canal: Panama";
-    // string s = "race a car";
-    // string s = " ";
-    string s = "0P";
-    cout << isPalindrome2(s) << endl;
-    cout << endl
-         << string(35, '-');
+    // vector<vector<int>> intervals = {{1, 3}, {2, 6}, {8, 10}, {15, 18}};
+    // vector<vector<int>> intervals = {{1, 4}, {4, 5}};
+    // vector<vector<int>> intervals = {{1, 4}, {0, 4}};
+    // vector<vector<int>> intervals = {{1, 4}, {2, 3}};
+    vector<vector<int>> intervals = {{1, 4}, {0, 5}};
+    vector<vector<int>> result = merge(intervals);
+    for (vector<int> vect : result)
+    {
+        cout << vect[0] << ", " << vect[1] << endl;
+    }
+    cout << string(35, '-');
     return 0;
 }

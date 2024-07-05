@@ -1,1 +1,1 @@
-rix
+ == "" ? "" : minWindowString;
