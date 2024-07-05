@@ -2,6 +2,8 @@
 using namespace std;
 
 // Bubble Sort Algorithm
+// Time Complexity: O(N2)
+// Auxiliary Space: O(1)
 void bubbleSort(int *array, int n)
 {
     bool swapped;
@@ -22,7 +24,10 @@ void bubbleSort(int *array, int n)
             break;
     }
 }
+
 // Insertion Sort Algorithm
+// Time Complexity: O(N^2)
+// Auxiliary Space: O(1)
 void insertionSort(int array[], int n)
 {
     int key;
@@ -38,6 +43,7 @@ void insertionSort(int array[], int n)
         array[j + 1] = key;
     }
 }
+// Time Complexity: O(N^2)
 int main()
 {
     cout << string(20, '-') << endl;
