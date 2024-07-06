@@ -3717,15 +3717,53 @@ vector<vector<int>> merge3(vector<vector<int>> &intervals)
     answer.push_back(newInterval);
     return answer;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // vector<vector<int>> intervals = {{1, 3}, {2, 6}, {8, 10}, {15, 18}};
+//     // vector<vector<int>> intervals = {{1, 4}, {4, 5}};
+//     // vector<vector<int>> intervals = {{1, 4}, {0, 4}};
+//     // vector<vector<int>> intervals = {{1, 4}, {2, 3}};
+//     vector<vector<int>> intervals = {{1, 4}, {0, 5}};
+//     vector<vector<int>> result = merge(intervals);
+//     for (vector<int> vect : result)
+//     {
+//         cout << vect[0] << ", " << vect[1] << endl;
+//     }
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------------- 57. Insert Interval -------------------------------------------------------------------------
+vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInterval)
+{
+    vector<vector<int>> result;
+    int n = intervals.size();
+    for (int i = 0; i < n; i++)
+    {
+        if (newInterval[0] > intervals[i][1])
+        {
+            result.push_back(intervals[i]);
+        }
+        else if (intervals[i][0] > newInterval[1])
+        {
+            result.push_back(newInterval);
+            newInterval = intervals[i];
+        }
+        else if (newInterval[0] <= intervals[i][1])
+        {
+            newInterval[0] = min(newInterval[0], intervals[i][0]);
+            newInterval[1] = max(newInterval[1], intervals[i][1]);
+        }
+    }
+    result.push_back(newInterval);
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    // vector<vector<int>> intervals = {{1, 3}, {2, 6}, {8, 10}, {15, 18}};
-    // vector<vector<int>> intervals = {{1, 4}, {4, 5}};
-    // vector<vector<int>> intervals = {{1, 4}, {0, 4}};
-    // vector<vector<int>> intervals = {{1, 4}, {2, 3}};
-    vector<vector<int>> intervals = {{1, 4}, {0, 5}};
-    vector<vector<int>> result = merge(intervals);
+    vector<vector<int>> intervals = {{1, 2}, {3, 5}, {6, 7}, {8, 10}, {12, 16}};
+    vector<int> newInterval = {4, 8};
+    vector<vector<int>> result = insert(intervals, newInterval);
     for (vector<int> vect : result)
     {
         cout << vect[0] << ", " << vect[1] << endl;
