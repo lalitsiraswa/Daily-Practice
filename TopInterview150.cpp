@@ -3758,16 +3758,87 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
     result.push_back(newInterval);
     return result;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<vector<int>> intervals = {{1, 2}, {3, 5}, {6, 7}, {8, 10}, {12, 16}};
+//     vector<int> newInterval = {4, 8};
+//     vector<vector<int>> result = insert(intervals, newInterval);
+//     for (vector<int> vect : result)
+//     {
+//         cout << vect[0] << ", " << vect[1] << endl;
+//     }
+//     cout << string(35, '-');
+//     return 0;
+// }
+// -------------------------------------------------------------------- 42. Trapping Rain Water Revision -----------------------------------------------------------------------
+int trapRevise(vector<int> &height)
+{
+    int n = height.size();
+    int left = 0;
+    int right = n - 1;
+    int totalWaterTrapped = 0;
+    int leftMax = height[0];
+    int rightMax = height[n - 1];
+    while (left < right)
+    {
+        if (height[left] > leftMax)
+        {
+            leftMax = height[left];
+        }
+        if (height[right] > rightMax)
+        {
+            rightMax = height[right];
+        }
+        int totalWaterCanFillBetween = min(leftMax, rightMax);
+        if (height[left] <= height[right])
+        {
+            if (totalWaterCanFillBetween > height[left])
+                totalWaterTrapped += (totalWaterCanFillBetween - height[left]);
+            left++;
+        }
+        else
+        {
+            if (totalWaterCanFillBetween > height[right])
+                totalWaterTrapped += (totalWaterCanFillBetween - height[right]);
+            right--;
+        }
+    }
+    return totalWaterTrapped;
+}
+// ------------------------
+int trapRevise2(vector<int> &height)
+{
+    int n = height.size();
+    int waterTrapped = 0;
+    int leftPointer = 0, rightPointer = n - 1;
+    int leftMax = 0, rightMax = 0;
+    while (leftPointer <= rightPointer)
+    {
+        if (height[leftPointer] <= height[rightPointer])
+        {
+            if (height[leftPointer] > leftMax)
+                leftMax = height[leftPointer];
+            else
+                waterTrapped += leftMax - height[leftPointer];
+            leftPointer++;
+        }
+        else
+        {
+            if (height[rightPointer] > rightMax)
+                rightMax = height[rightPointer];
+            else
+                waterTrapped += rightMax - height[rightPointer];
+            rightPointer--;
+        }
+    }
+    return waterTrapped;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<vector<int>> intervals = {{1, 2}, {3, 5}, {6, 7}, {8, 10}, {12, 16}};
-    vector<int> newInterval = {4, 8};
-    vector<vector<int>> result = insert(intervals, newInterval);
-    for (vector<int> vect : result)
-    {
-        cout << vect[0] << ", " << vect[1] << endl;
-    }
+    vector<int> height = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
+    cout << trapRevise2(height) << endl;
     cout << string(35, '-');
     return 0;
 }
