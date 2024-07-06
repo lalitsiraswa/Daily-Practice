@@ -3834,11 +3834,80 @@ int trapRevise2(vector<int> &height)
     }
     return waterTrapped;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> height = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
+//     cout << trapRevise2(height) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------ 209. Minimum Size Subarray Sum --------------------------------------------------------------
+int minSubArrayLenRevision(int target, vector<int> &nums)
+{
+    int n = nums.size();
+    int subarraySum = 0, subarrayLength = 0;
+    int minSubarrayLength = INT_MAX;
+    int right = 0;
+    while (right < n)
+    {
+        subarrayLength++;
+        subarraySum += nums[right];
+        if (subarraySum >= target)
+            break;
+        right++;
+    }
+    if (subarraySum < target)
+        return 0;
+    int left = 0;
+    while (left < n && (subarraySum - nums[left]) >= target)
+    {
+        subarraySum -= nums[left];
+        subarrayLength--;
+        left++;
+    }
+    minSubarrayLength = min(minSubarrayLength, subarrayLength);
+    right++;
+    while (right < n)
+    {
+        subarraySum += nums[right];
+        subarrayLength++;
+        while (left < n && (subarraySum - nums[left]) >= target)
+        {
+            subarraySum -= nums[left];
+            subarrayLength--;
+            left++;
+        }
+        minSubarrayLength = min(minSubarrayLength, subarrayLength);
+        right++;
+    }
+    return minSubarrayLength;
+}
+// ------------------
+int minSubArrayLenRevision2(int target, vector<int> &nums)
+{
+    int n = nums.size();
+    int left = 0;
+    int sum = 0;
+    int minLengthSubArray = INT_MAX;
+    for (int right = 0; right < n; right++)
+    {
+        sum += nums[right];
+        while (sum >= target)
+        {
+            minLengthSubArray = min((right - left) + 1, minLengthSubArray);
+            sum -= nums[left];
+            left++;
+        }
+    }
+    return minLengthSubArray == INT_MAX ? 0 : minLengthSubArray;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> height = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
-    cout << trapRevise2(height) << endl;
+    vector<int> nums = {5, 1, 3, 5, 10, 7, 4, 9, 2, 8};
+    int target = 15;
+    cout << minSubArrayLenRevision2(target, nums) << endl;
     cout << string(35, '-');
     return 0;
 }
