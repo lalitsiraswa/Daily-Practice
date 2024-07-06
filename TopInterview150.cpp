@@ -3902,12 +3902,51 @@ int minSubArrayLenRevision2(int target, vector<int> &nums)
     }
     return minLengthSubArray == INT_MAX ? 0 : minLengthSubArray;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {5, 1, 3, 5, 10, 7, 4, 9, 2, 8};
+//     int target = 15;
+//     cout << minSubArrayLenRevision2(target, nums) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 53. Maximum Subarray Revision ------------------------------------------------------------------------
+// Kadane's Algorithms
+int maxSubArrayRevision(vector<int> &nums)
+{
+    int max_so_far = INT_MIN;
+    int max_ending_here = 0;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        max_ending_here += nums[i];
+        if (max_ending_here > max_so_far)
+            max_so_far = max_ending_here;
+        if (max_ending_here < 0)
+            max_ending_here = 0;
+    }
+    return max_so_far;
+}
+int maxSubArrayRevision2(vector<int> &nums)
+{
+    int n = nums.size();
+    int curr = 0;
+    int prev = nums[0];
+    for (int i = 0; i < n; i++)
+    {
+        curr += nums[i];
+        if (nums[i] > curr)
+            curr = nums[i];
+        if (curr > prev)
+            prev = curr;
+    }
+    return prev;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> nums = {5, 1, 3, 5, 10, 7, 4, 9, 2, 8};
-    int target = 15;
-    cout << minSubArrayLenRevision2(target, nums) << endl;
+    vector<int> nums = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+    cout << maxSubArrayRevision(nums) << endl;
     cout << string(35, '-');
     return 0;
 }
