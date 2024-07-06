@@ -3931,7 +3931,7 @@ int maxSubArrayRevision2(vector<int> &nums)
 {
     int n = nums.size();
     int curr = 0;
-    int prev = nums[0];
+    int prev = INT_MIN;
     for (int i = 0; i < n; i++)
     {
         curr += nums[i];
