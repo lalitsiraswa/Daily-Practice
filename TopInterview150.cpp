@@ -3942,11 +3942,11 @@ int maxSubArrayRevision2(vector<int> &nums)
     }
     return prev;
 }
-int main()
-{
-    cout << string(35, '-') << endl;
-    vector<int> nums = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
-    cout << maxSubArrayRevision(nums) << endl;
-    cout << string(35, '-');
-    return 0;
-}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+//     cout << maxSubArrayRevision(nums) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
