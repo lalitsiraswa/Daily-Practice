@@ -3950,3 +3950,53 @@ int maxSubArrayRevision2(vector<int> &nums)
 //     cout << string(35, '-');
 //     return 0;
 // }
+// ------------------------------------------------------------------- 4. Median of Two Sorted Arrays -------------------------------------------------------------------
+double findMedianSortedArrays(vector<int> &nums1, vector<int> &nums2)
+{
+    int n = nums1.size();
+    int m = nums2.size();
+    int mergeSize = m + n;
+    vector<int> merged(mergeSize);
+    int nums1Pointer = n - 1;
+    int nums2Pointer = m - 1;
+    int mergedPointer = mergeSize - 1;
+    while (nums1Pointer >= 0 && nums2Pointer >= 0)
+    {
+        if (nums1[nums1Pointer] >= nums2[nums2Pointer])
+        {
+            merged[mergedPointer] = nums1[nums1Pointer];
+            nums1Pointer--;
+        }
+        else
+        {
+            merged[mergedPointer] = nums2[nums2Pointer];
+            nums2Pointer--;
+        }
+        mergedPointer--;
+    }
+    while (nums1Pointer >= 0)
+    {
+        merged[mergedPointer] = nums1[nums1Pointer];
+        nums1Pointer--;
+        mergedPointer--;
+    }
+    while (nums2Pointer >= 0)
+    {
+        merged[mergedPointer] = nums2[nums2Pointer];
+        nums2Pointer--;
+        mergedPointer--;
+    }
+    int mid = mergeSize / 2;
+    if (mergeSize % 2 == 0)
+        return (double(merged[mid - 1]) + double(merged[mid])) / 2;
+    return double(merged[mid]);
+}
+int main()
+{
+    cout << string(35, '-') << endl;
+    vector<int> nums1 = {1, 3};
+    vector<int> nums2 = {2, 4};
+    cout << findMedianSortedArrays(nums1, nums2) << endl;
+    cout << string(35, '-');
+    return 0;
+}
