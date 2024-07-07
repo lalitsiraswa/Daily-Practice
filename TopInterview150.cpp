@@ -4065,10 +4065,55 @@ int climbStairsRevisionDP(int n)
     }
     return dp[n];
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     cout << climbStairsRevisionDP(3);
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------ 121. Best Time to Buy and Sell Stock Revision -------------------------------------------------------------------
+int maxProfitRevision(vector<int> &prices)
+{
+    int n = prices.size();
+    int buyIndex = 0;
+    int sellIndex = 0;
+    int maxProfit = INT_MIN;
+    for (int i = 0; i < n; i++)
+    {
+        if (prices[i] < prices[buyIndex])
+        {
+            maxProfit = max(maxProfit, prices[sellIndex] - prices[buyIndex]);
+            buyIndex = i;
+            sellIndex = i;
+        }
+        if (prices[i] > prices[sellIndex])
+        {
+            sellIndex = i;
+        }
+    }
+    maxProfit = max(maxProfit, prices[sellIndex] - prices[buyIndex]);
+    return maxProfit;
+}
+// ------------------------
+int maxProfitRevision2(vector<int> &prices)
+{
+    int maxProfit = 0;
+    int minPrice = prices[0];
+    for (int i = 1; i < prices.size(); i++)
+    {
+        int currProfit = prices[i] - minPrice;
+        maxProfit = max(maxProfit, currProfit);
+        minPrice = min(minPrice, prices[i]);
+    }
+    return maxProfit;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    cout << climbStairsRevisionDP(3);
+    vector<int> prices = {7, 1, 5, 3, 6, 4};
+    cout << maxProfitRevision2(prices) << endl;
     cout << endl
          << string(35, '-');
     return 0;
