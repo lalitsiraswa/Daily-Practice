@@ -3991,12 +3991,46 @@ double findMedianSortedArrays(vector<int> &nums1, vector<int> &nums2)
         return (double(merged[mid - 1]) + double(merged[mid])) / 2;
     return double(merged[mid]);
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> nums1 = {1, 3};
+//     vector<int> nums2 = {2, 4};
+//     cout << findMedianSortedArrays(nums1, nums2) << endl;
+//     cout << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 4. Median of Two Sorted Arrays -------------------------------------------------------------------
+int firstUniqChar(string s)
+{
+    int n = s.size();
+    unordered_map<char, int> charFrequency;
+    for (int i = 0; i < n; i++)
+        charFrequency[s[i]]++;
+    for (int i = 0; i < n; i++)
+    {
+        if (charFrequency[s[i]] == 1)
+            return i;
+    }
+    return -1;
+}
+// -------------------
+int firstUniqChar2(string s)
+{
+    int n = s.length();
+    int counter[26] = {0};
+    for (int i = 0; i < n; i++)
+        counter[s[i] - 'a']++;
+    for (int i = 0; i < n; i++)
+        if (counter[s[i] - 'a'] == 1)
+            return i;
+    return -1;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> nums1 = {1, 3};
-    vector<int> nums2 = {2, 4};
-    cout << findMedianSortedArrays(nums1, nums2) << endl;
+    string s = "aabb";
+    cout << firstUniqChar(s) << endl;
     cout << string(35, '-');
     return 0;
 }
