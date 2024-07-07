@@ -4109,11 +4109,68 @@ int maxProfitRevision2(vector<int> &prices)
     }
     return maxProfit;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> prices = {7, 1, 5, 3, 6, 4};
+//     cout << maxProfitRevision2(prices) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------ 11. Container With Most Water Revision -------------------------------------------------------------------
+int maxAreaRevision(vector<int> &height)
+{
+    int n = height.size();
+    int mostWaterLevel = INT_MIN;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            int currMaxWaterCanFillBetween = (j - 1) * min(height[i], height[j]);
+            mostWaterLevel = max(mostWaterLevel, currMaxWaterCanFillBetween);
+        }
+    }
+    return mostWaterLevel;
+}
+// --------------
+int maxAreaRevision2(vector<int> &height)
+{
+    int n = height.size();
+    int mostWaterLevel = 0;
+    int maxWaterCanFillBetween = 0;
+    int left = 0, right = n - 1;
+    while (left < right)
+    {
+        maxWaterCanFillBetween = min(height[left], height[right]);
+        mostWaterLevel = max(mostWaterLevel, (right - left) * maxWaterCanFillBetween);
+        while (height[left] <= maxWaterCanFillBetween && left < right)
+            left++;
+        while (height[right] <= maxWaterCanFillBetween && left < right)
+            right--;
+    }
+    return mostWaterLevel;
+}
+// ---------------
+int maxAreaRevision3(vector<int> &height)
+{
+    int n = height.size();
+    int left = 0, right = n - 1;
+    int mostWaterLevel = INT_MIN;
+    while (left < right)
+    {
+        int maxWaterCanFillBetween = (right - left) * min(height[left], height[right]);
+        mostWaterLevel = max(mostWaterLevel, maxWaterCanFillBetween);
+        if (height[left] < height[right])
+            left++;
+        else
+            right--;
+    }
+    return mostWaterLevel;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> prices = {7, 1, 5, 3, 6, 4};
-    cout << maxProfitRevision2(prices) << endl;
     cout << endl
          << string(35, '-');
     return 0;
