@@ -4145,7 +4145,7 @@ int maxAreaRevision2(vector<int> &height)
         maxWaterCanFillBetween = min(height[left], height[right]);
         mostWaterLevel = max(mostWaterLevel, (right - left) * maxWaterCanFillBetween);
         while (height[left] <= maxWaterCanFillBetween && left < right)
-        
+
             left++;
         while (height[right] <= maxWaterCanFillBetween && left < right)
             right--;
@@ -4169,9 +4169,50 @@ int maxAreaRevision3(vector<int> &height)
     }
     return mostWaterLevel;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------------------- 64. Minimum Path Sum Revision --------------------------------------------------------------------
+int minPathSumRevisionHelper(int row, int col, int m, int n, vector<vector<int>> &grid, vector<vector<int>> &dp)
+{
+    if (row == m && col == n)
+    {
+        dp[row][col] = grid[row][col];
+        return dp[row][col];
+    }
+    if (dp[row][col] != -1)
+        return dp[row][col];
+    int downSide = INT_MAX;
+    int rightSide = INT_MAX;
+    if (row < m)
+    {
+        downSide = minPathSumRevisionHelper(row + 1, col, m, n, grid, dp);
+    }
+    if (col < n)
+    {
+        rightSide = minPathSumRevisionHelper(row, col + 1, m, n, grid, dp);
+    }
+    return dp[row][col] = min(downSide, rightSide) + grid[row][col];
+}
+int minPathSumRevision(vector<vector<int>> &grid)
+{
+    int m = grid.size();
+    int n = grid[0].size();
+    int row = 0, col = 0;
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    minPathSumRevisionHelper(row, col, m - 1, n - 1, grid, dp);
+    return dp[0][0];
+}
 int main()
 {
     cout << string(35, '-') << endl;
+    vector<vector<int>> grid = {{1, 3, 1}, {1, 5, 1}, {4, 2, 1}};
+    // vector<vector<int>> grid = {{1, 2, 3}, s{4, 5, 6}};
+    cout << minPathSumRevision(grid) << endl;
     cout << endl
          << string(35, '-');
     return 0;
