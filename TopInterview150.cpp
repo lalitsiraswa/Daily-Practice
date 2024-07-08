@@ -4145,6 +4145,7 @@ int maxAreaRevision2(vector<int> &height)
         maxWaterCanFillBetween = min(height[left], height[right]);
         mostWaterLevel = max(mostWaterLevel, (right - left) * maxWaterCanFillBetween);
         while (height[left] <= maxWaterCanFillBetween && left < right)
+        
             left++;
         while (height[right] <= maxWaterCanFillBetween && left < right)
             right--;
