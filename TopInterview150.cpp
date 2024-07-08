@@ -4207,12 +4207,51 @@ int minPathSumRevision(vector<vector<int>> &grid)
     minPathSumRevisionHelper(row, col, m - 1, n - 1, grid, dp);
     return dp[0][0];
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<vector<int>> grid = {{1, 3, 1}, {1, 5, 1}, {4, 2, 1}};
+//     // vector<vector<int>> grid = {{1, 2, 3}, s{4, 5, 6}};
+//     cout << minPathSumRevision(grid) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------------------- 122. Best Time to Buy and Sell Stock II Revision --------------------------------------------------------------------
+int maxProfit2RevisionHelper(vector<int> &prices, int index, int buy, int n, vector<vector<int>> &dp)
+{
+    if (index == n)
+        return 0;
+    if (dp[index][buy] != -1)
+        return dp[index][buy];
+    long profit = 0;
+    if (buy == 0)
+    {
+        long notBuyStock = 0 + maxProfit2RevisionHelper(prices, index + 1, 0, n, dp);
+        long buyStock = -prices[index] + maxProfit2RevisionHelper(prices, index + 1, 1, n, dp);
+        profit = max(notBuyStock, buyStock);
+    }
+    if (buy == 1)
+    {
+        long notSellStock = 0 + maxProfit2RevisionHelper(prices, index + 1, 1, n, dp);
+        long sellStock = +prices[index] + maxProfit2RevisionHelper(prices, index + 1, 0, n, dp);
+        profit = max(notSellStock, sellStock);
+    }
+    return dp[index][buy] = profit;
+}
+int maxProfit2Revision(vector<int> &prices)
+{
+    int n = prices.size();
+    vector<vector<int>> dp(n, vector<int>(2, -1));
+    if (n == 0)
+        return 0;
+    return maxProfit2RevisionHelper(prices, 0, 0, n, dp);
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<vector<int>> grid = {{1, 3, 1}, {1, 5, 1}, {4, 2, 1}};
-    // vector<vector<int>> grid = {{1, 2, 3}, s{4, 5, 6}};
-    cout << minPathSumRevision(grid) << endl;
+    vector<int> prices = {7, 1, 5, 3, 6, 4};
+    cout << maxProfit2Revision(prices) << endl;
     cout << endl
          << string(35, '-');
     return 0;
