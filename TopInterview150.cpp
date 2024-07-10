@@ -4256,7 +4256,7 @@ int maxProfit2Revision(vector<int> &prices)
 //          << string(35, '-');
 //     return 0;
 // }
-// ---------------------------------------------------------------------------- 322. Coin Change --------------------------------------------------------------------
+// ---------------------------------------------------------------------------- 322. Coin Change Revision --------------------------------------------------------------------
 int coinChangeHelper(vector<int> &coins, int index, int amount, long long totalCoinSum, vector<vector<int>> &dp)
 {
     if (totalCoinSum == amount)
@@ -4301,26 +4301,110 @@ int coinChange(vector<int> &coins, int amount)
     return minCoins == INT_MAX ? -1 : minCoins;
 }
 // -------------------
-int coinChangerevision(vector<int> &coins, int amount)
+int findCoinChangeRecursive(vector<int> &coins, int target, int index, int n)
 {
-    if (amount == 0)
-        return 0;
-    int minCoins = INT_MAX;
-    int currCoins = INT_MAX;
-    int n = coins.size();
-    vector<vector<int>> dp(n, vector<int>(amount + 1, -1));
-    for (int index = 0; index < n; index++)
+    if (index == n - 1)
     {
-        currCoins = coinChangeHelper(coins, index, amount, coins[index], dp);
-        minCoins = min(currCoins, minCoins);
+        if (target % coins[index] == 0)
+            return target / coins[index];
+        else
+            return 1e9;
     }
-    return minCoins == INT_MAX ? -1 : minCoins;
+    int notTake = 0 + findCoinChangeRecursive(coins, target, index + 1, n);
+    int take = INT_MAX;
+    if (coins[index] <= target)
+        take = 1 + findCoinChangeRecursive(coins, target - coins[index], index, n);
+    return min(take, notTake);
+}
+int findCoinChangeRecursive2(vector<int> &coins, int target, int index)
+{
+    if (index == 0)
+    {
+        if (target % coins[index] == 0)
+            return target / coins[index];
+        else
+            return 1e9;
+    }
+    int notTake = 0 + findCoinChangeRecursive2(coins, target, index - 1);
+    int take = INT_MAX;
+    if (coins[index] <= target)
+        take = 1 + findCoinChangeRecursive2(coins, target - coins[index], index);
+    return min(take, notTake);
+}
+int coinChangerevision(vector<int> &coins, int target)
+{
+    int n = coins.size();
+    int m = target + 1;
+    // int minimumCoins = findCoinChangeRecursive(coins, target, 0, n);
+    int minimumCoins = findCoinChangeRecursive2(coins, target, n - 1);
+    return (minimumCoins > target) ? -1 : minimumCoins;
+}
+// ---------------- Memoization ---------------
+int findCoinChangeRecursiveMemo(vector<int> &coins, int target, int index, vector<vector<int>> &dp)
+{
+    if (index == 0)
+    {
+        if (target % coins[index] == 0)
+        {
+            return dp[index][target] = target / coins[index];
+        }
+        else
+        {
+            return dp[index][target] = 1e9;
+        }
+    }
+    if (dp[index][target] != -1)
+        return dp[index][target];
+    int notTake = 0 + findCoinChangeRecursiveMemo(coins, target, index - 1, dp);
+    int take = INT_MAX;
+    if (coins[index] <= target)
+        take = 1 + findCoinChangeRecursiveMemo(coins, target - coins[index], index, dp);
+    return dp[index][target] = min(take, notTake);
+}
+int coinChangerevisionMemo(vector<int> &coins, int target)
+{
+    int n = coins.size();
+    int m = target + 1;
+    if (!target)
+        return target;
+    vector<vector<int>> dp(n, vector<int>(m, -1));
+    int minimumCoins = findCoinChangeRecursiveMemo(coins, target, n - 1, dp);
+    return (minimumCoins > target) ? -1 : minimumCoins;
+}
+// ------------ Tabulation ------------
+int coinChangerevisionTabulation(vector<int> &coins, int target)
+{
+    int n = coins.size();
+    int m = target + 1;
+    vector<vector<int>> dp(n, vector<int>(m, -1));
+    for (int T = 0; T <= target; T++)
+    {
+        if (T % coins[0] == 0)
+            dp[0][T] = T / coins[0];
+        else
+            dp[0][T] = 1e9;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        for (int T = 0; T <= target; T++)
+        {
+            int notTake = 0 + dp[index - 1][T];
+            int take = INT_MAX;
+            if (coins[index] <= T)
+                take = 1 + dp[index][T - coins[index]];
+            dp[index][T] = min(take, notTake);
+        }
+    }
+    int result = dp[n - 1][target];
+    if (result > target)
+        return -1;
+    return result;
 }
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> coins = {2, 3};
-    cout << coinChange(coins, 6) << endl;
+    vector<int> coins = {1, 2, 3};
+    cout << coinChangerevisionTabulation(coins, 7) << endl;
     cout << endl
          << string(35, '-');
     return 0;
