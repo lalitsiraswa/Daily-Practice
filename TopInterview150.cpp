@@ -4247,11 +4247,80 @@ int maxProfit2Revision(vector<int> &prices)
         return 0;
     return maxProfit2RevisionHelper(prices, 0, 0, n, dp);
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> prices = {7, 1, 5, 3, 6, 4};
+//     cout << maxProfit2Revision(prices) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------------------- 322. Coin Change --------------------------------------------------------------------
+int coinChangeHelper(vector<int> &coins, int index, int amount, long long totalCoinSum, vector<vector<int>> &dp)
+{
+    if (totalCoinSum == amount)
+    {
+        dp[index][totalCoinSum] = 1;
+        return dp[index][totalCoinSum];
+    }
+    if (totalCoinSum > amount)
+        return INT_MAX;
+    if (dp[index][totalCoinSum] != -1)
+        return dp[index][totalCoinSum];
+    int n = coins.size();
+    int minCoins = INT_MAX;
+    int currCoins = INT_MAX;
+    for (int i = index; i < n; i++)
+    {
+        if (totalCoinSum + coins[i] <= amount)
+        {
+            totalCoinSum = totalCoinSum + coins[i];
+            currCoins = coinChangeHelper(coins, i, amount, totalCoinSum, dp);
+            totalCoinSum = totalCoinSum - coins[i];
+            if (currCoins != INT_MAX)
+                currCoins += 1;
+        }
+        minCoins = min(currCoins, minCoins);
+    }
+    return dp[index][totalCoinSum] = minCoins;
+}
+int coinChange(vector<int> &coins, int amount)
+{
+    if (amount == 0)
+        return 0;
+    int minCoins = INT_MAX;
+    int currCoins = INT_MAX;
+    int n = coins.size();
+    vector<vector<int>> dp(n, vector<int>(amount + 1, -1));
+    for (int index = 0; index < n; index++)
+    {
+        currCoins = coinChangeHelper(coins, index, amount, coins[index], dp);
+        minCoins = min(currCoins, minCoins);
+    }
+    return minCoins == INT_MAX ? -1 : minCoins;
+}
+// -------------------
+int coinChangerevision(vector<int> &coins, int amount)
+{
+    if (amount == 0)
+        return 0;
+    int minCoins = INT_MAX;
+    int currCoins = INT_MAX;
+    int n = coins.size();
+    vector<vector<int>> dp(n, vector<int>(amount + 1, -1));
+    for (int index = 0; index < n; index++)
+    {
+        currCoins = coinChangeHelper(coins, index, amount, coins[index], dp);
+        minCoins = min(currCoins, minCoins);
+    }
+    return minCoins == INT_MAX ? -1 : minCoins;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> prices = {7, 1, 5, 3, 6, 4};
-    cout << maxProfit2Revision(prices) << endl;
+    vector<int> coins = {2, 3};
+    cout << coinChange(coins, 6) << endl;
     cout << endl
          << string(35, '-');
     return 0;
