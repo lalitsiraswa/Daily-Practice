@@ -4400,11 +4400,71 @@ int coinChangerevisionTabulation(vector<int> &coins, int target)
         return -1;
     return result;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> coins = {1, 2, 3};
+//     cout << coinChangerevisionTabulation(coins, 7) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------------------- 0/1 Knapsack Problem --------------------------------------------------------------------
+int knapsackHelper(int targetWeight, vector<int> &profit, vector<int> &weight, int index, vector<vector<int>> &dp)
+{
+    if (index == 0)
+    {
+        if (weight[index] <= targetWeight)
+            return dp[index][targetWeight] = profit[index];
+        else
+            return 0;
+    }
+    if (dp[index][targetWeight] != -1)
+        return dp[index][targetWeight];
+    int notTake = 0 + knapsackHelper(targetWeight, profit, weight, index - 1, dp);
+    int take = 0;
+    if (weight[index] <= targetWeight)
+        take = profit[index] + knapsackHelper(targetWeight - weight[index], profit, weight, index - 1, dp);
+    return dp[index][targetWeight] = max(take, notTake);
+}
+int knapsack(int targetWeight, vector<int> profit, vector<int> weight)
+{
+    int n = profit.size();
+    vector<vector<int>> dp(n, vector<int>(targetWeight + 1, -1));
+    knapsackHelper(targetWeight, profit, weight, n - 1, dp);
+    return dp[n - 1][targetWeight];
+}
+// ------------------
+int knapsackDP(int targetWeight, vector<int> profit, vector<int> weight)
+{
+    int n = profit.size();
+    vector<vector<int>> dp(n, vector<int>(targetWeight + 1, -1));
+    for (int w = 0; w <= targetWeight; w++)
+    {
+        if (weight[0] <= w)
+            dp[0][w] = profit[0];
+        else
+            dp[0][w] = 0;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        for (int w = 0; w <= targetWeight; w++)
+        {
+            int notTake = 0 + dp[index - 1][w];
+            int take = 0;
+            if (weight[index] <= w)
+                take = profit[index] + dp[index - 1][w - weight[index]];
+            dp[index][w] = max(take, notTake);
+        }
+    }
+    return dp[n - 1][targetWeight];
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> coins = {1, 2, 3};
-    cout << coinChangerevisionTabulation(coins, 7) << endl;
+    vector<int> profit = {1, 2, 3};
+    vector<int> weight = {4, 5, 1};
+    cout << knapsack(4, profit, weight);
     cout << endl
          << string(35, '-');
     return 0;
