@@ -140,7 +140,7 @@ bool canCross(vector<int> &stones)
     vector<vector<int>> dp(2000, vector<int>(2000, -1));
     return canCrossHelper(0, 1, stones, dp);
 }
-// ------------------
+// --------- Correct One ---------
 bool canCrossHelper(int index, int jumps, vector<int> &stones, vector<vector<int>> &dp, unordered_map<int, int> &isPresent)
 {
     if (index == stones.size() - 1)
@@ -152,7 +152,7 @@ bool canCrossHelper(int index, int jumps, vector<int> &stones, vector<vector<int
     bool jumpPlusOne = false;
     if (isPresent.find(stones[index] + jumps) != isPresent.end())
         jumpZero = canCrossHelper(isPresent[stones[index] + jumps], jumps, stones, dp, isPresent);
-    if (isPresent.find(stones[index] + jumps - 1) != isPresent.end())
+    if (jumps > 1 && isPresent.find(stones[index] + jumps - 1) != isPresent.end())
         jumpMinusOne = canCrossHelper(isPresent[stones[index] + jumps - 1], jumps - 1, stones, dp, isPresent);
     if (isPresent.find(stones[index] + jumps + 1) != isPresent.end())
         jumpPlusOne = canCrossHelper(isPresent[stones[index] + jumps + 1], jumps + 1, stones, dp, isPresent);
