@@ -99,10 +99,80 @@ int climbStairsSpaceOptimization(int n)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     cout << climbStairsSpaceOptimization(3);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 403. Frog Jump -------------------------------------------------------------------------
+// Wrong Answer
+bool canCrossHelper(int index, int jumps, vector<int> &stones, vector<vector<int>> &dp)
+{
+    if (index == stones.size() - 1)
+        return true;
+    if (dp[index][jumps] != -1)
+        return dp[index][jumps];
+    bool answer = false;
+    for (int ind = index + 1; ind < stones.size(); ind++)
+    {
+        if (stones[ind] - stones[index] > jumps + 1)
+            break;
+        for (int jump = 0; jump < 2; jump++)
+        {
+            if (stones[ind] - stones[index] == jumps + jump)
+            {
+                answer = canCrossHelper(ind, jumps + jump, stones, dp) || answer;
+            }
+        }
+    }
+    return dp[index][jumps] = answer;
+}
+bool canCross(vector<int> &stones)
+{
+    if (stones[1] - stones[0] > 1)
+        return false;
+    if (stones.size() == 2)
+        return (stones[1] - stones[0] == 1);
+    int n = stones.size();
+    vector<vector<int>> dp(2000, vector<int>(2000, -1));
+    return canCrossHelper(0, 1, stones, dp);
+}
+// ------------------
+bool canCrossHelper(int index, int jumps, vector<int> &stones, vector<vector<int>> &dp, unordered_map<int, int> &isPresent)
+{
+    if (index == stones.size() - 1)
+        return true;
+    if (dp[index][jumps] != -1)
+        return dp[index][jumps];
+    bool jumpZero = false;
+    bool jumpMinusOne = false;
+    bool jumpPlusOne = false;
+    if (isPresent.find(stones[index] + jumps) != isPresent.end())
+        jumpZero = canCrossHelper(isPresent[stones[index] + jumps], jumps, stones, dp, isPresent);
+    if (isPresent.find(stones[index] + jumps - 1) != isPresent.end())
+        jumpMinusOne = canCrossHelper(isPresent[stones[index] + jumps - 1], jumps - 1, stones, dp, isPresent);
+    if (isPresent.find(stones[index] + jumps + 1) != isPresent.end())
+        jumpPlusOne = canCrossHelper(isPresent[stones[index] + jumps + 1], jumps + 1, stones, dp, isPresent);
+    return dp[index][jumps] = jumpZero || jumpMinusOne || jumpPlusOne;
+}
+bool canCrossPractice(vector<int> &stones)
+{
+    if (stones[1] - stones[0] != 1)
+        return false;
+    unordered_map<int, int> isPresent;
+    vector<vector<int>> dp(2000, vector<int>(2000, -1));
+    for (int index = 0; index < stones.size(); index++)
+        isPresent[stones[index]] = index;
+    return canCrossHelper(1, 1, stones, dp, isPresent);
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    cout << climbStairsSpaceOptimization(3);
+    vector<int> stones = {0, 1, 3, 5, 6, 8, 12, 17};
+    cout << canCrossPractice(stones);
     cout << endl
          << string(20, '-');
     return 0;
