@@ -302,12 +302,77 @@ int frogJumpTUFWithKDistanceTabulation(vector<int> &heights, int k)
     }
     return dp[n - 1];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> heights = {30, 10, 60, 10, 60, 50};
+//     // cout << frogJumpTUFSpaceOptimization(heights, heights.size() - 1);
+//     cout << frogJumpTUFWithKDistanceTabulation(heights, 2);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 198. House Robber -------------------------------------------------------------------------
+int robRecursionMemoization(vector<int> &nums, int index, vector<int> &dp)
+{
+    if (index == 0)
+        return dp[index] = nums[index];
+    if (dp[index] != -1)
+        return dp[index];
+    int notTake = 0 + robRecursionMemoization(nums, index - 1, dp);
+    int take = nums[index];
+    if (index > 1)
+        take += robRecursionMemoization(nums, index - 2, dp);
+    return dp[index] = max(take, notTake);
+}
+int rob(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> dp(n, -1);
+    robRecursionMemoization(nums, n - 1, dp);
+    return dp[n - 1];
+}
+// ----------------------
+int robTabulation(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> dp(n, -1);
+    dp[0] = nums[0];
+    for (int index = 1; index < n; index++)
+    {
+        int notTake = 0 + dp[index - 1];
+        int take = nums[index];
+        if (index > 1)
+            take += dp[index - 2];
+        dp[index] = max(take, notTake);
+    }
+    return dp[n - 1];
+}
+// --------------------
+int robSpaceOptimization(vector<int> &nums)
+{
+    int n = nums.size();
+    int maxRob = INT_MIN;
+    int first = nums[0];
+    int second = INT_MIN;
+    if (n > 1)
+        second = max(nums[0], nums[1]);
+    maxRob = max(first, second);
+    for (int index = 2; index < n; index++)
+    {
+        int notTake = 0 + second;
+        int take = nums[index] + first;
+        maxRob = max(take, notTake);
+        first = second;
+        second = maxRob;
+    }
+    return maxRob;
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> heights = {30, 10, 60, 10, 60, 50};
-    // cout << frogJumpTUFSpaceOptimization(heights, heights.size() - 1);
-    cout << frogJumpTUFWithKDistanceTabulation(heights, 2);
+    vector<int> nums = {2, 7, 9, 3, 1};
+    cout << robSpaceOptimization(nums);
     cout << endl
          << string(20, '-');
     return 0;
