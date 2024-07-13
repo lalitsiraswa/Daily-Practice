@@ -353,18 +353,18 @@ int robSpaceOptimization(vector<int> &nums)
 {
     int n = nums.size();
     int maxRob = INT_MIN;
-    int first = nums[0];
-    int second = INT_MIN;
+    int previousSecond = nums[0];
+    int previousFirst = INT_MIN;
     if (n > 1)
-        second = max(nums[0], nums[1]);
-    maxRob = max(first, second);
+        previousFirst = max(nums[0], nums[1]);
+    maxRob = max(previousFirst, previousSecond);
     for (int index = 2; index < n; index++)
     {
-        int notTake = 0 + second;
-        int take = nums[index] + first;
+        int notTake = 0 + previousFirst;
+        int take = nums[index] + previousSecond;
         maxRob = max(take, notTake);
-        first = second;
-        second = maxRob;
+        previousSecond = previousFirst;
+        previousFirst = maxRob;
     }
     return maxRob;
 }
