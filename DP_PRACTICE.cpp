@@ -244,12 +244,70 @@ int frogJumpTUFSpaceOptimization(vector<int> &heights)
     }
     return minEnergy;
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> heights = {30, 10, 60, 10, 60, 50};
+//     // cout << frogJumpTUFSpaceOptimization(heights, heights.size() - 1);
+//     cout << frogJumpTUFTabulation(heights);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------ TUF - DP 4. Frog Jump with K Distance | Lecture 3 Follow Up Question ----------------------------------------------
+int frogJumpTUFWithKDistance(vector<int> &heights, int k, int index, vector<int> &dp)
+{
+    if (index == 0)
+        return dp[index] = 0;
+    if (dp[index] != -1)
+        return dp[index];
+    int minEnergy = INT_MAX;
+    int currentEnergy = 0;
+    for (int i = 1; i <= k; i++)
+    {
+        if (index - i >= 0)
+        {
+            currentEnergy = abs(heights[index] - heights[index - i]) + frogJumpTUFWithKDistance(heights, k, index - i, dp);
+        }
+        minEnergy = min(minEnergy, currentEnergy);
+    }
+    return dp[index] = minEnergy;
+}
+int frogJumpTUFWithKDistance(vector<int> &heights, int k)
+{
+    int n = heights.size();
+    vector<int> dp(n, -1);
+    frogJumpTUFWithKDistance(heights, k, n - 1, dp);
+    return dp[n - 1];
+}
+// ---------------------------
+int frogJumpTUFWithKDistanceTabulation(vector<int> &heights, int k)
+{
+    int n = heights.size();
+    vector<int> dp(n, -1);
+    dp[0] = 0;
+    for (int index = 1; index < n; index++)
+    {
+        int minEnergy = INT_MAX;
+        int currentEnergy = 0;
+        for (int i = 1; i <= k; i++)
+        {
+            if (index - i >= 0)
+            {
+                currentEnergy = abs(heights[index] - heights[index - i]) + dp[index - i];
+            }
+            minEnergy = min(minEnergy, currentEnergy);
+        }
+        dp[index] = minEnergy;
+    }
+    return dp[n - 1];
+}
 int main()
 {
     cout << string(20, '-') << endl;
     vector<int> heights = {30, 10, 60, 10, 60, 50};
     // cout << frogJumpTUFSpaceOptimization(heights, heights.size() - 1);
-    cout << frogJumpTUFTabulation(heights);
+    cout << frogJumpTUFWithKDistanceTabulation(heights, 2);
     cout << endl
          << string(20, '-');
     return 0;
