@@ -368,11 +368,31 @@ int robSpaceOptimization(vector<int> &nums)
     }
     return maxRob;
 }
+// ---------------------
+int robSpaceOptimization2(vector<int> &nums)
+{
+    int n = nums.size();
+    int maxRob = INT_MIN;
+    int previousFirst = nums[0];
+    int previousSecond = INT_MIN;
+    maxRob = max(previousFirst, previousSecond);
+    for (int index = 1; index < n; index++)
+    {
+        int notTake = 0 + previousFirst;
+        int take = nums[index];
+        if (index > 1)
+            take += previousSecond;
+        maxRob = max(take, notTake);
+        previousSecond = previousFirst;
+        previousFirst = maxRob;
+    }
+    return maxRob;
+}
 int main()
 {
     cout << string(20, '-') << endl;
     vector<int> nums = {2, 7, 9, 3, 1};
-    cout << robSpaceOptimization(nums);
+    cout << robSpaceOptimization2(nums);
     cout << endl
          << string(20, '-');
     return 0;
