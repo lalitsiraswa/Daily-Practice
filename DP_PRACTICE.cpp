@@ -388,11 +388,52 @@ int robSpaceOptimization2(vector<int> &nums)
     }
     return maxRob;
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> nums = {2, 7, 9, 3, 1};
+//     cout << robSpaceOptimization2(nums);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 213. House Robber II -------------------------------------------------------------------------
+int houseRobberSpaceOptimization(vector<int> nums)
+{
+    int n = nums.size();
+    int maxRob = INT_MIN;
+    int previousFirst = nums[0];
+    int previousSecond = INT_MIN;
+    maxRob = max(previousFirst, previousSecond);
+    for (int index = 1; index < n; index++)
+    {
+        int notTake = 0 + previousFirst;
+        int take = nums[index];
+        if (index > 1)
+            take += previousSecond;
+        maxRob = max(take, notTake);
+        previousSecond = previousFirst;
+        previousFirst = maxRob;
+    }
+    return maxRob;
+}
+int rob2(vector<int> &nums)
+{
+    int n = nums.size();
+    if (n == 1)
+        return nums[0];
+    vector<int> includeFirstElement(nums.begin(), nums.end() - 1);
+    vector<int> excludeFirstElement(nums.begin() + 1, nums.end());
+    // Then Same As the 198. House Robber
+    int includeElementFirst = houseRobberSpaceOptimization(includeFirstElement);
+    int excludeElementFirst = houseRobberSpaceOptimization(excludeFirstElement);
+    return max(includeElementFirst, excludeElementFirst);
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> nums = {2, 7, 9, 3, 1};
-    cout << robSpaceOptimization2(nums);
+    vector<int> nums = {2, 3, 2};
+    cout << rob2(nums);
     cout << endl
          << string(20, '-');
     return 0;
