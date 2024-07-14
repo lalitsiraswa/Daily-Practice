@@ -652,11 +652,77 @@ int uniquePathsSpaceOptimization(int m, int n)
     }
     return lastStoredData[0];
 }
+// --------------------------
+int countWaysUtil(int row, int column, vector<vector<int>> &dp)
+{
+    if (row == 0 && column == 0)
+        return dp[row][column] = 1;
+    if (dp[row][column] != -1)
+        return dp[row][column];
+    int moveUp = 0;
+    int moveLeft = 0;
+    if (row > 0)
+        moveUp = countWaysUtil(row - 1, column, dp);
+    if (column > 0)
+        moveLeft = countWaysUtil(row, column - 1, dp);
+    return dp[row][column] = (moveUp + moveLeft);
+}
+int countWays(int m, int n)
+{
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    return countWaysUtil(m - 1, n - 1, dp);
+}
+// ----------------------------
+int countWaysTabulation(int m, int n)
+{
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    dp[0][0] = 1;
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            if (row == 0 && column == 0)
+                continue;
+            int moveUp = 0;
+            int moveLeft = 0;
+            if (row > 0)
+                moveUp = dp[row - 1][column];
+            if (column > 0)
+                moveLeft = dp[row][column - 1];
+            dp[row][column] = (moveUp + moveLeft);
+        }
+    }
+    return dp[m - 1][n - 1];
+}
+// ------------------------
+int countWaysSpaceOptimization(int m, int n)
+{
+    vector<int> previousDataStore(n);
+    previousDataStore[0] = 1;
+    vector<int> tempDataStore(n);
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            if (row == 0 && column == 0)
+                continue;
+            int moveUp = 0;
+            int moveLeft = 0;
+            if (row > 0)
+                moveUp = tempDataStore[column];
+            if (column > 0)
+                moveLeft = previousDataStore[column - 1];
+            previousDataStore[column] = (moveUp + moveLeft);
+        }
+        tempDataStore = previousDataStore;
+    }
+    return previousDataStore[n - 1];
+}
 int main()
 {
     cout << string(20, '-') << endl;
     int m = 3, n = 2;
-    cout << uniquePathsSpaceOptimization(m, n);
+    cout << countWaysSpaceOptimization(m, n);
     cout << endl
          << string(20, '-');
     return 0;
