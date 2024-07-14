@@ -557,11 +557,106 @@ int ninjaTrainingSpaceOptimization(int n, vector<vector<int>> &points)
     // The maximum points for the last day with any activity can be found in prev[3]
     return prev[3];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<vector<int>> points = {{2, 1, 3}, {3, 4, 6}, {10, 1, 6}, {8, 3, 7}};
+//     cout << ninjaTrainingSpaceOptimization(points.size(), points);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 62. Unique Paths -------------------------------------------------------------------------
+int uniquePathsMemoization(int row, int column, int &m, int &n, vector<vector<int>> &dp)
+{
+    if (row == m - 1 && column == n - 1)
+        return dp[row][column] = 1;
+    if (dp[row][column] != -1)
+        return dp[row][column];
+    int moveDown = 0;
+    int moveRight = 0;
+    if (row < m - 1)
+        moveDown = uniquePathsMemoization(row + 1, column, m, n, dp);
+    if (column < n - 1)
+        moveRight = uniquePathsMemoization(row, column + 1, m, n, dp);
+    return dp[row][column] = (moveDown + moveRight);
+}
+int uniquePaths(int m, int n)
+{
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    return uniquePathsMemoization(0, 0, m, n, dp);
+}
+// -------------------------
+int uniquePathsTabulation(int m, int n)
+{
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    dp[m - 1][n - 1] = 1;
+    for (int row = m - 1; row >= 0; row--)
+    {
+        for (int column = n - 1; column >= 0; column--)
+        {
+            int moveDown = 0;
+            int moveRight = 0;
+            if (row < m - 1)
+                moveDown = dp[row + 1][column];
+            if (column < n - 1)
+                moveRight = dp[row][column + 1];
+            if (row == (m - 1) && column == (n - 1))
+                continue;
+            dp[row][column] = (moveDown + moveRight);
+        }
+    }
+    return dp[0][0];
+}
+// --------------------
+int uniquePathsTabulationModified(int m, int n)
+{
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    for (int column = 0; column < n; column++)
+        dp[m - 1][column] = 1;
+    for (int row = m - 2; row >= 0; row--)
+    {
+        for (int column = n - 1; column >= 0; column--)
+        {
+            int moveDown = 0;
+            int moveRight = 0;
+            if (row < m - 1)
+                moveDown = dp[row + 1][column];
+            if (column < n - 1)
+                moveRight = dp[row][column + 1];
+            dp[row][column] = (moveDown + moveRight);
+        }
+    }
+    return dp[0][0];
+}
+// --------------------------
+int uniquePathsSpaceOptimization(int m, int n)
+{
+    vector<int> lastStoredData(n, -1);
+    for (int column = 0; column < n; column++)
+        lastStoredData[column] = 1;
+    for (int row = m - 2; row >= 0; row--)
+    {
+        vector<int> tempData(n, -1);
+        for (int column = n - 1; column >= 0; column--)
+        {
+            int moveDown = 0;
+            int moveRight = 0;
+            if (row < m - 1)
+                moveDown = lastStoredData[column];
+            if (column < n - 1)
+                moveRight = tempData[column + 1];
+            tempData[column] = (moveDown + moveRight);
+        }
+        lastStoredData = tempData;
+    }
+    return lastStoredData[0];
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<vector<int>> points = {{2, 1, 3}, {3, 4, 6}, {10, 1, 6}, {8, 3, 7}};
-    cout << ninjaTrainingSpaceOptimization(points.size(), points);
+    int m = 3, n = 2;
+    cout << uniquePathsSpaceOptimization(m, n);
     cout << endl
          << string(20, '-');
     return 0;
