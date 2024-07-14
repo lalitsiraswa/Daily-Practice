@@ -595,14 +595,14 @@ int uniquePathsTabulation(int m, int n)
     {
         for (int column = n - 1; column >= 0; column--)
         {
+            if (row == (m - 1) && column == (n - 1))
+                continue;
             int moveDown = 0;
             int moveRight = 0;
             if (row < m - 1)
                 moveDown = dp[row + 1][column];
             if (column < n - 1)
                 moveRight = dp[row][column + 1];
-            if (row == (m - 1) && column == (n - 1))
-                continue;
             dp[row][column] = (moveDown + moveRight);
         }
     }
