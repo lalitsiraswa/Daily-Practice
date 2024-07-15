@@ -718,11 +718,98 @@ int countWaysSpaceOptimization(int m, int n)
     }
     return previousDataStore[n - 1];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     int m = 3, n = 2;
+//     cout << countWaysSpaceOptimization(m, n);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 63. Unique Paths II -------------------------------------------------------------------------
+int uniquePathsWithObstaclesMemoization(vector<vector<int>> &obstacleGrid, int row, int column, vector<vector<int>> &dp)
+{
+    if (row == 0 && column == 0)
+        return dp[row][column] = 1;
+    if (dp[row][column] != -1)
+        return dp[row][column];
+    int moveUp = 0;
+    int moveLeft = 0;
+    if (row > 0 && obstacleGrid[row - 1][column] != 1)
+        moveUp = uniquePathsWithObstaclesMemoization(obstacleGrid, row - 1, column, dp);
+    if (column > 0 && obstacleGrid[row][column - 1] != 1)
+        moveLeft = uniquePathsWithObstaclesMemoization(obstacleGrid, row, column - 1, dp);
+    return dp[row][column] = (moveUp + moveLeft);
+}
+int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
+{
+    int row = obstacleGrid.size();
+    int column = obstacleGrid[0].size();
+    vector<vector<int>> dp(row, vector<int>(column, -1));
+    if (obstacleGrid[row - 1][column - 1] != 1)
+        return uniquePathsWithObstaclesMemoization(obstacleGrid, row - 1, column - 1, dp);
+    return 0;
+}
+// ------------------------------------
+int uniquePathsWithObstaclesTabulation(vector<vector<int>> &obstacleGrid)
+{
+    int rowCount = obstacleGrid.size();
+    int columnCount = obstacleGrid[0].size();
+    if (obstacleGrid[rowCount - 1][columnCount - 1] == 1 || obstacleGrid[0][0] == 1)
+        return 0;
+    vector<vector<int>> dp(rowCount, vector<int>(columnCount, -1));
+    dp[0][0] = 1;
+    for (int row = 0; row < rowCount; row++)
+    {
+        for (int column = 0; column < columnCount; column++)
+        {
+            if (row == 0 && column == 0)
+                continue;
+            int moveUp = 0;
+            int moveLeft = 0;
+            if (row > 0 && obstacleGrid[row - 1][column] != 1)
+                moveUp = dp[row - 1][column];
+            if (column > 0 && obstacleGrid[row][column - 1] != 1)
+                moveLeft = dp[row][column - 1];
+            dp[row][column] = (moveUp + moveLeft);
+        }
+    }
+    return dp[rowCount - 1][columnCount - 1];
+}
+// -----------------------
+int uniquePathsWithObstaclesSpaceOptimization(vector<vector<int>> &obstacleGrid)
+{
+    int rowCount = obstacleGrid.size();
+    int columnCount = obstacleGrid[0].size();
+    if (obstacleGrid[rowCount - 1][columnCount - 1] == 1 || obstacleGrid[0][0] == 1)
+        return 0;
+    vector<int> previousDataStore(columnCount, -1);
+    previousDataStore[0] = 1;
+    vector<int> tempDataStore(columnCount, -1);
+    for (int row = 0; row < rowCount; row++)
+    {
+        for (int column = 0; column < columnCount; column++)
+        {
+            if (row == 0 && column == 0)
+                continue;
+            int moveUp = 0;
+            int moveLeft = 0;
+            if (row > 0 && obstacleGrid[row - 1][column] != 1)
+                moveUp = tempDataStore[column];
+            if (column > 0 && obstacleGrid[row][column - 1] != 1)
+                moveLeft = previousDataStore[column - 1];
+            previousDataStore[column] = (moveUp + moveLeft);
+        }
+        tempDataStore = previousDataStore;
+    }
+    return previousDataStore[columnCount - 1];
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    int m = 3, n = 2;
-    cout << countWaysSpaceOptimization(m, n);
+    vector<vector<int>> obstacleGrid = {{0, 1}, {0, 0}};
+    cout << uniquePathsWithObstaclesSpaceOptimization(obstacleGrid);
     cout << endl
          << string(20, '-');
     return 0;
