@@ -886,11 +886,88 @@ int minPathSumSpaceOptimization(vector<vector<int>> &grid)
     }
     return previousDataStore[columnCount - 1];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<vector<int>> grid = {{1, 3, 1}, {1, 5, 1}, {4, 2, 1}};
+//     cout << minPathSumSpaceOptimization(grid);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 120. Triangle -------------------------------------------------------------------------
+int minimumTotalRecursion(vector<vector<int>> &triangle, int row, int column, vector<vector<int>> &dp)
+{
+    if (row == 0 && column == 0)
+        return dp[row][column] = triangle[row][column];
+    if (dp[row][column] != -1)
+        return dp[row][column];
+    int moveUp = 1e9;
+    int moveLeft = 1e9;
+    if (row > 0)
+    {
+        if (row != column)
+            moveUp = triangle[row][column] + minimumTotalRecursion(triangle, row - 1, column, dp);
+        if (column > 0)
+            moveLeft = triangle[row][column] + minimumTotalRecursion(triangle, row - 1, column - 1, dp);
+    }
+    return dp[row][column] = min(moveUp, moveLeft);
+}
+int minimumTotal(vector<vector<int>> &triangle)
+{
+    int m = triangle.size();
+    int n = triangle[m - 1].size();
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    int minimumTotal = INT_MAX;
+    for (int column = n - 1; column >= 0; column--)
+    {
+        int currentTotal = minimumTotalRecursion(triangle, m - 1, column, dp);
+        minimumTotal = min(minimumTotal, currentTotal);
+        dp[m - 1][column] = minimumTotal;
+    }
+    return minimumTotal;
+}
+// --------------------
+int minimumTotalTabulation(vector<vector<int>> &triangle)
+{
+    int m = triangle.size();
+    int n = triangle[m - 1].size();
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    dp[0][0] = triangle[0][0];
+    int minimumTotal = INT_MAX;
+    for (int column = 0; column < n; column++)
+    {
+        int currentTotal = 1e9;
+        for (int row = 0; row < column; row++)
+        {
+            for (int col = 0; col <= column; col++)
+            {
+                if (row == 0 && col == 0)
+                    continue;
+                int moveUp = 1e9;
+                int moveLeft = 1e9;
+                if (row > 0)
+                {
+                    if (row != column)
+                        moveUp = triangle[row][column] + dp[row - 1][column];
+                    if (column > 0)
+                        moveLeft = triangle[row][column] + dp[row - 1][column - 1];
+                }
+                dp[row][col] = min(moveUp, moveLeft);
+                currentTotal = min(currentTotal, dp[row][col]);
+            }
+        }
+        minimumTotal = min(minimumTotal, currentTotal);
+        dp[m - 1][column] = minimumTotal;
+    }
+    return minimumTotal;
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<vector<int>> grid = {{1, 3, 1}, {1, 5, 1}, {4, 2, 1}};
-    cout << minPathSumSpaceOptimization(grid);
+    vector<vector<int>> triangle = {{2}, {3, 4}, {6, 5, 7}, {4, 1, 8, 3}};
+    // vector<vector<int>> triangle = {{-10}};
+    cout << minimumTotalTabulation(triangle);
     cout << endl
          << string(20, '-');
     return 0;
