@@ -1038,12 +1038,166 @@ int minimumTotalSpaceOptimizationWay(vector<vector<int>> &triangle)
     }
     return previousDataStore[0];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<vector<int>> triangle = {{2}, {3, 4}, {6, 5, 7}, {4, 1, 8, 3}};
+//     // vector<vector<int>> triangle = {{-10}};
+//     cout << minimumTotalSpaceOptimizationWay(triangle);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 931. Minimum/Maximum Falling Path Sum -------------------------------------------------------------------------
+// ----------------- MEMOIZATION 'TLE' -------------------
+int minFallingPathSumMemoization(vector<vector<int>> &matrix, int row, int column, int &size, vector<vector<int>> &dp)
+{
+    if (row == 0)
+        return dp[row][column] = matrix[row][column];
+    if (dp[row][column] != -1)
+        return dp[row][column];
+    int moveUp = matrix[row][column] + minFallingPathSumMemoization(matrix, row - 1, column, size, dp);
+    int moveDiagonalLeft = INT_MAX;
+    int moveDiagonalRight = INT_MAX;
+    if (column > 0)
+        moveDiagonalLeft = matrix[row][column] + minFallingPathSumMemoization(matrix, row - 1, column - 1, size, dp);
+    if (column < size - 1)
+        moveDiagonalRight = matrix[row][column] + minFallingPathSumMemoization(matrix, row - 1, column + 1, size, dp);
+    return dp[row][column] = min(moveUp, min(moveDiagonalLeft, moveDiagonalRight));
+}
+int minFallingPathSum(vector<vector<int>> &matrix)
+{
+    int size = matrix.size();
+    vector<vector<int>> dp(size, vector<int>(size, -1));
+    int minFallingPath = INT_MAX;
+    for (int column = 0; column < size; column++)
+    {
+        int currentFallingPath = minFallingPathSumMemoization(matrix, size - 1, column, size, dp);
+        dp[size - 1][column] = currentFallingPath;
+        minFallingPath = min(currentFallingPath, minFallingPath);
+    }
+    return minFallingPath;
+}
+// -------------------------
+int minFallingPathSumTabulation(vector<vector<int>> &matrix)
+{
+    int size = matrix.size();
+    vector<vector<int>> dp(size, vector<int>(size, -1));
+    int minFallingPath = 1e9;
+    for (int column = 0; column < size; column++)
+    {
+        dp[0][column] = matrix[0][column];
+        minFallingPath = min(minFallingPath, dp[0][column]);
+    }
+    for (int row = 1; row < size; row++)
+    {
+        minFallingPath = 1e9;
+        for (int column = 0; column < size; column++)
+        {
+            int moveUp = matrix[row][column] + dp[row - 1][column];
+            int moveDiagonalLeft = 1e9;
+            int moveDiagonalRight = 1e9;
+            if (column > 0)
+                moveDiagonalLeft = matrix[row][column] + dp[row - 1][column - 1];
+            if (column < size - 1)
+                moveDiagonalRight = matrix[row][column] + dp[row - 1][column + 1];
+            dp[row][column] = min(moveUp, min(moveDiagonalLeft, moveDiagonalRight));
+            minFallingPath = min(minFallingPath, dp[row][column]);
+        }
+    }
+    return minFallingPath;
+}
+// -------------------
+int minFallingPathSumTabulationOtherWay(vector<vector<int>> &matrix)
+{
+    int size = matrix.size();
+    vector<vector<int>> dp(size, vector<int>(size, -1));
+    int minFallingPath = 1e9;
+    for (int column = 0; column < size; column++)
+        dp[0][column] = matrix[0][column];
+    for (int row = 1; row < size; row++)
+    {
+        for (int column = 0; column < size; column++)
+        {
+            int moveUp = matrix[row][column] + dp[row - 1][column];
+            int moveDiagonalLeft = 1e9;
+            int moveDiagonalRight = 1e9;
+            if (column > 0)
+                moveDiagonalLeft = matrix[row][column] + dp[row - 1][column - 1];
+            if (column < size - 1)
+                moveDiagonalRight = matrix[row][column] + dp[row - 1][column + 1];
+            dp[row][column] = min(moveUp, min(moveDiagonalLeft, moveDiagonalRight));
+        }
+    }
+    for (int column = 0; column < size; column++)
+        minFallingPath = min(minFallingPath, dp[size - 1][column]);
+    return minFallingPath;
+}
+// -------------------
+int minFallingPathSumSpaceOptimization(vector<vector<int>> &matrix)
+{
+    int size = matrix.size();
+    vector<int> previousDataStore(size, -1);
+    int minFallingPath = 1e9;
+    for (int column = 0; column < size; column++)
+    {
+        previousDataStore[column] = matrix[0][column];
+        minFallingPath = min(minFallingPath, previousDataStore[column]);
+    }
+    for (int row = 1; row < size; row++)
+    {
+        vector<int> currentDataStore(size, -1);
+        minFallingPath = 1e9;
+        for (int column = 0; column < size; column++)
+        {
+            int moveUp = matrix[row][column] + previousDataStore[column];
+            int moveDiagonalLeft = 1e9;
+            int moveDiagonalRight = 1e9;
+            if (column > 0)
+                moveDiagonalLeft = matrix[row][column] + previousDataStore[column - 1];
+            if (column < size - 1)
+                moveDiagonalRight = matrix[row][column] + previousDataStore[column + 1];
+            currentDataStore[column] = min(moveUp, min(moveDiagonalLeft, moveDiagonalRight));
+            minFallingPath = min(minFallingPath, currentDataStore[column]);
+        }
+        previousDataStore = currentDataStore;
+    }
+    return minFallingPath;
+}
+// -----------------
+int minFallingPathSumSpaceOptimizationOtherWay(vector<vector<int>> &matrix)
+{
+    int size = matrix.size();
+    vector<int> previousDataStore(size, -1);
+    int minFallingPath = 1e9;
+    for (int column = 0; column < size; column++)
+        previousDataStore[column] = matrix[0][column];
+    for (int row = 1; row < size; row++)
+    {
+        vector<int> currentDataStore(size, -1);
+        minFallingPath = 1e9;
+        for (int column = 0; column < size; column++)
+        {
+            int moveUp = matrix[row][column] + previousDataStore[column];
+            int moveDiagonalLeft = 1e9;
+            int moveDiagonalRight = 1e9;
+            if (column > 0)
+                moveDiagonalLeft = matrix[row][column] + previousDataStore[column - 1];
+            if (column < size - 1)
+                moveDiagonalRight = matrix[row][column] + previousDataStore[column + 1];
+            currentDataStore[column] = min(moveUp, min(moveDiagonalLeft, moveDiagonalRight));
+        }
+        previousDataStore = currentDataStore;
+    }
+    for (int column = 0; column < size; column++)
+        minFallingPath = min(minFallingPath, previousDataStore[column]);
+    return minFallingPath;
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<vector<int>> triangle = {{2}, {3, 4}, {6, 5, 7}, {4, 1, 8, 3}};
-    // vector<vector<int>> triangle = {{-10}};
-    cout << minimumTotalSpaceOptimizationWay(triangle);
+    vector<vector<int>> matrix = {{2, 1, 3}, {6, 5, 4}, {7, 8, 9}};
+    cout << minFallingPathSumSpaceOptimizationOtherWay(matrix);
     cout << endl
          << string(20, '-');
     return 0;
