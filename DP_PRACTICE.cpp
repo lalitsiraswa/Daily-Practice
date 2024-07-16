@@ -962,12 +962,88 @@ int minimumTotalTabulation(vector<vector<int>> &triangle)
     }
     return minimumTotal;
 }
+// -------------------- Preferred Ways 'Move from (0, 0)' ---------------
+int minimumTotalMemoizationWay(vector<vector<int>> &triangle, int &m, int &n, int row, int column, vector<vector<int>> &dp)
+{
+    if (row == m - 1)
+        return dp[row][column] = triangle[row][column];
+    if (dp[row][column] != -1)
+        return dp[row][column];
+    int moveDown = INT_MAX;
+    int moveRight = INT_MAX;
+    if (row < m - 1)
+    {
+        moveDown = triangle[row][column] + minimumTotalMemoizationWay(triangle, m, n, row + 1, column, dp);
+        if (column < n - 1)
+            moveRight = triangle[row][column] + minimumTotalMemoizationWay(triangle, m, n, row + 1, column + 1, dp);
+    }
+    return dp[row][column] = min(moveDown, moveRight);
+}
+int minimumTotalPreferWay(vector<vector<int>> &triangle)
+{
+    int m = triangle.size();
+    int n = triangle[m - 1].size();
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    return minimumTotalMemoizationWay(triangle, m, n, 0, 0, dp);
+}
+// ------------------
+int minimumTotalTabulationWay(vector<vector<int>> &triangle)
+{
+    int m = triangle.size();
+    int n = triangle[m - 1].size();
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    for (int column = 0; column < n; column++)
+        dp[m - 1][column] = triangle[m - 1][column];
+    for (int row = m - 2; row >= 0; row--)
+    {
+        for (int column = 0; column <= row; column++)
+        {
+            int moveDown = INT_MAX;
+            int moveRight = INT_MAX;
+            if (row < m - 1)
+            {
+                moveDown = triangle[row][column] + dp[row + 1][column];
+                if (column < n - 1)
+                    moveRight = triangle[row][column] + dp[row + 1][column + 1];
+            }
+            dp[row][column] = min(moveDown, moveRight);
+        }
+    }
+    return dp[0][0];
+}
+// --------------
+int minimumTotalSpaceOptimizationWay(vector<vector<int>> &triangle)
+{
+    int m = triangle.size();
+    int n = triangle[m - 1].size();
+    vector<int> previousDataStore(n, -1);
+    for (int column = 0; column < n; column++)
+        previousDataStore[column] = triangle[m - 1][column];
+    for (int row = m - 2; row >= 0; row--)
+    {
+        vector<int> currentDataStore(n, -1);
+        for (int column = 0; column <= row; column++)
+        {
+            int moveDown = INT_MAX;
+            int moveRight = INT_MAX;
+            if (row < m - 1)
+            {
+                moveDown = triangle[row][column] + previousDataStore[column];
+                if (column < n - 1)
+                    moveRight = triangle[row][column] + previousDataStore[column + 1];
+            }
+            currentDataStore[column] = min(moveDown, moveRight);
+        }
+        previousDataStore = currentDataStore;
+    }
+    return previousDataStore[0];
+}
 int main()
 {
     cout << string(20, '-') << endl;
     vector<vector<int>> triangle = {{2}, {3, 4}, {6, 5, 7}, {4, 1, 8, 3}};
     // vector<vector<int>> triangle = {{-10}};
-    cout << minimumTotalTabulation(triangle);
+    cout << minimumTotalSpaceOptimizationWay(triangle);
     cout << endl
          << string(20, '-');
     return 0;
