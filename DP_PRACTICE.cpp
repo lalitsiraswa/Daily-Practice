@@ -1193,11 +1193,83 @@ int minFallingPathSumSpaceOptimizationOtherWay(vector<vector<int>> &matrix)
         minFallingPath = min(minFallingPath, previousDataStore[column]);
     return minFallingPath;
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<vector<int>> matrix = {{2, 1, 3}, {6, 5, 4}, {7, 8, 9}};
+//     cout << minFallingPathSumSpaceOptimizationOtherWay(matrix);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 741. Cherry Pickup 'Wrong Code' -------------------------------------------------------------------------
+int cherryPickupMemoization2(vector<vector<int>> &grid, int row, int column, int &size, vector<vector<int>> &dp)
+{
+    if (row == 0 && column == 0)
+        return dp[row][column] = grid[row][column];
+    if (dp[row][column] != -1)
+        return dp[row][column];
+    int moveUp = 0;
+    int moveLeft = 0;
+    if (row > 0 && grid[row - 1][column] != -1)
+    {
+        int temp = grid[row][column];
+        grid[row][column] = 0;
+        moveUp = temp + cherryPickupMemoization2(grid, row - 1, column, size, dp);
+        grid[row][column] = temp;
+    }
+    if (column > 0 && grid[row][column - 1] != -1)
+    {
+        int temp = grid[row][column];
+        grid[row][column] = 0;
+        moveLeft = temp + cherryPickupMemoization2(grid, row, column - 1, size, dp);
+        grid[row][column] = temp;
+    }
+    return dp[row][column] = max(moveUp, moveLeft);
+}
+int cherryPickupMemoization1(vector<vector<int>> &grid, int row, int column, int &size, vector<vector<int>> &dp)
+{
+    if (row == size - 1 && column == size - 1)
+    {
+        int temp = grid[row][column];
+        grid[row][column] = 0;
+        vector<vector<int>> dp2(size, vector<int>(size, -1));
+        int result = temp + cherryPickupMemoization2(grid, row, column, size, dp);
+        grid[row][column] = temp;
+        return dp[row][column] = result;
+    }
+    if (dp[row][column] != -1)
+        return dp[row][column];
+    int moveDown = 0;
+    int moveRight = 0;
+    if (row + 1 < size && grid[row + 1][column] != -1)
+    {
+        int temp = grid[row][column];
+        grid[row][column] = 0;
+        moveDown = temp + cherryPickupMemoization1(grid, row + 1, column, size, dp);
+        grid[row][column] = temp;
+    }
+    if (column + 1 < size && grid[row][column + 1] != -1)
+    {
+        int temp = grid[row][column];
+        grid[row][column] = 0;
+        moveRight = temp + cherryPickupMemoization1(grid, row, column + 1, size, dp);
+        grid[row][column] = temp;
+    }
+    return dp[row][column] = max(moveDown, moveRight);
+}
+int cherryPickup(vector<vector<int>> &grid)
+{
+    int size = grid.size();
+    vector<vector<int>> dp(size, vector<int>(size, -1));
+    return cherryPickupMemoization1(grid, 0, 0, size, dp);
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<vector<int>> matrix = {{2, 1, 3}, {6, 5, 4}, {7, 8, 9}};
-    cout << minFallingPathSumSpaceOptimizationOtherWay(matrix);
+    // vector<vector<int>> grid = {{0, 1, -1}, {1, 0, -1}, {1, 1, 1}};
+    vector<vector<int>> grid = {{1, 1, -1}, {1, -1, 1}, {-1, 1, 1}};
+    cout << cherryPickup(grid);
     cout << endl
          << string(20, '-');
     return 0;
