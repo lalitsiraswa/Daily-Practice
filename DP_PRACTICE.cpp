@@ -1264,12 +1264,92 @@ int cherryPickup(vector<vector<int>> &grid)
     vector<vector<int>> dp(size, vector<int>(size, -1));
     return cherryPickupMemoization1(grid, 0, 0, size, dp);
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     // vector<vector<int>> grid = {{0, 1, -1}, {1, 0, -1}, {1, 1, 1}};
+//     vector<vector<int>> grid = {{1, 1, -1}, {1, -1, 1}, {-1, 1, 1}};
+//     cout << cherryPickup(grid);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- DP 14. Subset Sum Equals to Target -------------------------------------------------------------------------
+bool subsetSumToKMemoization(int index, int target, vector<int> &arr, vector<vector<int>> &dp)
+{
+    if (target == 0)
+        return dp[index][target] = true;
+    // if (arr[index] == target)
+    //     return dp[index][target] = true;
+    if (index == 0)
+        return dp[index][target] = (arr[index] == target);
+    if (dp[index][target] != -1)
+        return dp[index][target];
+    bool pick = false;
+    if (arr[index] <= target)
+        pick = subsetSumToKMemoization(index - 1, target - arr[index], arr, dp);
+    bool notPick = subsetSumToKMemoization(index - 1, target, arr, dp);
+    return dp[index][target] = (notPick || pick);
+}
+bool subsetSumToK(int n, int k, vector<int> &arr)
+{
+    vector<vector<int>> dp(n, vector<int>(k + 1, -1));
+    return subsetSumToKMemoization(n - 1, k, arr, dp);
+}
+// ---------------------
+bool subsetSumToKTabulation(int n, int k, vector<int> &arr)
+{
+    vector<vector<int>> dp(n, vector<int>(k + 1, -1));
+    // if index == 0;
+    for (int target = 0; target <= k; target++)
+        dp[0][target] = (arr[0] == target);
+    // If target == 0;
+    for (int index = 0; index < n; index++)
+        dp[index][0] = true;
+    for (int index = 1; index < n; index++)
+    {
+        for (int target = 1; target <= k; target++)
+        {
+            bool pick = false;
+            if (arr[index] <= target)
+                pick = dp[index - 1][target - arr[index]];
+            bool notPick = dp[index - 1][target];
+            dp[index][target] = (notPick || pick);
+        }
+    }
+    return dp[n - 1][k];
+}
+// ----------------------
+bool subsetSumToKSpaceOptimization(int n, int k, vector<int> &arr)
+{
+    vector<int> previousDataStore(k + 1, -1);
+    // if index == 0;
+    for (int target = 0; target <= k; target++)
+        previousDataStore[target] = (arr[0] == target);
+    // If target == 0;
+    previousDataStore[0] = true;
+    for (int index = 1; index < n; index++)
+    {
+        vector<int> currentDataStore(k + 1, -1);
+        for (int target = 1; target <= k; target++)
+        {
+            bool pick = false;
+            if (arr[index] <= target)
+                pick = previousDataStore[target - arr[index]];
+            bool notPick = previousDataStore[target];
+            currentDataStore[target] = (notPick || pick);
+        }
+        currentDataStore[0] = true;
+        previousDataStore = currentDataStore;
+    }
+    return previousDataStore[k];
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    // vector<vector<int>> grid = {{0, 1, -1}, {1, 0, -1}, {1, 1, 1}};
-    vector<vector<int>> grid = {{1, 1, -1}, {1, -1, 1}, {-1, 1, 1}};
-    cout << cherryPickup(grid);
+    vector<int> arr = {4, 3, 2, 1};
+    int k = 2;
+    cout << subsetSumToKSpaceOptimization(arr.size(), k, arr);
     cout << endl
          << string(20, '-');
     return 0;
