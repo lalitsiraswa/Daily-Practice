@@ -1452,6 +1452,14 @@ bool canPartitionSpaceOptimization(vector<int> &nums)
 // https://www.naukri.com/code360/problems/number-of-subsets_3952532?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTabValue=PROBLEM
 int findWaysMemoization(vector<int> &arr, int target, int index, vector<vector<int>> &dp)
 {
+    // if (index == 0)
+    // {
+    //     if (target == 0 && arr[0] == 0)
+    //         return 2;
+    //     if (target == 0 || target == arr[0])
+    //         return 1;
+    //     return 0;
+    // }
     if (index == 0)
     {
         if (target == 0)
