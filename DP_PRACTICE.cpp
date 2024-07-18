@@ -1344,12 +1344,106 @@ bool subsetSumToKSpaceOptimization(int n, int k, vector<int> &arr)
     }
     return previousDataStore[k];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> arr = {4, 3, 2, 1};
+//     int k = 2;
+//     cout << subsetSumToKSpaceOptimization(arr.size(), k, arr);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// // --------------------------------------------------------------------- 416. Partition Equal Subset Sum -------------------------------------------------------------------------
+bool canPartitionTabulation(vector<int> &nums, int index, int target, vector<vector<int>> &dp)
+{
+    if (target == 0)
+        return dp[index][target] = true;
+    if (index == 0)
+        return dp[index][target] = nums[index] == target;
+    if (dp[index][target] != -1)
+        return dp[index][target];
+    int notPick = canPartitionTabulation(nums, index - 1, target, dp);
+    int pick = false;
+    if (nums[index] <= target)
+        pick = canPartitionTabulation(nums, index - 1, target - nums[index], dp);
+    return dp[index][target] = (pick || notPick);
+}
+bool canPartition(vector<int> &nums)
+{
+    int n = nums.size();
+    int totalSum = 0;
+    for (int index = 0; index < n; index++)
+        totalSum += nums[index];
+    if (totalSum % 2 != 0)
+        return false;
+    int targetSum = totalSum / 2;
+    vector<vector<int>> dp(n, vector<int>(targetSum + 1, -1));
+    return canPartitionTabulation(nums, n - 1, targetSum, dp);
+}
+// ------------------------
+bool canPartitionTabulation(vector<int> &nums)
+{
+    int n = nums.size();
+    int totalSum = 0;
+    for (int index = 0; index < n; index++)
+        totalSum += nums[index];
+    if (totalSum % 2 != 0)
+        return false;
+    int targetSum = totalSum / 2;
+    vector<vector<int>> dp(n, vector<int>(targetSum + 1, -1));
+    for (int target = 0; target <= targetSum; target++)
+        dp[0][target] = nums[0] == target;
+    for (int index = 0; index < n; index++)
+        dp[index][0] = true;
+    for (int index = 1; index < n; index++)
+    {
+        for (int target = 1; target <= targetSum; target++)
+        {
+            int notPick = dp[index - 1][target];
+            int pick = false;
+            if (nums[index] <= target)
+                pick = dp[index - 1][target - nums[index]];
+            dp[index][target] = (pick || notPick);
+        }
+    }
+    return dp[n - 1][targetSum];
+}
+// -----------------
+bool canPartitionSpaceOptimization(vector<int> &nums)
+{
+    int n = nums.size();
+    int totalSum = 0;
+    for (int index = 0; index < n; index++)
+        totalSum += nums[index];
+    if (totalSum % 2 != 0)
+        return false;
+    int targetSum = totalSum / 2;
+    vector<int> previousDataStore(targetSum + 1, -1);
+    for (int target = 0; target <= targetSum; target++)
+        previousDataStore[target] = nums[0] == target;
+    previousDataStore[0] = true;
+    for (int index = 1; index < n; index++)
+    {
+        vector<int> currentDataStore(targetSum + 1, -1);
+        for (int target = 1; target <= targetSum; target++)
+        {
+            int notPick = previousDataStore[target];
+            int pick = false;
+            if (nums[index] <= target)
+                pick = previousDataStore[target - nums[index]];
+            currentDataStore[target] = (pick || notPick);
+        }
+        currentDataStore[0] = true;
+        previousDataStore = currentDataStore;
+    }
+    return previousDataStore[targetSum];
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> arr = {4, 3, 2, 1};
-    int k = 2;
-    cout << subsetSumToKSpaceOptimization(arr.size(), k, arr);
+    vector<int> nums = {1, 5, 11, 5};
+    cout << canPartitionSpaceOptimization(nums);
     cout << endl
          << string(20, '-');
     return 0;
