@@ -1448,26 +1448,32 @@ bool canPartitionSpaceOptimization(vector<int> &nums)
 //          << string(20, '-');
 //     return 0;
 // }
-// --------------------------------------------------------------------- "Code Mistake 'Wrong Answer'" DP 17. Counts Subsets with Sum K | Dp on Subsequences -------------------------------------------------------------------------
+// --------------------------------------------------------------------- DP 17. Counts Subsets with Sum K | Dp on Subsequences -------------------------------------------------------------------------
 // https://www.naukri.com/code360/problems/number-of-subsets_3952532?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTabValue=PROBLEM
-int findWaysMemoization(vector<int> &arr, int target, int index)
+int findWaysMemoization(vector<int> &arr, int target, int index, vector<vector<int>> &dp)
 {
-    if (target == 0)
-        return 1;
     if (index == 0)
-        return arr[0] == target;
-    int notPick = findWaysMemoization(arr, target, index - 1);
+    {
+        if (target == 0)
+            return dp[index][target] = (arr[0] == 0) ? 2 : 1;
+        return dp[index][target] = (arr[0] == target) ? 1 : 0;
+    }
+    if (dp[index][target] != -1)
+        return dp[index][target];
+    int notPick = findWaysMemoization(arr, target, index - 1, dp);
     int pick = 0;
     if (arr[index] <= target)
-        pick = findWaysMemoization(arr, target - arr[index], index - 1);
-    return (pick + notPick);
+        pick = findWaysMemoization(arr, target - arr[index], index - 1, dp);
+    return dp[index][target] = (pick + notPick);
 }
 int findWays(vector<int> &arr, int k)
 {
     int n = arr.size();
     vector<vector<int>> dp(n, vector<int>(k + 1, -1));
-    return findWaysMemoization(arr, k, n - 1);
+    return findWaysMemoization(arr, k, n - 1, dp);
 }
+// ------------------
+
 int main()
 {
     cout << string(20, '-') << endl;
