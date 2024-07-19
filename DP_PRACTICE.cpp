@@ -1556,15 +1556,15 @@ int findWaysSpaceOptimization(vector<int> &arr, int k)
     }
     return previousDataStore[k];
 }
-int main()
-{
-    cout << string(20, '-') << endl;
-    vector<int> arr = {0, 1, 3};
-    cout << findWaysSpaceOptimization(arr, 4);
-    cout << endl
-         << string(20, '-');
-    return 0;
-}
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> arr = {0, 1, 3};
+//     cout << findWaysSpaceOptimization(arr, 4);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
 // --------------------------------------------------------------------- DP 18. Count Partitions With Given Difference | Dp on Subsequences -------------------------------------------------------------------------
 // Same As Counts Subsets with Sum K Above Code
 #include <bits/stdc++.h>
@@ -1606,3 +1606,85 @@ int countPartitions(int n, int d, vector<int> &arr)
 //          << string(20, '-');
 //     return 0;
 // }
+// ---------------------------------------- DP 19. 0/1 Knapsack | Recursion to Single Array Space Optimised Approach | DP on Subsequences --------------------------------
+int knapsackMemoization(vector<int> &weight, vector<int> &value, int index, int targetWeight, vector<vector<int>> &dp)
+{
+    if (index == 0)
+    {
+        if (weight[index] <= targetWeight)
+            return dp[index][targetWeight] = value[index];
+        return dp[index][targetWeight] = 0;
+    }
+    if (dp[index][targetWeight] != -1)
+        return dp[index][targetWeight];
+    int notPick = knapsackMemoization(weight, value, index - 1, targetWeight, dp);
+    int pick = 0;
+    if (weight[index] <= targetWeight)
+        pick = value[index] + knapsackMemoization(weight, value, index - 1, targetWeight - weight[index], dp);
+    return dp[index][targetWeight] = max(pick, notPick);
+}
+int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight)
+{
+    vector<vector<int>> dp(n, vector<int>(maxWeight + 1, -1));
+    return knapsackMemoization(weight, value, n - 1, maxWeight, dp);
+}
+// ----------------
+int knapsackTabulation(vector<int> weight, vector<int> value, int n, int maxWeight)
+{
+    vector<vector<int>> dp(n, vector<int>(maxWeight + 1, -1));
+    for (int targetWeight = 0; targetWeight <= maxWeight; targetWeight++)
+    {
+        if (weight[0] <= targetWeight)
+            dp[0][targetWeight] = value[0];
+        else
+            dp[0][targetWeight] = 0;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        for (int targetWeight = 0; targetWeight <= maxWeight; targetWeight++)
+        {
+            int notPick = dp[index - 1][targetWeight];
+            int pick = 0;
+            if (weight[index] <= targetWeight)
+                pick = value[index] + dp[index - 1][targetWeight - weight[index]];
+            dp[index][targetWeight] = max(pick, notPick);
+        }
+    }
+    return dp[n - 1][maxWeight];
+}
+// -------------------
+int knapsackSpaceOptimization(vector<int> weight, vector<int> value, int n, int maxWeight)
+{
+    vector<int> previousDataStore(maxWeight + 1, -1);
+    for (int targetWeight = 0; targetWeight <= maxWeight; targetWeight++)
+    {
+        if (weight[0] <= targetWeight)
+            previousDataStore[targetWeight] = value[0];
+        else
+            previousDataStore[targetWeight] = 0;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        vector<int> currentDataStore(maxWeight + 1, -1);
+        for (int targetWeight = 0; targetWeight <= maxWeight; targetWeight++)
+        {
+            int notPick = previousDataStore[targetWeight];
+            int pick = 0;
+            if (weight[index] <= targetWeight)
+                pick = value[index] + previousDataStore[targetWeight - weight[index]];
+            currentDataStore[targetWeight] = max(pick, notPick);
+        }
+        previousDataStore = currentDataStore;
+    }
+    return previousDataStore[maxWeight];
+}
+int main()
+{
+    cout << string(20, '-') << endl;
+    vector<int> weight = {1, 2, 4, 5};
+    vector<int> values = {5, 4, 8, 6};
+    cout << knapsackSpaceOptimization(weight, values, weight.size(), 5);
+    cout << endl
+         << string(20, '-');
+    return 0;
+}
