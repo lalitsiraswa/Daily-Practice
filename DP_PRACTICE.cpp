@@ -1527,11 +1527,40 @@ int findWaysTabulation(vector<int> &arr, int k)
     }
     return dp[n - 1][k];
 }
+// ------------------
+int findWaysSpaceOptimization(vector<int> &arr, int k)
+{
+    int n = arr.size();
+    vector<int> previousDataStore(k + 1, -1);
+    for (int target = 0; target <= k; target++)
+    {
+        if (target == 0)
+        {
+            previousDataStore[target] = (arr[0] == 0) ? 2 : 1;
+            continue;
+        }
+        previousDataStore[target] = (arr[0] == target) ? 1 : 0;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        vector<int> currentDataStore(k + 1, -1);
+        for (int target = 0; target <= k; target++)
+        {
+            int notPick = previousDataStore[target];
+            int pick = 0;
+            if (arr[index] <= target)
+                pick = previousDataStore[target - arr[index]];
+            currentDataStore[target] = (pick + notPick) % mod;
+        }
+        previousDataStore = currentDataStore;
+    }
+    return previousDataStore[k];
+}
 int main()
 {
     cout << string(20, '-') << endl;
     vector<int> arr = {0, 1, 3};
-    cout << findWaysTabulation(arr, 4);
+    cout << findWaysSpaceOptimization(arr, 4);
     cout << endl
          << string(20, '-');
     return 0;
