@@ -1508,20 +1508,34 @@ int findWaysTabulation(vector<int> &arr, int k)
     for (int target = 0; target <= k; target++)
     {
         if (target == 0)
+        {
             dp[0][target] = (arr[0] == 0) ? 2 : 1;
-        return dp[0][target] = (arr[0] == target) ? 1 : 0;
+            continue;
+        }
+        dp[0][target] = (arr[0] == target) ? 1 : 0;
     }
-    return dp[k][n - 1];
+    for (int index = 1; index < n; index++)
+    {
+        for (int target = 0; target <= k; target++)
+        {
+            int notPick = dp[index - 1][target];
+            int pick = 0;
+            if (arr[index] <= target)
+                pick = dp[index - 1][target - arr[index]];
+            dp[index][target] = (pick + notPick) % mod;
+        }
+    }
+    return dp[n - 1][k];
 }
-// int main()
-// {
-//     cout << string(20, '-') << endl;
-//     vector<int> arr = {0, 1, 3};
-//     cout << findWays(arr, 4);
-//     cout << endl
-//          << string(20, '-');
-//     return 0;
-// }
+int main()
+{
+    cout << string(20, '-') << endl;
+    vector<int> arr = {0, 1, 3};
+    cout << findWaysTabulation(arr, 4);
+    cout << endl
+         << string(20, '-');
+    return 0;
+}
 // --------------------------------------------------------------------- DP 18. Count Partitions With Given Difference | Dp on Subsequences -------------------------------------------------------------------------
 // Same As Counts Subsets with Sum K Above Code
 #include <bits/stdc++.h>
