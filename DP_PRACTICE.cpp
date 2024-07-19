@@ -1678,12 +1678,36 @@ int knapsackSpaceOptimization(vector<int> weight, vector<int> value, int n, int 
     }
     return previousDataStore[maxWeight];
 }
+// -------------------------
+int knapsackSpaceOptimizationOtherWay(vector<int> weight, vector<int> value, int n, int maxWeight)
+{
+    vector<int> previousDataStore(maxWeight + 1, -1);
+    for (int targetWeight = 0; targetWeight <= maxWeight; targetWeight++)
+    {
+        if (weight[0] <= targetWeight)
+            previousDataStore[targetWeight] = value[0];
+        else
+            previousDataStore[targetWeight] = 0;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        for (int targetWeight = maxWeight; targetWeight >= 0; targetWeight--)
+        {
+            int notPick = previousDataStore[targetWeight];
+            int pick = 0;
+            if (weight[index] <= targetWeight)
+                pick = value[index] + previousDataStore[targetWeight - weight[index]];
+            previousDataStore[targetWeight] = max(pick, notPick);
+        }
+    }
+    return previousDataStore[maxWeight];
+}
 int main()
 {
     cout << string(20, '-') << endl;
     vector<int> weight = {1, 2, 4, 5};
     vector<int> values = {5, 4, 8, 6};
-    cout << knapsackSpaceOptimization(weight, values, weight.size(), 5);
+    cout << knapsackSpaceOptimizationOtherWay(weight, values, weight.size(), 5);
     cout << endl
          << string(20, '-');
     return 0;
