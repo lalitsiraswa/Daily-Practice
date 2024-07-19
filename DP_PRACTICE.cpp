@@ -1450,6 +1450,7 @@ bool canPartitionSpaceOptimization(vector<int> &nums)
 // }
 // --------------------------------------------------------------------- DP 17. Counts Subsets with Sum K | Dp on Subsequences -------------------------------------------------------------------------
 // https://www.naukri.com/code360/problems/number-of-subsets_3952532?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTabValue=PROBLEM
+int mod = (int)(1e9 + 7);
 int findWaysMemoization(vector<int> &arr, int target, int index, vector<vector<int>> &dp)
 {
     // if (index == 0)
@@ -1474,20 +1475,91 @@ int findWaysMemoization(vector<int> &arr, int target, int index, vector<vector<i
         pick = findWaysMemoization(arr, target - arr[index], index - 1, dp);
     return dp[index][target] = (pick + notPick);
 }
+// -----------------------
+int findWaysMemoizationCorrectOne(vector<int> &arr, int index, int target, vector<vector<int>> &dp)
+{
+    if (index == 0)
+    {
+        if (target == 0 && arr[0] == 0)
+            return dp[index][target] = 2;
+        if (target == 0 || target == arr[0])
+            return dp[index][target] = 1;
+        return dp[index][target] = 0;
+    }
+    if (dp[index][target] != -1)
+        return dp[index][target];
+    int notPick = findWaysMemoizationCorrectOne(arr, index - 1, target, dp);
+    int pick = 0;
+    if (arr[index] <= target)
+        pick = findWaysMemoizationCorrectOne(arr, index - 1, target - arr[index], dp);
+    return dp[index][target] = (pick + notPick) % mod;
+}
 int findWays(vector<int> &arr, int k)
 {
     int n = arr.size();
     vector<vector<int>> dp(n, vector<int>(k + 1, -1));
-    return findWaysMemoization(arr, k, n - 1, dp);
+    return findWaysMemoizationCorrectOne(arr, k, n - 1, dp);
 }
 // ------------------
-
-int main()
+int findWaysTabulation(vector<int> &arr, int k)
 {
-    cout << string(20, '-') << endl;
-    vector<int> arr = {0, 1, 3};
-    cout << findWays(arr, 4);
-    cout << endl
-         << string(20, '-');
-    return 0;
+    int n = arr.size();
+    vector<vector<int>> dp(n, vector<int>(k + 1, -1));
+    for (int target = 0; target <= k; target++)
+    {
+        if (target == 0)
+            dp[0][target] = (arr[0] == 0) ? 2 : 1;
+        return dp[0][target] = (arr[0] == target) ? 1 : 0;
+    }
+    return dp[k][n - 1];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> arr = {0, 1, 3};
+//     cout << findWays(arr, 4);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- DP 18. Count Partitions With Given Difference | Dp on Subsequences -------------------------------------------------------------------------
+// Same As Counts Subsets with Sum K Above Code
+#include <bits/stdc++.h>
+int countPartitionsMemoization(vector<int> &arr, int index, int target, vector<vector<int>> &dp)
+{
+    if (index == 0)
+    {
+        if (target == 0 && arr[0] == 0)
+            return dp[index][target] = 2;
+        if (target == 0 || target == arr[0])
+            return dp[index][target] = 1;
+        return dp[index][target] = 0;
+    }
+    if (dp[index][target] != -1)
+        return dp[index][target];
+    int notPick = countPartitionsMemoization(arr, index - 1, target, dp);
+    int pick = 0;
+    if (arr[index] <= target)
+        pick = countPartitionsMemoization(arr, index - 1, target - arr[index], dp);
+    return dp[index][target] = (pick + notPick) % mod;
+}
+int countPartitions(int n, int d, vector<int> &arr)
+{
+    int totalSum = 0;
+    for (int index = 0; index < n; index++)
+        totalSum += arr[index];
+    if ((totalSum - d) < 0 || (totalSum - d) % 2 != 0)
+        return 0;
+    int target = (totalSum - d) / 2;
+    vector<vector<int>> dp(n, vector<int>(target + 1, -1));
+    return countPartitionsMemoization(arr, n - 1, target, dp);
+}
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> arr = {0, 1, 3};
+//     cout << findWays(arr, 4);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
