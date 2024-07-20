@@ -1567,6 +1567,9 @@ int findWaysSpaceOptimization(vector<int> &arr, int k)
 // }
 // --------------------------------------------------------------------- DP 18. Count Partitions With Given Difference | Dp on Subsequences -------------------------------------------------------------------------
 // Same As Counts Subsets with Sum K Above Code
+// Same As Counts Subsets with Sum K Above Code
+// Same As Counts Subsets with Sum K Above Code
+// Same As Counts Subsets with Sum K Above Code
 #include <bits/stdc++.h>
 int countPartitionsMemoization(vector<int> &arr, int index, int target, vector<vector<int>> &dp)
 {
@@ -1712,7 +1715,7 @@ int knapsackSpaceOptimizationOtherWay(vector<int> weight, vector<int> value, int
 //          << string(20, '-');
 //     return 0;
 // }
-// ---------------------------------------- DP 19. 0/1 Knapsack | Recursion to Single Array Space Optimised Approach | DP on Subsequences --------------------------------
+// ---------------------------------------- DP 19. Coin Change | Recursion to Single Array Space Optimised Approach | DP on Subsequences --------------------------------
 int coinChangeMemoization(vector<int> &coins, int targetAmount, int index, vector<vector<int>> &dp)
 {
     if (index == 0)
@@ -1790,12 +1793,121 @@ int coinChangeSpaceOptimization(vector<int> &coins, int amount)
     int minimumCoins = previousDataStore[amount];
     return minimumCoins > amount ? -1 : minimumCoins;
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> coins = {1, 2, 5};
+//     // vector<int> coins = {2};
+//     cout << coinChangeSpaceOptimization(coins, 11);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------------------- 494. Target Sum -------------------------------------------------------------------------
+int findTargetSumWaysMemoization(vector<int> &arr, int index, int target, vector<vector<int>> &dp)
+{
+    if (index == 0)
+    {
+        if (target == 0 && arr[0] == 0)
+            return dp[index][target] = 2;
+        if (target == 0 || target == arr[0])
+            return dp[index][target] = 1;
+        return dp[index][target] = 0;
+    }
+    if (dp[index][target] != -1)
+        return dp[index][target];
+    int notPick = findTargetSumWaysMemoization(arr, index - 1, target, dp);
+    int pick = 0;
+    if (arr[index] <= target)
+        pick = findTargetSumWaysMemoization(arr, index - 1, target - arr[index], dp);
+    return dp[index][target] = pick + notPick;
+}
+
+int findTargetSumWays(vector<int> &nums, int targetValue)
+{
+    int n = nums.size();
+    int totalSum = 0;
+    for (int index = 0; index < n; index++)
+        totalSum += nums[index];
+    if ((totalSum - targetValue) < 0 || (totalSum - targetValue) % 2 != 0)
+        return 0;
+    int target = (totalSum - targetValue) / 2;
+    vector<vector<int>> dp(n, vector<int>(target + 1, -1));
+    return findTargetSumWaysMemoization(nums, n - 1, target, dp);
+}
+// ---------------------
+int findTargetSumWaysTabulation(vector<int> &nums, int targetValue)
+{
+    int n = nums.size();
+    int totalSum = 0;
+    for (int index = 0; index < n; index++)
+        totalSum += nums[index];
+    if ((totalSum - targetValue) < 0 || (totalSum - targetValue) % 2 != 0)
+        return 0;
+    int target = (totalSum - targetValue) / 2;
+    vector<vector<int>> dp(n, vector<int>(target + 1, -1));
+    for (int currTarget = 0; currTarget <= target; currTarget++)
+    {
+        if (currTarget == 0)
+        {
+            dp[0][currTarget] = (nums[0] == 0) ? 2 : 1;
+            continue;
+        }
+        dp[0][currTarget] = (nums[0] == currTarget) ? 1 : 0;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        for (int currTarget = 0; currTarget <= target; currTarget++)
+        {
+            int notPick = dp[index - 1][currTarget];
+            int pick = 0;
+            if (nums[index] <= currTarget)
+                pick = dp[index - 1][currTarget - nums[index]];
+            dp[index][currTarget] = (pick + notPick) % mod;
+        }
+    }
+    return dp[n - 1][target];
+}
+// ------------------
+int findTargetSumWaysSpaceOptimization(vector<int> &nums, int targetValue)
+{
+    int n = nums.size();
+    int totalSum = 0;
+    for (int index = 0; index < n; index++)
+        totalSum += nums[index];
+    if ((totalSum - targetValue) < 0 || (totalSum - targetValue) % 2 != 0)
+        return 0;
+    int target = (totalSum - targetValue) / 2;
+    vector<int> previousDataStore(target + 1, -1);
+    for (int currTarget = 0; currTarget <= target; currTarget++)
+    {
+        if (currTarget == 0)
+        {
+            previousDataStore[currTarget] = (nums[0] == 0) ? 2 : 1;
+            continue;
+        }
+        previousDataStore[currTarget] = (nums[0] == currTarget) ? 1 : 0;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        vector<int> currentDataStore(target + 1, -1);
+        for (int currTarget = 0; currTarget <= target; currTarget++)
+        {
+            int notPick = previousDataStore[currTarget];
+            int pick = 0;
+            if (nums[index] <= currTarget)
+                pick = previousDataStore[currTarget - nums[index]];
+            currentDataStore[currTarget] = (pick + notPick) % mod;
+        }
+        previousDataStore = currentDataStore;
+    }
+    return previousDataStore[target];
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> coins = {1, 2, 5};
-    // vector<int> coins = {2};
-    cout << coinChangeSpaceOptimization(coins, 11);
+    vector<int> coins = {1, 2, 3, 1};
+    cout << findTargetSumWaysSpaceOptimization(coins, 3);
     cout << endl
          << string(20, '-');
     return 0;
