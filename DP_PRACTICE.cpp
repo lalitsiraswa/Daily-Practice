@@ -2068,12 +2068,47 @@ int unboundedKnapsackSpaceOptimization(int n, int w, vector<int> &profit, vector
     }
     return previousDataStore[w];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> profit = {5, 11, 13};
+//     vector<int> weight = {2, 4, 6};
+//     cout << unboundedKnapsackSpaceOptimization(3, 10, profit, weight);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// --------------------------------------------------- DP 24. Rod Cutting Problem | 1D Array Space Optimised Approach -------------------------------------------------------------------------
+int cutRodMemoization(vector<int> &price, int index, int targetRodSize, vector<vector<int>> &dp)
+{
+    if (index == 0)
+    {
+        // return targetRodSize * price[0];
+        if (1 <= targetRodSize)
+            dp[index][targetRodSize] = (targetRodSize / 1) * price[index];
+        else
+            dp[index][targetRodSize] = 0;
+    }
+    if (dp[index][targetRodSize] != -1)
+        return dp[index][targetRodSize];
+    int notPick = 0 + cutRodMemoization(price, index - 1, targetRodSize, dp);
+    int pick = 0;
+    int rodLength = index + 1;
+    if (rodLength <= targetRodSize)
+        pick = price[index] + cutRodMemoization(price, index, targetRodSize - rodLength, dp);
+    return dp[index][targetRodSize] = max(pick, notPick);
+}
+int cutRod(vector<int> &price, int n)
+{
+    vector<vector<int>> dp(n, vector<int>(n + 1, -1));
+    return cutRodMemoization(price, n - 1, n, dp);
+}
+// We can do the Tabulation and Space Optimization in the similar way as above
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> profit = {5, 11, 13};
-    vector<int> weight = {2, 4, 6};
-    cout << unboundedKnapsackSpaceOptimization(3, 10, profit, weight);
+    vector<int> price = {2, 5, 7, 8, 10};
+    cout << cutRod(price, price.size());
     cout << endl
          << string(20, '-');
     return 0;
