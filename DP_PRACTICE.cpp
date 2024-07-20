@@ -1987,11 +1987,93 @@ int changeSpaceOptimization(int amount, vector<int> &coins)
     }
     return previousDataStore[amount];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> coins = {1, 2, 5};
+//     cout << changeSpaceOptimization(5, coins);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ---------------------------------------------- DP 23. Unbounded Knapsack | 1-D Array Space Optimised Approach -------------------------------------------------------------------------
+int unboundedKnapsackMemoization(vector<int> &profit, vector<int> &weight, int index, int targetWeight, vector<vector<int>> &dp)
+{
+    if (index == 0)
+    {
+        if (weight[0] <= targetWeight)
+            return dp[index][targetWeight] = (targetWeight / weight[0]) * profit[0];
+        return dp[index][targetWeight] = 0;
+    }
+    if (dp[index][targetWeight] != -1)
+        return dp[index][targetWeight];
+    int notPick = unboundedKnapsackMemoization(profit, weight, index - 1, targetWeight, dp);
+    int pick = 0;
+    if (weight[index] <= targetWeight)
+        pick = profit[index] + unboundedKnapsackMemoization(profit, weight, index, targetWeight - weight[index], dp);
+    return dp[index][targetWeight] = max(pick, notPick);
+}
+int unboundedKnapsack(int n, int w, vector<int> &profit, vector<int> &weight)
+{
+    vector<vector<int>> dp(n, vector<int>(w + 1, -1));
+    return unboundedKnapsackMemoization(profit, weight, n - 1, w, dp);
+}
+// -------------------------
+int unboundedKnapsackTabulation(int n, int w, vector<int> &profit, vector<int> &weight)
+{
+    vector<vector<int>> dp(n, vector<int>(w + 1, -1));
+    for (int targetWeight = 0; targetWeight <= w; targetWeight++)
+    {
+        if (weight[0] <= targetWeight)
+            dp[0][targetWeight] = (targetWeight / weight[0]) * profit[0];
+        else
+            dp[0][targetWeight] = 0;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        for (int targetWeight = 0; targetWeight <= w; targetWeight++)
+        {
+            int notPick = dp[index - 1][targetWeight];
+            int pick = 0;
+            if (weight[index] <= targetWeight)
+                pick = profit[index] + dp[index][targetWeight - weight[index]];
+            dp[index][targetWeight] = max(pick, notPick);
+        }
+    }
+    return dp[n - 1][w];
+}
+// -----------------
+int unboundedKnapsackSpaceOptimization(int n, int w, vector<int> &profit, vector<int> &weight)
+{
+    vector<int> previousDataStore(w + 1, -1);
+    for (int targetWeight = 0; targetWeight <= w; targetWeight++)
+    {
+        if (weight[0] <= targetWeight)
+            previousDataStore[targetWeight] = (targetWeight / weight[0]) * profit[0];
+        else
+            previousDataStore[targetWeight] = 0;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        vector<int> currentDataStore(w + 1, -1);
+        for (int targetWeight = 0; targetWeight <= w; targetWeight++)
+        {
+            int notPick = previousDataStore[targetWeight];
+            int pick = 0;
+            if (weight[index] <= targetWeight)
+                pick = profit[index] + currentDataStore[targetWeight - weight[index]];
+            currentDataStore[targetWeight] = max(pick, notPick);
+        }
+        previousDataStore = currentDataStore;
+    }
+    return previousDataStore[w];
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> coins = {1, 2, 5};
-    cout << changeSpaceOptimization(5, coins);
+    vector<int> profit = {5, 11, 13};
+    vector<int> weight = {2, 4, 6};
+    cout << unboundedKnapsackSpaceOptimization(3, 10, profit, weight);
     cout << endl
          << string(20, '-');
     return 0;
