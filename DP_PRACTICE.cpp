@@ -1702,12 +1702,100 @@ int knapsackSpaceOptimizationOtherWay(vector<int> weight, vector<int> value, int
     }
     return previousDataStore[maxWeight];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> weight = {1, 2, 4, 5};
+//     vector<int> values = {5, 4, 8, 6};
+//     cout << knapsackSpaceOptimizationOtherWay(weight, values, weight.size(), 5);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ---------------------------------------- DP 19. 0/1 Knapsack | Recursion to Single Array Space Optimised Approach | DP on Subsequences --------------------------------
+int coinChangeMemoization(vector<int> &coins, int targetAmount, int index, vector<vector<int>> &dp)
+{
+    if (index == 0)
+    {
+        if (targetAmount % coins[0] == 0)
+            return dp[index][targetAmount] = targetAmount / coins[0];
+        return dp[index][targetAmount] = 1e9;
+    }
+    if (dp[index][targetAmount] != -1)
+        return dp[index][targetAmount];
+    int notPick = 0 + coinChangeMemoization(coins, targetAmount, index - 1, dp);
+    int pick = 1e9;
+    if (coins[index] <= targetAmount)
+        pick = 1 + coinChangeMemoization(coins, targetAmount - coins[index], index, dp);
+    return dp[index][targetAmount] = min(pick, notPick);
+}
+int coinChange(vector<int> &coins, int amount)
+{
+    int n = coins.size();
+    vector<vector<int>> dp(n, vector<int>(amount + 1, -1));
+    int minimumCoins = coinChangeMemoization(coins, amount, n - 1, dp);
+    return minimumCoins > amount ? -1 : minimumCoins;
+}
+// --------------------
+int coinChangeTabulation(vector<int> &coins, int amount)
+{
+    int n = coins.size();
+    vector<vector<int>> dp(n, vector<int>(amount + 1, -1));
+    for (int targetAmount = 0; targetAmount <= amount; targetAmount++)
+    {
+        if (targetAmount % coins[0] == 0)
+            dp[0][targetAmount] = targetAmount / coins[0];
+        else
+            dp[0][targetAmount] = 1e9;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        for (int targetAmount = 0; targetAmount <= amount; targetAmount++)
+        {
+            int notPick = 0 + dp[index - 1][targetAmount];
+            int pick = 1e9;
+            if (coins[index] <= targetAmount)
+                pick = 1 + dp[index][targetAmount - coins[index]];
+            dp[index][targetAmount] = min(pick, notPick);
+        }
+    }
+    int minimumCoins = dp[n - 1][amount];
+    return minimumCoins > amount ? -1 : minimumCoins;
+}
+// -----------------
+int coinChangeSpaceOptimization(vector<int> &coins, int amount)
+{
+    int n = coins.size();
+    vector<int> previousDataStore(amount + 1, -1);
+    for (int targetAmount = 0; targetAmount <= amount; targetAmount++)
+    {
+        if (targetAmount % coins[0] == 0)
+            previousDataStore[targetAmount] = targetAmount / coins[0];
+        else
+            previousDataStore[targetAmount] = 1e9;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        vector<int> currentDataStore(amount + 1, -1);
+        for (int targetAmount = 0; targetAmount <= amount; targetAmount++)
+        {
+            int notPick = 0 + previousDataStore[targetAmount];
+            int pick = 1e9;
+            if (coins[index] <= targetAmount)
+                pick = 1 + currentDataStore[targetAmount - coins[index]];
+            currentDataStore[targetAmount] = min(pick, notPick);
+        }
+        previousDataStore = currentDataStore;
+    }
+    int minimumCoins = previousDataStore[amount];
+    return minimumCoins > amount ? -1 : minimumCoins;
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> weight = {1, 2, 4, 5};
-    vector<int> values = {5, 4, 8, 6};
-    cout << knapsackSpaceOptimizationOtherWay(weight, values, weight.size(), 5);
+    vector<int> coins = {1, 2, 5};
+    // vector<int> coins = {2};
+    cout << coinChangeSpaceOptimization(coins, 11);
     cout << endl
          << string(20, '-');
     return 0;
