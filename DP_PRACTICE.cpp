@@ -1903,11 +1903,95 @@ int findTargetSumWaysSpaceOptimization(vector<int> &nums, int targetValue)
     }
     return previousDataStore[target];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> coins = {1, 2, 3, 1};
+//     cout << findTargetSumWaysSpaceOptimization(coins, 3);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------------------- 518. Coin Change II -------------------------------------------------------------------------
+int changeMemoization(int amount, vector<int> &coins, int index, vector<vector<int>> &dp)
+{
+    if (index == 0)
+    {
+        if (amount % coins[0] == 0)
+            return dp[index][amount] = 1;
+        return dp[index][amount] = 0;
+    }
+    if (dp[index][amount] != -1)
+        return dp[index][amount];
+    int notTake = changeMemoization(amount, coins, index - 1, dp);
+    int take = 0;
+    if (coins[index] <= amount)
+        take = changeMemoization(amount - coins[index], coins, index, dp);
+    return dp[index][amount] = (take + notTake);
+}
+int change(int amount, vector<int> &coins)
+{
+    int n = coins.size();
+    vector<vector<int>> dp(n, vector<int>(amount + 1, -1));
+    return changeMemoization(amount, coins, n - 1, dp);
+}
+// -----------------
+int changeTabulation(int amount, vector<int> &coins)
+{
+    int n = coins.size();
+    vector<vector<int>> dp(n, vector<int>(amount + 1, -1));
+    for (int targetAmount = 0; targetAmount <= amount; targetAmount++)
+    {
+        if (targetAmount % coins[0] == 0)
+            dp[0][targetAmount] = 1;
+        else
+            dp[0][targetAmount] = 0;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        for (int targetAmount = 0; targetAmount <= amount; targetAmount++)
+        {
+            int notTake = dp[index - 1][targetAmount];
+            int take = 0;
+            if (coins[index] <= targetAmount)
+                take = dp[index][targetAmount - coins[index]];
+            dp[index][targetAmount] = (take + notTake);
+        }
+    }
+    return dp[n - 1][amount];
+}
+// ----------------------
+int changeSpaceOptimization(int amount, vector<int> &coins)
+{
+    int n = coins.size();
+    vector<int> previousDataStore(amount + 1, -1);
+    for (int targetAmount = 0; targetAmount <= amount; targetAmount++)
+    {
+        if (targetAmount % coins[0] == 0)
+            previousDataStore[targetAmount] = 1;
+        else
+            previousDataStore[targetAmount] = 0;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        vector<int> currentDataStore(amount + 1, -1);
+        for (int targetAmount = 0; targetAmount <= amount; targetAmount++)
+        {
+            int notTake = previousDataStore[targetAmount];
+            int take = 0;
+            if (coins[index] <= targetAmount)
+                take = currentDataStore[targetAmount - coins[index]];
+            currentDataStore[targetAmount] = (take + notTake);
+        }
+        previousDataStore = currentDataStore;
+    }
+    return previousDataStore[amount];
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> coins = {1, 2, 3, 1};
-    cout << findTargetSumWaysSpaceOptimization(coins, 3);
+    vector<int> coins = {1, 2, 5};
+    cout << changeSpaceOptimization(5, coins);
     cout << endl
          << string(20, '-');
     return 0;
