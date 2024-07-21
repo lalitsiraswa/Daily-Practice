@@ -2104,11 +2104,115 @@ int cutRod(vector<int> &price, int n)
     return cutRodMemoization(price, n - 1, n, dp);
 }
 // We can do the Tabulation and Space Optimization in the similar way as above
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> price = {2, 5, 7, 8, 10};
+//     cout << cutRod(price, price.size());
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 1143. Longest Common Subsequence ---------------------------------------------------------------
+int longestCommonSubsequenceMemoization(string &text1, string &text2, int text1Index, int text2Index, vector<vector<int>> &dp)
+{
+    if (text1Index < 0 || text2Index < 0)
+        return 0;
+    if (dp[text1Index][text2Index] != -1)
+        return dp[text1Index][text2Index];
+    // Match
+    if (text1[text1Index] == text2[text2Index])
+        return dp[text1Index][text2Index] = 1 + longestCommonSubsequenceMemoization(text1, text2, text1Index - 1, text2Index - 1, dp);
+    // Not Match
+    return dp[text1Index][text2Index] = 0 + max(longestCommonSubsequenceMemoization(text1, text2, text1Index - 1, text2Index, dp), longestCommonSubsequenceMemoization(text1, text2, text1Index, text2Index - 1, dp));
+}
+int longestCommonSubsequence(string text1, string text2)
+{
+    int text1Size = text1.size();
+    int text2Size = text2.size();
+    vector<vector<int>> dp(text1Size, vector<int>(text2Size, -1));
+    return longestCommonSubsequenceMemoization(text1, text2, text1Size - 1, text2Size - 1, dp);
+}
+// --- "MEMOIZATION WITH SHIFTING INDEX 1 BY RIGHT IN DP, FOR TABULATION APPROACH" ---
+int longestCommonSubsequenceMemoization2(string &text1, string &text2, int text1Index, int text2Index, vector<vector<int>> &dp)
+{
+    if (text1Index == 0 || text2Index == 0)
+        return 0;
+    if (dp[text1Index][text2Index] != -1)
+        return dp[text1Index][text2Index];
+    // Match
+    if (text1[text1Index - 1] == text2[text2Index - 1])
+        return dp[text1Index][text2Index] = 1 + longestCommonSubsequenceMemoization2(text1, text2, text1Index - 1, text2Index - 1, dp);
+    // Not Match
+    return dp[text1Index][text2Index] = 0 + max(longestCommonSubsequenceMemoization2(text1, text2, text1Index - 1, text2Index, dp), longestCommonSubsequenceMemoization2(text1, text2, text1Index, text2Index - 1, dp));
+}
+int longestCommonSubsequence2(string text1, string text2)
+{
+    int text1Size = text1.size();
+    int text2Size = text2.size();
+    vector<vector<int>> dp(text1Size + 1, vector<int>(text2Size + 1, -1));
+    return longestCommonSubsequenceMemoization2(text1, text2, text1Size, text2Size, dp);
+}
+// -----------------------------
+int longestCommonSubsequenceTabulation(string text1, string text2)
+{
+    int text1Size = text1.size();
+    int text2Size = text2.size();
+    vector<vector<int>> dp(text1Size + 1, vector<int>(text2Size + 1, -1));
+    // If column == 0
+    for (int text1Index = 0; text1Index <= text1Size; text1Index++)
+        dp[text1Index][0] = 0;
+    // if row == 0
+    for (int text2Index = 0; text2Index <= text2Size; text2Index++)
+        dp[0][text2Index] = 0;
+    for (int text1Index = 1; text1Index <= text1Size; text1Index++)
+    {
+        for (int text2Index = 1; text2Index <= text2Size; text2Index++)
+        {
+            // Match
+            if (text1[text1Index - 1] == text2[text2Index - 1])
+                dp[text1Index][text2Index] = 1 + dp[text1Index - 1][text2Index - 1];
+            // Not Match
+            else
+                dp[text1Index][text2Index] = 0 + max(dp[text1Index - 1][text2Index], dp[text1Index][text2Index - 1]);
+        }
+    }
+    return dp[text1Size][text2Size];
+}
+// ------------------------
+int longestCommonSubsequenceSpaceOptimization(string text1, string text2)
+{
+    int text1Size = text1.size();
+    int text2Size = text2.size();
+    vector<int> previousDataStore(text2Size + 1, -1);
+    // if row == 0
+    for (int text2Index = 0; text2Index <= text2Size; text2Index++)
+        previousDataStore[text2Index] = 0;
+    // If column == 0
+    previousDataStore[0] = 0;
+    for (int text1Index = 1; text1Index <= text1Size; text1Index++)
+    {
+        vector<int> currentDataStore(text2Size + 1, -1);
+        currentDataStore[0] = 0;
+        for (int text2Index = 1; text2Index <= text2Size; text2Index++)
+        {
+            // Match
+            if (text1[text1Index - 1] == text2[text2Index - 1])
+                currentDataStore[text2Index] = 1 + previousDataStore[text2Index - 1];
+            // Not Match
+            else
+                currentDataStore[text2Index] = 0 + max(previousDataStore[text2Index], currentDataStore[text2Index - 1]);
+        }
+        previousDataStore = currentDataStore;
+    }
+    return previousDataStore[text2Size];
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> price = {2, 5, 7, 8, 10};
-    cout << cutRod(price, price.size());
+    string text1 = "abcde";
+    string text2 = "ace";
+    cout << longestCommonSubsequenceSpaceOptimization(text1, text2);
     cout << endl
          << string(20, '-');
     return 0;
