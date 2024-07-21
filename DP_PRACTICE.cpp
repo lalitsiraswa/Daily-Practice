@@ -2286,12 +2286,108 @@ void printLCSFun(string &s, string &t)
     string lcsString = printLongestCommonSubsequenceTabulation(s, t);
     cout << lcsString;
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     string s = "ace";
+//     string t = "abcde";
+//     printLCSFun(s, t);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------- DP 27. Longest Common Substring | DP on Strings ---------------------------------------------------------------
+int longestCommonSubstringMemorization(string &str1, string &str2, int str1Index, int str2Index, int currentLength, vector<vector<vector<int>>> &memo)
+{
+    if (str1Index == 0 || str2Index == 0)
+        return currentLength;
+    if (memo[str1Index][str2Index][currentLength] != -1)
+        return memo[str1Index][str2Index][currentLength];
+    // If characters match, increment current substring length and continue
+    if (str1[str1Index - 1] == str2[str2Index - 1])
+        return longestCommonSubstringMemorization(str1, str2, str1Index - 1, str2Index - 1, currentLength + 1, memo);
+    // If characters don't match, reset current substring length to 0 and compare the results of skipping each character
+    int str1CharacterSkip = longestCommonSubstringMemorization(str1, str2, str1Index - 1, str2Index, 0, memo);
+    int str2CharacterSkip = longestCommonSubstringMemorization(str1, str2, str1Index, str2Index - 1, 0, memo);
+    return memo[str1Index][str2Index][currentLength] = max(currentLength, max(str1CharacterSkip, str2CharacterSkip));
+}
+
+int longestCommonSubstring(string &str1, string &str2)
+{
+    int n = str1.size();
+    int m = str2.size();
+    vector<vector<vector<int>>> memo(n + 1, vector<vector<int>>(m + 1, vector<int>(min(n, m) + 1, -1)));
+    return longestCommonSubstringMemorization(str1, str2, str1.size(), str2.size(), 0, memo);
+}
+// -------------
+int longestCommonSubStringTabulation(string text1, string text2)
+{
+    int text1Size = text1.size();
+    int text2Size = text2.size();
+    vector<vector<int>> dp(text1Size + 1, vector<int>(text2Size + 1, -1));
+    // If column == 0
+    for (int text1Index = 0; text1Index <= text1Size; text1Index++)
+        dp[text1Index][0] = 0;
+    // if row == 0
+    for (int text2Index = 0; text2Index <= text2Size; text2Index++)
+        dp[0][text2Index] = 0;
+    int ans = 0; // Initialize the answer variable
+    for (int text1Index = 1; text1Index <= text1Size; text1Index++)
+    {
+        for (int text2Index = 1; text2Index <= text2Size; text2Index++)
+        {
+            // Match
+            if (text1[text1Index - 1] == text2[text2Index - 1])
+            {
+                dp[text1Index][text2Index] = 1 + dp[text1Index - 1][text2Index - 1];
+                ans = max(ans, dp[text1Index][text2Index]);
+            }
+            // Not Match
+            else
+                dp[text1Index][text2Index] = 0;
+        }
+    }
+    return ans;
+}
+// ---------------------
+int longestCommonSubStringSpaceOptimization(string text1, string text2)
+{
+    int text1Size = text1.size();
+    int text2Size = text2.size();
+    vector<int> previousDataStore(text2Size + 1, -1);
+    // if row == 0
+    for (int text2Index = 0; text2Index <= text2Size; text2Index++)
+        previousDataStore[text2Index] = 0;
+    // If column == 0
+    previousDataStore[0] = 0;
+    int ans = 0; // Initialize the answer variable
+    for (int text1Index = 1; text1Index <= text1Size; text1Index++)
+    {
+        vector<int> currentDataStore(text2Size + 1, -1);
+        currentDataStore[0] = 0;
+        for (int text2Index = 1; text2Index <= text2Size; text2Index++)
+        {
+            // Match
+            if (text1[text1Index - 1] == text2[text2Index - 1])
+            {
+                currentDataStore[text2Index] = 1 + previousDataStore[text2Index - 1];
+                ans = max(ans, currentDataStore[text2Index]);
+            }
+            // Not Match
+            else
+                currentDataStore[text2Index] = 0;
+        }
+        previousDataStore = currentDataStore;
+    }
+    return ans;
+}
+
 int main()
 {
     cout << string(20, '-') << endl;
-    string s = "ace";
-    string t = "abcde";
-    printLCSFun(s, t);
+    string str1 = "abcjklp";
+    string str2 = "acjkp";
+    cout << longestCommonSubStringSpaceOptimization(str1, str2);
     cout << endl
          << string(20, '-');
     return 0;
