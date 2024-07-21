@@ -2207,12 +2207,91 @@ int longestCommonSubsequenceSpaceOptimization(string text1, string text2)
     }
     return previousDataStore[text2Size];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     string text1 = "abcde";
+//     string text2 = "ace";
+//     cout << longestCommonSubsequenceSpaceOptimization(text1, text2);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------- DP 26. Print Longest Common Subsequence | Dp on Strings ---------------------------------------------------------------
+string printLCSMemoization(string &s, string &t, int sIndex, int tIndex)
+{
+    if (sIndex == 0 || tIndex == 0)
+        return "";
+    // Match
+    if (s[sIndex - 1] == t[tIndex - 1])
+        return printLCSMemoization(s, t, sIndex - 1, tIndex - 1) + s[sIndex - 1];
+    // Not Match
+    string shiftingSIndex = printLCSMemoization(s, t, sIndex - 1, tIndex);
+    string shiftingTindex = printLCSMemoization(s, t, sIndex, tIndex - 1);
+    return (shiftingSIndex.size() >= shiftingTindex.size()) ? shiftingSIndex : shiftingTindex;
+}
+void printLCS(string &s, string &t)
+{
+    int sSize = s.size();
+    int tSize = t.size();
+    string lcsString = printLCSMemoization(s, t, sSize, tSize);
+    cout << lcsString;
+}
+// ---------------------------------
+string printLongestCommonSubsequenceTabulation(string text1, string text2)
+{
+    int text1Size = text1.size();
+    int text2Size = text2.size();
+    vector<vector<int>> dp(text1Size + 1, vector<int>(text2Size + 1, -1));
+    // If column == 0
+    for (int text1Index = 0; text1Index <= text1Size; text1Index++)
+        dp[text1Index][0] = 0;
+    // if row == 0
+    for (int text2Index = 0; text2Index <= text2Size; text2Index++)
+        dp[0][text2Index] = 0;
+    for (int text1Index = 1; text1Index <= text1Size; text1Index++)
+    {
+        for (int text2Index = 1; text2Index <= text2Size; text2Index++)
+        {
+            // Match
+            if (text1[text1Index - 1] == text2[text2Index - 1])
+                dp[text1Index][text2Index] = 1 + dp[text1Index - 1][text2Index - 1];
+            // Not Match
+            else
+                dp[text1Index][text2Index] = 0 + max(dp[text1Index - 1][text2Index], dp[text1Index][text2Index - 1]);
+        }
+    }
+    int text1Index = text1Size;
+    int text2Index = text2Size;
+    string lcsString;
+    while (text1Index > 0 && text2Index > 0)
+    {
+        if (text1[text1Index - 1] == text2[text2Index - 1])
+        {
+            lcsString = text1[text1Index - 1] + lcsString;
+            text1Index--;
+            text2Index--;
+        }
+        else if (dp[text1Index - 1][text2Index] >= dp[text1Index][text2Index - 1])
+            text1Index--;
+        // else if (dp[text1Index - 1][text2Index] < dp[text1Index][text2Index - 1])
+        else
+            text2Index--;
+    }
+    return lcsString;
+    // return dp[text1Size][text2Size];
+}
+void printLCSFun(string &s, string &t)
+{
+    string lcsString = printLongestCommonSubsequenceTabulation(s, t);
+    cout << lcsString;
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    string text1 = "abcde";
-    string text2 = "ace";
-    cout << longestCommonSubsequenceSpaceOptimization(text1, text2);
+    string s = "ace";
+    string t = "abcde";
+    printLCSFun(s, t);
     cout << endl
          << string(20, '-');
     return 0;
