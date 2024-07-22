@@ -2382,12 +2382,108 @@ int longestCommonSubStringSpaceOptimization(string text1, string text2)
     return ans;
 }
 
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     string str1 = "abcjklp";
+//     string str2 = "acjkp";
+//     cout << longestCommonSubStringSpaceOptimization(str1, str2);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------- DP 28. Longest Palindromic Subsequence ---------------------------------------------------------------
+int longestPalindromeSubseqMemoization(string &str1, string &str2, int str1index, int str2index, vector<vector<int>> &dp)
+{
+    if (str1index == 0 || str2index == 0)
+        return dp[str1index][str2index] = 0;
+    if (dp[str1index][str2index] != -1)
+        return dp[str1index][str2index];
+    // Match
+    if (str1[str1index - 1] == str2[str2index - 1])
+        return dp[str1index][str2index] = 1 + longestPalindromeSubseqMemoization(str1, str2, str1index - 1, str2index - 1, dp);
+    // Not Match
+    int str1SkipCharacter = 0 + longestPalindromeSubseqMemoization(str1, str2, str1index - 1, str2index, dp);
+    int str2SkipCharacter = 0 + longestPalindromeSubseqMemoization(str1, str2, str1index, str2index - 1, dp);
+    return dp[str1index][str2index] = max(str1SkipCharacter, str2SkipCharacter);
+}
+int longestPalindromeSubseq(string s)
+{
+    int n = s.size();
+    string str2 = s;
+    reverse(str2.begin(), str2.end());
+    vector<vector<int>> dp(n + 1, vector<int>(n + 1, -1));
+    return longestPalindromeSubseqMemoization(s, str2, n, n, dp);
+}
+// -----------------------------
+int longestPalindromeSubseqTabulation(string str1)
+{
+    int n = str1.size();
+    string str2 = str1;
+    reverse(str2.begin(), str2.end());
+    vector<vector<int>> dp(n + 1, vector<int>(n + 1, -1));
+    // If column == 0
+    for (int str1index = 0; str1index <= n; str1index++)
+        dp[str1index][0] = 0;
+    // if row == 0
+    for (int str2index = 0; str2index <= n; str2index++)
+        dp[0][str2index] = 0;
+    for (int str1index = 1; str1index <= n; str1index++)
+    {
+        for (int str2index = 1; str2index <= n; str2index++)
+        {
+            // Match
+            if (str1[str1index - 1] == str2[str2index - 1])
+                dp[str1index][str2index] = 1 + dp[str1index - 1][str2index - 1];
+            // Not Match
+            else
+            {
+                int str1SkipCharacter = 0 + dp[str1index - 1][str2index];
+                int str2SkipCharacter = 0 + dp[str1index][str2index - 1];
+                dp[str1index][str2index] = max(str1SkipCharacter, str2SkipCharacter);
+            }
+        }
+    }
+    return dp[n][n];
+}
+// --------------
+int longestPalindromeSubseqSpaceOptimization(string str1)
+{
+    int n = str1.size();
+    string str2 = str1;
+    reverse(str2.begin(), str2.end());
+    vector<int> previousDataStore(n + 1, -1);
+    // if row == 0
+    for (int str2index = 0; str2index <= n; str2index++)
+        previousDataStore[str2index] = 0;
+    // If column == 0
+    previousDataStore[0] = 0;
+    for (int str1index = 1; str1index <= n; str1index++)
+    {
+        vector<int> currentDataStore(n + 1, -1);
+        currentDataStore[0] = 0;
+        for (int str2index = 1; str2index <= n; str2index++)
+        {
+            // Match
+            if (str1[str1index - 1] == str2[str2index - 1])
+                currentDataStore[str2index] = 1 + previousDataStore[str2index - 1];
+            // Not Match
+            else
+            {
+                int str1SkipCharacter = 0 + previousDataStore[str2index];
+                int str2SkipCharacter = 0 + currentDataStore[str2index - 1];
+                currentDataStore[str2index] = max(str1SkipCharacter, str2SkipCharacter);
+            }
+        }
+        previousDataStore = currentDataStore;
+    }
+    return previousDataStore[n];
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    string str1 = "abcjklp";
-    string str2 = "acjkp";
-    cout << longestCommonSubStringSpaceOptimization(str1, str2);
+    string s = "bbbab";
+    cout << longestPalindromeSubseqTabulation(s);
     cout << endl
          << string(20, '-');
     return 0;
