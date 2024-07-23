@@ -2578,11 +2578,52 @@ int minInsertionsSpaceOptimization(string str1)
     int lengthOfLongestCommonSubsequence = previousDataStore[n];
     return (n - lengthOfLongestCommonSubsequence);
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     string s = "zzazz";
+//     cout << minInsertionsSpaceOptimization(s);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------- 121. Best Time to Buy and Sell Stock ---------------------------------------------------------------
+int maxProfit(vector<int> &prices)
+{
+    int buyPrice = INT_MAX;
+    int sellPrice = INT_MIN;
+    int max_profit = 0;
+    for (int index = 0; index < prices.size(); index++)
+    {
+        if (buyPrice > prices[index])
+        {
+            buyPrice = prices[index];
+            sellPrice = prices[index];
+        }
+        else if (sellPrice < prices[index])
+            sellPrice = prices[index];
+        max_profit = max(max_profit, sellPrice - buyPrice);
+    }
+    return max_profit;
+}
+// ----------------------------
+int maxProfitTUF(vector<int> &prices)
+{
+    int maxProfit = 0;
+    int minPrice = prices[0];
+    for (int index = 1; index < prices.size(); index++)
+    {
+        int currProfit = prices[index] - minPrice;
+        maxProfit = max(currProfit, maxProfit);
+        minPrice = min(minPrice, prices[index]);
+    }
+    return maxProfit;
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    string s = "zzazz";
-    cout << minInsertionsSpaceOptimization(s);
+    vector<int> prices = {7, 1, 5, 3, 6, 4};
+    cout << maxProfit(prices);
     cout << endl
          << string(20, '-');
     return 0;
