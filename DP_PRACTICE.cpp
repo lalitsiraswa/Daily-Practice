@@ -2479,11 +2479,110 @@ int longestPalindromeSubseqSpaceOptimization(string str1)
     }
     return previousDataStore[n];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     string s = "bbbab";
+//     cout << longestPalindromeSubseqTabulation(s);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------- DP 29. Minimum Insertions to Make String Palindrome ---------------------------------------------------------------
+int findLongestCommonSubsequenceMemoization(string &str1, string &str2, int str1Index, int str2Index, vector<vector<int>> &dp)
+{
+    if (str1Index == 0 || str2Index == 0)
+        return dp[str1Index][str2Index] = 0;
+    if (dp[str1Index][str2Index] != -1)
+        return dp[str1Index][str2Index];
+    // Match
+    if (str1[str1Index - 1] == str2[str2Index - 1])
+        return dp[str1Index][str2Index] = 1 + findLongestCommonSubsequenceMemoization(str1, str2, str1Index - 1, str2Index - 1, dp);
+    // NotMatch
+    int str1SkipCharacter = 0 + findLongestCommonSubsequenceMemoization(str1, str2, str1Index - 1, str2Index, dp);
+    int str2SkipCharacter = 0 + findLongestCommonSubsequenceMemoization(str1, str2, str1Index, str2Index - 1, dp);
+    return dp[str1Index][str2Index] = max(str1SkipCharacter, str2SkipCharacter);
+}
+int minInsertions(string str1)
+{
+    int n = str1.size();
+    string str2 = str1;
+    reverse(str2.begin(), str2.end());
+    vector<vector<int>> dp(n + 1, vector<int>(n + 1, -1));
+    int lengthOfLongestCommonSubsequence = findLongestCommonSubsequenceMemoization(str1, str2, n, n, dp);
+    return (n - lengthOfLongestCommonSubsequence);
+}
+// ------------------
+int minInsertionsTabulation(string str1)
+{
+    int n = str1.size();
+    string str2 = str1;
+    reverse(str2.begin(), str2.end());
+    vector<vector<int>> dp(n + 1, vector<int>(n + 1, -1));
+    // If column == 0
+    for (int str1index = 0; str1index <= n; str1index++)
+        dp[str1index][0] = 0;
+    // if row == 0
+    for (int str2index = 0; str2index <= n; str2index++)
+        dp[0][str2index] = 0;
+    for (int str1index = 1; str1index <= n; str1index++)
+    {
+        for (int str2index = 1; str2index <= n; str2index++)
+        {
+            // Match
+            if (str1[str1index - 1] == str2[str2index - 1])
+                dp[str1index][str2index] = 1 + dp[str1index - 1][str2index - 1];
+            // Not Match
+            else
+            {
+                int str1SkipCharacter = 0 + dp[str1index - 1][str2index];
+                int str2SkipCharacter = 0 + dp[str1index][str2index - 1];
+                dp[str1index][str2index] = max(str1SkipCharacter, str2SkipCharacter);
+            }
+        }
+    }
+    int lengthOfLongestCommonSubsequence = dp[n][n];
+    return (n - lengthOfLongestCommonSubsequence);
+}
+// -------------
+int minInsertionsSpaceOptimization(string str1)
+{
+    int n = str1.size();
+    string str2 = str1;
+    reverse(str2.begin(), str2.end());
+    vector<int> previousDataStore(n + 1, -1);
+    // if row == 0
+    for (int str2index = 0; str2index <= n; str2index++)
+        previousDataStore[str2index] = 0;
+    // If column == 0
+    previousDataStore[0] = 0;
+    for (int str1index = 1; str1index <= n; str1index++)
+    {
+        vector<int> currentDataStore(n + 1, -1);
+        currentDataStore[0] = 0;
+        for (int str2index = 1; str2index <= n; str2index++)
+        {
+            // Match
+            if (str1[str1index - 1] == str2[str2index - 1])
+                currentDataStore[str2index] = 1 + previousDataStore[str2index - 1];
+            // Not Match
+            else
+            {
+                int str1SkipCharacter = 0 + previousDataStore[str2index];
+                int str2SkipCharacter = 0 + currentDataStore[str2index - 1];
+                currentDataStore[str2index] = max(str1SkipCharacter, str2SkipCharacter);
+            }
+        }
+        previousDataStore = currentDataStore;
+    }
+    int lengthOfLongestCommonSubsequence = previousDataStore[n];
+    return (n - lengthOfLongestCommonSubsequence);
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    string s = "bbbab";
-    cout << longestPalindromeSubseqTabulation(s);
+    string s = "zzazz";
+    cout << minInsertionsSpaceOptimization(s);
     cout << endl
          << string(20, '-');
     return 0;
