@@ -2619,11 +2619,120 @@ int maxProfitTUF(vector<int> &prices)
     }
     return maxProfit;
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> prices = {7, 1, 5, 3, 6, 4};
+//     cout << maxProfit(prices);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------------------ DP 36. Buy and Sell Stock - II | Recursion to Space Optimisation -------------------------------------------------------------
+long buyAndSellStockMemoization(vector<int> &prices, int index, bool buy, int &n, vector<vector<int>> &dp)
+{
+    if (index == n)
+        return dp[index][buy] = 0;
+    if (dp[index][buy] != -1)
+        return dp[index][buy];
+    long profit = 0;
+    if (buy == 0)
+    {
+        long notBuyStock = 0 + buyAndSellStockMemoization(prices, index + 1, 0, n, dp);
+        long buyStock = -prices[index] + buyAndSellStockMemoization(prices, index + 1, 1, n, dp);
+        profit = max(notBuyStock, buyStock);
+    }
+    if (buy == 1)
+    {
+        long notSellStack = 0 + buyAndSellStockMemoization(prices, index + 1, 1, n, dp);
+        long sellStock = prices[index] + buyAndSellStockMemoization(prices, index + 1, 0, n, dp);
+        profit = max(sellStock, notSellStack);
+    }
+    return dp[index][buy] = profit;
+}
+int buyAndSellStock2(vector<int> &prices)
+{
+    int n = prices.size();
+    if (n == 0)
+        return 0;
+    vector<vector<int>> dp(n + 1, vector<int>(2, -1));
+    return buyAndSellStockMemoization(prices, 0, 0, n, dp);
+}
+// ---------------------
+int buyAndSellStock2Tabulation(vector<int> &prices)
+{
+    int n = prices.size();
+    if (n == 0)
+        return 0;
+    vector<vector<int>> dp(n + 1, vector<int>(2, -1));
+    dp[n][0] = 0;
+    dp[n][1] = 0;
+    long profit;
+    for (int index = n - 1; index >= 0; index--)
+    {
+        for (int buy = 0; buy <= 1; buy++)
+        {
+            if (buy == 0)
+            {
+                long notBuyStock = 0 + dp[index + 1][0];
+                long buyStock = -prices[index] + dp[index + 1][1];
+                profit = max(notBuyStock, buyStock);
+            }
+            if (buy == 1)
+            {
+                long notSellStock = 0 + dp[index + 1][1];
+                long sellStock = prices[index] + dp[index + 1][0];
+                profit = max(notSellStock, sellStock);
+            }
+            dp[index][buy] = profit;
+        }
+    }
+    return dp[0][0];
+}
+// ------------------------
+int buyAndSellStock2SpaceOptimization(vector<int> &prices)
+{
+    int n = prices.size();
+    if (n == 0)
+        return 0;
+    vector<int> previousDataStore(2, -1);
+    // Base condition: When there are no stocks left, the profit is 0.
+    previousDataStore[0] = 0;
+    previousDataStore[1] = 0;
+    long profit;
+    // Loop through the array in reverse order
+    for (int index = n - 1; index >= 0; index--)
+    {
+        vector<int> currentDataDataStore(2, -1);
+        for (int buy = 0; buy <= 1; buy++)
+        {
+            // We can buy the stock
+            if (buy == 0)
+            {
+                long notBuyStock = 0 + previousDataStore[0];
+                long buyStock = -prices[index] + previousDataStore[1];
+                profit = max(notBuyStock, buyStock);
+            }
+            // We can sell the stock
+            if (buy == 1)
+            {
+                long notSellStock = 0 + previousDataStore[1];
+                long sellStock = prices[index] + previousDataStore[0];
+                profit = max(notSellStock, sellStock);
+            }
+            currentDataDataStore[buy] = profit;
+        }
+        // Update the "previousDataStore" array with the current values
+        previousDataStore = currentDataDataStore;
+    }
+    // The maximum profit is stored in previousDataStore[0] after all calculations
+    return previousDataStore[0];
+}
 int main()
 {
     cout << string(20, '-') << endl;
     vector<int> prices = {7, 1, 5, 3, 6, 4};
-    cout << maxProfit(prices);
+    cout << buyAndSellStock2SpaceOptimization(prices);
     cout << endl
          << string(20, '-');
     return 0;
