@@ -149,12 +149,48 @@ vector<int> getSecondOrderElements(int n, vector<int> a)
 {
     return {findSecondLargest(a, n), findSecondSmallest(a, n)};
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {3, 4, 5, 2};
+//     vector<int> result = getSecondOrderElements(arr.size(), arr);
+//     cout << "{" << result[0] << ", " << result[1] << "}";
+//     cout << endl
+//          << string(30, '-');
+// }
+// -------------------------------------------------------------- 1752. Check if Array Is Sorted and Rotated ------------------------------------------------------------
+bool check(vector<int> &nums)
+{
+    int n = nums.size();
+    int index = 1;
+    int firstElement = nums[0];
+    int lastElement = nums[0];
+    while (index < n)
+    {
+
+        if (nums[index] >= nums[index - 1])
+        {
+            lastElement = nums[index];
+            index++;
+        }
+        else
+            break;
+    }
+    index++;
+    while (index < n)
+    {
+        if (nums[index] >= nums[index - 1] && nums[index] <= lastElement && nums[index] <= firstElement)
+            index++;
+        else
+            return false;
+    }
+    return true;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr = {3, 4, 5, 2};
-    vector<int> result = getSecondOrderElements(arr.size(), arr);
-    cout << "{" << result[0] << ", " << result[1] << "}";
+    vector<int> nums = {3, 4, 5, 1, 2};
+    cout << check(nums);
     cout << endl
          << string(30, '-');
 }
