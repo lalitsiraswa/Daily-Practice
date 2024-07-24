@@ -72,11 +72,89 @@ int print2largest3(vector<int> &arr)
     }
     return secondLargestElement;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {12, 35, 1, 10, 34, 1};
+//     cout << print2largest3(arr);
+//     cout << endl
+//          << string(30, '-');
+// }
+// -------------------------------------------------------------- Second Largest Element in Array ------------------------------------------------------------
+int find2ndLargest(vector<int> &arr, int n)
+{
+    int firstLargest = arr[0];
+    int secondLargest = INT_MIN;
+    for (int index = 1; index < n; index++)
+    {
+        if (firstLargest < arr[index])
+            firstLargest = arr[index];
+    }
+    for (int index = 0; index < n; index++)
+    {
+        if (arr[index] > secondLargest && arr[index] != firstLargest)
+            secondLargest = arr[index];
+    }
+    return secondLargest;
+}
+int find2ndSmallest(vector<int> &arr, int n)
+{
+    int firstSmallest = arr[0];
+    int secondSmallest = INT_MAX;
+    for (int index = 1; index < n; index++)
+    {
+        if (firstSmallest > arr[index])
+            firstSmallest = arr[index];
+    }
+    for (int index = 0; index < n; index++)
+    {
+        if (arr[index] < secondSmallest && arr[index] != firstSmallest)
+            secondSmallest = arr[index];
+    }
+    return secondSmallest;
+}
+int findSecondLargest(vector<int> &arr, int n)
+{
+    int firstLargest = arr[0];
+    int secondLargest = INT_MIN;
+    for (int index = 1; index < n; index++)
+    {
+        if (firstLargest < arr[index])
+        {
+            secondLargest = firstLargest;
+            firstLargest = arr[index];
+        }
+        else if (secondLargest < arr[index] && arr[index] < firstLargest)
+            secondLargest = arr[index];
+    }
+    return secondLargest;
+}
+int findSecondSmallest(vector<int> &arr, int n)
+{
+    int firstSmallest = arr[0];
+    int secondSmallest = INT_MAX;
+    for (int index = 1; index < n; index++)
+    {
+        if (firstSmallest > arr[index])
+        {
+            secondSmallest = firstSmallest;
+            firstSmallest = arr[index];
+        }
+        else if (secondSmallest > arr[index] && arr[index] > firstSmallest)
+            secondSmallest = arr[index];
+    }
+    return secondSmallest;
+}
+vector<int> getSecondOrderElements(int n, vector<int> a)
+{
+    return {findSecondLargest(a, n), findSecondSmallest(a, n)};
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr = {12, 35, 1, 10, 34, 1};
-    cout << print2largest3(arr);
+    vector<int> arr = {3, 4, 5, 2};
+    vector<int> result = getSecondOrderElements(arr.size(), arr);
+    cout << "{" << result[0] << ", " << result[1] << "}";
     cout << endl
          << string(30, '-');
 }
