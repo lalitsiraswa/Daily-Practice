@@ -200,11 +200,75 @@ bool check2(vector<int> &nums)
     // If the count of violations is less than or equal to 1, return true
     return count <= 1;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {3, 4, 5, 1, 2};
+//     cout << check2(nums);
+//     cout << endl
+//          << string(30, '-');
+// }
+// -------------------------------------------------------------- 26. Remove Duplicates from Sorted Array ------------------------------------------------------------
+int removeDuplicates(vector<int> &nums)
+{
+    int n = nums.size();
+    int previous = 0;
+    int current = 1;
+    for (int current = 1; current < n; current++)
+    {
+        if (nums[current] != nums[previous])
+        {
+            nums[previous + 1] = nums[current];
+            previous++;
+        }
+    }
+    return previous + 1;
+}
+// --------------
+int removeDuplicates2(vector<int> &nums)
+{
+    int n = nums.size();
+    int previous = 0;
+    int current = 1;
+    while (current < n)
+    {
+        if (nums[current] == nums[current - 1])
+            current++;
+        else
+        {
+            nums[previous] = nums[current - 1];
+            previous++;
+            current++;
+        }
+    }
+    if (previous > 0 && nums[current - 1] != nums[previous - 1])
+        nums[previous] = nums[current - 1];
+    return previous + 1;
+}
+// --------------
+int removeDuplicates3(vector<int> &nums)
+{
+    int n = nums.size();
+    int previous = 0;
+    int current = 1;
+    while (current < n)
+    {
+        if (nums[current] != nums[current - 1])
+        {
+            nums[previous] = nums[current - 1];
+            previous++;
+        }
+        current++;
+    }
+    if (previous > 0 && nums[current - 1] != nums[previous - 1])
+        nums[previous] = nums[current - 1];
+    return previous + 1;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {3, 4, 5, 1, 2};
-    cout << check2(nums);
+    vector<int> nums = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
+    cout << removeDuplicates3(nums);
     cout << endl
          << string(30, '-');
 }
