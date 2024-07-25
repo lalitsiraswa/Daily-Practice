@@ -164,33 +164,47 @@ bool check(vector<int> &nums)
     int n = nums.size();
     int index = 1;
     int firstElement = nums[0];
-    int lastElement = nums[0];
     while (index < n)
     {
-
         if (nums[index] >= nums[index - 1])
-        {
-            lastElement = nums[index];
             index++;
-        }
         else
             break;
     }
+    if (index < n && nums[index] > firstElement)
+        return false;
     index++;
     while (index < n)
     {
-        if (nums[index] >= nums[index - 1] && nums[index] <= lastElement && nums[index] <= firstElement)
+        if (nums[index] >= nums[index - 1] && nums[index] <= firstElement)
             index++;
         else
             return false;
     }
     return true;
 }
+// -------------------
+bool check2(vector<int> &nums)
+{
+    int n = nums.size();
+    int count = 0;
+    // Check if the array is non-decreasing
+    for (int i = 1; i < n; i++)
+    {
+        if (nums[i - 1] > nums[i])
+            count++;
+    }
+    // Check if the last element is greater than the first element
+    if (nums[n - 1] > nums[0])
+        count++;
+    // If the count of violations is less than or equal to 1, return true
+    return count <= 1;
+}
 int main()
 {
     cout << string(30, '-') << endl;
     vector<int> nums = {3, 4, 5, 1, 2};
-    cout << check(nums);
+    cout << check2(nums);
     cout << endl
          << string(30, '-');
 }
