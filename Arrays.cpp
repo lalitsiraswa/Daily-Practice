@@ -264,11 +264,56 @@ int removeDuplicates3(vector<int> &nums)
         nums[previous] = nums[current - 1];
     return previous + 1;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
+//     cout << removeDuplicates3(nums);
+//     cout << endl
+//          << string(30, '-');
+// }
+// -------------------------------------------------------------- 283. Move Zeroes ------------------------------------------------------------
+void moveZeroes(vector<int> &nums)
+{
+    int n = nums.size();
+    int index = 0;
+    for (int currentIndex = 0; currentIndex < n; currentIndex++)
+    {
+        if (nums[currentIndex] != 0)
+            nums[index++] = nums[currentIndex];
+    }
+    while (index < n)
+        nums[index++] = 0;
+}
+// ------------------
+// Using swap()
+void moveZeroes2(vector<int> &nums)
+{
+    int n = nums.size();
+    int index = 0;
+    int currentIndex = 0;
+    while (index < n)
+    {
+        if (nums[index] == 0)
+            break;
+        index++;
+    }
+    for (int currenIndex = index + 1; currenIndex < n; currenIndex++)
+    {
+        if (nums[currenIndex] != 0)
+        {
+            swap(nums[index], nums[currenIndex]);
+            index++;
+        }
+    }
+    for (int i = 0; i < n; i++)
+        cout << nums[i] << " ";
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
-    cout << removeDuplicates3(nums);
+    vector<int> nums = {0, 1, 0, 3, 12};
+    moveZeroes2(nums);
     cout << endl
          << string(30, '-');
 }
