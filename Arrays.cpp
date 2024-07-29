@@ -392,12 +392,65 @@ vector<int> findUnion2(int arr1[], int arr2[], int n, int m)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     int arr1[] = {-9, -8, -7, -5, -1, 0, 3};
+//     int arr2[] = {2};
+//     vector<int> result = findUnion2(arr1, arr2, 7, 1);
+//     for (int item : result)
+//         cout << item << "  ";
+//     cout << endl
+//          << string(30, '-');
+// }
+// -------------------------------------------------------------- 349. Intersection of Two Arrays ------------------------------------------------------------
+vector<int> findIntersection(vector<int> &nums1, vector<int> &nums2)
+{
+    unordered_map<int, int> nums1FrequencyCounter;
+    unordered_map<int, int> nums2FrequencyCounter;
+    vector<int> intersection;
+    for (int item : nums1)
+        nums1FrequencyCounter[item] = 1;
+    for (int item : nums2)
+        nums2FrequencyCounter[item] = 1;
+    unordered_map<int, int>::iterator itr;
+    for (itr = nums1FrequencyCounter.begin(); itr != nums1FrequencyCounter.end(); itr++)
+    {
+        if (nums2FrequencyCounter[itr->first])
+            intersection.push_back(itr->first);
+    }
+    return intersection;
+}
+// ----------------
+vector<int> findIntersection2(vector<int> &nums1, vector<int> &nums2)
+{
+    vector<int> intersection;
+    sort(nums1.begin(), nums1.end());
+    sort(nums2.begin(), nums2.end());
+    int nums1Index = 0;
+    int nums2Index = 0;
+    while (nums1Index < nums1.size() && nums2Index < nums2.size())
+    {
+        if (nums1[nums1Index] == nums2[nums2Index])
+        {
+            if (intersection.size() == 0 || intersection.back() != nums1[nums1Index])
+                intersection.push_back(nums1[nums1Index]);
+            nums1Index++;
+            nums2Index++;
+        }
+        else if (nums1[nums1Index] < nums2[nums2Index])
+            nums1Index++;
+        else
+            nums2Index++;
+    }
+    return intersection;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    int arr1[] = {-9, -8, -7, -5, -1, 0, 3};
-    int arr2[] = {2};
-    vector<int> result = findUnion2(arr1, arr2, 7, 1);
+    vector<int> nums1 = {1, 2, 2, 1};
+    vector<int> nums2 = {2, 2};
+    vector<int> result = findIntersection2(nums1, nums2);
     for (int item : result)
         cout << item << "  ";
     cout << endl
