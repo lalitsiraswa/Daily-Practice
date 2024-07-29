@@ -561,11 +561,28 @@ int findMaxConsecutiveOnes(vector<int> &nums)
     }
     return max(maxCount, currentCount);
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {1, 1, 0, 1, 1, 1};
+//     cout << findMaxConsecutiveOnes(nums) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// -------------------------------------------------------------- 136. Single Number ------------------------------------------------------------
+int singleNumber(vector<int> &nums)
+{
+    int result = nums[0];
+    int n = nums.size();
+    for (int i = 1; i < n; i++)
+        result = result ^ nums[i];
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {1, 1, 0, 1, 1, 1};
-    cout << findMaxConsecutiveOnes(nums) << endl;
+    vector<int> nums = {4, 1, 2, 1, 2};
+    cout << singleNumber(nums) << endl;
     cout << endl
          << string(30, '-');
 }
