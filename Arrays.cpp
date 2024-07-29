@@ -309,11 +309,97 @@ void moveZeroes2(vector<int> &nums)
     for (int i = 0; i < n; i++)
         cout << nums[i] << " ";
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {0, 1, 0, 3, 12};
+//     moveZeroes2(nums);
+//     cout << endl
+//          << string(30, '-');
+// }
+// -------------------------------------------------------------- Union of Two Sorted Arrays ------------------------------------------------------------
+vector<int> findUnion(int arr1[], int arr2[], int n, int m)
+{
+    vector<int> result;
+    int arr1Index = 0;
+    int arr2Index = 0;
+    while (arr1Index < n && arr2Index < m)
+    {
+        int resultLength = result.size();
+        if (arr1[arr1Index] <= arr2[arr2Index])
+        {
+            if (resultLength == 0 || (resultLength > 0) && result[resultLength - 1] != arr1[arr1Index])
+                result.push_back(arr1[arr1Index]);
+            if (arr1[arr1Index] == arr2[arr2Index])
+                arr2Index++;
+            arr1Index++;
+        }
+        else
+        {
+            if (resultLength == 0 || (resultLength > 0) && result[resultLength - 1] != arr2[arr2Index])
+                result.push_back(arr2[arr2Index]);
+            arr2Index++;
+        }
+    }
+    while (arr1Index < n)
+    {
+        if (arr1[arr1Index - 1] != arr1[arr1Index])
+            result.push_back(arr1[arr1Index]);
+        arr1Index++;
+    }
+    while (arr2Index < m)
+    {
+        if (arr2[arr2Index - 1] != arr2[arr2Index])
+            result.push_back(arr2[arr2Index]);
+        arr2Index++;
+    }
+    return result;
+}
+// ------------
+vector<int> findUnion2(int arr1[], int arr2[], int n, int m)
+{
+    vector<int> result;
+    int arr1Index = 0;
+    int arr2Index = 0;
+    while (arr1Index < n && arr2Index < m)
+    {
+        if (arr1[arr1Index] <= arr2[arr2Index])
+        {
+            if (result.size() == 0 || result.back() != arr1[arr1Index])
+                result.push_back(arr1[arr1Index]);
+            if (arr1[arr1Index] == arr2[arr2Index])
+                arr2Index++;
+            arr1Index++;
+        }
+        else
+        {
+            if (result.size() == 0 || result.back() != arr2[arr2Index])
+                result.push_back(arr2[arr2Index]);
+            arr2Index++;
+        }
+    }
+    while (arr1Index < n)
+    {
+        if (result.size() == 0 || result.back() != arr1[arr1Index])
+            result.push_back(arr1[arr1Index]);
+        arr1Index++;
+    }
+    while (arr2Index < m)
+    {
+        if (result.size() == 0 || result.back() != arr2[arr2Index])
+            result.push_back(arr2[arr2Index]);
+        arr2Index++;
+    }
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {0, 1, 0, 3, 12};
-    moveZeroes2(nums);
+    int arr1[] = {-9, -8, -7, -5, -1, 0, 3};
+    int arr2[] = {2};
+    vector<int> result = findUnion2(arr1, arr2, 7, 1);
+    for (int item : result)
+        cout << item << "  ";
     cout << endl
          << string(30, '-');
 }
