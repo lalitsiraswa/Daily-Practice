@@ -534,11 +534,38 @@ int missingNumber4(vector<int> &nums)
         currentTotalSum += element;
     return sumOfNaturalNumber - currentTotalSum;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {0, 1};
+//     cout << missingNumber4(nums) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// -------------------------------------------------------------- 485. Max Consecutive Ones ------------------------------------------------------------
+int findMaxConsecutiveOnes(vector<int> &nums)
+{
+    int n = nums.size();
+    int maxCount = 0;
+    int currentCount = 0;
+    int index = 0;
+    for (int index = 0; index < n; index++)
+    {
+        if (nums[index] == 1)
+            currentCount++;
+        else
+        {
+            maxCount = max(currentCount, maxCount);
+            currentCount = 0;
+        }
+    }
+    return max(maxCount, currentCount);
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {0, 1};
-    cout << missingNumber4(nums) << endl;
+    vector<int> nums = {1, 1, 0, 1, 1, 1};
+    cout << findMaxConsecutiveOnes(nums) << endl;
     cout << endl
          << string(30, '-');
 }
