@@ -445,14 +445,100 @@ vector<int> findIntersection2(vector<int> &nums1, vector<int> &nums2)
     }
     return intersection;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums1 = {1, 2, 2, 1};
+//     vector<int> nums2 = {2, 2};
+//     vector<int> result = findIntersection2(nums1, nums2);
+//     for (int item : result)
+//         cout << item << "  ";
+//     cout << endl
+//          << string(30, '-');
+// }
+// -------------------------------------------------------------- 349. Intersection of Two Arrays ------------------------------------------------------------
+int missingNumber(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> isVisited(n + 1, 0);
+    for (int item : nums)
+        isVisited[item] = 1;
+    int index;
+    for (index = 0; index <= n; index++)
+    {
+        if (isVisited[index] == 0)
+            break;
+    }
+    return index;
+}
+// ---------------
+int missingNumber2(vector<int> &nums)
+{
+    nums.push_back(nums[0]);
+    int index = 0;
+    while (index < nums.size())
+    {
+        if (index == nums[index])
+            index++;
+        if (nums[index] != nums[nums[index]])
+        {
+            int temp = nums[index];
+            nums[index] = nums[temp];
+            nums[temp] = temp;
+        }
+        else
+            index++;
+    }
+    index = 0;
+    for (; index < nums.size(); index++)
+    {
+        if (nums[index] != index)
+            break;
+    }
+    return index;
+}
+// ---------------------
+int missingNumber3(vector<int> &nums)
+{
+    int n = nums.size();
+    int index = 0;
+    while (index < n)
+    {
+        int element = nums[index];
+        if (element == n)
+            index++;
+        else if (nums[index] != nums[element])
+        {
+            nums[index] = nums[element];
+            nums[element] = element;
+        }
+        else
+            index++;
+    }
+    index = 0;
+    while (index < n)
+    {
+        if (nums[index] != index)
+            break;
+        index++;
+    }
+    return index;
+}
+// ------- Using Mathematical Formula (SUM OF N NATURAL NUIMBERS "N(N+1)/2") ---------
+int missingNumber4(vector<int> &nums)
+{
+    int n = nums.size();
+    int sumOfNaturalNumber = n * (n + 1) / 2;
+    int currentTotalSum = 0;
+    for (int element : nums)
+        currentTotalSum += element;
+    return sumOfNaturalNumber - currentTotalSum;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums1 = {1, 2, 2, 1};
-    vector<int> nums2 = {2, 2};
-    vector<int> result = findIntersection2(nums1, nums2);
-    for (int item : result)
-        cout << item << "  ";
+    vector<int> nums = {0, 1};
+    cout << missingNumber4(nums) << endl;
     cout << endl
          << string(30, '-');
 }
