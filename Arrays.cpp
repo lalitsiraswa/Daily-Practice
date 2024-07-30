@@ -631,18 +631,18 @@ int lenOfLongSubarr2(int A[], int N, int K)
     }
     return maxLen;
 }
-// int main()
-// {
-//     cout << string(30, '-') << endl;
-//     int A[] = {1, 2, 3, 1, 1, 1, 1, 4, 2, 3};
-//     cout << lenOfLongSubarr2(A, 6, -5) << endl;
-//     cout << endl
-//          << string(30, '-');
-// }
+int main()
+{
+    cout << string(30, '-') << endl;
+    int A[] = {1, 2, 3, 1, 1, 1, 1, 4, 2, 3};
+    cout << lenOfLongSubarr2(A, 6, -5) << endl;
+    cout << endl
+         << string(30, '-');
+}
 // -------------------------------------------------------------- Largest subarray with 0 sum ------------------------------------------------------------
 int maxLen(vector<int> &arr, int n)
 {
-    unordered_map<int, int> preSumMap;
+    map<int, int> preSumMap;
     int maxLength = 0;
     int sum = 0;
     for (int i = 0; i < n; i++)
@@ -664,11 +664,11 @@ int maxLen(vector<int> &arr, int n)
     }
     return maxLength;
 }
-int main()
-{
-    cout << string(30, '-') << endl;
-    vector<int> arr = {-1, 1, -1, 1};
-    cout << maxLen(arr, 4) << endl;
-    cout << endl
-         << string(30, '-');
-}
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {-1, 1, -1, 1};
+//     cout << maxLen(arr, 4) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
