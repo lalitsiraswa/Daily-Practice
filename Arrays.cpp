@@ -578,11 +578,64 @@ int singleNumber(vector<int> &nums)
         result = result ^ nums[i];
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {4, 1, 2, 1, 2};
+//     cout << singleNumber(nums) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// -------------------------------------------------------------- Longest Sub-Array with Sum K ------------------------------------------------------------
+int lenOfLongSubarr(int A[], int N, int K)
+{
+    int maxSubArrayLen = 0;
+    int currSubArrayLen = 0;
+    for (int i = 0; i < N; i++)
+    {
+        int currSum = 0;
+        for (int j = i; j < N; j++)
+        {
+            currSum += A[j];
+            if (currSum == K)
+            {
+                maxSubArrayLen = max(maxSubArrayLen, (j - i) + 1);
+            }
+        }
+    }
+    return maxSubArrayLen;
+}
+// -----------------
+int lenOfLongSubarr2(int A[], int N, int K)
+{
+    map<long long, int> preSumMap;
+    long long sum = 0;
+    int maxLen = 0;
+    for (int i = 0; i < N; i++)
+    {
+        sum += A[i];
+        if (sum == K)
+        {
+            maxLen = max(maxLen, i + 1);
+        }
+        long long remaining = sum - K;
+        if (preSumMap.find(remaining) != preSumMap.end())
+        {
+            int len = i - preSumMap[remaining];
+            maxLen = max(maxLen, len);
+        }
+        if (preSumMap.find(sum) == preSumMap.end())
+        {
+            preSumMap[sum] = i;
+        }
+    }
+    return maxLen;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {4, 1, 2, 1, 2};
-    cout << singleNumber(nums) << endl;
+    int A[] = {1, 2, 3, 1, 1, 1, 1, 4, 2, 3};
+    cout << lenOfLongSubarr2(A, 6, -5) << endl;
     cout << endl
          << string(30, '-');
 }
