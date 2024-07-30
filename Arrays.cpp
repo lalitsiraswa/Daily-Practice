@@ -631,14 +631,14 @@ int lenOfLongSubarr2(int A[], int N, int K)
     }
     return maxLen;
 }
-int main()
-{
-    cout << string(30, '-') << endl;
-    int A[] = {1, 2, 3, 1, 1, 1, 1, 4, 2, 3};
-    cout << lenOfLongSubarr2(A, 6, -5) << endl;
-    cout << endl
-         << string(30, '-');
-}
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     int A[] = {1, 2, 3, 1, 1, 1, 1, 4, 2, 3};
+//     cout << lenOfLongSubarr2(A, 6, -5) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
 // -------------------------------------------------------------- Largest subarray with 0 sum ------------------------------------------------------------
 int maxLen(vector<int> &arr, int n)
 {
@@ -672,3 +672,30 @@ int maxLen(vector<int> &arr, int n)
 //     cout << endl
 //          << string(30, '-');
 // }
+// ----------------------------------------------------------------------------- 1. Two Sum ---------------------------------------------------------------------------
+vector<int> twoSum(vector<int> &nums, int target)
+{
+    map<int, int> isPresent;
+    vector<int> result(2);
+    for (int index = 0; index < nums.size(); index++)
+    {
+        int required = target - nums[index];
+        if (isPresent.find(required) != isPresent.end())
+        {
+            result[0] = isPresent[required];
+            result[1] = index;
+            break;
+        }
+        isPresent[nums[index]] = index;
+    }
+    return result;
+}
+int main()
+{
+    cout << string(30, '-') << endl;
+    vector<int> nums = {3, 2, 4};
+    vector<int> vect = twoSum(nums, 6);
+    cout << vect[0] << " : " << vect[1] << endl;
+    cout << endl
+         << string(30, '-');
+}
