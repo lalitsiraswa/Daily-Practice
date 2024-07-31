@@ -812,11 +812,47 @@ void sortColorsImp(vector<int> &nums)
         }
     }
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {2, 0, 2, 1, 1, 0};
+//     sortColorsImp(nums);
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- 169. Majority Element ------------------------------------------------------------------------
+int majorityElement(vector<int> &nums)
+{
+    int n = nums.size();
+    int element;
+    int elementCounter = 0;
+    for (int index = 0; index < n; index++)
+    {
+        if (elementCounter == 0)
+        {
+            element = nums[index];
+            elementCounter = 1;
+        }
+        else if (element == nums[index])
+            elementCounter++;
+        else
+            elementCounter--;
+    }
+    int counter = 0;
+    for (int index = 0; index < n; index++)
+    {
+        if (element == nums[index])
+            counter++;
+    }
+    if (counter > n / 2)
+        return element;
+    return -1;
+}
 int main()
 {
     cout << string(30, '-') << endl;
     vector<int> nums = {2, 0, 2, 1, 1, 0};
-    sortColorsImp(nums);
+    cout << majorityElement(nums) << endl;
     cout << endl
          << string(30, '-');
 }
