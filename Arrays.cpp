@@ -821,6 +821,7 @@ void sortColorsImp(vector<int> &nums)
 //          << string(30, '-');
 // }
 // --------------------------------------------------------------------- 169. Majority Element ------------------------------------------------------------------------
+// Boyer-Moore Majority Voting Algorithm
 int majorityElement(vector<int> &nums)
 {
     int n = nums.size();
