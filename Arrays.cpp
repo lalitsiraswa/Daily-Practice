@@ -690,12 +690,133 @@ vector<int> twoSum(vector<int> &nums, int target)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {3, 2, 4};
+//     vector<int> vect = twoSum(nums, 6);
+//     cout << vect[0] << " : " << vect[1] << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- 75. Sort Colors ------------------------------------------------------------------------
+void sortColors(vector<int> &nums)
+{
+    map<int, int> frequencyCounter;
+    for (int item : nums)
+        frequencyCounter[item]++;
+    int index = 0;
+    for (int i = 1; i <= frequencyCounter[0]; i++)
+        nums[index++] = 0;
+    for (int i = 1; i <= frequencyCounter[1]; i++)
+        nums[index++] = 1;
+    for (int i = 1; i <= frequencyCounter[2]; i++)
+        nums[index++] = 2;
+    for (int item : nums)
+        cout << item << " ";
+}
+// ------------
+void sortColors2(vector<int> &nums)
+{
+    int n = nums.size();
+    int smallest = INT_MAX;
+    int largest = 0;
+    for (int item : nums)
+    {
+        smallest = min(smallest, item);
+        largest = max(largest, item);
+    }
+    int index = 0;
+    int left = 0, right = n - 1;
+    while (index <= right)
+    {
+        if (nums[index] == smallest)
+        {
+            swap(nums[index], nums[left]);
+            index++;
+            left++;
+        }
+        else if (nums[index] == largest)
+        {
+            swap(nums[index], nums[right]);
+            right--;
+        }
+        else
+            index++;
+    }
+}
+// -------------
+void sortColors3(vector<int> &colors)
+{
+    int redIndex = 0, whiteindex = 0, blueIndex = colors.size() - 1;
+    while (whiteindex <= blueIndex)
+    {
+        if (colors[whiteindex] == 0)
+        {
+            if (colors[redIndex] != 0)
+                swap(colors[redIndex], colors[whiteindex]);
+            redIndex++;
+            whiteindex++;
+        }
+        else if (colors[whiteindex] == 1)
+            whiteindex++;
+        else if (colors[whiteindex] == 2)
+        {
+            if (colors[blueIndex] != 2)
+                swap(colors[whiteindex], colors[blueIndex]);
+            blueIndex--;
+        }
+    }
+}
+// ------------------
+void sortColors4(vector<int> &nums)
+{
+    int countZero = 0, countOne = 0, countTwo = 0;
+    for (int item : nums)
+    {
+        if (item == 0)
+            countZero++;
+        else if (item == 1)
+            countOne++;
+        else
+            countTwo++;
+    }
+    int index = 0;
+    for (int count = 1; count <= countZero; count++)
+        nums[index++] = 0;
+    for (int count = 1; count <= countOne; count++)
+        nums[index++] = 1;
+    for (int count = 1; count <= countTwo; count++)
+        nums[index++] = 2;
+}
+// ------- Dutch National Flag problem --------
+void sortColorsImp(vector<int> &nums)
+{
+    int low = 0, mid = 0, high = nums.size() - 1;
+    while (mid <= high)
+    {
+        if (nums[mid] == 0)
+        {
+            swap(nums[low], nums[mid]);
+            low++;
+            mid++;
+        }
+        else if (nums[mid] == 1)
+        {
+            mid++;
+        }
+        else if (nums[mid] == 2)
+        {
+            swap(nums[mid], nums[high]);
+            high--;
+        }
+    }
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {3, 2, 4};
-    vector<int> vect = twoSum(nums, 6);
-    cout << vect[0] << " : " << vect[1] << endl;
+    vector<int> nums = {2, 0, 2, 1, 1, 0};
+    sortColorsImp(nums);
     cout << endl
          << string(30, '-');
 }
