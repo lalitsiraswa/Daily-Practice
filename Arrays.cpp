@@ -849,11 +849,61 @@ int majorityElement(vector<int> &nums)
         return element;
     return -1;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {2, 2, 1, 1, 1, 2, 2};
+//     cout << majorityElement(nums) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- 53. Maximum Subarray & print logic ------------------------------------------------------------------------
+int maxSubArray(vector<int> &nums)
+{
+    int max_so_for = INT_MIN;
+    int max_ending_here = 0;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        max_ending_here += nums[i];
+        if (max_ending_here > max_so_for)
+            max_so_for = max_ending_here;
+        if (max_ending_here < 0)
+            max_ending_here = 0;
+    }
+    return max_so_for;
+}
+// ---------------------
+void printMaxSubArray(vector<int> &nums)
+{
+    int max_so_for = INT_MIN;
+    int max_ending_here = 0;
+    int maxSubArrayStartIndex = -1;
+    int maxSubArrayEndingIndex = -1;
+    int start;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        if (max_ending_here == 0)
+            start = i;
+        max_ending_here += nums[i];
+        if (max_ending_here > max_so_for)
+        {
+            max_so_for = max_ending_here;
+            maxSubArrayStartIndex = start;
+            maxSubArrayEndingIndex = i;
+        }
+        if (max_ending_here < 0)
+            max_ending_here = 0;
+    }
+    for (int index = maxSubArrayStartIndex; index <= maxSubArrayEndingIndex; index++)
+    {
+        cout << nums[index] << " ";
+    }
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {2, 0, 2, 1, 1, 0};
-    cout << majorityElement(nums) << endl;
+    vector<int> nums = {-2, -3, 4, -1, -2, 1, 5, -2};
+    printMaxSubArray(nums);
     cout << endl
          << string(30, '-');
 }
