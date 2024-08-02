@@ -899,11 +899,55 @@ void printMaxSubArray(vector<int> &nums)
         cout << nums[index] << " ";
     }
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {-2, -3, 4, -1, -2, 1, 5, -2};
+//     printMaxSubArray(nums);
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- Maximum Score from Subarray Minimums ------------------------------------------------------------------------
+int pairWithMaxSum(vector<int> &arr)
+{
+    int n = arr.size();
+    int maxSum = 0;
+    for (int i = 0; i < n; i++)
+    {
+        int firstSmall = arr[i];
+        int secondSmall = INT_MAX;
+        for (int j = i + 1; j < n; j++)
+        {
+            if (arr[j] <= firstSmall)
+            {
+                secondSmall = firstSmall;
+                firstSmall = arr[j];
+            }
+            else
+            {
+                secondSmall = min(secondSmall, arr[j]);
+            }
+            maxSum = max(maxSum, firstSmall + secondSmall);
+        }
+    }
+    return maxSum;
+}
+// ------------------
+int pairWithMaxSum2(vector<int> &arr)
+{
+    int n = arr.size();
+    int maxSum = 0;
+    for (int index = 0; index < n - 1; index++)
+    {
+        maxSum = max(arr[index] + arr[index + 1], maxSum);
+    }
+    return maxSum;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {-2, -3, 4, -1, -2, 1, 5, -2};
-    printMaxSubArray(nums);
+    vector<int> arr = {4, 3, 1, 5, 6};
+    cout << pairWithMaxSum2(arr) << endl;
     cout << endl
          << string(30, '-');
 }
