@@ -943,11 +943,189 @@ int pairWithMaxSum2(vector<int> &arr)
     }
     return maxSum;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {4, 3, 1, 5, 6};
+//     cout << pairWithMaxSum2(arr) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- 121. Best Time to Buy and Sell Stock ------------------------------------------------------------------------
+int maxProfit(vector<int> &prices)
+{
+    int n = prices.size();
+    int buyPrice = INT_MAX;
+    int sellPrice = INT_MIN;
+    int maxProfitPrice = 0;
+    for (int index = 0; index < n; index++)
+    {
+        if (prices[index] < buyPrice)
+        {
+            buyPrice = prices[index];
+            sellPrice = prices[index];
+        }
+        else if (prices[index] > sellPrice)
+            sellPrice = prices[index];
+        maxProfitPrice = max(maxProfitPrice, sellPrice - buyPrice);
+    }
+    return maxProfitPrice;
+}
+// -----------------------
+int maxProfit2(vector<int> &prices)
+{
+    int n = prices.size();
+    int buyPrice = INT_MAX;
+    int sellPrice = INT_MIN;
+    int maxProfitPrice = 0;
+    for (int index = 0; index < n; index++)
+    {
+        sellPrice = prices[index];
+        maxProfitPrice = max(maxProfitPrice, sellPrice - buyPrice);
+        buyPrice = min(buyPrice, prices[index]);
+    }
+    return maxProfitPrice;
+}
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {7, 1, 5, 3, 6, 4};
+//     cout << maxProfit2(arr) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------- 2149. Rearrange Array Elements by Sign ------------------------------------------------------------------------
+vector<int> rearrangeArray(vector<int> &nums)
+{
+    vector<int> result;
+    int n = nums.size();
+    int positiveIndex = 0;
+    int negativeIndex = 0;
+    while (positiveIndex < n || negativeIndex < n)
+    {
+        while (positiveIndex < n && nums[positiveIndex] < 0)
+            positiveIndex++;
+        if (positiveIndex < n)
+            result.push_back(nums[positiveIndex]);
+        positiveIndex++;
+        while (negativeIndex < n && nums[negativeIndex] > 0)
+            negativeIndex++;
+        if (negativeIndex < n)
+            result.push_back(nums[negativeIndex]);
+        negativeIndex++;
+    }
+    return result;
+}
+// -----------------------
+vector<int> rearrangeArray2(vector<int> &nums)
+{
+    vector<int> result;
+    int n = nums.size();
+    int positiveIndex = 0;
+    int negativeIndex = 0;
+    while (positiveIndex < n || negativeIndex < n)
+    {
+        while (positiveIndex < n)
+        {
+            if (nums[positiveIndex] >= 0)
+            {
+                result.push_back(nums[positiveIndex]);
+                break;
+            }
+            positiveIndex++;
+        }
+        positiveIndex++;
+        while (negativeIndex < n)
+        {
+            if (nums[negativeIndex] < 0)
+            {
+                result.push_back(nums[negativeIndex]);
+                break;
+            }
+            negativeIndex++;
+        }
+        negativeIndex++;
+    }
+    return result;
+}
+// -------------------
+vector<int> rearrangeArray3(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> result(n);
+    int index = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (nums[i] >= 0)
+        {
+            result[index] = nums[i];
+            index += 2;
+        }
+    }
+    index = 1;
+    for (int i = 0; i < n; i++)
+    {
+        if (nums[i] < 0)
+        {
+            result[index] = nums[i];
+            index += 2;
+        }
+    }
+    return result;
+}
+// ------------------
+vector<int> rearrangeArray4(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> result(n);
+    int positiveIndex = 0;
+    int negativeIndex = 1;
+    for (int index = 0; index < n; index++)
+    {
+        if (nums[index] >= 0)
+        {
+            result[positiveIndex] = nums[index];
+            positiveIndex += 2;
+        }
+        if (nums[index] < 0)
+        {
+            result[negativeIndex] = nums[index];
+            negativeIndex += 2;
+        }
+    }
+    return result;
+}
+// -------------------------------
+// When negatinge count and positive count are not equal
+vector<int> rearrangeArray5(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> result;
+    int positiveIndex = 0;
+    int negativeIndex = 0;
+    while (negativeIndex < n || positiveIndex < n)
+    {
+        while (positiveIndex < n && nums[positiveIndex] < 0)
+            positiveIndex++;
+        if (positiveIndex < n)
+            result.push_back(nums[positiveIndex]);
+        positiveIndex++;
+        while (negativeIndex < n && nums[negativeIndex] >= 0)
+            negativeIndex++;
+        if (negativeIndex < n)
+            result.push_back(nums[negativeIndex]);
+        negativeIndex++;
+    }
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr = {4, 3, 1, 5, 6};
-    cout << pairWithMaxSum2(arr) << endl;
+    // vector<int> nums = {3, 1, -2, -5, 2, -4};
+    vector<int> nums = {1, -4, 2, -5, 3, 6};
+    vector<int> result = rearrangeArray5(nums);
+    for (int item : result)
+        cout << item << "  ";
     cout << endl
          << string(30, '-');
 }
