@@ -1149,6 +1149,7 @@ void nextPermutation(vector<int> &nums)
     {
         // reverse the whole array:
         reverse(nums.begin(), nums.end());
+        return;
     }
     // Step 2: Find the next greater element
     // and swap it with arr[ind]:
@@ -1163,12 +1164,90 @@ void nextPermutation(vector<int> &nums)
     // Step 3: reverse the right half:
     reverse(nums.begin() + index + 1, nums.end());
 }
+// --------------------
+void nextPermutationPractice(vector<int> &nums)
+{
+    int n = nums.size();
+    int index = -1;
+    for (int i = n - 2; i >= 0; i--)
+    {
+        if (nums[i] < nums[i + 1])
+        {
+            index = i;
+            break;
+        }
+    }
+    if (index == -1)
+    {
+        reverse(nums.begin(), nums.end());
+        return;
+    }
+    for (int i = n - 1; i > index; i--)
+    {
+        if (nums[i] > nums[index])
+        {
+            swap(nums[i], nums[index]);
+            break;
+        }
+    }
+    reverse(nums.begin() + index + 1, nums.end());
+}
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     // vector<int> nums = {2, 1, 5, 4, 3, 0, 0};
+//     // vector<int> nums = {2, 3, 0, 0, 1, 4, 5};
+//     // vector<int> nums = {2, 3, 0, 0, 1, 5, 4};
+//     vector<int> nums = {2, 3, 0, 0, 4, 5, 1};
+//     // vector<int> nums = {1, 1, 5};
+//     nextPermutationPractice(nums);
+//     for (int item : nums)
+//         cout << item << "  ";
+//     cout << endl
+//          << string(30, '-');
+// }
+// -------------------------------------------------------------------- Array Leaders ------------------------------------------------------------------------
+vector<int> leaders(int n, int arr[])
+{
+    vector<int> result;
+    result.push_back(arr[n - 1]);
+    for (int i = n - 2; i >= 0; i--)
+    {
+        if (arr[i] >= result.back())
+        {
+            result.push_back(arr[i]);
+        }
+    }
+    reverse(result.begin(), result.end());
+    return result;
+}
+// ---------------
+vector<int> leader2(int n, int arr[])
+{
+    vector<int> result;
+    // Last element of an array is always a leader,
+    // push into ans array.
+    int max = arr[n - 1];
+    result.push_back(arr[n - 1]);
+    // Start checking from the end whether a number is greater
+    // than max no. from right, hence leader.
+    for (int i = n - 2; i >= 0; i--)
+    {
+        if (arr[i] > max)
+        {
+            result.push_back(arr[i]);
+            max = arr[i];
+        }
+    }
+    reverse(result.begin(), result.end());
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {2, 1, 5, 4, 3, 0, 0};
-    nextPermutation(nums);
-    for (int item : nums)
+    int arr[] = {16, 17, 4, 3, 5, 2};
+    vector<int> result = leader2(sizeof(arr) / sizeof(int), arr);
+    for (int item : result)
         cout << item << "  ";
     cout << endl
          << string(30, '-');
