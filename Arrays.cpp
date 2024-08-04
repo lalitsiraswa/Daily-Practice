@@ -1118,13 +1118,57 @@ vector<int> rearrangeArray5(vector<int> &nums)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     // vector<int> nums = {3, 1, -2, -5, 2, -4};
+//     vector<int> nums = {1, -4, 2, -5, 3, 6};
+//     vector<int> result = rearrangeArray5(nums);
+//     for (int item : result)
+//         cout << item << "  ";
+//     cout << endl
+//          << string(30, '-');
+// }
+// -------------------------------------------------------------------- 31. Next Permutation ------------------------------------------------------------------------
+void nextPermutation(vector<int> &nums)
+{
+    int n = nums.size(); // size of the array.
+    // Step 1: Find the break point:
+    int index = -1; // break point
+    for (int i = n - 2; i >= 0; i--)
+    {
+        if (nums[i] < nums[i + 1])
+        {
+            // index i is the break point
+            index = i;
+            break;
+        }
+    }
+    // If break point does not exist:
+    if (index == -1)
+    {
+        // reverse the whole array:
+        reverse(nums.begin(), nums.end());
+    }
+    // Step 2: Find the next greater element
+    // and swap it with arr[ind]:
+    for (int i = n - 1; i > index; i--)
+    {
+        if (nums[i] > nums[index])
+        {
+            swap(nums[i], nums[index]);
+            break;
+        }
+    }
+    // Step 3: reverse the right half:
+    reverse(nums.begin() + index + 1, nums.end());
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    // vector<int> nums = {3, 1, -2, -5, 2, -4};
-    vector<int> nums = {1, -4, 2, -5, 3, 6};
-    vector<int> result = rearrangeArray5(nums);
-    for (int item : result)
+    vector<int> nums = {2, 1, 5, 4, 3, 0, 0};
+    nextPermutation(nums);
+    for (int item : nums)
         cout << item << "  ";
     cout << endl
          << string(30, '-');
