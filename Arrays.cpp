@@ -1356,11 +1356,161 @@ int longestConsecutive4(vector<int> &nums)
     }
     return longest;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {8, 3, 5, 2, 1, 0, 3, 1, 0, 0, 2};
+//     cout << longestConsecutive4(nums) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// -------------------------------------------------------------------- 73. Set Matrix Zeroes ------------------------------------------------------------------------
+void setZeroes1(vector<vector<int>> &matrix)
+{
+    int m = matrix.size();
+    int n = matrix[0].size();
+    vector<int> rowValidate;
+    vector<int> columnValidate;
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            if (matrix[row][column] == 0)
+            {
+                for (int rw = 0; rw < m; rw++)
+                {
+                    if (matrix[rw][column] != 0)
+                        matrix[rw][column] = -1;
+                }
+                for (int col = 0; col < n; col++)
+                {
+                    if (matrix[row][col] != 0)
+                        matrix[row][col] = -1;
+                }
+            }
+        }
+    }
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            if (matrix[row][column] == -1)
+                matrix[row][column] = 0;
+        }
+    }
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            cout << matrix[row][column] << "  ";
+        }
+        cout << endl;
+    }
+}
+// -----------------------
+void setZeroes2(vector<vector<int>> &matrix)
+{
+    int m = matrix.size();
+    int n = matrix[0].size();
+    vector<int> rowValidate;
+    vector<int> columnValidate;
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            if (matrix[row][column] == 0)
+            {
+                rowValidate.push_back(row);
+                columnValidate.push_back(column);
+            }
+        }
+    }
+    for (int row : rowValidate)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            matrix[row][column] = 0;
+        }
+    }
+    for (int column : columnValidate)
+    {
+        for (int row = 0; row < m; row++)
+        {
+            matrix[row][column] = 0;
+        }
+    }
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            cout << matrix[row][column] << "  ";
+        }
+        cout << endl;
+    }
+}
+// --------------
+void setZeroes3(vector<vector<int>> &matrix)
+{
+    int rowCount = matrix.size();
+    int columnCount = matrix[0].size();
+    // int row[rowCount] = {0}; --> matrix[..][0]
+    // int col[columnCount] = {0}; --> matrix[0][..]
+    int col0 = 1;
+    // step: 1: Traverse the matrix amd
+    // mark 1st row & col accordingly:
+    for (int row = 0; row < rowCount; row++)
+    {
+        for (int column = 0; column < columnCount; column++)
+        {
+            if (matrix[row][column] == 0)
+            {
+                // mark i-th row
+                matrix[row][0] = 0;
+                // mark j-th column
+                if (column != 0)
+                    matrix[0][column] = 0;
+                else
+                    col0 = 0;
+            }
+        }
+    }
+
+    // Step 2: Mark with 0 from (1, 1) to (rowCount-1, columnCount-1):
+    for (int row = 1; row < rowCount; row++)
+    {
+        for (int column = 1; column < columnCount; column++)
+        {
+            if (matrix[row][column] != 0)
+            {
+                // check for row & column
+                if (matrix[row][0] == 0 || matrix[0][column] == 0)
+                    matrix[row][column] = 0;
+            }
+        }
+    }
+    // Step 3: Finally mark the 1st column and then 1st row:
+    if (matrix[0][0] == 0)
+    {
+        for (int column = 0; column < columnCount; column++)
+        {
+            matrix[0][column] = 0;
+        }
+    }
+    if (col0 == 0)
+    {
+        for (int row = 0; row < rowCount; row++)
+        {
+            matrix[row][0] = 0;
+        }
+    }
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {8, 3, 5, 2, 1, 0, 3, 1, 0, 0, 2};
-    cout << longestConsecutive4(nums) << endl;
+    // vector<vector<int>> matrix = {{0, 1, 2, 0}, {3, 4, 5, 2}, {1, 3, 1, 5}};
+    // vector<vector<int>> matrix = {{1, 1, 1}, {1, 0, 1}, {1, 1, 1}};
+    vector<vector<int>> matrix = {{1, 0, 3}};
+    setZeroes3(matrix);
     cout << endl
          << string(30, '-');
 }
