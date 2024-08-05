@@ -1242,13 +1242,125 @@ vector<int> leader2(int n, int arr[])
     reverse(result.begin(), result.end());
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     int arr[] = {16, 17, 4, 3, 5, 2};
+//     vector<int> result = leader2(sizeof(arr) / sizeof(int), arr);
+//     for (int item : result)
+//         cout << item << "  ";
+//     cout << endl
+//          << string(30, '-');
+// }
+// -------------------------------------------------------------------- 128. Longest Consecutive Sequence ------------------------------------------------------------------------
+// TLE
+int longestConsecutive(vector<int> &nums)
+{
+    int n = nums.size();
+    unordered_map<int, int> umap;
+    for (int item : nums)
+        umap[item] = 1;
+    int maxCount = 0;
+    for (int index = 0; index < n; index++)
+    {
+        int currentCount = 0;
+        int element = nums[index];
+        while (umap[element])
+        {
+            currentCount++;
+            element--;
+        }
+        maxCount = max(maxCount, currentCount);
+    }
+    return maxCount;
+}
+// ------------------
+int longestConsecutive2(vector<int> &nums)
+{
+    if (nums.size() == 0)
+        return 0;
+    sort(nums.begin(), nums.end());
+    int longestLength = INT_MIN;
+    int currentLongestLength = 1;
+    for (int i = 1; i < nums.size(); i++)
+    {
+        if (nums[i] == nums[i - 1])
+            continue;
+        else if (nums[i] == (nums[i - 1] + 1))
+            currentLongestLength++;
+        else
+        {
+            longestLength = max(longestLength, currentLongestLength);
+            currentLongestLength = 1;
+        }
+    }
+    longestLength = max(longestLength, currentLongestLength);
+    return longestLength;
+}
+// -------------------
+int longestConsecutive3(vector<int> &nums)
+{
+    int n = nums.size();
+    if (n == 0)
+        return 0;
+    int longest = 1;
+    unordered_set<int> st;
+    // put all the array elements into set:
+    for (int i = 0; i < n; i++)
+        st.insert(nums[i]);
+    // Find the longest sequence:
+    for (auto &item : st)
+    {
+        // if 'it' is a starting number:
+        if (st.find(item - 1) == st.end())
+        {
+            // find consecutive numbers:
+            int count = 1;
+            int x = item;
+            while (st.find(x + 1) != st.end())
+            {
+                x = x + 1;
+                count++;
+            }
+            longest = max(longest, count);
+        }
+    }
+    return longest;
+}
+// --------------------
+int longestConsecutive4(vector<int> &nums)
+{
+    if (nums.size() == 0)
+        return 0;
+    int longest = 1;
+    unordered_map<int, int> umap;
+    // put all the array elements into Map:
+    for (int item : nums)
+        umap[item] = 1;
+    // Find the longest sequence:
+    for (auto &item : umap)
+    {
+        int element = item.first;
+        // if 'it' is a starting number:
+        if (umap.count(element - 1) == 0)
+        {
+            // find consecutive numbers:
+            int currentCount = 1;
+            while (umap.count(element + 1))
+            {
+                currentCount++;
+                element++;
+            }
+            longest = max(longest, currentCount);
+        }
+    }
+    return longest;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    int arr[] = {16, 17, 4, 3, 5, 2};
-    vector<int> result = leader2(sizeof(arr) / sizeof(int), arr);
-    for (int item : result)
-        cout << item << "  ";
+    vector<int> nums = {8, 3, 5, 2, 1, 0, 3, 1, 0, 0, 2};
+    cout << longestConsecutive4(nums) << endl;
     cout << endl
          << string(30, '-');
 }
