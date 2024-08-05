@@ -1504,13 +1504,69 @@ void setZeroes3(vector<vector<int>> &matrix)
         }
     }
 }
+// ------------
+void setZeroesRevision(vector<vector<int>> &matrix)
+{
+    int m = matrix.size();
+    int n = matrix[0].size();
+    int col0 = 1;
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            if (matrix[row][column] == 0)
+            {
+                matrix[row][0] = 0;
+                if (column != 0)
+                    matrix[0][column] = 0;
+                else
+                    col0 = 0;
+            }
+        }
+    }
+    for (int row = 1; row < m; row++)
+    {
+        for (int column = 1; column < n; column++)
+        {
+            if (matrix[row][column] != 0)
+            {
+                if (matrix[row][0] == 0 || matrix[0][column] == 0)
+                {
+                    matrix[row][column] = 0;
+                }
+            }
+        }
+    }
+    if (matrix[0][0] == 0)
+    {
+        for (int row = 0; row < m; row++)
+        {
+            matrix[row][0] = 0;
+        }
+    }
+    if (col0 == 0)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            matrix[0][column] = 0;
+        }
+    }
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            cout << matrix[row][column] << "  ";
+        }
+        cout << endl;
+    }
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    // vector<vector<int>> matrix = {{0, 1, 2, 0}, {3, 4, 5, 2}, {1, 3, 1, 5}};
+    vector<vector<int>> matrix = {{0, 1, 2, 0}, {3, 4, 5, 2}, {1, 3, 1, 5}};
     // vector<vector<int>> matrix = {{1, 1, 1}, {1, 0, 1}, {1, 1, 1}};
-    vector<vector<int>> matrix = {{1, 0, 3}};
-    setZeroes3(matrix);
+    // vector<vector<int>> matrix = {{1, 0, 3}};
+    setZeroesRevision(matrix);
     cout << endl
          << string(30, '-');
 }
