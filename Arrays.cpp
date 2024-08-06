@@ -1560,13 +1560,51 @@ void setZeroesRevision(vector<vector<int>> &matrix)
         cout << endl;
     }
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<vector<int>> matrix = {{0, 1, 2, 0}, {3, 4, 5, 2}, {1, 3, 1, 5}};
+//     // vector<vector<int>> matrix = {{1, 1, 1}, {1, 0, 1}, {1, 1, 1}};
+//     // vector<vector<int>> matrix = {{1, 0, 3}};
+//     setZeroesRevision(matrix);
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- 48. Rotate Image ------------------------------------------------------------------------
+void rotate(vector<vector<int>> &matrix)
+{
+    int m = matrix.size();
+    int n = matrix[0].size();
+    for (int row = 1; row < m; row++)
+    {
+        for (int column = 0; column < row; column++)
+        {
+            swap(matrix[row][column], matrix[column][row]);
+        }
+    }
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n / 2; column++)
+        {
+            int temp = matrix[row][column];
+            matrix[row][column] = matrix[row][n - 1 - column];
+            matrix[row][n - 1 - column] = temp;
+        }
+    }
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            cout << matrix[row][column] << "  ";
+        }
+        cout << endl;
+    }
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<vector<int>> matrix = {{0, 1, 2, 0}, {3, 4, 5, 2}, {1, 3, 1, 5}};
-    // vector<vector<int>> matrix = {{1, 1, 1}, {1, 0, 1}, {1, 1, 1}};
-    // vector<vector<int>> matrix = {{1, 0, 3}};
-    setZeroesRevision(matrix);
+    vector<vector<int>> matrix = {{5, 1, 9, 11}, {2, 4, 8, 10}, {13, 3, 6, 7}, {15, 14, 12, 16}};
+    rotate(matrix);
     cout << endl
          << string(30, '-');
 }
