@@ -1600,11 +1600,54 @@ void rotate(vector<vector<int>> &matrix)
         cout << endl;
     }
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<vector<int>> matrix = {{5, 1, 9, 11}, {2, 4, 8, 10}, {13, 3, 6, 7}, {15, 14, 12, 16}};
+//     rotate(matrix);
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- 54. Spiral Matrix ------------------------------------------------------------------------
+vector<int> spiralOrder(vector<vector<int>> &matrix)
+{
+    int m = matrix.size();
+    int n = matrix[0].size();
+    int columnLeft = 0, columnRight = n - 1;
+    int rowTop = 0, rowBottom = m - 1;
+    vector<int> result;
+    while (1)
+    {
+        for (int column = columnLeft; column <= columnRight; column++)
+            result.push_back(matrix[rowTop][column]);
+        rowTop++;
+        if (rowTop > rowBottom)
+            break;
+        for (int row = rowTop; row <= rowBottom; row++)
+            result.push_back(matrix[row][columnRight]);
+        columnRight--;
+        if (columnLeft > columnRight)
+            break;
+        for (int column = columnRight; column >= columnLeft; column--)
+            result.push_back(matrix[rowBottom][column]);
+        rowBottom--;
+        if (rowTop > rowBottom)
+            break;
+        for (int row = rowBottom; row >= rowTop; row--)
+            result.push_back(matrix[row][columnLeft]);
+        columnLeft++;
+        if (columnLeft > columnRight)
+            break;
+    }
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<vector<int>> matrix = {{5, 1, 9, 11}, {2, 4, 8, 10}, {13, 3, 6, 7}, {15, 14, 12, 16}};
-    rotate(matrix);
+    vector<vector<int>> matrix = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
+    vector<int> result = spiralOrder(matrix);
+    for (int item : result)
+        cout << item << " ";
     cout << endl
          << string(30, '-');
 }
