@@ -1641,13 +1641,57 @@ vector<int> spiralOrder(vector<vector<int>> &matrix)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<vector<int>> matrix = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
+//     vector<int> result = spiralOrder(matrix);
+//     for (int item : result)
+//         cout << item << " ";
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- 560. Subarray Sum Equals K ------------------------------------------------------------------------
+int subarraySum(vector<int> &nums, int K)
+{
+    map<long long, int> preSumMap;
+    int sum = 0;
+    int subarrayCount = 0;
+    for (int index = 0; index < nums.size(); index++)
+    {
+        sum += nums[index];
+        if (sum == K)
+            subarrayCount++;
+        int remaining = sum - K;
+        if (preSumMap.find(remaining) != preSumMap.end())
+            subarrayCount += preSumMap[remaining];
+        preSumMap[sum] = preSumMap[sum] + 1;
+    }
+    return subarrayCount;
+}
+// --------------
+int subarraySum2(vector<int> &nums, int K)
+{
+    map<long long, int> preSumMap;
+    int sum = 0;
+    int subarrayCount = 0;
+    preSumMap[0] = 1;
+    for (int index = 0; index < nums.size(); index++)
+    {
+        sum += nums[index];
+        int remaining = sum - K;
+        if (preSumMap.find(remaining) != preSumMap.end())
+            subarrayCount += preSumMap[remaining];
+        preSumMap[sum] = preSumMap[sum] + 1;
+    }
+    return subarrayCount;
+}
+
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<vector<int>> matrix = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
-    vector<int> result = spiralOrder(matrix);
-    for (int item : result)
-        cout << item << " ";
+    vector<int> nums = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    cout << subarraySum2(nums, 0) << endl;
     cout << endl
          << string(30, '-');
 }
