@@ -1690,8 +1690,9 @@ int subarraySum2(vector<int> &nums, int K)
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    cout << subarraySum2(nums, 0) << endl;
+    // vector<int> nums = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    vector<int> nums = {1, 2, 3, -3, 1, 1, 1, 4, 2, -3};
+    cout << subarraySum2(nums, 3) << endl;
     cout << endl
          << string(30, '-');
 }
