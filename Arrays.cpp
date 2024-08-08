@@ -1772,18 +1772,147 @@ vector<vector<int>> generate(int numRows)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<vector<int>> result = generate(5);
+//     for (int row = 0; row < 5; row++)
+//     {
+//         for (int column = 0; column <= row; column++)
+//         {
+//             cout << result[row][column] << " ";
+//         }
+//         cout << endl;
+//     }
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- 229. Majority Element II ------------------------------------------------------------------------
+vector<int> majorityElement2(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> result;
+    set<int> st;
+    int majorityCount = n / 3;
+    for (int i = 0; i < n; i++)
+    {
+        int count = 1;
+        for (int j = i + 1; j < n; j++)
+        {
+            if (nums[i] == nums[j])
+            {
+                count++;
+            }
+        }
+        if (count > majorityCount)
+        {
+            st.insert(nums[i]);
+        }
+    }
+    result = {st.begin(), st.end()};
+    return result;
+}
+// -----------------------
+vector<int> majorityElement3(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> result;
+    unordered_map<int, int> frequencyCounter;
+    int majorityCount = n / 3;
+    for (int item : nums)
+        frequencyCounter[item]++;
+    unordered_map<int, int>::iterator itr;
+    for (itr = frequencyCounter.begin(); itr != frequencyCounter.end(); itr++)
+    {
+        if (itr->second > majorityCount)
+        {
+            result.push_back(itr->first);
+        }
+    }
+    return result;
+}
+// -----------------------------
+vector<int> majorityElement4(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> result;
+    unordered_map<int, int> frequencyCounter;
+    int majorityCount = n / 3;
+    for (int item : nums)
+    {
+        if (frequencyCounter[item] <= majorityCount)
+        {
+            frequencyCounter[item]++;
+            if (frequencyCounter[item] > majorityCount)
+            {
+                result.push_back(item);
+            }
+        }
+        if (result.size() == 2)
+        {
+            break;
+        }
+    }
+    return result;
+}
+// ---------------
+vector<int> majorityElementTUF(vector<int> &nums)
+{
+    int n = nums.size();        // size of the array
+    int count1 = 0, count2 = 0; // counts
+    int element1 = INT_MIN;     // element 1
+    int element2 = INT_MIN;     // element 2
+    // applying the Extended Boyer Moore's Voting Algorithm:
+    for (int i = 0; i < n; i++)
+    {
+        if (count1 == 0 && element2 != nums[i])
+        {
+            count1 = 1;
+            element1 = nums[i];
+        }
+        else if (count2 == 0 && element1 != nums[i])
+        {
+            count2 = 1;
+            element2 = nums[i];
+        }
+        else if (element1 == nums[i])
+            count1++;
+        else if (element2 == nums[i])
+            count2++;
+        else
+        {
+            count1--;
+            count2--;
+        }
+    }
+    vector<int> result; // list of answers
+    // Manually check if the stored elements in
+    // element1 and element2 are the majority elements:
+    count1 = 0, count2 = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (element1 == nums[i])
+            count1++;
+        if (element2 == nums[i])
+            count2++;
+    }
+    int majorityCount = n / 3 + 1;
+    if (count1 >= majorityCount)
+        result.push_back(element1);
+    if (count2 >= majorityCount)
+        result.push_back(element2);
+    // Uncomment the following line
+    // if it is told to sort the answer array:
+    // sort(ls.begin(), ls.end()); //TC --> O(2*log2) ~ O(1);
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<vector<int>> result = generate(5);
-    for (int row = 0; row < 5; row++)
-    {
-        for (int column = 0; column <= row; column++)
-        {
-            cout << result[row][column] << " ";
-        }
-        cout << endl;
-    }
+    vector<int> nums = {1, 2, 3};
+    vector<int> result = majorityElementTUF(nums);
+    for (auto item : result)
+        cout << item << " ";
     cout << endl
          << string(30, '-');
 }
