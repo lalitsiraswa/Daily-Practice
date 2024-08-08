@@ -1687,12 +1687,103 @@ int subarraySum2(vector<int> &nums, int K)
     return subarrayCount;
 }
 
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     // vector<int> nums = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+//     vector<int> nums = {1, 2, 3, -3, 1, 1, 1, 4, 2, -3};
+//     cout << subarraySum2(nums, 3) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- 118. Pascal's Triangle ------------------------------------------------------------------------
+// nCr=n!/r!(n-r)!
+int nCr(int n, int r)
+{
+    long long result = 1;
+    // calculating nCr:
+    for (int i = 0; i < r; i++)
+    {
+        result = result * (n - i);
+        result = result / (i + 1);
+    }
+    return result;
+}
+void pascaltriangle(int n)
+{
+    // printing the entire row m:
+    for (int c = 1; c <= n; c++)
+    {
+        cout << nCr(n - 1, c - 1) << " ";
+    }
+}
+// ----------------------
+void pascaltriangle2(int n)
+{
+    long long result = 1;
+    cout << result << " "; // printing 1st element
+    // printing the rest of the part:
+    for (int i = 1; i < n; i++)
+    {
+        result = result * (n - 1);
+        result = result / i;
+        cout << result << " ";
+    }
+}
+// -------------------------------------
+vector<int> generateRow(int row)
+{
+    long long result = 1;
+    vector<int> resultRow;
+    resultRow.push_back(1); // inserting the 1st element
+    // calculating the rest of the elements:
+    for (int column = 1; column < row; column++)
+    {
+        result = result * (row - column);
+        result = result / column;
+        resultRow.push_back(result);
+    }
+    return resultRow;
+}
+vector<vector<int>> generatePascalTrianle(int n)
+{
+    vector<vector<int>> result;
+    // store the entire pascal's triangle:
+    for (int row = 1; row <= n; row++)
+    {
+        result.push_back(generateRow(row));
+    }
+    return result;
+}
+// -------------------------------------
+vector<vector<int>> generate(int numRows)
+{
+    vector<vector<int>> result;
+    for (int row = 0; row < numRows; row++)
+    {
+        result.push_back({});
+        for (int column = 0; column <= row; column++)
+        {
+            if (column == 0 || column == row)
+                result.back().push_back(1);
+            else
+                result.back().push_back(result[row - 1][column - 1] + result[row - 1][column]);
+        }
+    }
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    // vector<int> nums = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    vector<int> nums = {1, 2, 3, -3, 1, 1, 1, 4, 2, -3};
-    cout << subarraySum2(nums, 3) << endl;
+    vector<vector<int>> result = generate(5);
+    for (int row = 0; row < 5; row++)
+    {
+        for (int column = 0; column <= row; column++)
+        {
+            cout << result[row][column] << " ";
+        }
+        cout << endl;
+    }
     cout << endl
          << string(30, '-');
 }
