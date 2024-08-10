@@ -2097,11 +2097,49 @@ int maxLenSubarray(vector<int> &arr, int n)
     }
     return maxLength;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {15, -2, 2, -8, 1, 7, 10, 23};
+//     cout << maxLenSubarray(arr, arr.size()) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------------------ 56. Merge Intervals ------------------------------------------------------------------------------------
+vector<vector<int>> merge(vector<vector<int>> &intervals)
+{
+    vector<vector<int>> mergeInterval;
+    sort(intervals.begin(), intervals.end());
+    vector<int> helper(intervals.at(0));
+    int index = 1;
+    for (index; index < intervals.size(); index++)
+    {
+        if (intervals.at(index)[0] <= helper[1])
+        {
+            helper[0] = min(intervals.at(index)[0], helper[0]);
+            helper[1] = max(intervals.at(index)[1], helper[1]);
+        }
+        else
+        {
+            mergeInterval.push_back(helper);
+            helper = intervals.at(index);
+        }
+    }
+    mergeInterval.push_back(helper);
+    return mergeInterval;
+}
+
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr = {15, -2, 2, -8, 1, 7, 10, 23};
-    cout << maxLenSubarray(arr, arr.size()) << endl;
+    vector<vector<int>> intervals = {{1, 3}, {2, 6}, {8, 10}, {15, 18}, {3, 9}};
+    // vector<vector<int>> intervals = {{1, 4}, {0, 0}};
+    vector<vector<int>> result = merge(intervals);
+    int n = result.size();
+    for (int i = 0; i < n; i++)
+    {
+        cout << "{" << result[i][0] << ", " << result[i][1] << "}" << endl;
+    }
     cout << endl
          << string(30, '-');
 }
