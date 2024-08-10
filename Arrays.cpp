@@ -1906,13 +1906,169 @@ vector<int> majorityElementTUF(vector<int> &nums)
     // sort(ls.begin(), ls.end()); //TC --> O(2*log2) ~ O(1);
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {1, 2, 3};
+//     vector<int> result = majorityElementTUF(nums);
+//     for (auto item : result)
+//         cout << item << " ";
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- 15. 3Sum ------------------------------------------------------------------------
+vector<vector<int>> threeSum1(vector<int> &nums)
+{
+    int n = nums.size();
+    if (n < 3)
+        return {{}};
+    unordered_map<int, int> numsTracker;
+    sort(nums.begin(), nums.end());
+    set<vector<int>> result;
+    for (int index = 0; index < n; index++)
+        numsTracker[nums[index]] = index;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            int requiredValue = -1 * (nums[i] + nums[j]);
+            if (numsTracker[requiredValue] > j)
+            {
+                result.insert({nums[i], nums[j], requiredValue});
+            }
+        }
+    }
+    return {result.begin(), result.end()};
+}
+// -----------------------
+vector<vector<int>> threeSum2(vector<int> &nums)
+{
+    sort(nums.begin(), nums.end()); // Sorted Array
+    if (nums.size() < 3)
+    { // Base Case 1
+        return {};
+    }
+    if (nums[0] > 0)
+    { // Base Case 2
+        return {};
+    }
+    unordered_map<int, int> hashMap;
+    for (int i = 0; i < nums.size(); ++i)
+    { // Hashing of Indices
+        hashMap[nums[i]] = i;
+    }
+    vector<vector<int>> answer;
+    for (int i = 0; i < nums.size() - 2; ++i)
+    { // Traversing the array to fix the number.
+        if (nums[i] > 0)
+        { // If number fixed is +ve, stop there because we can't make it zero by searching after it.
+            break;
+        }
+        for (int j = i + 1; j < nums.size() - 1; ++j)
+        {                                            // Fixing another number after first number
+            int required = -1 * (nums[i] + nums[j]); // To make sum 0, we would require the -ve sum of both fixed numbers.
+            if (hashMap.count(required) && hashMap.find(required)->second > j)
+            { // If it exists in hashmap and its last occurrence index > 2nd fixed index, we found our triplet.
+                answer.push_back({nums[i], nums[j], required});
+            }
+            j = hashMap.find(nums[j])->second; // Update j to last occurence of 2nd fixed number to avoid duplicate triplets.
+        }
+        i = hashMap.find(nums[i])->second; // Update i to last occurence of 1st fixed number to avoid duplicate triplets.
+    }
+    return answer; // Return answer vector.
+}
+// ------------- TLE ------------
+vector<vector<int>> threeSum3(vector<int> &nums)
+{
+    sort(nums.begin(), nums.end());
+    int n = nums.size();
+    if (nums.size() < 3)
+    {
+        return {};
+    }
+    if (nums[0] > 0)
+    {
+        return {};
+    }
+    set<vector<int>> answer;
+    for (int i = 0; i < n; i++)
+    {
+        unordered_map<int, int> hashMap;
+        for (int j = i + 1; j < n; j++)
+        {
+            int required = -1 * (nums[i] + nums[j]);
+            if (hashMap.count(required))
+            {
+                answer.insert({nums[i], nums[j], required});
+            }
+            hashMap[nums[j]] = j;
+        }
+    }
+    return {answer.begin(), answer.end()};
+}
+// ------------------------------
+vector<vector<int>> threeSum4(vector<int> &nums)
+{
+    sort(nums.begin(), nums.end()); // Sorted Array
+    if (nums.size() < 3)
+    { // Base case 1
+        return {};
+    }
+    if (nums[0] > 0)
+    { // Base case 2
+        return {};
+    }
+    vector<vector<int>> answer;
+    for (int i = 0; i < nums.size(); ++i)
+    { // Traversing the array to fix the number.
+        if (nums[i] > 0)
+        { // If number fixed is +ve, stop there because we can't make it zero by searching after it.
+            break;
+        }
+        if (i > 0 && nums[i] == nums[i - 1])
+        { // If number is getting repeated, ignore the lower loop and continue.
+            continue;
+        }
+        int low = i + 1, high = nums.size() - 1; // Make two pointers high and low, and initialize sum as 0.
+        int sum = 0;
+        while (low < high)
+        { // Search between two pointers, just similiar to binary search.
+            sum = nums[i] + nums[low] + nums[high];
+            if (sum > 0)
+            { // If sum is +ve, means, we need more -ve numbers to make it 0, decreament high (high--).
+                high--;
+            }
+            else if (sum < 0)
+            { // If sum is -ve, means, we need more +ve numbers to make it 0, increament low (low++).
+                low++;
+            }
+            else
+            {
+                answer.push_back({nums[i], nums[low], nums[high]});                   // we have found the required triplet, push it in answer vector
+                int last_low_occurence = nums[low], last_high_occurence = nums[high]; // Now again, to avoid duplicate triplets, we have to navigate to last occurences of num[low] and num[high] respectively
+                while (low < high && nums[low] == last_low_occurence)
+                { // Update the low and high with last occurences of low and high.
+                    low++;
+                }
+                while (low < high && nums[high] == last_high_occurence)
+                {
+                    high--;
+                }
+            }
+        }
+    }
+    return answer; // Return the answer vector.
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {1, 2, 3};
-    vector<int> result = majorityElementTUF(nums);
-    for (auto item : result)
-        cout << item << " ";
+    // vector<int> nums = {-1, 0, 1, 2, -1, -4};
+    vector<int> nums = {-2, -2, -2, -1, -1, -1, 0, 0, 0, 2, 2, 2, 2};
+    vector<vector<int>> result = threeSum4(nums);
+    for (int i = 0; i < result.size(); i++)
+    {
+        cout << "{" << result[i][0] << ", " << result[i][1] << ", " << result[i][2] << "}" << endl;
+    }
     cout << endl
          << string(30, '-');
 }
