@@ -1916,7 +1916,7 @@ vector<int> majorityElementTUF(vector<int> &nums)
 //     cout << endl
 //          << string(30, '-');
 // }
-// --------------------------------------------------------------------- 15. 3Sum ------------------------------------------------------------------------
+// ---------------------------------------------------------------------------- 15. 3Sum -------------------------------------------------------------------------------
 vector<vector<int>> threeSum1(vector<int> &nums)
 {
     int n = nums.size();
@@ -2059,16 +2059,49 @@ vector<vector<int>> threeSum4(vector<int> &nums)
     }
     return answer; // Return the answer vector.
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     // vector<int> nums = {-1, 0, 1, 2, -1, -4};
+//     vector<int> nums = {-2, -2, -2, -1, -1, -1, 0, 0, 0, 2, 2, 2, 2};
+//     vector<vector<int>> result = threeSum4(nums);
+//     for (int i = 0; i < result.size(); i++)
+//     {
+//         cout << "{" << result[i][0] << ", " << result[i][1] << ", " << result[i][2] << "}" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------------- Largest subarray with 0 sum -------------------------------------------------------------------------------
+int maxLenSubarray(vector<int> &arr, int n)
+{
+    map<int, int> preSumMap;
+    int maxLength = 0;
+    int sum = 0;
+    for (int i = 0; i < n; i++)
+    {
+        sum += arr[i];
+        if (sum == 0)
+        {
+            maxLength = max(maxLength, i + 1);
+        }
+        if (preSumMap.find(sum) != preSumMap.end())
+        {
+            int len = i - preSumMap[sum];
+            maxLength = max(maxLength, len);
+        }
+        if (preSumMap.find(sum) == preSumMap.end())
+        {
+            preSumMap[sum] = i;
+        }
+    }
+    return maxLength;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    // vector<int> nums = {-1, 0, 1, 2, -1, -4};
-    vector<int> nums = {-2, -2, -2, -1, -1, -1, 0, 0, 0, 2, 2, 2, 2};
-    vector<vector<int>> result = threeSum4(nums);
-    for (int i = 0; i < result.size(); i++)
-    {
-        cout << "{" << result[i][0] << ", " << result[i][1] << ", " << result[i][2] << "}" << endl;
-    }
+    vector<int> arr = {15, -2, 2, -8, 1, 7, 10, 23};
+    cout << maxLenSubarray(arr, arr.size()) << endl;
     cout << endl
          << string(30, '-');
 }
