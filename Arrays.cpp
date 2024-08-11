@@ -2129,17 +2129,55 @@ vector<vector<int>> merge(vector<vector<int>> &intervals)
     return mergeInterval;
 }
 
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<vector<int>> intervals = {{1, 3}, {2, 6}, {8, 10}, {15, 18}, {3, 9}};
+//     // vector<vector<int>> intervals = {{1, 4}, {0, 0}};
+//     vector<vector<int>> result = merge(intervals);
+//     int n = result.size();
+//     for (int i = 0; i < n; i++)
+//     {
+//         cout << "{" << result[i][0] << ", " << result[i][1] << "}" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------------------ 88. Merge Sorted Array ------------------------------------------------------------------------------------
+void mergeSortedArray(vector<int> &nums1, int m, vector<int> &nums2, int n)
+{
+    int index = (m + n) - 1;
+    int nums1Index = m - 1;
+    int nums2Index = n - 1;
+    while (nums1Index >= 0 && nums2Index >= 0)
+    {
+        if (nums1[nums1Index] >= nums2[nums2Index])
+        {
+            nums1[index] = nums1[nums1Index];
+            nums1Index--;
+        }
+        else
+        {
+            nums1[index] = nums2[nums2Index];
+            nums2Index--;
+        }
+        index--;
+    }
+    while (nums2Index >= 0)
+    {
+        nums1[index] = nums2[nums2Index];
+        nums2Index--;
+        index--;
+    }
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<vector<int>> intervals = {{1, 3}, {2, 6}, {8, 10}, {15, 18}, {3, 9}};
-    // vector<vector<int>> intervals = {{1, 4}, {0, 0}};
-    vector<vector<int>> result = merge(intervals);
-    int n = result.size();
-    for (int i = 0; i < n; i++)
-    {
-        cout << "{" << result[i][0] << ", " << result[i][1] << "}" << endl;
-    }
+    vector<int> nums1 = {1, 2, 3, 0, 0, 0};
+    vector<int> nums2 = {2, 5, 6};
+    mergeSortedArray(nums1, 3, nums2, 3);
+    for (int i = 0; i < nums1.size(); i++)
+        cout << nums1[i] << " ";
     cout << endl
          << string(30, '-');
 }
