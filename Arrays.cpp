@@ -2170,14 +2170,59 @@ void mergeSortedArray(vector<int> &nums1, int m, vector<int> &nums2, int n)
         index--;
     }
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums1 = {1, 2, 3, 0, 0, 0};
+//     vector<int> nums2 = {2, 5, 6};
+//     mergeSortedArray(nums1, 3, nums2, 3);
+//     for (int i = 0; i < nums1.size(); i++)
+//         cout << nums1[i] << " ";
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------------------ 152. Maximum Product Subarray ------------------------------------------------------------------------------------
+int maxProduct(vector<int> &nums)
+{
+    double prefixMaxProduct = 1, suffixMaxProduct = 1;
+    double result = INT_MIN;
+    int n = nums.size();
+    for (int index = 0; index < n; index++)
+    {
+        if (prefixMaxProduct == 0)
+            prefixMaxProduct = 1;
+        if (suffixMaxProduct == 0)
+            suffixMaxProduct = 1;
+        prefixMaxProduct = prefixMaxProduct * nums[index];
+        suffixMaxProduct = suffixMaxProduct * nums[n - index - 1];
+        result = max(result, max(prefixMaxProduct, suffixMaxProduct));
+    }
+    return result;
+}
+// -------------------------------------------
+int maxProduct2(vector<int> &nums)
+{
+    if (nums.empty())
+        return 0;
+    double maxSoFar = nums[0];
+    double minSoFar = nums[0];
+    double result = maxSoFar;
+    for (int index = 1; index < nums.size(); index++)
+    {
+        double current = nums[index];
+        double tempMaxSoFar = max(current, max(maxSoFar * current, minSoFar * current));
+        minSoFar = min(current, min(maxSoFar * current, minSoFar * current));
+        maxSoFar = tempMaxSoFar;
+        result = max(maxSoFar, result);
+    }
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums1 = {1, 2, 3, 0, 0, 0};
-    vector<int> nums2 = {2, 5, 6};
-    mergeSortedArray(nums1, 3, nums2, 3);
-    for (int i = 0; i < nums1.size(); i++)
-        cout << nums1[i] << " ";
+    // vector<int> nums = {2, 3, -2, 4};
+    vector<int> nums = {3, 2, -1, 4, -6, 3, -2, 6};
+    cout << maxProduct2(nums) << endl;
     cout << endl
          << string(30, '-');
 }
