@@ -2217,12 +2217,89 @@ int maxProduct2(vector<int> &nums)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     // vector<int> nums = {2, 3, -2, 4};
+//     vector<int> nums = {3, 2, -1, 4, -6, 3, -2, 6};
+//     cout << maxProduct2(nums) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------------------ 287. Find the Duplicate Number ------------------------------------------------------------------------------------
+int findDuplicate(vector<int> &nums)
+{
+    int n = nums.size();
+    int index = 0;
+    while (index < n)
+    {
+        int correct = nums[index] - 1;
+        if (nums[index] != nums[correct])
+        {
+            int temp = nums[index];
+            nums[index] = nums[correct];
+            nums[correct] = temp;
+        }
+        else
+        {
+            index++;
+        }
+    }
+    for (int index = 0; index < n; index++)
+    {
+        if (index != nums[index] - 1)
+        {
+            return nums[index];
+        }
+    }
+    return 0;
+}
+// -------------
+int findDuplicate2(vector<int> &nums)
+{
+    // Initialize the fast and slow pointers and make them point the first
+    //  element of the array
+    int fast = nums[0];
+    int slow = nums[0];
+    // PART 1: Traverse the array until an intersection point is found
+    while (true)
+    {
+        // Move the slow pointer using the nums[slow] flow
+        slow = nums[slow];
+        //  Move the fast pointer two times fast as the slow pointer using the
+        // nums[nums[fast]] flow
+        fast = nums[nums[fast]];
+        // Break the loop when slow pointer becomes equal to the fast pointer, i.e.,
+        /// if the intersection is found
+        if (slow == fast)
+        {
+            // if intersection point is found, break the loop
+            break;
+        }
+    }
+    // PART 2:
+    // Make the slow pointer point the starting position of an array again, i.e.,
+    // start the slow pointer from starting position
+    slow = nums[0];
+    // Traverse in the array until the slow pointer becomes equal to the
+    // fast pointer
+    while (slow != fast)
+    {
+        // Move the slow pointer using the nums[slow] flow
+        slow = nums[slow];
+        // Move the fast pointer slower than before, i.e., move the fast pointer
+        // using the nums[fast] flow
+        fast = nums[fast];
+    }
+    // return the fast pointer as it'll be pointing to the duplicate number in the array
+    return fast;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    // vector<int> nums = {2, 3, -2, 4};
-    vector<int> nums = {3, 2, -1, 4, -6, 3, -2, 6};
-    cout << maxProduct2(nums) << endl;
+    // vector<int> nums = {1, 3, 4, 2, 2};
+    vector<int> nums = {3, 1, 3, 4, 2};
+    cout << findDuplicate2(nums) << endl;
     cout << endl
          << string(30, '-');
 }
