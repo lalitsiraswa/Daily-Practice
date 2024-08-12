@@ -46,33 +46,3 @@ int main()
     cout << endl
          << string(30, '-');
 }
-bool searchMatrix(vector<vector<int>> &matrix, int target)
-{
-    int rowCount = matrix.size();
-    int columnCount = matrix[0].size();
-    int row = 0;
-    while (row < rowCount)
-    {
-        int minimum = matrix[row][0];
-        int maximum = matrix[row][columnCount - 1];
-        if (minimum <= target && maximum >= target)
-            break;
-        row++;
-    }
-    if (row == rowCount)
-        return false;
-    int left = 0;
-    int right = columnCount - 1;
-    while (left <= right)
-    {
-        int middle = (left + right) / 2;
-        int element = matrix[row][middle];
-        if (element == target)
-            return true;
-        else if (element < target)
-            left++;
-        else
-            right--;
-    }
-    return false;
-}
