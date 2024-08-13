@@ -49,28 +49,79 @@ int binarySearchRecursive(vector<int> &nums, int target)
 // ------------------------------------------------------------------------ Floor in a Sorted Array ------------------------------------------------------------------------------------
 int findFloor(vector<long long> &v, long long n, long long x)
 {
-    if (v[0] > x)
-        return -1;
-    int left = 0, right = n - 1;
-    int middle;
-    while (left <= right)
+    int low = 0, high = n - 1;
+    int floorIndex = -1;
+    while (low <= high)
     {
-        middle = left + (right - left) / 2;
+        int middle = low + (high - low) / 2;
         int element = v[middle];
-        if (element <= x && v[middle + 1] > x)
-            return middle;
-        else if (element < x)
-            left = middle + 1;
+        if (element <= x)
+        {
+            floorIndex = middle;
+            low = middle + 1;
+        }
         else
-            right = middle - 1;
+            high = middle - 1;
     }
-    return middle;
+    return floorIndex;
+}
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<long long> v = {1, 2, 8, 10, 11, 12, 19};
+//     cout << findFloor(v, v.size(), 5) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------------------ Ceil The Floor ------------------------------------------------------------------------------------
+vector<int> getFloorAndCeil(int x, vector<int> &arr)
+{
+    vector<int> result;
+    int n = arr.size();
+    sort(arr.begin(), arr.end());
+    // Find Floor
+    int floor = -1;
+    int low = 0, high = n - 1;
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        int element = arr[middle];
+        if (element <= x)
+        {
+            floor = element;
+            low = middle + 1;
+        }
+        else
+            high = middle - 1;
+    }
+    result.push_back(floor);
+    // Find Ceil
+    int ceil = -1;
+    low = 0, high = n - 1;
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        int element = arr[middle];
+        if (element >= x)
+        {
+            ceil = element;
+            high = middle - 1;
+        }
+        else
+            low = middle + 1;
+    }
+    result.push_back(ceil);
+    return result;
 }
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<long long> v = {1, 2, 8, 10, 11, 12, 19};
-    cout << findFloor(v, v.size(), 5) << endl;
-    cout << endl
-         << string(30, '-');
+    // vector<int> arr = {5, 6, 8, 9, 6, 5, 5, 6};
+    // vector<int> result = getFloorAndCeil(7, arr);
+    // vector<int> arr = {5, 6, 8, 8, 6, 5, 5, 6};
+    // vector<int> result = getFloorAndCeil(10, arr);
+    vector<int> arr = {94, 51, 22, 55, 94, 3, 78, 57, 15};
+    vector<int> result = getFloorAndCeil(94, arr);
+    cout << result[0] << ", " << result[1] << endl;
+    cout << string(30, '-');
 }
