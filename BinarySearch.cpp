@@ -37,12 +37,40 @@ int binarySearchRecursive(vector<int> &nums, int target)
     int left = 0, right = n - 1;
     return binarySearchHelper(nums, left, right, target);
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {-1, 0, 3, 5, 9, 12};
+//     // cout << binarySearch(nums, 9) << endl;
+//     cout << binarySearchRecursive(nums, 9) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------------------ Floor in a Sorted Array ------------------------------------------------------------------------------------
+int findFloor(vector<long long> &v, long long n, long long x)
+{
+    if (v[0] > x)
+        return -1;
+    int left = 0, right = n - 1;
+    int middle;
+    while (left <= right)
+    {
+        middle = left + (right - left) / 2;
+        int element = v[middle];
+        if (element <= x && v[middle + 1] > x)
+            return middle;
+        else if (element < x)
+            left = middle + 1;
+        else
+            right = middle - 1;
+    }
+    return middle;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {-1, 0, 3, 5, 9, 12};
-    // cout << binarySearch(nums, 9) << endl;
-    cout << binarySearchRecursive(nums, 9) << endl;
+    vector<long long> v = {1, 2, 8, 10, 11, 12, 19};
+    cout << findFloor(v, v.size(), 5) << endl;
     cout << endl
          << string(30, '-');
 }
