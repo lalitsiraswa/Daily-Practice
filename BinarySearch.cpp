@@ -113,15 +113,42 @@ vector<int> getFloorAndCeil(int x, vector<int> &arr)
     result.push_back(ceil);
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     // vector<int> arr = {5, 6, 8, 9, 6, 5, 5, 6};
+//     // vector<int> result = getFloorAndCeil(7, arr);
+//     // vector<int> arr = {5, 6, 8, 8, 6, 5, 5, 6};
+//     // vector<int> result = getFloorAndCeil(10, arr);
+//     vector<int> arr = {94, 51, 22, 55, 94, 3, 78, 57, 15};
+//     vector<int> result = getFloorAndCeil(94, arr);
+//     cout << result[0] << ", " << result[1] << endl;
+//     cout << string(30, '-');
+// }
+// ------------------------------------------------------------------------ 35. Search Insert Position ------------------------------------------------------------------------------------
+int searchInsert(vector<int> &nums, int target)
+{
+    int n = nums.size();
+    int low = 0, high = n - 1;
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        int element = nums[middle];
+        if (element == target)
+            return middle;
+        else if (element < target)
+            low = middle + 1;
+        else
+            high = middle - 1;
+    }
+    return low;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    // vector<int> arr = {5, 6, 8, 9, 6, 5, 5, 6};
-    // vector<int> result = getFloorAndCeil(7, arr);
-    // vector<int> arr = {5, 6, 8, 8, 6, 5, 5, 6};
-    // vector<int> result = getFloorAndCeil(10, arr);
-    vector<int> arr = {94, 51, 22, 55, 94, 3, 78, 57, 15};
-    vector<int> result = getFloorAndCeil(94, arr);
-    cout << result[0] << ", " << result[1] << endl;
-    cout << string(30, '-');
+    // vector<int> nums = {1, 3, 5, 6};
+    vector<int> nums = {5, 6, 7, 8, 9, 10};
+    cout << searchInsert(nums, 15) << endl;
+    cout << endl
+         << string(30, '-');
 }
