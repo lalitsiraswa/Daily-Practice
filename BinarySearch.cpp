@@ -240,11 +240,68 @@ int search(vector<int> &nums, int target)
     }
     return -1;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {4, 5, 6, 7, 0, 1, 2};
+//     cout << search(nums, 3) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------------ 81. Search in Rotated Sorted Array II ---------------------------------------------------------------------------
+bool searchInARotatedSortedArrayII(vector<int> &nums, int target)
+{
+    int n = nums.size(); // size of the array.
+    int low = 0, high = n - 1;
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        // if mid points the target
+        if (nums[middle] == target)
+            return true;
+        // Edge case:
+        if (nums[low] == nums[middle] && nums[middle] == nums[high])
+        {
+            low = low + 1;
+            high = high - 1;
+            continue;
+        }
+        // if left part is sorted:
+        if (nums[low] <= nums[middle])
+        {
+            if (nums[low] <= target && target <= nums[middle])
+            {
+                // element exists:
+                high = middle - 1;
+            }
+            else
+            {
+                // element does not exist:
+                low = middle + 1;
+            }
+        }
+        // if right part is sorted:
+        else
+        {
+            if (nums[middle] <= target && target <= nums[high])
+            {
+                // element exists:
+                low = middle + 1;
+            }
+            else
+            {
+                // element does not exist:
+                high = middle - 1;
+            }
+        }
+    }
+    return false;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {4, 5, 6, 7, 0, 1, 2};
-    cout << search(nums, 3) << endl;
+    vector<int> nums = {2, 5, 6, 0, 0, 1, 2};
+    cout << searchInARotatedSortedArrayII(nums, 0) << endl;
     cout << endl
          << string(30, '-');
 }
