@@ -143,12 +143,64 @@ int searchInsert(vector<int> &nums, int target)
     }
     return low;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     // vector<int> nums = {1, 3, 5, 6};
+//     vector<int> nums = {5, 6, 7, 8, 9, 10};
+//     cout << searchInsert(nums, 15) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ----------------------------------------------------- 34. Find First and Last Position of Element in Sorted Array -----------------------------------------------------------------
+vector<int> searchRange(vector<int> &nums, int target)
+{
+    int n = nums.size();
+    vector<int> result;
+    // Find first position
+    int firstIIndex = -1;
+    int low = 0, high = n - 1;
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        int element = nums[middle];
+        if (element == target)
+        {
+            firstIIndex = middle;
+            high = middle - 1;
+        }
+        else if (element < target)
+            low = middle + 1;
+        else
+            high = middle - 1;
+    }
+    result.push_back(firstIIndex);
+    // Find last position
+    int lastIndex = -1;
+    low = 0, high = n - 1;
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        int element = nums[middle];
+        if (element == target)
+        {
+            lastIndex = middle;
+            low = middle + 1;
+        }
+        else if (element < target)
+            low = middle + 1;
+        else
+            high = middle - 1;
+    }
+    result.push_back(lastIndex);
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    // vector<int> nums = {1, 3, 5, 6};
-    vector<int> nums = {5, 6, 7, 8, 9, 10};
-    cout << searchInsert(nums, 15) << endl;
+    vector<int> nums = {5, 7, 7, 8, 8, 10};
+    vector<int> result = searchRange(nums, 6);
+    cout << result[0] << ", " << result[1] << endl;
     cout << endl
          << string(30, '-');
 }
