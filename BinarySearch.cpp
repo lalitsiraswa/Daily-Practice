@@ -297,11 +297,53 @@ bool searchInARotatedSortedArrayII(vector<int> &nums, int target)
     }
     return false;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {2, 5, 6, 0, 0, 1, 2};
+//     cout << searchInARotatedSortedArrayII(nums, 0) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------- 153. Find Minimum in Rotated Sorted Array ---------------------------------------------------------------------------
+int findMin(vector<int> &nums)
+{
+    int low = 0, high = nums.size() - 1;
+    int minimum = INT_MAX;
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        // search space is already sorted
+        // then arr[low] will always be
+        // the minimum in that search space:
+        if (nums[low] <= nums[high])
+        {
+            minimum = min(minimum, nums[low]);
+            break;
+        }
+        // if left part is sorted:
+        if (nums[low] <= nums[mid])
+        {
+            // keep the minimum:
+            minimum = min(minimum, nums[low]);
+            // Eliminate left half:
+            low = mid + 1;
+        }
+        else
+        { // if right part is sorted:
+            // keep the minimum:
+            minimum = min(minimum, nums[mid]);
+            // Eliminate right half:
+            high = mid - 1;
+        }
+    }
+    return minimum;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {2, 5, 6, 0, 0, 1, 2};
-    cout << searchInARotatedSortedArrayII(nums, 0) << endl;
+    vector<int> nums = {4, 5, 6, 7, 0, 1, 2};
+    cout << findMin(nums) << endl;
     cout << endl
          << string(30, '-');
 }
