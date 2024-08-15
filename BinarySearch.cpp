@@ -471,13 +471,117 @@ int singleNonDuplicate2(vector<int> &nums)
     // dummy return statement:
     return -1;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     // vector<int> nums = {1, 1, 2, 3, 3, 4, 4, 8, 8};
+//     // vector<int> nums = {3, 3, 7, 7, 10, 11, 11};
+//     vector<int> nums = {1, 1, 2, 3, 3};
+//     cout << singleNonDuplicate2(nums) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------------------- 162. Find Peak Element ---------------------------------------------------------------------------
+int findPeakElement(vector<int> &nums)
+{
+    int n = nums.size();
+    int peakElementIndex = 0;
+    for (int i = 1; i < n; i++)
+    {
+        peakElementIndex = nums[i] > nums[peakElementIndex] ? i : peakElementIndex;
+    }
+    return peakElementIndex;
+}
+// --------- TWO POINTER ----------
+int findPeakElement2(vector<int> &nums)
+{
+    int n = nums.size();
+    int peakElementIndex = 0;
+    int low = 0, high = n - 1;
+    while (low <= high)
+    {
+        peakElementIndex = nums[low] > nums[peakElementIndex] ? low : peakElementIndex;
+        peakElementIndex = nums[high] > nums[peakElementIndex] ? high : peakElementIndex;
+        low++;
+        high--;
+    }
+    return peakElementIndex;
+}
+// -----------------------
+int findPeakElementTUF(vector<int> &nums)
+{
+    int n = nums.size(); // Size of array.
+    // Edge cases:
+    if (n == 1)
+        return 0;
+    int low = 0, high = n - 1;
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        // If arr[mid] is the peak:
+        if ((middle == 0 && nums[middle] > nums[middle + 1]) || (middle == n - 1 && nums[middle] > nums[n - 2]))
+            return middle;
+        if ((middle > 0 && nums[middle - 1] < nums[middle]) && (middle < n - 1 && nums[middle] > nums[middle + 1]))
+            return middle;
+        // If we are in the left:
+        else if (middle > 0 && nums[middle] > nums[middle - 1])
+            low = middle + 1;
+        // If we are in the right:
+        else if (middle < n - 1 && nums[middle] > nums[middle + 1])
+            high = middle - 1;
+        // We can move either left ot right
+        // nums[middle] is a common point:
+        else
+        {
+            low = middle + 1;
+            // high = middle - 1;
+        }
+    }
+    return -1;
+}
+// -----------------------
+int findPeakElementTUF2(vector<int> &nums)
+{
+    int n = nums.size(); // Size of array.
+    // Edge cases:
+    if (n == 1)
+        return 0;
+    if (nums[0] > nums[1])
+        return 0;
+    if (nums[n - 1] > nums[n - 2])
+        return n - 1;
+    int low = 1, high = n - 2;
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        // If arr[mid] is the peak:
+        if (nums[middle - 1] < nums[middle] && nums[middle] > nums[middle + 1])
+            return middle;
+        // If we are in the left:
+        else if (nums[middle] > nums[middle - 1])
+            low = middle + 1;
+        // If we are in the right:
+        else if (nums[middle] > nums[middle + 1])
+            high = middle - 1;
+        // We can move either left ot right
+        // nums[middle] is a common point:
+        else
+        {
+            low = middle + 1;
+            // high = middle - 1;
+        }
+    }
+    return -1;
+}
 int main()
 {
     cout << string(30, '-') << endl;
     // vector<int> nums = {1, 1, 2, 3, 3, 4, 4, 8, 8};
     // vector<int> nums = {3, 3, 7, 7, 10, 11, 11};
-    vector<int> nums = {1, 1, 2, 3, 3};
-    cout << singleNonDuplicate2(nums) << endl;
+    // vector<int> nums = {1, 2, 1, 3, 5, 6, 4};
+    // vector<int> nums = {2, 1};
+    vector<int> nums = {1, 2};
+    cout << findPeakElementTUF(nums) << endl;
     cout << endl
          << string(30, '-');
 }
