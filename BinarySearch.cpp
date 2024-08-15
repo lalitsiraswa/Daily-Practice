@@ -394,11 +394,90 @@ int findKRotation(vector<int> &arr)
     }
     return minimumIndex;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {6, 9, 2, 4};
+//     cout << findKRotation(nums) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------------------- 540. Single Element in a Sorted Array ---------------------------------------------------------------------------
+int singleNonDuplicate(vector<int> &nums)
+{
+    int n = nums.size();
+    if (n == 1)
+        return nums[0];
+    int low = 0, high = n - 1;
+    int singleElement;
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        singleElement = nums[middle];
+        // Even Index
+        if (middle % 2 == 0)
+        {
+            if (nums[middle + 1] == nums[middle])
+                low = middle + 1;
+            else if (middle > 0 && nums[middle - 1] != nums[middle])
+                break;
+            else
+                high = middle - 1;
+        }
+        // Odd Index
+        else
+        {
+            if (nums[middle - 1] == nums[middle])
+                low = middle + 1;
+            else if (middle < n - 1 && nums[middle + 1] != nums[middle])
+                break;
+            else
+                high = middle - 1;
+        }
+    }
+    return singleElement;
+}
+// -------------------
+int singleNonDuplicate2(vector<int> &nums)
+{
+    int n = nums.size(); // size of the array.
+    // Edge cases:
+    if (n == 1)
+        return nums[0];
+    if (nums[0] != nums[1])
+        return nums[0];
+    if (nums[n - 1] != nums[n - 2])
+        return nums[n - 1];
+    int low = 1, high = n - 2;
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        // if arr[mid] is the single element:
+        if (nums[middle] != nums[middle + 1] && nums[middle] != nums[middle - 1])
+            return nums[middle];
+        // we are in the left:
+        if ((middle % 2 != 0 && nums[middle] == nums[middle - 1]) || (middle % 2 == 0 && nums[middle] == nums[middle + 1]))
+        {
+            // eliminate the left half:
+            low = middle + 1;
+        }
+        // we are in the right:
+        else
+        {
+            // eliminate the right half:
+            high = middle - 1;
+        }
+    }
+    // dummy return statement:
+    return -1;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {6, 9, 2, 4};
-    cout << findKRotation(nums) << endl;
+    // vector<int> nums = {1, 1, 2, 3, 3, 4, 4, 8, 8};
+    // vector<int> nums = {3, 3, 7, 7, 10, 11, 11};
+    vector<int> nums = {1, 1, 2, 3, 3};
+    cout << singleNonDuplicate2(nums) << endl;
     cout << endl
          << string(30, '-');
 }
