@@ -339,11 +339,66 @@ int findMin(vector<int> &nums)
     }
     return minimum;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {4, 5, 6, 7, 0, 1, 2};
+//     cout << findMin(nums) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------------------- Find Kth Rotation ---------------------------------------------------------------------------
+int findKRotation(vector<int> &arr)
+{
+    int low = 0, high = arr.size() - 1;
+    int minimumIndex = 0;
+    int minimum = INT_MAX;
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        // search space is already sorted
+        // then arr[low] will always be
+        // the minimum in that search space:
+        if (arr[low] <= arr[high])
+        {
+            if (arr[low] <= minimum)
+            {
+                minimum = arr[low];
+                minimumIndex = low;
+            }
+            break;
+        }
+        // if left part is sorted:
+        if (arr[low] <= arr[mid])
+        {
+            // keep the minimum:
+            if (arr[low] <= minimum)
+            {
+                minimum = arr[low];
+                minimumIndex = low;
+            }
+            // Eliminate left half:
+            low = mid + 1;
+        }
+        else
+        { // if right part is sorted:
+            // keep the minimum:
+            if (arr[mid] <= minimum)
+            {
+                minimum = arr[mid];
+                minimumIndex = mid;
+            }
+            // Eliminate right half:
+            high = mid - 1;
+        }
+    }
+    return minimumIndex;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {4, 5, 6, 7, 0, 1, 2};
-    cout << findMin(nums) << endl;
+    vector<int> nums = {6, 9, 2, 4};
+    cout << findKRotation(nums) << endl;
     cout << endl
          << string(30, '-');
 }
