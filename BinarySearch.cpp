@@ -573,15 +573,56 @@ int findPeakElementTUF2(vector<int> &nums)
     }
     return -1;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     // vector<int> nums = {1, 1, 2, 3, 3, 4, 4, 8, 8};
+//     // vector<int> nums = {3, 3, 7, 7, 10, 11, 11};
+//     // vector<int> nums = {1, 2, 1, 3, 5, 6, 4};
+//     // vector<int> nums = {2, 1};
+//     vector<int> nums = {1, 2};
+//     cout << findPeakElementTUF(nums) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------------------- 69. Sqrt(x) Square root of a number ---------------------------------------------------------------------------
+long long int floorSqrt(long long int n)
+{
+    if (n == 0)
+        return 0;
+    long long int floor = 1;
+    for (long long int i = 1; i <= n; i++)
+    {
+        if (i * i > n)
+            break;
+        floor = i;
+    }
+    return floor;
+}
+// ---------------------------
+long long int floorSqrt2(long long int n)
+{
+    if (n == 0)
+        return 0;
+    int low = 1, high = n;
+    long long int floor;
+    while (low <= high)
+    {
+        long long int middle = low + (high - low) / 2;
+        if ((middle * middle) <= n)
+        {
+            floor = middle;
+            low = middle + 1;
+        }
+        else
+            high = middle - 1;
+    }
+    return floor;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    // vector<int> nums = {1, 1, 2, 3, 3, 4, 4, 8, 8};
-    // vector<int> nums = {3, 3, 7, 7, 10, 11, 11};
-    // vector<int> nums = {1, 2, 1, 3, 5, 6, 4};
-    // vector<int> nums = {2, 1};
-    vector<int> nums = {1, 2};
-    cout << findPeakElementTUF(nums) << endl;
+    cout << floorSqrt(5) << endl;
     cout << endl
          << string(30, '-');
 }
