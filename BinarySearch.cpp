@@ -674,12 +674,72 @@ int NthRoot2(int n, int m)
     }
     return root;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     // cout << NthRoot2(2, 9) << endl;
+//     // cout << NthRoot2(9, 1953125) << endl;
+//     cout << NthRoot2(4, 81) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ----------------------------------------------------- 1283. Find the Smallest Divisor Given a Threshold ---------------------------------------------------------------------------
+// ------------------ TLE -----------------------
+int smallestDivisor(vector<int> &nums, int threshold)
+{
+    int n = nums.size();
+    int maxElement = *max_element(nums.begin(), nums.end());
+    for (int divisor = 1; divisor <= maxElement; divisor++)
+    {
+        int totalSum = 0;
+        for (auto num : nums)
+        {
+            totalSum += ceil((double)(num) / (double)(divisor));
+            if (totalSum > threshold)
+                break;
+        }
+        if (totalSum <= threshold)
+        {
+            return divisor;
+        }
+    }
+    return -1;
+}
+// -----------------------------------------
+int smallestDivisor2(vector<int> &nums, int threshold)
+{
+    int n = nums.size();
+    if (n > threshold)
+        return -1;
+    int low = 1, high = *max_element(nums.begin(), nums.end());
+    int result = -1;
+    // Apply binary search:
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        int sum = 0;
+        for (int num : nums)
+        {
+            sum += ceil((double)(num) / (double)(middle));
+            if (sum > threshold)
+                break;
+        }
+        if (sum <= threshold)
+        {
+            result = middle;
+            high = middle - 1;
+        }
+        else
+            low = middle + 1;
+    }
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    // cout << NthRoot2(2, 9) << endl;
-    // cout << NthRoot2(9, 1953125) << endl;
-    cout << NthRoot2(4, 81) << endl;
+    // vector<int> nums = {1, 2, 5, 9};
+    vector<int> nums = {44, 22, 33, 11, 1};
+    cout << smallestDivisor2(nums, 5) << endl;
     cout << endl
          << string(30, '-');
 }
