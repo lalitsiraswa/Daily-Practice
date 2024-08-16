@@ -619,10 +619,67 @@ long long int floorSqrt2(long long int n)
     }
     return floor;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     cout << floorSqrt(5) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------------------- Find Nth root of M ---------------------------------------------------------------------------
+int NthRoot(int n, int m)
+{
+    int root = -1;
+    for (int i = 1; i <= m; i++)
+    {
+        int multiply = 1;
+        for (int j = 1; j <= n; j++)
+        {
+            multiply = multiply * i;
+        }
+        if (multiply > m)
+            break;
+        if (multiply == m)
+        {
+            root = i;
+            break;
+        }
+    }
+    return root;
+}
+// -------------------------
+int NthRoot2(int n, int m)
+{
+    int root = -1;
+    int low = 1, high = m;
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        long long int multiply = 1;
+        for (int j = 1; j <= n; j++)
+        {
+            multiply = multiply * middle;
+            if (multiply > m)
+                break;
+        }
+        if (multiply == m)
+        {
+            root = middle;
+            break;
+        }
+        if (multiply < m)
+            low = middle + 1;
+        else
+            high = middle - 1;
+    }
+    return root;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    cout << floorSqrt(5) << endl;
+    // cout << NthRoot2(2, 9) << endl;
+    // cout << NthRoot2(9, 1953125) << endl;
+    cout << NthRoot2(4, 81) << endl;
     cout << endl
          << string(30, '-');
 }
