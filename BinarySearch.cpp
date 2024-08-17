@@ -734,12 +734,80 @@ int smallestDivisor2(vector<int> &nums, int threshold)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     // vector<int> nums = {1, 2, 5, 9};
+//     vector<int> nums = {44, 22, 33, 11, 1};
+//     cout << smallestDivisor2(nums, 5) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// -------------------------------------------------------------- 1539. Kth Missing Positive Number ---------------------------------------------------------------------------
+int findKthPositive(vector<int> &arr, int k)
+{
+    int n = arr.size();
+    int missingCount = 0;
+    int currentPositiveInteger = 1;
+    int i = 0;
+    while (i < n)
+    {
+        if (arr[i] != currentPositiveInteger)
+            missingCount++;
+        else
+            i++;
+        if (missingCount == k)
+            return currentPositiveInteger;
+        currentPositiveInteger += 1;
+    }
+    return currentPositiveInteger + (k - missingCount - 1);
+}
+// ---------------------
+int findKthPositive2(vector<int> &arr, int k)
+{
+    int n = arr.size();
+    int missingCount = 0;
+    int currentPositiveInteger = 1;
+    for (int i = 0; i < n; i++)
+    {
+        if (currentPositiveInteger == arr[i])
+        {
+            currentPositiveInteger += 1;
+        }
+        else
+        {
+            missingCount += (arr[i] - currentPositiveInteger);
+            if (missingCount >= k)
+                return arr[i] - (missingCount - k) - 1;
+            currentPositiveInteger = arr[i] + 1;
+        }
+    }
+    return currentPositiveInteger + (k - missingCount) - 1;
+}
+// --------- TUF ----------
+int findKthPositive3(vector<int> &arr, int k)
+{
+    int n = arr.size();
+    int low = 0, high = n - 1;
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        int missing = arr[middle] - (middle + 1);
+        if (missing < k)
+            low = middle + 1;
+        else
+            high = middle - 1;
+    }
+    return k + high + 1;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    // vector<int> nums = {1, 2, 5, 9};
-    vector<int> nums = {44, 22, 33, 11, 1};
-    cout << smallestDivisor2(nums, 5) << endl;
+    // vector<int> nums = {2, 3, 4, 7, 11};
+    // vector<int> nums = {3, 10};
+    // vector<int> nums = {1, 2, 3, 4};
+    vector<int> nums = {5, 6, 7, 8, 9};
+    cout << findKthPositive3(nums, 9) << endl;
     cout << endl
          << string(30, '-');
 }
