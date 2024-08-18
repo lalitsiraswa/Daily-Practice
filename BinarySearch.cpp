@@ -938,12 +938,79 @@ int kthElement(int k, vector<int> &arr1, vector<int> &arr2)
     }
     return -1;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr1 = {2, 3, 6, 7, 9};
+//     vector<int> arr2 = {1, 4, 8, 10};
+//     cout << kthElement(5, arr1, arr2) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ---------------------------------------------------------------------- Row with max 1s ----------------------------------------------------------------------
+int rowWithMax1s(vector<vector<int>> &arr)
+{
+    int rowCount = arr.size();
+    int columnCount = arr[0].size();
+    int rowIndex = -1;
+    int previousRowSum = 0;
+    for (int row = 0; row < rowCount; row++)
+    {
+        int sum = 0;
+        for (int column = 0; column < columnCount; column++)
+            sum += arr[row][column];
+        if (sum > previousRowSum)
+        {
+            previousRowSum = sum;
+            rowIndex = row;
+        }
+    }
+    return rowIndex;
+}
+// ----------------------
+int findLowerBound(vector<int> nums)
+{
+    int n = nums.size();
+    int low = 0, high = n - 1;
+    int lowerBountIndex = nums.size();
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        if (nums[middle] >= 1)
+        {
+            lowerBountIndex = middle;
+            high = middle - 1;
+        }
+        else
+            low = middle + 1;
+    }
+    return lowerBountIndex;
+}
+int rowWithMax1s2(vector<vector<int>> &arr)
+{
+    int n = arr.size();
+    int m = arr[0].size();
+    int rowIndex = -1;
+    int previousRowSum = 0;
+    for (int index = 0; index < n; index++)
+    {
+        int sum = m - findLowerBound(arr[index]);
+        if (sum > previousRowSum)
+        {
+            previousRowSum = sum;
+            rowIndex = index;
+        }
+    }
+    return rowIndex;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr1 = {2, 3, 6, 7, 9};
-    vector<int> arr2 = {1, 4, 8, 10};
-    cout << kthElement(5, arr1, arr2) << endl;
+    vector<vector<int>> arr = {{0, 1, 1, 1},
+                               {0, 0, 1, 1},
+                               {1, 1, 1, 1},
+                               {0, 0, 0, 0}};
+    cout << rowWithMax1s2(arr) << endl;
     cout << endl
          << string(30, '-');
 }
