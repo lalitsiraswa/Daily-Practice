@@ -893,17 +893,18 @@ double findMedianSortedArrays2(vector<int> &nums1, vector<int> &nums2)
         return (double)ind2el;
     return (double)((double)(ind1el + ind2el)) / 2.0;
 }
-int main()
-{
-    cout << string(30, '-') << endl;
-    vector<int> nums1 = {2, 3, 6, 7, 9};
-    vector<int> nums2 = {1, 4, 8, 10};
-    // vector<int> nums1 = {1, 3};
-    // vector<int> nums2 = {2};
-    cout << findMedianSortedArrays2(nums1, nums2) << endl;
-    cout << endl
-         << string(30, '-');
-}
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums1 = {2, 3, 6, 7, 9};
+//     vector<int> nums2 = {1, 4, 8, 10};
+//     // vector<int> nums1 = {1, 3};
+//     // vector<int> nums2 = {2};
+//     cout << findMedianSortedArrays2(nums1, nums2) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+
 // ---------------------------------------------------------------------- K-th element of two Arrays ----------------------------------------------------------------------
 int kthElement(int k, vector<int> &arr1, vector<int> &arr2)
 {
@@ -937,12 +938,12 @@ int kthElement(int k, vector<int> &arr1, vector<int> &arr2)
     }
     return -1;
 }
-// int main()
-// {
-//     cout << string(30, '-') << endl;
-//     vector<int> arr1 = {2, 3, 6, 7, 9};
-//     vector<int> arr2 = {1, 4, 8, 10};
-//     cout << kthElement(5, arr1, arr2) << endl;
-//     cout << endl
-//          << string(30, '-');
-// }
+int main()
+{
+    cout << string(30, '-') << endl;
+    vector<int> arr1 = {2, 3, 6, 7, 9};
+    vector<int> arr2 = {1, 4, 8, 10};
+    cout << kthElement(5, arr1, arr2) << endl;
+    cout << endl
+         << string(30, '-');
+}
