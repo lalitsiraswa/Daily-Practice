@@ -800,14 +800,149 @@ int findKthPositive3(vector<int> &arr, int k)
     }
     return k + high + 1;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     // vector<int> nums = {2, 3, 4, 7, 11};
+//     // vector<int> nums = {3, 10};
+//     // vector<int> nums = {1, 2, 3, 4};
+//     vector<int> nums = {5, 6, 7, 8, 9};
+//     cout << findKthPositive3(nums, 9) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ---------------------------------------------------------------------- 4. Median of Two Sorted Arrays ----------------------------------------------------------------------
+// ---------- Trying something different then the quesion actually asked ----------
+double findMedianSortedArrays(vector<int> &nums1, vector<int> &nums2)
+{
+    int n = nums1.size();
+    int m = nums2.size();
+    int nums1index = 0;
+    while (nums1index < n)
+    {
+        int i = nums1index;
+        int nums2Index = 0;
+        while (i < n && nums2Index < m)
+        {
+            if (nums2[nums2Index] <= nums1[i])
+                swap(nums2[nums2Index], nums1[i]);
+            else
+                break;
+            i += 1;
+            nums2Index += 1;
+        }
+        nums1index += 1;
+    }
+    return 1;
+}
+// ---------------------------------
+double findMedianSortedArrays2(vector<int> &nums1, vector<int> &nums2)
+{
+    // size of two given arrays:
+    int n1 = nums1.size(), n2 = nums2.size();
+    int n = n1 + n2; // total size
+    // required indices:
+    int ind2 = n / 2;
+    int ind1 = ind2 - 1;
+    int cnt = 0;
+    int ind1el = -1, ind2el = -1;
+    // apply the merge step:
+    int i = 0, j = 0;
+    while (i < n1 && j < n2)
+    {
+        if (nums1[i] < nums2[j])
+        {
+            if (cnt == ind1)
+                ind1el = nums1[i];
+            if (cnt == ind2)
+                ind2el = nums1[i];
+            cnt++;
+            i++;
+        }
+        else
+        {
+            if (cnt == ind1)
+                ind1el = nums2[j];
+            if (cnt == ind2)
+                ind2el = nums2[j];
+            cnt++;
+            j++;
+        }
+    }
+    // copy the left-out elements:
+    while (i < n1)
+    {
+        if (cnt == ind1)
+            ind1el = nums1[i];
+        if (cnt == ind2)
+            ind2el = nums1[i];
+        cnt++;
+        i++;
+    }
+    while (j < n2)
+    {
+        if (cnt == ind1)
+            ind1el = nums2[j];
+        if (cnt == ind2)
+            ind2el = nums2[j];
+        cnt++;
+        j++;
+    }
+    // Find the median:
+    if (n % 2 == 1)
+        return (double)ind2el;
+    return (double)((double)(ind1el + ind2el)) / 2.0;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    // vector<int> nums = {2, 3, 4, 7, 11};
-    // vector<int> nums = {3, 10};
-    // vector<int> nums = {1, 2, 3, 4};
-    vector<int> nums = {5, 6, 7, 8, 9};
-    cout << findKthPositive3(nums, 9) << endl;
+    vector<int> nums1 = {2, 3, 6, 7, 9};
+    vector<int> nums2 = {1, 4, 8, 10};
+    // vector<int> nums1 = {1, 3};
+    // vector<int> nums2 = {2};
+    cout << findMedianSortedArrays2(nums1, nums2) << endl;
     cout << endl
          << string(30, '-');
 }
+// ---------------------------------------------------------------------- K-th element of two Arrays ----------------------------------------------------------------------
+int kthElement(int k, vector<int> &arr1, vector<int> &arr2)
+{
+    int n = arr1.size(), m = arr2.size();
+    int arr1Index = 0, arr2Index = 0;
+    int elementCounter = 0;
+    while (arr1Index < n && arr2Index < m)
+    {
+        elementCounter += 1;
+        // Always think in term's of base Case: like 0, 1 etc.
+        if (elementCounter == k)
+            return min(arr1[arr1Index], arr2[arr2Index]);
+        if (arr1[arr1Index] < arr2[arr2Index])
+            arr1Index += 1;
+        else
+            arr2Index += 1;
+    }
+    while (arr1Index < n)
+    {
+        elementCounter += 1;
+        if (elementCounter == k)
+            return arr1[arr1Index];
+        arr1Index += 1;
+    }
+    while (arr2Index < m)
+    {
+        elementCounter += 1;
+        if (elementCounter == k)
+            return arr2[arr2Index];
+        arr2Index += 1;
+    }
+    return -1;
+}
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr1 = {2, 3, 6, 7, 9};
+//     vector<int> arr2 = {1, 4, 8, 10};
+//     cout << kthElement(5, arr1, arr2) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
