@@ -1064,12 +1064,72 @@ bool searchMatrix2(vector<vector<int>> &matrix, int target)
     }
     return false;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<vector<int>> matrix = {{1, 3, 5, 7}, {10, 11, 16, 20}, {23, 30, 34, 60}};
+//     // vector<vector<int>> matrix = {{1}, {3}};
+//     cout << searchMatrix2(matrix, 30) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ---------------------------------------------------------------------- 240. Search a 2D Matrix II ----------------------------------------------------------------------
+bool binarySearchRowWise(vector<vector<int>> &matrix, int row, int target)
+{
+    int m = matrix[0].size();
+    int low = 0, high = m - 1;
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        if (matrix[row][middle] == target)
+            return true;
+        if (matrix[row][middle] < target)
+            low = middle + 1;
+        else
+            high = middle - 1;
+    }
+    return false;
+}
+bool searchMatrix_2(vector<vector<int>> &matrix, int target)
+{
+    int n = matrix.size();
+    int m = matrix[0].size();
+    // Check rows
+    for (int row = 0; row < n; row++)
+    {
+        int minElement = matrix[row][0];
+        int maxElement = matrix[row][m - 1];
+        if (minElement <= target && target <= maxElement)
+        {
+            if (binarySearchRowWise(matrix, row, target))
+                return true;
+        }
+    }
+    return false;
+}
+// ------------------------
+bool searchMatrix_2_TUF(vector<vector<int>> &matrix, int target)
+{
+    int n = matrix.size();
+    int m = matrix[0].size();
+    int row = 0, column = m - 1;
+    // traverse the matrix from (0, m-1):
+    while (row < n && column >= 0)
+    {
+        if (matrix[row][column] == target)
+            return true;
+        if (matrix[row][column] < target)
+            row += 1;
+        else
+            column -= 1;
+    }
+    return false;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<vector<int>> matrix = {{1, 3, 5, 7}, {10, 11, 16, 20}, {23, 30, 34, 60}};
-    // vector<vector<int>> matrix = {{1}, {3}};
-    cout << searchMatrix2(matrix, 30) << endl;
+    vector<vector<int>> matrix = {{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}};
+    cout << searchMatrix_2_TUF(matrix, 5) << endl;
     cout << endl
          << string(30, '-');
 }
