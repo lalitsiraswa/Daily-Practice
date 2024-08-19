@@ -1003,14 +1003,73 @@ int rowWithMax1s2(vector<vector<int>> &arr)
     }
     return rowIndex;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<vector<int>> arr = {{0, 1, 1, 1},
+//                                {0, 0, 1, 1},
+//                                {1, 1, 1, 1},
+//                                {0, 0, 0, 0}};
+//     cout << rowWithMax1s2(arr) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ---------------------------------------------------------------------- 74. Search a 2D Matrix ----------------------------------------------------------------------
+bool searchMatrix(vector<vector<int>> &matrix, int target)
+{
+    int n = matrix.size();
+    int m = matrix[0].size();
+    int row = 0;
+    while (row < n)
+    {
+        int minElement = matrix[row][0];
+        int maxElement = matrix[row][m - 1];
+        if (minElement <= target && target <= maxElement)
+            break;
+        row += 1;
+    }
+    if (row == n)
+        return false;
+    int low = 0, high = m - 1;
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        if (matrix[row][middle] == target)
+            return true;
+        if (matrix[row][middle] < target)
+            low = middle + 1;
+        else
+            high = middle - 1;
+    }
+    return false;
+}
+// -----------------------------
+bool searchMatrix2(vector<vector<int>> &matrix, int target)
+{
+    int n = matrix.size();
+    int m = matrix[0].size();
+    // apply binary search:
+    int low = 0, high = n * m - 1;
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        int row = middle / m;
+        int column = middle % m;
+        if (matrix[row][column] == target)
+            return true;
+        if (matrix[row][column] < target)
+            low = middle + 1;
+        else
+            high = middle - 1;
+    }
+    return false;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<vector<int>> arr = {{0, 1, 1, 1},
-                               {0, 0, 1, 1},
-                               {1, 1, 1, 1},
-                               {0, 0, 0, 0}};
-    cout << rowWithMax1s2(arr) << endl;
+    vector<vector<int>> matrix = {{1, 3, 5, 7}, {10, 11, 16, 20}, {23, 30, 34, 60}};
+    // vector<vector<int>> matrix = {{1}, {3}};
+    cout << searchMatrix2(matrix, 30) << endl;
     cout << endl
          << string(30, '-');
 }
