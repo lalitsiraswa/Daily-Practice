@@ -163,11 +163,39 @@ string longestCommonPrefix(vector<string> &strs)
     }
     return longestCommonPrefix;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<string> strs = {"flower", "flow", "flight"};
+//     cout << longestCommonPrefix(strs) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 14. Longest Common Prefix ----------------------------------------------------------------------
+bool isIsomorphic(string s, string t)
+{
+    if (s.size() != t.size())
+        return false;
+    unordered_map<char, int> sFrequency;
+    unordered_map<char, int> tFrequency;
+    for (char ch : s)
+        sFrequency[ch]++;
+    for (char ch : t)
+        tFrequency[ch]++;
+    for (int index = 0; index < s.size(); index++)
+    {
+        if (sFrequency[s[index]] != tFrequency[t[index]])
+            return false;
+    }
+    return true;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<string> strs = {"flower", "flow", "flight"};
-    cout << longestCommonPrefix(strs) << endl;
+    string s = "paper";
+    string t = "title";
+    cout << isIsomorphic(s, t) << endl;
     cout << endl
          << string(35, '-');
     return 0;
