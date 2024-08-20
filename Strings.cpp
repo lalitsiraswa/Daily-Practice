@@ -132,13 +132,42 @@ string largestOddNumber(string num)
     int low = 0;
     return num.substr(0, high + 1);
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // string num = "52";
+//     // string num = "4206";
+//     string num = "35427";
+//     cout << largestOddNumber(num) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 14. Longest Common Prefix ----------------------------------------------------------------------
+string longestCommonPrefix(vector<string> &strs)
+{
+    string longestCommonPrefix;
+    for (int i = 0; i < strs[0].size(); i++)
+    {
+        for (int j = 1; j < strs.size(); j++)
+        {
+            if (strs[j].size() - 1 >= i)
+            {
+                if (strs[j][i] != strs[0][i])
+                    return longestCommonPrefix;
+            }
+            else
+                return longestCommonPrefix;
+        }
+        longestCommonPrefix.push_back(strs[0][i]);
+    }
+    return longestCommonPrefix;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    // string num = "52";
-    // string num = "4206";
-    string num = "35427";
-    cout << largestOddNumber(num) << endl;
+    vector<string> strs = {"flower", "flow", "flight"};
+    cout << longestCommonPrefix(strs) << endl;
     cout << endl
          << string(35, '-');
     return 0;
