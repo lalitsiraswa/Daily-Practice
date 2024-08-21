@@ -177,16 +177,52 @@ bool isIsomorphic(string s, string t)
 {
     if (s.size() != t.size())
         return false;
-    unordered_map<char, int> sFrequency;
-    unordered_map<char, int> tFrequency;
-    for (char ch : s)
-        sFrequency[ch]++;
-    for (char ch : t)
-        tFrequency[ch]++;
-    for (int index = 0; index < s.size(); index++)
+    unordered_map<char, vector<int>> sTracker;
+    unordered_map<char, vector<int>> tTracker;
+    for (int i = 0; i < s.size(); i++)
     {
-        if (sFrequency[s[index]] != tFrequency[t[index]])
+        sTracker[s[i]].push_back(i);
+        tTracker[t[i]].push_back(i);
+    }
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (sTracker[s[i]] != tTracker[t[i]])
             return false;
+    }
+    return true;
+}
+// -----------------------------------
+bool isIsomorphic2(string s, string t)
+{
+    if (s.size() != t.size())
+        return false;
+    // Check for the last index;
+    unordered_map<char, int> sLastindexTracker;
+    unordered_map<char, int> tLastindexTracker;
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (sLastindexTracker[s[i]] != tLastindexTracker[t[i]])
+            return false;
+        sLastindexTracker[s[i]] = i + 1;
+        tLastindexTracker[t[i]] = i + 1;
+    }
+    return true;
+}
+// ------------------------------------
+bool isIsomorphic3(string s, string t)
+{
+    if (s.size() != t.size())
+        return false;
+    unordered_map<char, int> sTracker;
+    unordered_map<char, int> tTracker;
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (sTracker[s[i]] && sTracker[s[i]] != t[i])
+            return false;
+        if (tTracker[t[i]] && tTracker[t[i]] != s[i])
+            return false;
+        sTracker[s[i]] = t[i];
+        tTracker[t[i]] = s[i];
     }
     return true;
 }
@@ -195,7 +231,11 @@ int main()
     cout << string(35, '-') << endl;
     string s = "paper";
     string t = "title";
-    cout << isIsomorphic(s, t) << endl;
+    // string s = "bbbaaaba";
+    // string t = "aaabbbba";
+    // string s = "badc";
+    // string t = "baba";
+    cout << isIsomorphic3(s, t) << endl;
     cout << endl
          << string(35, '-');
     return 0;
