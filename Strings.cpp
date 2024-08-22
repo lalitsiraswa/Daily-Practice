@@ -278,14 +278,76 @@ bool rotateString2(string s, string goal)
     }
     return false;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string s = "abcde";
+//     string goal = "cdeab";
+//     // string s = "abcde";
+//     // string goal = "abced";
+//     cout << rotateString2(s, goal) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 242. Valid Anagram ----------------------------------------------------------------------
+bool isAnagram(string s, string t)
+{
+    if (s.size() != t.size())
+        return false;
+    unordered_map<char, int> sFrequency;
+    for (char ch : s)
+        sFrequency[ch]++;
+    for (char ch : t)
+    {
+        if (!sFrequency[ch])
+            return false;
+        sFrequency[ch]--;
+    }
+    return true;
+}
+// ------------------
+bool isAnagram2(string s, string t)
+{
+    if (s.size() != t.size())
+        return false;
+    int sFrequency[26] = {0};
+    for (char ch : s)
+        sFrequency[ch - 'a']++;
+    for (char ch : t)
+    {
+        if (!sFrequency[ch - 'a'])
+            return false;
+        sFrequency[ch - 'a']--;
+    }
+    return true;
+}
+// ------------------
+bool isAnagram3(string s, string t)
+{
+    if (s.size() != t.size())
+        return false;
+    int characterCounter[26] = {0};
+    for (int i = 0; i < s.size(); i++)
+    {
+        characterCounter[s[i] - 'a']++;
+        characterCounter[t[i] - 'a']--;
+    }
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (characterCounter[s[i] - 'a'] != 0)
+            return false;
+    }
+    return true;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    string s = "abcde";
-    string goal = "cdeab";
-    // string s = "abcde";
-    // string goal = "abced";
-    cout << rotateString2(s, goal) << endl;
+    // string s = "anagram";
+    // string t = "nagaram";
+    string s = "ab";
+    string t = "a";
+    cout << isAnagram2(s, t) << endl;
     cout << endl
          << string(35, '-');
     return 0;
