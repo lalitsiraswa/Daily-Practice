@@ -226,16 +226,66 @@ bool isIsomorphic3(string s, string t)
     }
     return true;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string s = "paper";
+//     string t = "title";
+//     // string s = "bbbaaaba";
+//     // string t = "aaabbbba";
+//     // string s = "badc";
+//     // string t = "baba";
+//     cout << isIsomorphic3(s, t) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 796. Rotate String ----------------------------------------------------------------------
+bool rotateString(string s, string goal)
+{
+    if (s.size() != goal.size())
+        return false;
+    int n = s.size();
+    for (int index = 0; index < n; index++)
+    {
+        if (goal[index] == s[0])
+        {
+            int sIndex = 0;
+            int goalIndex = index;
+            while (sIndex < n)
+            {
+                if (s[sIndex] != goal[goalIndex % n])
+                    break;
+                sIndex++;
+                goalIndex++;
+            }
+            if (sIndex == n)
+                return true;
+        }
+    }
+    return false;
+}
+// ---------------------
+bool rotateString2(string s, string goal)
+{
+    if (s.size() != goal.size())
+        return false;
+    for (int index = 0; index < s.size(); index++)
+    {
+        if (s == goal)
+            return true;
+        s = s.substr(1) + s[0];
+    }
+    return false;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    string s = "paper";
-    string t = "title";
-    // string s = "bbbaaaba";
-    // string t = "aaabbbba";
-    // string s = "badc";
-    // string t = "baba";
-    cout << isIsomorphic3(s, t) << endl;
+    string s = "abcde";
+    string goal = "cdeab";
+    // string s = "abcde";
+    // string goal = "abced";
+    cout << rotateString2(s, goal) << endl;
     cout << endl
          << string(35, '-');
     return 0;
