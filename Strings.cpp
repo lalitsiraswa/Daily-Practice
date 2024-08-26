@@ -433,7 +433,7 @@ string frequencySort3(string str)
 //          << string(35, '-');
 //     return 0;
 // }
-// ----------------------------------------------------------- 1614. Maximum Nesting Depth of the Parentheses ----------------------------------------------------------------------
+// --------------------------------------------------------------- 1614. Maximum Nesting Depth of the Parentheses ----------------------------------------------------------------------
 int maxDepth(string s)
 {
     int maximumDepth = 0;
@@ -467,11 +467,58 @@ int maxDepth2(string s)
     }
     return maximumDepth;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string s = "(1+(2*3)+((8)/4))+1";
+//     cout << maxDepth2(s) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 13. Roman to Integer ----------------------------------------------------------------------------
+int romanToInt(string s)
+{
+    unordered_map<char, int> mapper;
+    mapper['I'] = 1;
+    mapper['V'] = 5;
+    mapper['X'] = 10;
+    mapper['L'] = 50;
+    mapper['C'] = 100;
+    mapper['D'] = 500;
+    mapper['M'] = 1000;
+    int n = s.size();
+    int index = 0;
+    int result = 0;
+    while (index < n)
+    {
+        if (index + 1 < n)
+        {
+            if (s[index] == 'I' && (s[index + 1] == 'V' || s[index] + 1 == 'X'))
+            {
+                result = result * 10 + (mapper[s[index + 1]] - mapper[s[index]]);
+            }
+            else if (s[index] == 'X' && (s[index + 1] == 'L' || s[index] + 1 == 'C'))
+            {
+                result = result * 10 + (mapper[s[index + 1]] - mapper[s[index]]);
+            }
+            else if (s[index] == 'C' && (s[index + 1] == 'D' || s[index] + 1 == 'M'))
+            {
+                result = result * 10 + (mapper[s[index + 1]] - mapper[s[index]]);
+            }
+        }
+        else
+        {
+            result = result * 10 + mapper[s[index]];
+        }
+    }
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    string s = "(1+(2*3)+((8)/4))+1";
-    cout << maxDepth2(s) << endl;
+    string s = "MCMXCIV";
+    cout << romanToInt(s) << endl;
     cout << endl
          << string(35, '-');
     return 0;
