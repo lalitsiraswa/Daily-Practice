@@ -340,14 +340,95 @@ bool isAnagram3(string s, string t)
     }
     return true;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // string s = "anagram";
+//     // string t = "nagaram";
+//     string s = "ab";
+//     string t = "a";
+//     cout << isAnagram2(s, t) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------- 451. Sort Characters By Frequency ----------------------------------------------------------------------
+class CustomMapComparator
+{
+public:
+    bool operator()(pair<char, int> &p1, pair<char, int> &p2)
+    {
+        return p1.second > p2.second;
+    }
+};
+bool customMapperComparator(pair<char, int> &p1, pair<char, int> &p2)
+{
+    return p1.second > p2.second;
+}
+string frequencySort(string s)
+{
+    unordered_map<char, int> mapper;
+    for (char &ch : s)
+        mapper[ch]++;
+    vector<pair<char, int>> mapperVect(mapper.begin(), mapper.end());
+    sort(mapperVect.begin(), mapperVect.end(), CustomMapComparator());
+    string result;
+    for (auto &item : mapperVect)
+        result += string(item.second, item.first);
+    return result;
+}
+// ----------------- Counter & Bucket Sort ---------------------
+string frequencySort2(string s)
+{
+    int n = s.size();
+    unordered_map<char, int> mapper;
+    for (char &ch : s)
+        mapper[ch] += 1;
+    // Since freq values are in range [0...n], so we can use Bucket Sort to achieve O(N) in Time Complexity
+    vector<vector<char>> bucket(n + 1);
+    for (auto item : mapper)
+        bucket[item.second].push_back(item.first);
+    string result;
+    for (int frequency = n; frequency >= 1; frequency--)
+    {
+        for (char &ch : bucket[frequency])
+            result.append(frequency, ch);
+    }
+    return result;
+}
+// -------------------------------
+class MaxCharFrequencyComperator
+{
+public:
+    bool operator()(const pair<char, int> &p1, const pair<char, int> &p2)
+    {
+        return p1.second <= p1.second;
+    }
+};
+string frequencySort3(string str)
+{
+    int n = str.size();
+    unordered_map<char, int> umap;
+    string result;
+    for (int index = 0; index < n; index++)
+    {
+        umap[str.at(index)]++;
+    }
+    priority_queue<pair<char, int>, vector<pair<char, int>>, MaxCharFrequencyComperator> pq(umap.begin(), umap.end());
+    while (!pq.empty())
+    {
+        pair<char, int> topElement = pq.top();
+        pq.pop();
+        result.append(string(topElement.second, topElement.first));
+    }
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    // string s = "anagram";
-    // string t = "nagaram";
-    string s = "ab";
-    string t = "a";
-    cout << isAnagram2(s, t) << endl;
+    // string s = "tree";
+    string s = "Aabb";
+    cout << frequencySort3(s) << endl;
     cout << endl
          << string(35, '-');
     return 0;
