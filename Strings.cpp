@@ -423,12 +423,55 @@ string frequencySort3(string str)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // string s = "tree";
+//     string s = "Aabb";
+//     cout << frequencySort3(s) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ----------------------------------------------------------- 1614. Maximum Nesting Depth of the Parentheses ----------------------------------------------------------------------
+int maxDepth(string s)
+{
+    int maximumDepth = 0;
+    int openBracketCount = 0, closeBracketCount = 0;
+    for (char &ch : s)
+    {
+        if (ch == '(')
+        {
+            openBracketCount += 1;
+            maximumDepth = max(maximumDepth, openBracketCount - closeBracketCount);
+        }
+        if (ch == ')')
+        {
+            closeBracketCount += 1;
+        }
+    }
+    return maximumDepth;
+}
+// -----------------
+int maxDepth2(string s)
+{
+    int maximumDepth = 0;
+    int openBracketCount = 0;
+    for (char &ch : s)
+    {
+        if (ch == '(')
+            openBracketCount += 1;
+        if (ch == ')')
+            openBracketCount -= 1;
+        maximumDepth = max(maximumDepth, openBracketCount);
+    }
+    return maximumDepth;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    // string s = "tree";
-    string s = "Aabb";
-    cout << frequencySort3(s) << endl;
+    string s = "(1+(2*3)+((8)/4))+1";
+    cout << maxDepth2(s) << endl;
     cout << endl
          << string(35, '-');
     return 0;
