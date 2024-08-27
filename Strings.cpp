@@ -492,33 +492,90 @@ int romanToInt(string s)
     int result = 0;
     while (index < n)
     {
-        if (index + 1 < n)
+        if (index + 1 < n && s[index] == 'I' && (s[index + 1] == 'V' || s[index + 1] == 'X'))
         {
-            if (s[index] == 'I' && (s[index + 1] == 'V' || s[index] + 1 == 'X'))
-            {
-                result = result * 10 + (mapper[s[index + 1]] - mapper[s[index]]);
-            }
-            else if (s[index] == 'X' && (s[index + 1] == 'L' || s[index] + 1 == 'C'))
-            {
-                result = result * 10 + (mapper[s[index + 1]] - mapper[s[index]]);
-            }
-            else if (s[index] == 'C' && (s[index + 1] == 'D' || s[index] + 1 == 'M'))
-            {
-                result = result * 10 + (mapper[s[index + 1]] - mapper[s[index]]);
-            }
+            result += (mapper[s[index + 1]] - mapper[s[index]]);
+            index += 1;
+        }
+        else if (index + 1 < n && s[index] == 'X' && (s[index + 1] == 'L' || s[index + 1] == 'C'))
+        {
+            result += (mapper[s[index + 1]] - mapper[s[index]]);
+            index += 1;
+        }
+        else if (index + 1 < n && s[index] == 'C' && (s[index + 1] == 'D' || s[index + 1] == 'M'))
+        {
+            result += (mapper[s[index + 1]] - mapper[s[index]]);
+            index += 1;
         }
         else
         {
-            result = result * 10 + mapper[s[index]];
+            result += mapper[s[index]];
         }
+        index += 1;
     }
     return result;
+}
+// -----------------------------------
+int romanToInt2(string s)
+{
+    int roman2Int[26] = {0};
+    roman2Int['I' - 65] = 1;
+    roman2Int['V' - 65] = 5;
+    roman2Int['X' - 65] = 10;
+    roman2Int['L' - 65] = 50;
+    roman2Int['C' - 65] = 100;
+    roman2Int['D' - 65] = 500;
+    roman2Int['M' - 65] = 1000;
+    int result = 0;
+    for (int i = 0; i < s.size(); i++)
+    {
+        // Roman numerals are usually written largest to smallest from left to right.
+        if ((i + 1) < s.size() && roman2Int[s[i] - 65] < roman2Int[s[i + 1] - 65])
+        {
+            result += roman2Int[s[i + 1] - 65] - roman2Int[s[i] - 65];
+            i += 1;
+        }
+        else
+            result += roman2Int[s[i] - 65];
+    }
+    return result;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string s = "MCMXCIV";
+//     cout << romanToInt2(s) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 8. String to Integer (atoi) ----------------------------------------------------------------------------
+int myAtoi(string s)
+{
+    int n = s.size();
+    double num = 0;
+    int i = 0;
+    while (s[i] == ' ')
+        i++;
+    bool positive = s[i] == '+';
+    bool negative = s[i] == '-';
+    positive == true ? i++ : i;
+    negative == true ? i++ : i;
+    while (i < n && s[i] >= '0' && s[i] <= '9')
+    {
+        num = (num * 10) + (s[i] - '0');
+        i++;
+    }
+    num = negative ? -num : num;
+    num = (num > INT_MAX) ? INT_MAX : num;
+    num = (num < INT_MIN) ? INT_MIN : num;
+    return int(num);
 }
 int main()
 {
     cout << string(35, '-') << endl;
-    string s = "MCMXCIV";
-    cout << romanToInt(s) << endl;
+    string s = "0-1";
+    cout << myAtoi(s) << endl;
     cout << endl
          << string(35, '-');
     return 0;
