@@ -640,7 +640,7 @@ long long int substrCount2(string s, int k)
     // return the count of subarrays with exactly k distinct elements minus the count of subarrays with less than k distinct elements
     return subArray(s, k) - subArray(s, k - 1);
 }
-// -----------------------
+// ----------- Correct One ------------
 int countSubstring(string &s, int k)
 {
     int low = 0;
