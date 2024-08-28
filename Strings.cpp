@@ -571,11 +571,119 @@ int myAtoi(string s)
     num = (num < INT_MIN) ? INT_MIN : num;
     return int(num);
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string s = "0-1";
+//     cout << myAtoi(s) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- Count number of substrings ----------------------------------------------------------------------------
+// ---------- TLE ------------
+long long int substrCount(string s, int k)
+{
+    unordered_set<char> st;
+    long long int subStrCount = 0;
+    int n = s.size();
+    for (int i = 0; i < n; i++)
+    {
+        st.clear();
+        string subString;
+        for (int j = i; j < n; j++)
+        {
+            subString += s[j];
+            st.insert(s[j]);
+            if (st.size() == k)
+                subStrCount++;
+            else if (st.size() > k)
+                break;
+        }
+    }
+    return subStrCount;
+}
+// ------------ TLE ---------------
+int subArray(string &s, int k)
+{
+    int n = s.size();
+    // create an unordered map to store the count of each character in the current subarray
+    unordered_map<char, int> map;
+    // initialize variables for count of valid subarrays, start and end index of subarray
+    int count = 0, start = 0, end = 0;
+    // loop through the array from the start to end index
+    while (end < n)
+    {
+        // add the current element to the map and increment its count
+        map[s[end]]++;
+        // if the number of distinct elements in the map is greater than k, move the start index and remove elements from the map
+        while (map.size() > k)
+        {
+            // decrement the count of the element at the start index
+            map[s[start]]--;
+            // if the count of the element at the start index becomes 0, remove it from the map
+            if (map[s[start]] == 0)
+                map.erase(s[start]);
+            // increment the start index to move the window
+            start++;
+        }
+        // add the count of valid subarrays for the current subarray to the total count
+        count += end - start + 1;
+        // increment the end index to move the window
+        end++;
+    }
+    // return the total count of valid subarrays
+    return count;
+}
+long long int substrCount2(string s, int k)
+{
+    // return the count of subarrays with exactly k distinct elements minus the count of subarrays with less than k distinct elements
+    return subArray(s, k) - subArray(s, k - 1);
+}
+// -----------------------
+int countSubstring(string &s, int k)
+{
+    int low = 0;
+    int high = 0;
+    int n = s.size();
+    // Array to store the frequency of characters
+    int charFreq[26] = {0};
+    // Variable to keep track of distinct characters
+    int dist_count = 0;
+    // Variable to store the final count
+    long ans = 0;
+    while (high < n)
+    {
+        charFreq[s[high] - 'a']++;
+        // If the character becomes distinct, increment the distinct count
+        if (charFreq[s[high] - 'a'] == 1)
+            dist_count++;
+        // Decreasing the window size to maintain at most k distinct characters
+        while (dist_count > k)
+        {
+            charFreq[s[low] - 'a']--;
+            // If the frequency becomes 0, decrement the distinct count
+            if (charFreq[s[low] - 'a'] == 0)
+                dist_count--;
+            // Move the window's starting point to the right
+            low++;
+        }
+        // Update the count by adding the current window size
+        ans += (high - low) + 1;
+        // Move the window's ending point to the right
+        high++;
+    }
+    return ans;
+}
+long long int substrCount3(string s, int k)
+{
+    return countSubstring(s, k) - countSubstring(s, k - 1);
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    string s = "0-1";
-    cout << myAtoi(s) << endl;
+    string s = "abaaca";
+    cout << substrCount3(s, 1) << endl;
     cout << endl
          << string(35, '-');
     return 0;
