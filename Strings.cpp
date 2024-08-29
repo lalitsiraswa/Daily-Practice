@@ -745,12 +745,44 @@ int countSubstringsWithExactlyKDistinctChars(string str, int k)
     return countAtMostK - countAtMostKMinus1;
 }
 
+// int main()
+// {
+//     // Example usage
+//     string inputString = "aacfssa";
+//     int k = 3;
+//     int result = countSubstringsWithExactlyKDistinctChars(inputString, k);
+//     cout << "The number of substrings with exactly " << k << " distinct characters is: " << result << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------------- 1781. Sum of Beauty of All Substrings ----------------------------------------------------------------------------
+int beautySum(string s)
+{
+    int n = s.size();
+    int totalBeautySum = 0;
+    for (int i = 0; i < n; i++)
+    {
+        unordered_map<char, int> charFrequency;
+        for (int j = i; j < n; j++)
+        {
+            charFrequency[s[j]]++;
+            int mostFrequent = INT_MIN;
+            int leastFrequent = INT_MAX;
+            for (auto item : charFrequency)
+            {
+                mostFrequent = max(mostFrequent, item.second);
+                leastFrequent = min(leastFrequent, item.second);
+            }
+            totalBeautySum += mostFrequent - leastFrequent;
+        }
+    }
+    return totalBeautySum;
+}
 int main()
 {
-    // Example usage
-    string inputString = "aacfssa";
-    int k = 3;
-    int result = countSubstringsWithExactlyKDistinctChars(inputString, k);
-    cout << "The number of substrings with exactly " << k << " distinct characters is: " << result << endl;
+    cout << string(35, '-') << endl;
+    string s = "aabcbaa";
+    cout << beautySum(s) << endl;
+    cout << endl
+         << string(35, '-');
     return 0;
 }
