@@ -690,27 +690,32 @@ long long int substrCount3(string s, int k)
 // }
 // ------------------------------
 // Function to count the number of substrings with at most k distinct characters
-int countSubstringsWithAtMostKDistinctChars(string &s, int k) {
+int countSubstringsWithAtMostKDistinctChars(string &s, int k)
+{
     int left = 0, right = 0, n = s.size(), distinctCount = 0, substringCount = 0;
 
     // Vector to store the frequency of characters in the current substring
     vector<int> charFrequency(26, 0);
 
-    while (right < n) {
+    while (right < n)
+    {
         int charIndex = s[right] - 'a';
         charFrequency[charIndex]++;
 
         // If the frequency becomes 1, it means a new distinct character is added
-        if (charFrequency[charIndex] == 1) {
+        if (charFrequency[charIndex] == 1)
+        {
             distinctCount++;
         }
 
         // While the number of distinct characters exceeds k, move the left pointer
-        while (distinctCount > k) {
+        while (distinctCount > k)
+        {
             charFrequency[s[left] - 'a']--;
 
             // If the frequency becomes 0, it means a distinct character is removed
-            if (charFrequency[s[left] - 'a'] == 0) {
+            if (charFrequency[s[left] - 'a'] == 0)
+            {
                 distinctCount--;
             }
 
@@ -728,7 +733,8 @@ int countSubstringsWithAtMostKDistinctChars(string &s, int k) {
 }
 
 // Function to count the number of substrings with exactly k distinct characters
-int countSubstringsWithExactlyKDistinctChars(string str, int k) {
+int countSubstringsWithExactlyKDistinctChars(string str, int k)
+{
     // Count substrings with at most k distinct characters
     int countAtMostK = countSubstringsWithAtMostKDistinctChars(str, k);
 
@@ -739,7 +745,8 @@ int countSubstringsWithExactlyKDistinctChars(string str, int k) {
     return countAtMostK - countAtMostKMinus1;
 }
 
-int main() {
+int main()
+{
     // Example usage
     string inputString = "aacfssa";
     int k = 3;
