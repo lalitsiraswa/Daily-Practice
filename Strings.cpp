@@ -777,11 +777,80 @@ int beautySum(string s)
     }
     return totalBeautySum;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string s = "aabcbaa";
+//     cout << beautySum(s) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// --------------------------------------------------------------------- 151. Reverse Words in a String ----------------------------------------------------------------------------
+string reverseWordsInString(string s)
+{
+    int low = 0;
+    int high = s.size() - 1;
+    while (s[low] == ' ')
+        low++;
+    while (s[high] == ' ')
+        high--;
+    string result;
+    string subString;
+    for (low; low <= high; low++)
+    {
+        if (s[low] != ' ')
+            subString += s[low];
+        else if (!subString.empty())
+        {
+            if (result.empty())
+                result = subString;
+            else
+                result = subString + " " + result;
+            subString.clear();
+        }
+    }
+    if (result.empty())
+        result = subString;
+    else
+        result = subString + " " + result;
+    return result;
+}
+//----------------------------------------------
+string reverseWords2(string s)
+{
+    int n = s.size();
+    string result;
+    string subString;
+    int low = 0, high = n - 1;
+    // Trim spaces from left and right end
+    while (s[low] == ' ' || s[high] == ' ')
+    {
+        if (s[low] == ' ')
+            low += 1;
+        if (s[high] == ' ')
+            high -= 1;
+    }
+    for (int index = low; index <= high; index++)
+    {
+        if (s[index] != ' ')
+            subString.push_back(s[index]);
+        else if (!subString.empty())
+        {
+            result = " " + subString + result;
+            subString = "";
+        }
+    }
+    result = subString + result;
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    string s = "aabcbaa";
-    cout << beautySum(s) << endl;
+    // string s = "  hello world  ";
+    // string s = "the sky is blue";
+    string s = "EPY2giL";
+    cout << reverseWordsInString(s) << endl;
     cout << endl
          << string(35, '-');
     return 0;
