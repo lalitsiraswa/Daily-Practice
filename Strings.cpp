@@ -679,12 +679,71 @@ long long int substrCount3(string s, int k)
 {
     return countSubstring(s, k) - countSubstring(s, k - 1);
 }
-int main()
-{
-    cout << string(35, '-') << endl;
-    string s = "abaaca";
-    cout << substrCount3(s, 1) << endl;
-    cout << endl
-         << string(35, '-');
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string s = "abaaca";
+//     cout << substrCount3(s, 1) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------------------------
+// Function to count the number of substrings with at most k distinct characters
+int countSubstringsWithAtMostKDistinctChars(string &s, int k) {
+    int left = 0, right = 0, n = s.size(), distinctCount = 0, substringCount = 0;
+
+    // Vector to store the frequency of characters in the current substring
+    vector<int> charFrequency(26, 0);
+
+    while (right < n) {
+        int charIndex = s[right] - 'a';
+        charFrequency[charIndex]++;
+
+        // If the frequency becomes 1, it means a new distinct character is added
+        if (charFrequency[charIndex] == 1) {
+            distinctCount++;
+        }
+
+        // While the number of distinct characters exceeds k, move the left pointer
+        while (distinctCount > k) {
+            charFrequency[s[left] - 'a']--;
+
+            // If the frequency becomes 0, it means a distinct character is removed
+            if (charFrequency[s[left] - 'a'] == 0) {
+                distinctCount--;
+            }
+
+            left++;
+        }
+
+        // Add the count of substrings with at most k distinct characters
+        substringCount += (right - left + 1);
+
+        // Move the right pointer to expand the window
+        right++;
+    }
+
+    return substringCount;
+}
+
+// Function to count the number of substrings with exactly k distinct characters
+int countSubstringsWithExactlyKDistinctChars(string str, int k) {
+    // Count substrings with at most k distinct characters
+    int countAtMostK = countSubstringsWithAtMostKDistinctChars(str, k);
+
+    // Count substrings with at most (k-1) distinct characters
+    int countAtMostKMinus1 = countSubstringsWithAtMostKDistinctChars(str, k - 1);
+
+    // The difference gives the count of substrings with exactly k distinct characters
+    return countAtMostK - countAtMostKMinus1;
+}
+
+int main() {
+    // Example usage
+    string inputString = "aacfssa";
+    int k = 3;
+    int result = countSubstringsWithExactlyKDistinctChars(inputString, k);
+    cout << "The number of substrings with exactly " << k << " distinct characters is: " << result << endl;
     return 0;
 }
