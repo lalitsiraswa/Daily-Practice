@@ -55,3 +55,33 @@ bool searchInLinkedList(Node<int> *head, int target)
 //          << string(30, '-') << endl;
 //     return 0;
 // }
+// ------------------------------------------------------------------ Linked List Insertion At End --------------------------------------------------------------------
+Node<int> *insertAtEnd(Node<int> *head, int x)
+{
+    if (head == nullptr)
+    {
+        head = new Node<int>(x);
+        return head;
+    }
+    Node<int> *temp = head;
+    while (temp->next != nullptr)
+    {
+        temp = temp->next;
+    }
+    temp->next = new Node<int>(x);
+    return head;
+}
+int main()
+{
+    cout << string(30, '-') << endl;
+    Node<int> *head = nullptr;
+    head = insertAtEnd(head, 2);
+    head = insertAtEnd(head, 4);
+    head = insertAtEnd(head, 6);
+    head = insertAtEnd(head, 8);
+    head = insertAtEnd(head, 10);
+    printLinkedList(head);
+    cout << endl
+         << string(30, '-') << endl;
+    return 0;
+}
