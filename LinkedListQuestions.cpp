@@ -149,6 +149,32 @@ Node<int> *removeKthNodeFromLL(Node<int> *head, int k)
     }
     return head;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     Node<int> *head = nullptr;
+//     head = insertAtEnd(head, 2);
+//     head = insertAtEnd(head, 4);
+//     head = insertAtEnd(head, 6);
+//     head = insertAtEnd(head, 8);
+//     head = insertAtEnd(head, 10);
+//     head = insertAtEnd(head, 12);
+//     printLinkedList(head);
+//     head = removeKthNodeFromLL(head, 2);
+//     printLinkedList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------ 237. Delete Node in a Linked List --------------------------------------------------------------------
+void deleteNode(Node<int> *node)
+{
+    Node<int> *temp = node->next;
+    node->data = temp->data;
+    node->next = temp->next;
+    temp = NULL;
+    delete temp;
+}
 int main()
 {
     cout << string(30, '-') << endl;
@@ -160,7 +186,7 @@ int main()
     head = insertAtEnd(head, 10);
     head = insertAtEnd(head, 12);
     printLinkedList(head);
-    head = removeKthNodeFromLL(head, 2);
+    deleteNode(head->next->next->next);
     printLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
