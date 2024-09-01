@@ -1,1 +1,1 @@
- == "" ? "" : minWindowString;
+ut << endl;

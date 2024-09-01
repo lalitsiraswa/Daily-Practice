@@ -31,6 +31,7 @@ void printLinkedList(Node<int> *head)
         cout << temp->data << "  ";
         temp = temp->next;
     }
+    cout << endl;
 }
 bool searchInLinkedList(Node<int> *head, int target)
 {
@@ -71,6 +72,83 @@ Node<int> *insertAtEnd(Node<int> *head, int x)
     temp->next = new Node<int>(x);
     return head;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     Node<int> *head = nullptr;
+//     head = insertAtEnd(head, 2);
+//     head = insertAtEnd(head, 4);
+//     head = insertAtEnd(head, 6);
+//     head = insertAtEnd(head, 8);
+//     head = insertAtEnd(head, 10);
+//     printLinkedList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------ Delete Kth element from the Linked List --------------------------------------------------------------------
+Node<int> *removeKthNode(Node<int> *head, int k)
+{
+    if (head == nullptr)
+        return head;
+    int n = 0;
+    Node<int> *temp = head;
+    while (temp)
+    {
+        n++;
+        temp = temp->next;
+    }
+    if (k > n)
+        return head;
+    if (k == 1)
+    {
+        temp = head;
+        head = head->next;
+        delete temp;
+        return head;
+    }
+    temp = head;
+    int count = 1;
+    Node<int> *prev = nullptr;
+    while (count != k)
+    {
+        prev = temp;
+        temp = temp->next;
+        count++;
+    }
+    prev->next = temp->next;
+    delete temp;
+    return head;
+}
+// -----------------------
+Node<int> *removeKthNodeFromLL(Node<int> *head, int k)
+{
+    if (head == nullptr)
+        return head;
+    if (k == 1)
+    {
+        Node<int> *temp = head;
+        head = head->next;
+        delete temp;
+        return head;
+    }
+    int count = 0;
+    Node<int> *temp = head;
+    Node<int> *previous = nullptr;
+    while (temp != nullptr)
+    {
+        count++;
+        if (count == k)
+        {
+            previous->next = temp->next;
+            delete temp;
+            break;
+        }
+        previous = temp;
+        temp = temp->next;
+    }
+    return head;
+}
 int main()
 {
     cout << string(30, '-') << endl;
@@ -80,6 +158,9 @@ int main()
     head = insertAtEnd(head, 6);
     head = insertAtEnd(head, 8);
     head = insertAtEnd(head, 10);
+    head = insertAtEnd(head, 12);
+    printLinkedList(head);
+    head = removeKthNodeFromLL(head, 2);
     printLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
