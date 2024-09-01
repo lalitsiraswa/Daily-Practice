@@ -175,6 +175,61 @@ void deleteNode(Node<int> *node)
     temp = NULL;
     delete temp;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     Node<int> *head = nullptr;
+//     head = insertAtEnd(head, 2);
+//     head = insertAtEnd(head, 4);
+//     head = insertAtEnd(head, 6);
+//     head = insertAtEnd(head, 8);
+//     head = insertAtEnd(head, 10);
+//     head = insertAtEnd(head, 12);
+//     printLinkedList(head);
+//     deleteNode(head->next->next->next);
+//     printLinkedList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ---------------------------------------------------------------------- Insert at kth position ------------------------------------------------------------------------
+Node<int> *insertAtKthPosition(Node<int> *head, int k, int value)
+{
+    if (head == nullptr)
+    {
+        if (k == 1)
+        {
+            Node<int> *newNode = new Node<int>(value);
+            newNode->next = head;
+            return newNode;
+        }
+        else
+            return head;
+    }
+    if (k == 1)
+    {
+        Node<int> *newNode = new Node<int>(value);
+        newNode->next = head;
+        return newNode;
+    }
+    int count = 1;
+    Node<int> *temp = head;
+    Node<int> *previous = NULL;
+    while (temp)
+    {
+        count++;
+        previous = temp;
+        temp = temp->next;
+        if (count == k)
+        {
+            Node<int> *newNode = new Node<int>(value);
+            previous->next = newNode;
+            newNode->next = temp;
+            break;
+        }
+    }
+    return head;
+}
 int main()
 {
     cout << string(30, '-') << endl;
@@ -186,7 +241,7 @@ int main()
     head = insertAtEnd(head, 10);
     head = insertAtEnd(head, 12);
     printLinkedList(head);
-    deleteNode(head->next->next->next);
+    head = insertAtKthPosition(head, 7, 100);
     printLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
