@@ -59,6 +59,40 @@ Node<int> *deleteTail(Node<int> *head)
     delete temp;
     return head;
 }
+Node<int> *deleteKthNode(Node<int> *head, int k)
+{
+    if (head == nullptr)
+        return head;
+    if (k == 1)
+    {
+        Node<int> *previous = head;
+        head = head->next;
+        previous->next = nullptr;
+        if (head != nullptr)
+            head->previous = nullptr;
+        delete previous;
+        return head;
+    }
+    int count = 1;
+    Node<int> *temp = head;
+    while (temp)
+    {
+        count++;
+        temp = temp->next;
+        if (count == k)
+        {
+            Node<int> *previous = temp->previous;
+            previous->next = temp->next;
+            if (temp->next != nullptr)
+                temp->next->previous = previous;
+            temp->next = nullptr;
+            temp->previous = nullptr;
+            delete temp;
+            break;
+        }
+    }
+    return head;
+}
 void printDoublyLinkedList(Node<int> *head)
 {
     Node<int> *temp = head;
@@ -75,9 +109,11 @@ int main()
     vector<int> vect = {2, 4, 6, 8, 10, 12};
     Node<int> *head = array2DoublyLinkedList(vect);
     printDoublyLinkedList(head);
-    head = deleteHead(head);
-    printDoublyLinkedList(head);
-    head = deleteTail(head);
+    // head = deleteHead(head);
+    // printDoublyLinkedList(head);
+    // head = deleteTail(head);
+    // printDoublyLinkedList(head);
+    head = deleteKthNode(head, 0);
     printDoublyLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
