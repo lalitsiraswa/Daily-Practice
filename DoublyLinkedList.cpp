@@ -103,17 +103,49 @@ void printDoublyLinkedList(Node<int> *head)
     }
     cout << endl;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {2, 4, 6, 8, 10, 12};
+//     Node<int> *head = array2DoublyLinkedList(vect);
+//     printDoublyLinkedList(head);
+//     // head = deleteHead(head);
+//     // printDoublyLinkedList(head);
+//     // head = deleteTail(head);
+//     // printDoublyLinkedList(head);
+//     head = deleteKthNode(head, 0);
+//     printDoublyLinkedList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------- Doubly linked list Insertion at given position --------------------------------------------------------int main()
+void addNode(Node<int> *head, int pos, int data)
+{
+    int positionIndex = 0;
+    Node<int> *previous = head;
+    while (previous != nullptr)
+    {
+        if (positionIndex == pos)
+            break;
+        positionIndex++;
+        previous = previous->next;
+    }
+    Node<int> *next = previous->next;
+    Node<int> *newNode = new Node<int>(data);
+    newNode->next = next;
+    previous->next = newNode;
+    newNode->previous = previous;
+    if (next != nullptr)
+        next->previous = previous;
+}
 int main()
 {
     cout << string(30, '-') << endl;
     vector<int> vect = {2, 4, 6, 8, 10, 12};
     Node<int> *head = array2DoublyLinkedList(vect);
     printDoublyLinkedList(head);
-    // head = deleteHead(head);
-    // printDoublyLinkedList(head);
-    // head = deleteTail(head);
-    // printDoublyLinkedList(head);
-    head = deleteKthNode(head, 0);
+    addNode(head, 6, 100);
     printDoublyLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
