@@ -1,6 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+//   Definition for singly-linked list.
+class ListNode
+{
+public:
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {};
+    ListNode(int x) : val(x), next(nullptr) {};
+    ListNode(int x, ListNode *next) : val(x), next(next) {};
+};
+
 template <typename T>
 class Node
 {
@@ -230,19 +241,63 @@ Node<int> *insertAtKthPosition(Node<int> *head, int k, int value)
     }
     return head;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     Node<int> *head = nullptr;
+//     head = insertAtEnd(head, 2);
+//     head = insertAtEnd(head, 4);
+//     head = insertAtEnd(head, 6);
+//     head = insertAtEnd(head, 8);
+//     head = insertAtEnd(head, 10);
+//     head = insertAtEnd(head, 12);
+//     printLinkedList(head);
+//     head = insertAtKthPosition(head, 7, 100);
+//     printLinkedList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ---------------------------------------------------------------------- 876. Middle of the Linked List ------------------------------------------------------------------------
+ListNode *array2LinkedList(vector<int> &vect)
+{
+    ListNode *head = new ListNode(vect[0]);
+    ListNode *mover = head;
+    for (int i = 1; i < vect.size(); i++)
+    {
+        ListNode *temp = new ListNode(vect[i]);
+        mover->next = temp;
+        mover = temp;
+    }
+    return head;
+}
+void printSinglyLinkedList(ListNode *head)
+{
+    ListNode *temp = head;
+    while (temp)
+    {
+        cout << temp->val << " -> ";
+        temp = temp->next;
+    }
+    cout << "NULL" << endl;
+}
+ListNode *middleNode(ListNode *head)
+{
+    ListNode *slowPointer = head, *fastPointer = head;
+    while (fastPointer && fastPointer->next != nullptr)
+    {
+        slowPointer = slowPointer->next;
+        fastPointer = fastPointer->next->next;
+    }
+    return slowPointer;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    Node<int> *head = nullptr;
-    head = insertAtEnd(head, 2);
-    head = insertAtEnd(head, 4);
-    head = insertAtEnd(head, 6);
-    head = insertAtEnd(head, 8);
-    head = insertAtEnd(head, 10);
-    head = insertAtEnd(head, 12);
-    printLinkedList(head);
-    head = insertAtKthPosition(head, 7, 100);
-    printLinkedList(head);
+    vector<int> vect = {1, 2, 3, 4, 5};
+    ListNode *head = array2LinkedList(vect);
+    printSinglyLinkedList(head);
+    cout << middleNode(head)->val << endl;
     cout << endl
          << string(30, '-') << endl;
     return 0;
