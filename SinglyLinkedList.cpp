@@ -317,13 +317,43 @@ ListNode *reverseList(ListNode *head)
     }
     return newHead;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {1, 2, 3, 4, 5};
+//     ListNode *head = array2LinkedList(vect);
+//     printSinglyLinkedList(head);
+//     head = reverseList(head);
+//     printSinglyLinkedList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ---------------------------------------------------------------------- 206. Reverse Linked List - Recursive ------------------------------------------------------------------------
+ListNode *reverseListRecursiveHelper(ListNode *head, ListNode *newHead)
+{
+    if (head->next == nullptr)
+        return newHead;
+    ListNode *temp = head->next;
+    head->next = temp->next;
+    temp->next = newHead;
+    newHead = temp;
+    return reverseListRecursiveHelper(head, newHead);
+}
+ListNode *reverseListRecursive(ListNode *head)
+{
+    if (head == nullptr)
+        return head;
+    ListNode *newHead = head;
+    return reverseListRecursiveHelper(head, newHead);
+}
 int main()
 {
     cout << string(30, '-') << endl;
     vector<int> vect = {1, 2, 3, 4, 5};
     ListNode *head = array2LinkedList(vect);
     printSinglyLinkedList(head);
-    head = reverseList(head);
+    head = reverseListRecursive(head);
     printSinglyLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
