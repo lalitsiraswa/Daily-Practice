@@ -137,15 +137,15 @@ void addNode(Node<int> *head, int pos, int data)
     previous->next = newNode;
     newNode->previous = previous;
     if (next != nullptr)
-        next->previous = previous;
+        next->previous = newNode;
 }
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> vect = {2, 4, 6, 8, 10, 12};
+    vector<int> vect = {8, 5, 1, 10, 5, 9, 9, 3, 5, 6, 6, 2};
     Node<int> *head = array2DoublyLinkedList(vect);
     printDoublyLinkedList(head);
-    addNode(head, 6, 100);
+    addNode(head, 1, 27);
     printDoublyLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
