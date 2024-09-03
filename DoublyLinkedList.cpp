@@ -139,13 +139,42 @@ void addNode(Node<int> *head, int pos, int data)
     if (next != nullptr)
         next->previous = newNode;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {8, 5, 1, 10, 5, 9, 9, 3, 5, 6, 6, 2};
+//     Node<int> *head = array2DoublyLinkedList(vect);
+//     printDoublyLinkedList(head);
+//     addNode(head, 1, 27);
+//     printDoublyLinkedList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ---------------------------------------------------------------------- Reverse a Doubly Linked List -----------------------------------------------------------------
+// Function to reverse a doubly linked list
+Node<int> *reverseDLL(Node<int> *head)
+{
+    Node<int> *newHead = head;
+    while (head->next != nullptr)
+    {
+        Node<int> *temp = head->next;
+        head->next = temp->next;
+        if (head->next != nullptr)
+            head->next->previous = head;
+        temp->next = newHead;
+        newHead->previous = temp;
+        newHead = temp;
+    }
+    return newHead;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> vect = {8, 5, 1, 10, 5, 9, 9, 3, 5, 6, 6, 2};
+    vector<int> vect = {2, 4, 6, 8, 10};
     Node<int> *head = array2DoublyLinkedList(vect);
     printDoublyLinkedList(head);
-    addNode(head, 1, 27);
+    head = reverseDLL(head);
     printDoublyLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
