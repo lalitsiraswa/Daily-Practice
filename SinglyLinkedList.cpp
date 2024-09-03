@@ -317,13 +317,36 @@ ListNode *reverseList(ListNode *head)
     }
     return newHead;
 }
+// ----------------------------------
+ListNode *reverseList2(ListNode *head)
+{
+    // Initialize'temp' at head of linked list
+    ListNode *temp = head;
+    // Initialize pointer 'prev' to NULL, representing the previous node
+    ListNode *previous = nullptr;
+    // Traverse the list, continue till 'temp' reaches the end (NULL)
+    while (temp != nullptr)
+    {
+        // Store the next node in 'front' to preserve the reference
+        ListNode *front = temp->next;
+        // Reverse the direction of the current node's 'next' pointer
+        // to point to 'prev'
+        temp->next = previous;
+        // Move 'prev' to the current node for the next iteration
+        previous = temp;
+        // Move 'temp' to the 'front' node advancing the traversal
+        temp = front;
+    }
+    // Return the new head of the reversed linked list
+    return previous;
+}
 // int main()
 // {
 //     cout << string(30, '-') << endl;
 //     vector<int> vect = {1, 2, 3, 4, 5};
 //     ListNode *head = array2LinkedList(vect);
 //     printSinglyLinkedList(head);
-//     head = reverseList(head);
+//     head = reverseList2(head);
 //     printSinglyLinkedList(head);
 //     cout << endl
 //          << string(30, '-') << endl;
@@ -347,13 +370,37 @@ ListNode *reverseListRecursive(ListNode *head)
     ListNode *newHead = head;
     return reverseListRecursiveHelper(head, newHead);
 }
+// --------------------------
+ListNode *reverseListRecursiveHelper2(ListNode *temp, ListNode *previous)
+{
+    if (temp == nullptr)
+        return previous;
+    // Store the next node in 'front' to preserve the reference
+    ListNode *front = temp->next;
+    // Reverse the direction of the current node's 'next' pointer
+    // to point to 'prev'
+    temp->next = previous;
+    // Move 'prev' to the current node for the next iteration
+    previous = temp;
+    // Move 'temp' to the 'front' node advancing the traversal
+    temp = front;
+    return reverseListRecursiveHelper2(temp, previous);
+}
+ListNode *reverseListRecursive2(ListNode *head)
+{
+    if (head == nullptr)
+        return head;
+    ListNode *temp = head;
+    ListNode *previous = nullptr;
+    return reverseListRecursiveHelper2(temp, previous);
+}
 int main()
 {
     cout << string(30, '-') << endl;
     vector<int> vect = {1, 2, 3, 4, 5};
     ListNode *head = array2LinkedList(vect);
     printSinglyLinkedList(head);
-    head = reverseListRecursive(head);
+    head = reverseListRecursive2(head);
     printSinglyLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
