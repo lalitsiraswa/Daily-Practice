@@ -291,13 +291,40 @@ ListNode *middleNode(ListNode *head)
     }
     return slowPointer;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {1, 2, 3, 4, 5};
+//     ListNode *head = array2LinkedList(vect);
+//     printSinglyLinkedList(head);
+//     cout << middleNode(head)->val << endl;
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ---------------------------------------------------------------------- 206. Reverse Linked List - Iterative ------------------------------------------------------------------------
+ListNode *reverseList(ListNode *head)
+{
+    if (head == nullptr)
+        return head;
+    ListNode *newHead = head;
+    while (head->next != nullptr)
+    {
+        ListNode *temp = head->next;
+        head->next = temp->next;
+        temp->next = newHead;
+        newHead = temp;
+    }
+    return newHead;
+}
 int main()
 {
     cout << string(30, '-') << endl;
     vector<int> vect = {1, 2, 3, 4, 5};
     ListNode *head = array2LinkedList(vect);
     printSinglyLinkedList(head);
-    cout << middleNode(head)->val << endl;
+    head = reverseList(head);
+    printSinglyLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
     return 0;
