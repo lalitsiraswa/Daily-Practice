@@ -394,15 +394,31 @@ ListNode *reverseListRecursive2(ListNode *head)
     ListNode *previous = nullptr;
     return reverseListRecursiveHelper2(temp, previous);
 }
-int main()
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {1, 2, 3, 4, 5};
+//     ListNode *head = array2LinkedList(vect);
+//     printSinglyLinkedList(head);
+//     head = reverseListRecursive2(head);
+//     printSinglyLinkedList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ---------------------------------------------------------------------- 141. Linked List Cycle ------------------------------------------------------------------------
+bool DetectCycleOtherWay(ListNode *head)
 {
-    cout << string(30, '-') << endl;
-    vector<int> vect = {1, 2, 3, 4, 5};
-    ListNode *head = array2LinkedList(vect);
-    printSinglyLinkedList(head);
-    head = reverseListRecursive2(head);
-    printSinglyLinkedList(head);
-    cout << endl
-         << string(30, '-') << endl;
-    return 0;
+    if (head == NULL)
+        return false;
+    ListNode *slowPointer = head;
+    ListNode *fastPointer = head;
+    while (fastPointer && fastPointer->next)
+    {
+        slowPointer = slowPointer->next;
+        fastPointer = fastPointer->next->next;
+        if (slowPointer == fastPointer)
+            return true;
+    }
+    return false;
 }
