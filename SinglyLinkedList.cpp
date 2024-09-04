@@ -422,3 +422,46 @@ bool DetectCycleOtherWay(ListNode *head)
     }
     return false;
 }
+// ---------------------------------------------------------------------- 142. Linked List Cycle II ------------------------------------------------------------------------
+ListNode *detectCycle2(ListNode *head)
+{
+    if (head == nullptr)
+        return head;
+    ListNode *slowPointer = head;
+    ListNode *fastPointer = head;
+    bool isCycleDetected = false;
+    while (fastPointer != nullptr && fastPointer->next != nullptr)
+    {
+        slowPointer = slowPointer->next;
+        fastPointer = fastPointer->next->next;
+        if (slowPointer == fastPointer)
+        {
+            isCycleDetected = true;
+            break;
+        }
+    }
+    if (isCycleDetected == false)
+        return nullptr;
+    slowPointer = head;
+    while (1)
+    {
+        if (slowPointer == fastPointer)
+            break;
+        slowPointer = slowPointer->next;
+        fastPointer = fastPointer->next;
+    }
+    return slowPointer;
+}
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {1, 2, 3, 4, 5};
+//     ListNode *head = array2LinkedList(vect);
+//     printSinglyLinkedList(head);
+//     ListNode *cycleStartingNode = detectCycle2(head);
+//     if (cycleStartingNode != nullptr)
+//         cout << cycleStartingNode->val << endl;
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
