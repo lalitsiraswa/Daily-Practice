@@ -465,3 +465,42 @@ ListNode *detectCycle2(ListNode *head)
 //          << string(30, '-') << endl;
 //     return 0;
 // }
+// ---------------------------------------------------------------------- Find length of Loop ------------------------------------------------------------------------
+int countNodesinLoop(ListNode *head)
+{
+    if (head == nullptr)
+        return 0;
+    ListNode *slowPointer = head, *fastpointer = head;
+    bool isCycleDetected = false;
+    while (fastpointer != nullptr && fastpointer->next != nullptr)
+    {
+        slowPointer = slowPointer->next;
+        fastpointer = fastpointer->next->next;
+        if (slowPointer == fastpointer)
+        {
+            isCycleDetected = true;
+            break;
+        }
+    }
+    if (!isCycleDetected)
+        return 0;
+    int cycleLength = 1;
+    while (slowPointer->next != fastpointer)
+    {
+        cycleLength++;
+        slowPointer = slowPointer->next;
+    }
+    return cycleLength;
+}
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {1, 2, 3, 4, 5};
+//     ListNode *head = array2LinkedList(vect);
+//     printSinglyLinkedList(head);
+//     ListNode *cycleStartingNode = detectCycle2(head);
+//     cout << countNodesinLoop(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
