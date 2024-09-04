@@ -504,3 +504,52 @@ int countNodesinLoop(ListNode *head)
 //          << string(30, '-') << endl;
 //     return 0;
 // }
+// ---------------------------------------------------------------------- 234. Palindrome Linked List ------------------------------------------------------------------------
+bool isPalindrome(ListNode *head)
+{
+    if (head == nullptr)
+        return head;
+    ListNode *slowPointer = head, *fastPointer = head;
+    while (fastPointer != nullptr && fastPointer->next != nullptr)
+    {
+        slowPointer = slowPointer->next;
+        fastPointer = fastPointer->next->next;
+    }
+    ListNode *temp = nullptr;
+    // Even number of nodes
+    if (fastPointer == nullptr)
+        temp = slowPointer;
+    // Odd number of nodes
+    else
+        temp = slowPointer->next;
+    // Reverse the second half
+    ListNode *previous = nullptr;
+    while (temp != nullptr)
+    {
+        ListNode *next = temp->next;
+        temp->next = previous;
+        previous = temp;
+        temp = next;
+    }
+    // Now the previous will be our newHead for the second half linked list
+    slowPointer = head;
+    while (previous != nullptr)
+    {
+        if (slowPointer->val != previous->val)
+            return false;
+        slowPointer = slowPointer->next;
+        previous = previous->next;
+    }
+    return true;
+}
+int main()
+{
+    cout << string(30, '-') << endl;
+    vector<int> vect = {1, 2, 3, 3, 1};
+    ListNode *head = array2LinkedList(vect);
+    printSinglyLinkedList(head);
+    cout << isPalindrome(head) << endl;
+    cout << endl
+         << string(30, '-') << endl;
+    return 0;
+}
