@@ -667,43 +667,13 @@ ListNode *removeNthFromEnd2(ListNode *head, int n)
     delete slowPointer;
     return head;
 }
-int main()
-{
-    cout << string(30, '-') << endl;
-    vector<int> vect = {1, 2, 3, 4, 5};
-    ListNode *head = array2LinkedList(vect);
-    printSinglyLinkedList(head);
-    head = removeNthFromEnd2(head, 1);
-    printSinglyLinkedList(head);
-    cout << endl
-         << string(30, '-') << endl;
-    return 0;
-}
-// ---------------------------------------------------------------- 2095. Delete the Middle Node of a Linked List ------------------------------------------------------------------
-ListNode *deleteMiddle(ListNode *head)
-{
-    if (head == nullptr || head->next == nullptr)
-        return nullptr;
-    ListNode *slowPointer = head;
-    ListNode *fastPointer = head;
-    ListNode *slowPointerPrevious = nullptr;
-    while (fastPointer != nullptr && fastPointer->next != nullptr)
-    {
-        slowPointerPrevious = slowPointer;
-        slowPointer = slowPointer->next;
-        fastPointer = fastPointer->next->next;
-    }
-    slowPointerPrevious->next = slowPointer->next;
-    delete slowPointer;
-    return head;
-}
 // int main()
 // {
 //     cout << string(30, '-') << endl;
-//     vector<int> vect = {1, 2};
+//     vector<int> vect = {1, 2, 3, 4, 5};
 //     ListNode *head = array2LinkedList(vect);
 //     printSinglyLinkedList(head);
-//     head = deleteMiddle(head);
+//     head = removeNthFromEnd2(head, 1);
 //     printSinglyLinkedList(head);
 //     cout << endl
 //          << string(30, '-') << endl;
