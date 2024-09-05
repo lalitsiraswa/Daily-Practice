@@ -542,13 +542,73 @@ bool isPalindrome(ListNode *head)
     }
     return true;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {1, 2, 3, 3, 1};
+//     ListNode *head = array2LinkedList(vect);
+//     printSinglyLinkedList(head);
+//     cout << isPalindrome(head) << endl;
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ---------------------------------------------------------------------- 328. Odd Even Linked List ------------------------------------------------------------------------
+ListNode *oddEvenList(ListNode *head)
+{
+    if (head == nullptr || head->next == nullptr || head->next->next == nullptr)
+        return head;
+    ListNode *oddHead = head;
+    ListNode *previousOddNode = head;
+    ListNode *evenHead = head->next;
+    ListNode *previousEvenNode = head->next;
+    ListNode *temp = head->next->next;
+    bool isOdd = true;
+    while (temp != nullptr)
+    {
+        if (isOdd)
+        {
+            previousOddNode->next = temp;
+            previousOddNode = temp;
+        }
+        else
+        {
+            previousEvenNode->next = temp;
+            previousEvenNode = temp;
+        }
+        temp = temp->next;
+        isOdd = !isOdd;
+    }
+    previousEvenNode->next = nullptr;
+    previousOddNode->next = evenHead;
+    return oddHead;
+}
+// -------------------------------
+ListNode *oddEvenList2(ListNode *head)
+{
+    if (head == nullptr || head->next == nullptr || head->next->next == nullptr)
+        return head;
+    ListNode *oddNode = head;
+    ListNode *evenNode = head->next;
+    ListNode *evenNodeHead = head->next;
+    while (evenNode != nullptr && evenNode->next != nullptr)
+    {
+        oddNode->next = oddNode->next->next;
+        evenNode->next = evenNode->next->next;
+        oddNode = oddNode->next;
+        evenNode = evenNode->next;
+    }
+    oddNode->next = evenNodeHead;
+    return head;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> vect = {1, 2, 3, 3, 1};
+    vector<int> vect = {1, 2, 3, 4, 5};
     ListNode *head = array2LinkedList(vect);
     printSinglyLinkedList(head);
-    cout << isPalindrome(head) << endl;
+    head = oddEvenList2(head);
+    printSinglyLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
     return 0;
