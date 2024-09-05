@@ -729,14 +729,97 @@ ListNode *sortList(ListNode *head)
     }
     return head;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {-1, 5, 3, 4, 0};
+//     ListNode *head = array2LinkedList(vect);
+//     printSinglyLinkedList(head);
+//     head = sortList(head);
+//     printSinglyLinkedList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------- 21. Merge Two Sorted Lists ----------------------------------------------------------------------
+ListNode *mergeTwoLists(ListNode *head1, ListNode *head2)
+{
+    if (head1 == nullptr)
+        return head2;
+    if (head2 == nullptr)
+        return head1;
+    ListNode *newHead = nullptr;
+    if (head1->val <= head2->val)
+    {
+        newHead = head1;
+        head1 = head1->next;
+    }
+    else
+    {
+        newHead = head2;
+        head2 = head2->next;
+    }
+    ListNode *temp = newHead;
+    while (head1 != nullptr && head2 != nullptr)
+    {
+        if (head1->val <= head2->val)
+        {
+            temp->next = head1;
+            head1 = head1->next;
+        }
+        else
+        {
+            temp->next = head2;
+            head2 = head2->next;
+        }
+        temp = temp->next;
+    }
+    if (head1 != nullptr)
+        temp->next = head1;
+    if (head2 != nullptr)
+        temp->next = head2;
+    return newHead;
+}
+// ----- Using Dummy Node Concept -----
+ListNode *mergeTwoLists2(ListNode *head1, ListNode *head2)
+{
+    if (head1 == nullptr)
+        return head2;
+    if (head2 == nullptr)
+        return head1;
+    ListNode *dummyNode = new ListNode(-1);
+    ListNode *temp = dummyNode;
+    while (head1 != nullptr && head2 != nullptr)
+    {
+        if (head1->val <= head2->val)
+        {
+            temp->next = head1;
+            head1 = head1->next;
+        }
+        else
+        {
+            temp->next = head2;
+            head2 = head2->next;
+        }
+        temp = temp->next;
+    }
+    if (head1 != nullptr)
+        temp->next = head1;
+    if (head2 != nullptr)
+        temp->next = head2;
+    return dummyNode->next;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> vect = {-1, 5, 3, 4, 0};
-    ListNode *head = array2LinkedList(vect);
-    printSinglyLinkedList(head);
-    head = sortList(head);
-    printSinglyLinkedList(head);
+    vector<int> list1 = {1, 2, 4};
+    vector<int> list2 = {1, 3, 4};
+    ListNode *head1 = array2LinkedList(list1);
+    ListNode *head2 = array2LinkedList(list2);
+    printSinglyLinkedList(head1);
+    printSinglyLinkedList(head2);
+    head1 = mergeTwoLists2(head1, head2);
+    printSinglyLinkedList(head1);
     cout << endl
          << string(30, '-') << endl;
     return 0;
