@@ -697,13 +697,45 @@ ListNode *deleteMiddle(ListNode *head)
     delete slowPointer;
     return head;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {1, 2};
+//     ListNode *head = array2LinkedList(vect);
+//     printSinglyLinkedList(head);
+//     head = deleteMiddle(head);
+//     printSinglyLinkedList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------- 148. Sort Singly Linked List ----------------------------------------------------------------------
+ListNode *sortList(ListNode *head)
+{
+    ListNode *temp = head;
+    vector<int> vect;
+    while (temp != nullptr)
+    {
+        vect.push_back(temp->val);
+        temp = temp->next;
+    }
+    sort(vect.begin(), vect.end());
+    temp = head;
+    int index = 0;
+    while (temp != nullptr)
+    {
+        temp->val = vect[index++];
+        temp = temp->next;
+    }
+    return head;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> vect = {1, 2};
+    vector<int> vect = {-1, 5, 3, 4, 0};
     ListNode *head = array2LinkedList(vect);
     printSinglyLinkedList(head);
-    head = deleteMiddle(head);
+    head = sortList(head);
     printSinglyLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
