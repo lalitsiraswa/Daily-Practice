@@ -643,15 +643,69 @@ ListNode *removeNthFromEnd(ListNode *head, int n)
     delete targetNode;
     return head;
 }
+// ----------------
+ListNode *removeNthFromEnd2(ListNode *head, int n)
+{
+    ListNode *fastPointer = head;
+    ListNode *slowPointer = head;
+    ListNode *slowPointerPrevious = nullptr;
+    for (int i = 1; i < n; i++)
+        fastPointer = fastPointer->next;
+    while (fastPointer->next != nullptr)
+    {
+        slowPointerPrevious = slowPointer;
+        slowPointer = slowPointer->next;
+        fastPointer = fastPointer->next;
+    }
+    if (slowPointerPrevious == nullptr)
+    {
+        head = head->next;
+        delete slowPointer;
+        return head;
+    }
+    slowPointerPrevious->next = slowPointer->next;
+    delete slowPointer;
+    return head;
+}
 int main()
 {
     cout << string(30, '-') << endl;
     vector<int> vect = {1, 2, 3, 4, 5};
     ListNode *head = array2LinkedList(vect);
     printSinglyLinkedList(head);
-    head = removeNthFromEnd(head, 5);
+    head = removeNthFromEnd2(head, 1);
     printSinglyLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
     return 0;
 }
+// ---------------------------------------------------------------- 2095. Delete the Middle Node of a Linked List ------------------------------------------------------------------
+ListNode *deleteMiddle(ListNode *head)
+{
+    if (head == nullptr || head->next == nullptr)
+        return nullptr;
+    ListNode *slowPointer = head;
+    ListNode *fastPointer = head;
+    ListNode *slowPointerPrevious = nullptr;
+    while (fastPointer != nullptr && fastPointer->next != nullptr)
+    {
+        slowPointerPrevious = slowPointer;
+        slowPointer = slowPointer->next;
+        fastPointer = fastPointer->next->next;
+    }
+    slowPointerPrevious->next = slowPointer->next;
+    delete slowPointer;
+    return head;
+}
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {1, 2};
+//     ListNode *head = array2LinkedList(vect);
+//     printSinglyLinkedList(head);
+//     head = deleteMiddle(head);
+//     printSinglyLinkedList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
