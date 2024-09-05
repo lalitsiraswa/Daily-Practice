@@ -601,13 +601,55 @@ ListNode *oddEvenList2(ListNode *head)
     oddNode->next = evenNodeHead;
     return head;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {1, 2, 3, 4, 5};
+//     ListNode *head = array2LinkedList(vect);
+//     printSinglyLinkedList(head);
+//     head = oddEvenList2(head);
+//     printSinglyLinkedList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ---------------------------------------------------------------------- 19. Remove Nth Node From End of List ------------------------------------------------------------------------
+ListNode *removeNthFromEnd(ListNode *head, int n)
+{
+    ListNode *currentNode = head;
+    ListNode *targetNode = nullptr;
+    ListNode *targetPrevious = nullptr;
+    int counter = 1;
+    while (currentNode != nullptr)
+    {
+        if (counter >= n)
+        {
+            targetPrevious = targetNode;
+            if (targetNode == nullptr)
+                targetNode = head;
+            else
+                targetNode = targetNode->next;
+        }
+        counter++;
+        currentNode = currentNode->next;
+    }
+    if (targetPrevious == nullptr)
+    {
+        head = head->next;
+        delete targetNode;
+        return head;
+    }
+    targetPrevious->next = targetNode->next;
+    delete targetNode;
+    return head;
+}
 int main()
 {
     cout << string(30, '-') << endl;
     vector<int> vect = {1, 2, 3, 4, 5};
     ListNode *head = array2LinkedList(vect);
     printSinglyLinkedList(head);
-    head = oddEvenList2(head);
+    head = removeNthFromEnd(head, 5);
     printSinglyLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
