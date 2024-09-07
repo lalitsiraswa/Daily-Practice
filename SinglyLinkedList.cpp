@@ -709,38 +709,6 @@ ListNode *deleteMiddle(ListNode *head)
 //          << string(30, '-') << endl;
 //     return 0;
 // }
-// -------------------------------------------------------------------- 148. Sort Singly Linked List ----------------------------------------------------------------------
-ListNode *sortList(ListNode *head)
-{
-    ListNode *temp = head;
-    vector<int> vect;
-    while (temp != nullptr)
-    {
-        vect.push_back(temp->val);
-        temp = temp->next;
-    }
-    sort(vect.begin(), vect.end());
-    temp = head;
-    int index = 0;
-    while (temp != nullptr)
-    {
-        temp->val = vect[index++];
-        temp = temp->next;
-    }
-    return head;
-}
-// int main()
-// {
-//     cout << string(30, '-') << endl;
-//     vector<int> vect = {-1, 5, 3, 4, 0};
-//     ListNode *head = array2LinkedList(vect);
-//     printSinglyLinkedList(head);
-//     head = sortList(head);
-//     printSinglyLinkedList(head);
-//     cout << endl
-//          << string(30, '-') << endl;
-//     return 0;
-// }
 // -------------------------------------------------------------------- 21. Merge Two Sorted Lists ----------------------------------------------------------------------
 ListNode *mergeTwoLists(ListNode *head1, ListNode *head2)
 {
@@ -871,13 +839,126 @@ ListNode *reverseKGroup(ListNode *head, int k)
     }
     return newHead;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {1, 2, 3, 4, 5};
+//     ListNode *head = array2LinkedList(vect);
+//     printSinglyLinkedList(head);
+//     head = reverseKGroup(head, 2);
+//     printSinglyLinkedList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------- 148. Sort Singly Linked List ----------------------------------------------------------------------
+ListNode *sortList(ListNode *head)
+{
+    ListNode *temp = head;
+    vector<int> vect;
+    while (temp != nullptr)
+    {
+        vect.push_back(temp->val);
+        temp = temp->next;
+    }
+    sort(vect.begin(), vect.end());
+    temp = head;
+    int index = 0;
+    while (temp != nullptr)
+    {
+        temp->val = vect[index++];
+        temp = temp->next;
+    }
+    return head;
+}
+// -------------------------------------------
+ListNode *mergeTwoSortedLinkedLists(ListNode *list1, ListNode *list2)
+{
+    // Create a dummy node to serve
+    // as the head of the merged list
+    ListNode *dummyNode = new ListNode(-1);
+    ListNode *temp = dummyNode;
+    // Traverse both lists simultaneously
+    while (list1 != nullptr && list2 != nullptr)
+    {
+        // Compare elements of both lists and
+        // link the smaller node to the merged list
+        if (list1->val <= list2->val)
+        {
+            temp->next = list1;
+            list1 = list1->next;
+        }
+        else
+        {
+            temp->next = list2;
+            list2 = list2->next;
+        }
+        // Move the temporary pointer
+        // to the next node
+        temp = temp->next;
+    }
+    // If any list still has remaining
+    // elements, append them to the merged list
+    if (list1 != nullptr)
+    {
+        temp->next = list1;
+    }
+    else
+    {
+        temp->next = list2;
+    }
+    return dummyNode->next;
+}
+// Function to find the middle of a linked list
+ListNode *findMiddle(ListNode *head)
+{
+    // If the list is empty or has only one node
+    // the middle is the head itself
+    if (head == nullptr || head->next == nullptr)
+    {
+        return head;
+    }
+    // Initializing slow and fast pointers
+    ListNode *slow = head;
+    ListNode *fast = head->next;
+    // Move the fast pointer twice as fast as the slow pointer
+    // When the fast pointer reaches the end, the slow pointer
+    // will be at the middle
+    while (fast != nullptr && fast->next != nullptr)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    return slow;
+}
+// Function to perform merge sort on a linked list
+ListNode *sortListMergeSort(ListNode *head)
+{
+    // Base case: if the list is empty or has only one node
+    // it is already sorted, so return the head
+    if (head == nullptr || head->next == nullptr)
+    {
+        return head;
+    }
+    // Find the middle of the list using the findMiddle function
+    ListNode *middle = findMiddle(head);
+    // Divide the list into two halves
+    ListNode *right = middle->next;
+    middle->next = nullptr;
+    ListNode *left = head;
+    // Recursively sort the left and right halves
+    left = sortListMergeSort(left);
+    right = sortListMergeSort(right);
+    // Merge the sorted halves using the mergeTwoSortedLinkedLists function
+    return mergeTwoSortedLinkedLists(left, right);
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> vect = {1, 2, 3, 4, 5};
+    vector<int> vect = {4, 2, 1, 3};
     ListNode *head = array2LinkedList(vect);
     printSinglyLinkedList(head);
-    head = reverseKGroup(head, 2);
+    head = sortList(head);
     printSinglyLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
