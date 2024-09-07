@@ -952,13 +952,107 @@ ListNode *sortListMergeSort(ListNode *head)
     // Merge the sorted halves using the mergeTwoSortedLinkedLists function
     return mergeTwoSortedLinkedLists(left, right);
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {4, 2, 1, 3};
+//     ListNode *head = array2LinkedList(vect);
+//     printSinglyLinkedList(head);
+//     head = sortList(head);
+//     printSinglyLinkedList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------- Sort a linked list of 0s, 1s and 2s ----------------------------------------------------------------------
+// Function to sort a linked list of 0s, 1s and 2s.
+ListNode *segregate(ListNode *head)
+{
+    ListNode *zeroHead = new ListNode(-1);
+    ListNode *oneHead = new ListNode(-1);
+    ListNode *twoHead = new ListNode(-1);
+    ListNode *tempZero = zeroHead, *tempOne = oneHead, *tempTwo = twoHead;
+    ListNode *temp = head;
+    head = nullptr;
+    while (temp != nullptr)
+    {
+        if (temp->val == 0)
+        {
+            tempZero->next = temp;
+            tempZero = tempZero->next;
+        }
+        else if (temp->val == 1)
+        {
+            tempOne->next = temp;
+            tempOne = tempOne->next;
+        }
+        else
+        {
+            tempTwo->next = temp;
+            tempTwo = tempTwo->next;
+        }
+        temp = temp->next;
+    }
+    if (tempZero->val != -1 && head == nullptr)
+    {
+        head = zeroHead->next;
+        if (tempOne->val != -1)
+        {
+            tempZero->next = oneHead->next;
+            tempOne->next = twoHead->next;
+        }
+        else
+            tempZero->next = twoHead->next;
+    }
+    if (tempOne->val != -1 && head == nullptr)
+    {
+        head = oneHead->next;
+        tempOne->next = twoHead->next;
+    }
+    if (tempTwo->val != -1 && head == nullptr)
+        head = twoHead->next;
+    tempTwo->next = nullptr;
+    return head;
+}
+// ----------------------
+ListNode *segregate2(ListNode *head)
+{
+    ListNode *zeroHead = new ListNode(-1);
+    ListNode *oneHead = new ListNode(-1);
+    ListNode *twoHead = new ListNode(-1);
+    ListNode *tempZero = zeroHead, *tempOne = oneHead, *tempTwo = twoHead;
+    ListNode *temp = head;
+    while (temp != nullptr)
+    {
+        if (temp->val == 0)
+        {
+            tempZero->next = temp;
+            tempZero = tempZero->next;
+        }
+        else if (temp->val == 1)
+        {
+            tempOne->next = temp;
+            tempOne = tempOne->next;
+        }
+        else
+        {
+            tempTwo->next = temp;
+            tempTwo = tempTwo->next;
+        }
+        temp = temp->next;
+    }
+    tempZero->next = (oneHead->next != nullptr) ? oneHead->next : twoHead->next;
+    tempOne->next = twoHead->next;
+    tempTwo->next = nullptr;
+    return zeroHead->next;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> vect = {4, 2, 1, 3};
+    vector<int> vect = {2, 2, 2, 0};
     ListNode *head = array2LinkedList(vect);
     printSinglyLinkedList(head);
-    head = sortList(head);
+    head = segregate2(head);
     printSinglyLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
