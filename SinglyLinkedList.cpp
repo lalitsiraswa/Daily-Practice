@@ -809,17 +809,76 @@ ListNode *mergeTwoLists2(ListNode *head1, ListNode *head2)
         temp->next = head2;
     return dummyNode->next;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> list1 = {1, 2, 4};
+//     vector<int> list2 = {1, 3, 4};
+//     ListNode *head1 = array2LinkedList(list1);
+//     ListNode *head2 = array2LinkedList(list2);
+//     printSinglyLinkedList(head1);
+//     printSinglyLinkedList(head2);
+//     head1 = mergeTwoLists2(head1, head2);
+//     printSinglyLinkedList(head1);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------- 25. Reverse Nodes in k-Group ----------------------------------------------------------------------
+ListNode *reverseKGroup(ListNode *head, int k)
+{
+    if (head->next == nullptr)
+        return head;
+    int listLength = 0;
+    ListNode *temp = head;
+    while (temp != nullptr)
+    {
+        listLength++;
+        temp = temp->next;
+    }
+    ListNode *newHead = nullptr;
+    ListNode *newPrevious = nullptr;
+    temp = head;
+    int counter = 1;
+    while (temp != nullptr)
+    {
+        ListNode *dummyHead = temp;
+        if ((counter + k) - 1 > listLength)
+        {
+            newPrevious->next = dummyHead;
+            break;
+        }
+        ListNode *previous = nullptr;
+        int count = 1;
+        while (count <= k)
+        {
+            ListNode *next = temp->next;
+            temp->next = previous;
+            previous = temp;
+            temp = next;
+            count++;
+            counter++;
+        }
+        if (newHead == nullptr)
+            newHead = previous;
+        if (newPrevious == nullptr)
+            newPrevious = head;
+        else
+        {
+            newPrevious->next = previous;
+            newPrevious = dummyHead;
+        }
+    }
+    return newHead;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> list1 = {1, 2, 4};
-    vector<int> list2 = {1, 3, 4};
-    ListNode *head1 = array2LinkedList(list1);
-    ListNode *head2 = array2LinkedList(list2);
-    printSinglyLinkedList(head1);
-    printSinglyLinkedList(head2);
-    head1 = mergeTwoLists2(head1, head2);
-    printSinglyLinkedList(head1);
+    vector<int> vect = {1, 2, 3, 4, 5};
+    ListNode *head = array2LinkedList(vect);
+    printSinglyLinkedList(head);
+    head = reverseKGroup(head, 2);
+    printSinglyLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
     return 0;
