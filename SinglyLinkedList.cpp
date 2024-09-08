@@ -1046,13 +1046,87 @@ ListNode *segregate2(ListNode *head)
     tempTwo->next = nullptr;
     return zeroHead->next;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {2, 2, 2, 0};
+//     ListNode *head = array2LinkedList(vect);
+//     printSinglyLinkedList(head);
+//     head = segregate2(head);
+//     printSinglyLinkedList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------- 160. Intersection of Two Linked Lists ----------------------------------------------------------------------
+ListNode *getIntersectionNode(ListNode *headA, ListNode *headB)
+{
+    int listALength = 0;
+    int listBLength = 0;
+    ListNode *tempA = headA;
+    ListNode *tempB = headB;
+    while (tempA != nullptr)
+    {
+        listALength++;
+        tempA = tempA->next;
+    }
+    while (tempB)
+    {
+        listBLength++;
+        tempB = tempB->next;
+    }
+    tempA = headA;
+    tempB = headB;
+    if (listALength >= listBLength)
+    {
+        while (listALength != listBLength)
+        {
+            tempA = tempA->next;
+            listALength--;
+        }
+    }
+    else
+    {
+        while (listALength != listBLength)
+        {
+            tempB = tempB->next;
+            listBLength--;
+        }
+    }
+    while (tempA != nullptr && tempB != nullptr)
+    {
+        if (tempA == tempB)
+            return tempA;
+        tempA = tempA->next;
+        tempB = tempB->next;
+    }
+    return nullptr;
+}
+// ----------------------------
+ListNode *getIntersectionNode2(ListNode *headA, ListNode *headB)
+{
+    if (headA == nullptr || headB == nullptr)
+        return nullptr;
+    ListNode *tempA = headA;
+    ListNode *tempB = headB;
+    while (tempA != tempB)
+    {
+        tempA = tempA->next;
+        tempB = tempB->next;
+        if (tempA == tempB)
+            return tempA;
+        if (tempA == nullptr)
+            tempA = headB;
+        if (tempB == nullptr)
+            tempB = headA;
+    }
+    return tempA;
+}
 int main()
 {
     cout << string(30, '-') << endl;
     vector<int> vect = {2, 2, 2, 0};
     ListNode *head = array2LinkedList(vect);
-    printSinglyLinkedList(head);
-    head = segregate2(head);
     printSinglyLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
