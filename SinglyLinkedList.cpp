@@ -1122,11 +1122,116 @@ ListNode *getIntersectionNode2(ListNode *headA, ListNode *headB)
     }
     return tempA;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {2, 2, 2, 0};
+//     ListNode *head = array2LinkedList(vect);
+//     printSinglyLinkedList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------- Add 1 to a Linked List Number ----------------------------------------------------------------------
+ListNode *addOne1(ListNode *head)
+{
+    ListNode *temp = head;
+    ListNode *previous = nullptr;
+    while (temp != nullptr)
+    {
+        ListNode *next = temp->next;
+        temp->next = previous;
+        previous = temp;
+        temp = next;
+    }
+    temp = previous;
+    while (temp != nullptr)
+    {
+        if (temp->next == nullptr && (temp->val + 1) > 9)
+        {
+            int sum = temp->val + 1;
+            temp->val = sum % 10;
+            ListNode *newNode = new ListNode(sum / 10);
+            temp->next = newNode;
+            head = newNode;
+            break;
+        }
+        else if (temp->val + 1 > 9)
+        {
+            temp->val = 0;
+        }
+        else
+        {
+            temp->val += 1;
+            break;
+        }
+        temp = temp->next;
+    }
+    temp = previous;
+    previous = nullptr;
+    while (temp != nullptr)
+    {
+        ListNode *next = temp->next;
+        temp->next = previous;
+        previous = temp;
+        temp = next;
+    }
+    return head;
+}
+// ----------------------------
+ListNode *reverseLinkedList(ListNode *head)
+{
+    ListNode *previous = nullptr;
+    ListNode *temp = head;
+    ListNode *next = nullptr;
+    while (temp != nullptr)
+    {
+        // storing next node
+        next = temp->next;
+        // linking current node to previous
+        temp->next = previous;
+        // updating previous
+        previous = temp;
+        // updating temp
+        temp = next;
+    }
+    return previous;
+}
+ListNode *addOne2(ListNode *head)
+{
+    head = reverseLinkedList(head);
+    ListNode *temp = head;
+    int carry = 1;
+    while (carry != 0)
+    {
+        // adding one to current node
+        temp->val += 1;
+        if (temp->val < 10)
+        {
+            // if no carry we can reverse back list and return it
+            return reverseLinkedList(head);
+        }
+        // else we continue with taking carry forward
+        else
+            temp->val = 0;
+        // if, end of list, we break from loop
+        if (temp->next == nullptr)
+            break;
+        // else we move to next node
+        else
+            temp = temp->next;
+    }
+    // adding new node for the carried 1
+    temp->next = new ListNode(1);
+    return reverseLinkedList(head);
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> vect = {2, 2, 2, 0};
+    vector<int> vect = {3};
     ListNode *head = array2LinkedList(vect);
+    printSinglyLinkedList(head);
+    head = addOne2(head);
     printSinglyLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
