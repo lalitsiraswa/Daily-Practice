@@ -1225,14 +1225,93 @@ ListNode *addOne2(ListNode *head)
     temp->next = new ListNode(1);
     return reverseLinkedList(head);
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {3};
+//     ListNode *head = array2LinkedList(vect);
+//     printSinglyLinkedList(head);
+//     head = addOne2(head);
+//     printSinglyLinkedList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------- 2. Add Two Numbers ----------------------------------------------------------------------
+ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
+{
+    ListNode *templ1 = l1;
+    ListNode *templ2 = l2;
+    ListNode *prevTempl1 = nullptr;
+    ListNode *prevTempl2 = nullptr;
+    int carry = 0;
+    while (templ1 != nullptr && templ2 != nullptr)
+    {
+        int totalSum = templ1->val + templ2->val + carry;
+        templ1->val = totalSum % 10;
+        carry = totalSum / 10;
+        prevTempl1 = templ1;
+        templ1 = templ1->next;
+        prevTempl2 = templ2;
+        templ2 = templ2->next;
+    }
+    // DryRun for [5] and [5]
+    ListNode *previous = prevTempl1;
+    if (templ1 == nullptr)
+        prevTempl1->next = templ2;
+    templ1 = prevTempl1->next;
+    while (templ1 != nullptr && carry != 0)
+    {
+        previous = templ1;
+        int totalSum = templ1->val + carry;
+        templ1->val = totalSum % 10;
+        carry = totalSum / 10;
+        templ1 = templ1->next;
+    }
+    if (carry > 0)
+    {
+        previous->next = new ListNode(carry);
+    }
+    return l1;
+}
+// ----------------------
+ListNode *addTwoNumbers2(ListNode *l1, ListNode *l2)
+{
+    ListNode *dummyHead = new ListNode(-1);
+    ListNode *temp = dummyHead;
+    int carry = 0;
+    while (l1 != nullptr || l2 != nullptr || carry != 0)
+    {
+        int sum = 0;
+        if (l1 != nullptr)
+        {
+            sum += l1->val;
+            l1 = l1->next;
+        }
+        if (l2 != nullptr)
+        {
+            sum += l2->val;
+            l2 = l2->next;
+        }
+        sum += carry;
+        carry = sum / 10;
+        ListNode *node = new ListNode(sum % 10);
+        temp->next = node;
+        temp = temp->next;
+    }
+    return dummyHead->next;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> vect = {3};
-    ListNode *head = array2LinkedList(vect);
-    printSinglyLinkedList(head);
-    head = addOne2(head);
-    printSinglyLinkedList(head);
+    vector<int> vect2 = {5};
+    vector<int> vect1 = {5};
+    ListNode *head1 = array2LinkedList(vect1);
+    ListNode *head2 = array2LinkedList(vect2);
+    printSinglyLinkedList(head1);
+    printSinglyLinkedList(head2);
+    head1 = addTwoNumbers2(head1, head2);
+    printSinglyLinkedList(head1);
     cout << endl
          << string(30, '-') << endl;
     return 0;
