@@ -2,28 +2,28 @@
 using namespace std;
 
 template <typename T>
-class Node
+class DLLNode
 {
 public:
     T data;
-    Node *previous;
-    Node *next;
-    Node(T value) : data(value), previous(nullptr), next(nullptr) {};
-    Node(T value, Node *previous, Node *next) : data(value), previous(previous), next(next) {};
+    DLLNode *previous;
+    DLLNode *next;
+    DLLNode(T value) : data(value), previous(nullptr), next(nullptr) {};
+    DLLNode(T value, DLLNode *previous, DLLNode *next) : data(value), previous(previous), next(next) {};
 };
-Node<int> *array2DoublyLinkedList(vector<int> &vect)
+DLLNode<int> *array2DoublyLinkedList(vector<int> &vect)
 {
-    Node<int> *head = new Node<int>(vect[0]);
-    Node<int> *previous = head;
+    DLLNode<int> *head = new DLLNode<int>(vect[0]);
+    DLLNode<int> *previous = head;
     for (int i = 1; i < vect.size(); i++)
     {
-        Node<int> *newNode = new Node<int>(vect[i], previous, nullptr);
+        DLLNode<int> *newNode = new DLLNode<int>(vect[i], previous, nullptr);
         previous->next = newNode;
         previous = newNode;
     }
     return head;
 }
-Node<int> *deleteHead(Node<int> *head)
+DLLNode<int> *deleteHead(DLLNode<int> *head)
 {
     if (head == nullptr)
         return nullptr;
@@ -32,14 +32,14 @@ Node<int> *deleteHead(Node<int> *head)
         delete head;
         return nullptr;
     }
-    Node<int> *previous = head;
+    DLLNode<int> *previous = head;
     head = head->next;
     head->previous = nullptr;
     previous->next = nullptr;
     delete previous;
     return head;
 }
-Node<int> *deleteTail(Node<int> *head)
+DLLNode<int> *deleteTail(DLLNode<int> *head)
 {
     if (head == nullptr)
         return nullptr;
@@ -48,24 +48,24 @@ Node<int> *deleteTail(Node<int> *head)
         delete head;
         return nullptr;
     }
-    Node<int> *temp = head;
+    DLLNode<int> *temp = head;
     while (temp->next != nullptr)
     {
         temp = temp->next;
     }
-    Node<int> *previous = temp->previous;
+    DLLNode<int> *previous = temp->previous;
     previous->next = nullptr;
     temp->previous = nullptr;
     delete temp;
     return head;
 }
-Node<int> *deleteKthNode(Node<int> *head, int k)
+DLLNode<int> *deleteKthNode(DLLNode<int> *head, int k)
 {
     if (head == nullptr)
         return head;
     if (k == 1)
     {
-        Node<int> *previous = head;
+        DLLNode<int> *previous = head;
         head = head->next;
         previous->next = nullptr;
         if (head != nullptr)
@@ -74,14 +74,14 @@ Node<int> *deleteKthNode(Node<int> *head, int k)
         return head;
     }
     int count = 1;
-    Node<int> *temp = head;
+    DLLNode<int> *temp = head;
     while (temp)
     {
         count++;
         temp = temp->next;
         if (count == k)
         {
-            Node<int> *previous = temp->previous;
+            DLLNode<int> *previous = temp->previous;
             previous->next = temp->next;
             if (temp->next != nullptr)
                 temp->next->previous = previous;
@@ -93,9 +93,9 @@ Node<int> *deleteKthNode(Node<int> *head, int k)
     }
     return head;
 }
-void printDoublyLinkedList(Node<int> *head)
+void printDoublyLinkedList(DLLNode<int> *head)
 {
-    Node<int> *temp = head;
+    DLLNode<int> *temp = head;
     while (temp)
     {
         cout << temp->data << "  ";
@@ -107,7 +107,7 @@ void printDoublyLinkedList(Node<int> *head)
 // {
 //     cout << string(30, '-') << endl;
 //     vector<int> vect = {2, 4, 6, 8, 10, 12};
-//     Node<int> *head = array2DoublyLinkedList(vect);
+//     DLLNode<int> *head = array2DoublyLinkedList(vect);
 //     printDoublyLinkedList(head);
 //     // head = deleteHead(head);
 //     // printDoublyLinkedList(head);
@@ -120,10 +120,10 @@ void printDoublyLinkedList(Node<int> *head)
 //     return 0;
 // }
 // ------------------------------------------------------------- Doubly linked list Insertion at given position --------------------------------------------------------int main()
-void addNode(Node<int> *head, int pos, int data)
+void addNode(DLLNode<int> *head, int pos, int data)
 {
     int positionIndex = 0;
-    Node<int> *previous = head;
+    DLLNode<int> *previous = head;
     while (previous != nullptr)
     {
         if (positionIndex == pos)
@@ -131,8 +131,8 @@ void addNode(Node<int> *head, int pos, int data)
         positionIndex++;
         previous = previous->next;
     }
-    Node<int> *next = previous->next;
-    Node<int> *newNode = new Node<int>(data);
+    DLLNode<int> *next = previous->next;
+    DLLNode<int> *newNode = new DLLNode<int>(data);
     newNode->next = next;
     previous->next = newNode;
     newNode->previous = previous;
@@ -143,7 +143,7 @@ void addNode(Node<int> *head, int pos, int data)
 // {
 //     cout << string(30, '-') << endl;
 //     vector<int> vect = {8, 5, 1, 10, 5, 9, 9, 3, 5, 6, 6, 2};
-//     Node<int> *head = array2DoublyLinkedList(vect);
+//     DLLNode<int> *head = array2DoublyLinkedList(vect);
 //     printDoublyLinkedList(head);
 //     addNode(head, 1, 27);
 //     printDoublyLinkedList(head);
@@ -153,12 +153,12 @@ void addNode(Node<int> *head, int pos, int data)
 // }
 // ---------------------------------------------------------------------- Reverse a Doubly Linked List -----------------------------------------------------------------
 // Function to reverse a doubly linked list
-Node<int> *reverseDLL(Node<int> *head)
+DLLNode<int> *reverseDLL(DLLNode<int> *head)
 {
-    Node<int> *newHead = head;
+    DLLNode<int> *newHead = head;
     while (head->next != nullptr)
     {
-        Node<int> *temp = head->next;
+        DLLNode<int> *temp = head->next;
         head->next = temp->next;
         if (head->next != nullptr)
             head->next->previous = head;
@@ -168,15 +168,15 @@ Node<int> *reverseDLL(Node<int> *head)
     }
     return newHead;
 }
-int main()
-{
-    cout << string(30, '-') << endl;
-    vector<int> vect = {2, 4, 6, 8, 10};
-    Node<int> *head = array2DoublyLinkedList(vect);
-    printDoublyLinkedList(head);
-    head = reverseDLL(head);
-    printDoublyLinkedList(head);
-    cout << endl
-         << string(30, '-') << endl;
-    return 0;
-}
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {2, 4, 6, 8, 10};
+//     DLLNode<int> *head = array2DoublyLinkedList(vect);
+//     printDoublyLinkedList(head);
+//     head = reverseDLL(head);
+//     printDoublyLinkedList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
