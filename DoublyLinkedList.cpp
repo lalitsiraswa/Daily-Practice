@@ -180,3 +180,51 @@ DLLNode<int> *reverseDLL(DLLNode<int> *head)
 //          << string(30, '-') << endl;
 //     return 0;
 // }
+// --------------------------------------------------------- Delete all occurrences of a given key in a doubly linked list ---------------------------------------------------------------
+void deleteAllOccurOfX(DLLNode<int> **head_ref, int x)
+{
+    // head points to head_ref as refernce is given
+    DLLNode<int> *head = *head_ref;
+    DLLNode<int> *temp = head;
+    if (head == nullptr)
+        return;
+    // remove x if it is at head
+    while (head->data == x)
+    {
+        head = head->next;
+        if (head != nullptr)
+            head->previous = nullptr;
+        delete temp;
+        temp = head;
+    }
+    // update the head
+    *head_ref = head;
+    // if x present after the head node
+    while (temp != nullptr)
+    {
+        if (temp->data == x)
+        {
+            DLLNode<int> *previous = temp->previous;
+            DLLNode<int> *next = temp->next;
+            previous->next = next;
+            if (next != nullptr)
+                next->previous = previous;
+            delete temp;
+            temp = next;
+        }
+        else
+            temp = temp->next;
+    }
+}
+int main()
+{
+    cout << string(30, '-') << endl;
+    vector<int> vect = {2, 2, 10, 8, 4, 2, 5, 2};
+    DLLNode<int> *head = array2DoublyLinkedList(vect);
+    printDoublyLinkedList(head);
+    deleteAllOccurOfX(&head, 2);
+    printDoublyLinkedList(head);
+    cout << endl
+         << string(30, '-') << endl;
+    return 0;
+}
