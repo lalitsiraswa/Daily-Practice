@@ -828,9 +828,10 @@ ListNode *reverseKGroup(ListNode *head, int k)
             counter++;
         }
         if (newHead == nullptr)
+        {
             newHead = previous;
-        if (newPrevious == nullptr)
-            newPrevious = head;
+            newPrevious = dummyHead;
+        }
         else
         {
             newPrevious->next = previous;
