@@ -286,17 +286,52 @@ vector<pair<int, int>> findPairsWithGivenSumBinarySearch(DLLNode<int> *head, int
     }
     return pairs;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {1, 2, 4, 5, 6, 8, 9};
+//     DLLNode<int> *head = array2DoublyLinkedList(vect);
+//     printDoublyLinkedList(head);
+//     vector<pair<int, int>> pairs = findPairsWithGivenSumBinarySearch(head, 7);
+//     for (auto pair : pairs)
+//     {
+//         cout << "{" << pair.first << ", " << pair.second << "}" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------- Remove duplicates from a sorted doubly linked list ---------------------------------------------------------------
+DLLNode<int> *removeDuplicates(DLLNode<int> *head)
+{
+    if (head == nullptr || head->next == nullptr)
+        return head;
+    DLLNode<int> *temp = head->next;
+    while (temp != nullptr)
+    {
+        if (temp->data == temp->previous->data)
+        {
+            DLLNode<int> *next = temp->next;
+            DLLNode<int> *previous = temp->previous;
+            previous->next = next;
+            if (next != nullptr)
+                next->previous = previous;
+            delete temp;
+            temp = next;
+        }
+        else
+            temp = temp->next;
+    }
+    return head;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> vect = {1, 2, 4, 5, 6, 8, 9};
+    vector<int> vect = {1, 1, 1, 2, 2, 2, 3, 4, 4, 4};
     DLLNode<int> *head = array2DoublyLinkedList(vect);
     printDoublyLinkedList(head);
-    vector<pair<int, int>> pairs = findPairsWithGivenSumBinarySearch(head, 7);
-    for (auto pair : pairs)
-    {
-        cout << "{" << pair.first << ", " << pair.second << "}" << endl;
-    }
+    head = removeDuplicates(head);
+    printDoublyLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
     return 0;
