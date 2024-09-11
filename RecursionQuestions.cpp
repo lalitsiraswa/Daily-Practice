@@ -25,10 +25,25 @@ void print1ToNUsingBacktracking(int n)
     print1ToNUsingBacktracking(n - 1);
     cout << n << endl;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     print1ToNUsingBacktracking(5);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------- Sum of first N Natural Numbers ------------------------------------------------------------------------
+int sumOfFirstNNaturalNumber(int n)
+{
+    if (n == 0)
+        return n;
+    return n + sumOfFirstNNaturalNumber(n - 1);
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    print1ToNUsingBacktracking(5);
+    cout << sumOfFirstNNaturalNumber(5);
     cout << endl
          << string(30, '-') << endl;
     return 0;
