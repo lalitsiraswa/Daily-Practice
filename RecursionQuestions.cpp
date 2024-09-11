@@ -65,13 +65,41 @@ void reverseArray2(vector<int> &vect, int index)
     swap(vect[index], vect[n - index]);
     reverseArray2(vect, index + 1);
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {1, 2, 3, 4, 2};
+//     reverseArray2(vect, 0);
+//     for (auto item : vect)
+//         cout << item << " ";
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------- Check if a string is palindrome or not ------------------------------------------------------------------------
+bool isStringPalindrome(string s, int left, int right)
+{
+    if (left >= right)
+        return true;
+    if (s[left] != s[right])
+        return false;
+    return isStringPalindrome(s, left + 1, right - 1);
+}
+// -------- Using single variable -------------
+bool isStringPalindrome2(string s, int index)
+{
+    int n = s.size() - 1;
+    if (index >= (n - index))
+        return true;
+    if (s[index] != s[n - index])
+        return false;
+    return isStringPalindrome2(s, index + 1);
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> vect = {1, 2, 3, 4, 2};
-    reverseArray2(vect, 0);
-    for (auto item : vect)
-        cout << item << " ";
+    string str = "abcdedcba";
+    cout << isStringPalindrome2(str, 0) << endl;
     cout << endl
          << string(30, '-') << endl;
     return 0;
