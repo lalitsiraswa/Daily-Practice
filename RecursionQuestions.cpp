@@ -40,10 +40,38 @@ int sumOfFirstNNaturalNumber(int n)
         return n;
     return n + sumOfFirstNNaturalNumber(n - 1);
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     cout << sumOfFirstNNaturalNumber(5);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------- Reverse an array using recursion ------------------------------------------------------------------------
+void reverseArray(vector<int> &vect, int left, int right)
+{
+    if (left >= right)
+        return;
+    swap(vect[left], vect[right]);
+    reverseArray(vect, left + 1, right - 1);
+}
+// ---- Using single variable ------
+void reverseArray2(vector<int> &vect, int index)
+{
+    int n = vect.size() - 1;
+    if (index >= (n - index))
+        return;
+    swap(vect[index], vect[n - index]);
+    reverseArray2(vect, index + 1);
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    cout << sumOfFirstNNaturalNumber(5);
+    vector<int> vect = {1, 2, 3, 4, 2};
+    reverseArray2(vect, 0);
+    for (auto item : vect)
+        cout << item << " ";
     cout << endl
          << string(30, '-') << endl;
     return 0;
