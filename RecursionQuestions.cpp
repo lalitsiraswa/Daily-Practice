@@ -95,12 +95,25 @@ bool isStringPalindrome2(string s, int index)
         return false;
     return isStringPalindrome2(s, index + 1);
 }
-int main()
-{
-    cout << string(30, '-') << endl;
-    string str = "abcdedcba";
-    cout << isStringPalindrome2(str, 0) << endl;
-    cout << endl
-         << string(30, '-') << endl;
-    return 0;
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string str = "abcdedcba";
+//     cout << isStringPalindrome2(str, 0) << endl;
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ----------------------------------------------------------------------------- Fibonacci Series -----------------------------------------------------------------------
+int fibonacciNum(int n){
+  if(n == 0 || n == 1)
+    return n;
+  return fibonacciNum(n-1) + fibonacciNum(n-2);
 }
+// int main() 
+// {
+//     cout << string(30, '-') << endl;
+//     cout << fibonacciNum(4);
+//     cout << endl << string(30, '-') << endl;
+//     return 0;
+// }
