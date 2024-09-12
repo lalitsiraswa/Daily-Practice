@@ -105,15 +105,46 @@ bool isStringPalindrome2(string s, int index)
 //     return 0;
 // }
 // ----------------------------------------------------------------------------- Fibonacci Series -----------------------------------------------------------------------
-int fibonacciNum(int n){
-  if(n == 0 || n == 1)
-    return n;
-  return fibonacciNum(n-1) + fibonacciNum(n-2);
+int fibonacciNum(int n)
+{
+    if (n == 0 || n == 1)
+        return n;
+    return fibonacciNum(n - 1) + fibonacciNum(n - 2);
 }
-// int main() 
+// int main()
 // {
 //     cout << string(30, '-') << endl;
 //     cout << fibonacciNum(4);
 //     cout << endl << string(30, '-') << endl;
 //     return 0;
 // }
+// ------------------------------------------------------------- Recursion on Subsequences | Printing Subsequences -------------------------------------------------------
+// take or not-take concept / pick or not-pick concept
+void printAllSubsequences(vector<int> &vect, vector<int> &subsequence, int index)
+{
+    if (index >= vect.size())
+    {
+        for (auto item : subsequence)
+            cout << item << ", ";
+        if (subsequence.size() == 0)
+            cout << "{}";
+        cout << endl;
+        return;
+    }
+    // take or pick the particular index into the subsequence
+    subsequence.push_back(vect[index]);
+    printAllSubsequences(vect, subsequence, index + 1);
+    // not take or not pick condition, this element is not added to your subseqnence
+    subsequence.pop_back();
+    printAllSubsequences(vect, subsequence, index + 1);
+}
+int main()
+{
+    cout << string(30, '-') << endl;
+    vector<int> vect = {1, 2, 3};
+    vector<int> subsequence;
+    printAllSubsequences(vect, subsequence, 0);
+    cout << endl
+         << string(30, '-') << endl;
+    return 0;
+}
