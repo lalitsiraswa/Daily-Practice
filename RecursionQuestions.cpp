@@ -246,7 +246,7 @@ bool printonlyOneSubSequenceWithSumK(vector<int> &vect, vector<int> &subSequence
 //     return 0;
 // }
 // --------------------------------------------------------------------- Count Subsequences whose sum is k ---------------------------------------------------------------
-int countSubSequencesWithSumK(vector<int> &vect, vector<int> &subSequence, int index, int sum)
+int countSubSequencesWithSumK(vector<int> &vect, int index, int sum)
 {
     if (index >= vect.size())
     {
@@ -255,19 +255,16 @@ int countSubSequencesWithSumK(vector<int> &vect, vector<int> &subSequence, int i
         return 0;
     }
     // take
-    subSequence.push_back(vect[index]);
-    int take = countSubSequencesWithSumK(vect, subSequence, index + 1, sum - vect[index]);
+    int take = countSubSequencesWithSumK(vect, index + 1, sum - vect[index]);
     // not-take
-    subSequence.pop_back();
-    int notTake = countSubSequencesWithSumK(vect, subSequence, index + 1, sum);
+    int notTake = countSubSequencesWithSumK(vect, index + 1, sum);
     return take + notTake;
 }
 int main()
 {
     cout << string(30, '-') << endl;
     vector<int> vect = {1, 2, 1};
-    vector<int> subSequence;
-    cout << countSubSequencesWithSumK(vect, subSequence, 0, 2);
+    cout << countSubSequencesWithSumK(vect, 0, 2);
     cout << endl
          << string(30, '-') << endl;
     return 0;
