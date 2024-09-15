@@ -201,11 +201,46 @@ void printSubsequenceWithSumK(vector<int> &vect, int sum)
         }
     }
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {1, 2, 3};
+//     printSubsequenceWithSumK(vect, 3);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------- Printing Only One Subsequences whose sum is k ---------------------------------------------------------
+bool printonlyOneSubSequenceWithSumK(vector<int> &vect, vector<int> &subSequence, int index, int sum)
+{
+    if (index >= vect.size())
+    {
+        if (sum == 0)
+        {
+            for (auto item : subSequence)
+                cout << item << " ";
+            cout << endl;
+            return true;
+        }
+        return false;
+    }
+    // take
+    subSequence.push_back(vect[index]);
+    if (printonlyOneSubSequenceWithSumK(vect, subSequence, index + 1, sum - vect[index]))
+        return true;
+    // not-take
+    subSequence.pop_back();
+    if (printonlyOneSubSequenceWithSumK(vect, subSequence, index + 1, sum))
+        return true;
+    return false;
+}
 int main()
 {
     cout << string(30, '-') << endl;
     vector<int> vect = {1, 2, 3};
-    printSubsequenceWithSumK(vect, 3);
+    vector<int> subSequence;
+    bool isSubSequenceFound = false;
+    printonlyOneSubSequenceWithSumK(vect, subSequence, 0, 3);
     cout << endl
          << string(30, '-') << endl;
     return 0;
