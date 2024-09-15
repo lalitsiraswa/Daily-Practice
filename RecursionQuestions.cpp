@@ -138,12 +138,74 @@ void printAllSubsequences(vector<int> &vect, vector<int> &subsequence, int index
     subsequence.pop_back();
     printAllSubsequences(vect, subsequence, index + 1);
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {1, 2, 3};
+//     vector<int> subsequence;
+//     printAllSubsequences(vect, subsequence, 0);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------- Printing Subsequences whose sum is k -------------------------------------------------------------
+void printSubSequenceWithSumK(vector<int> &vect, vector<int> &subSequence, int index, int sum)
+{
+    if (index >= vect.size())
+    {
+        if (sum == 0)
+        {
+            for (auto item : subSequence)
+                cout << item << " ";
+            cout << endl;
+        }
+        return;
+    }
+    // take
+    subSequence.push_back(vect[index]);
+    printSubSequenceWithSumK(vect, subSequence, index + 1, sum - vect[index]);
+    // not-take
+    subSequence.pop_back();
+    printSubSequenceWithSumK(vect, subSequence, index + 1, sum);
+}
+// -------------------------------
+void subSequenceHelper(vector<int> &vect, int index, vector<int> &subSequence, int sum)
+{
+    if (sum == 0)
+    {
+        for (auto item : subSequence)
+            cout << item << ", ";
+        cout << endl;
+    }
+    if (index >= vect.size())
+        return;
+    if (vect[index] <= sum)
+    {
+        subSequence.push_back(vect[index]);
+        subSequenceHelper(vect, index + 1, subSequence, sum - vect[index]);
+        subSequence.pop_back();
+    }
+    else
+    {
+        subSequenceHelper(vect, index + 1, subSequence, sum - vect[index]);
+    }
+}
+void printSubsequenceWithSumK(vector<int> &vect, int sum)
+{
+    for (int index = 0; index < vect.size(); index++)
+    {
+        if (vect[index] <= sum)
+        {
+            vector<int> subSequence = {vect[index]};
+            subSequenceHelper(vect, index + 1, subSequence, sum - vect[index]);
+        }
+    }
+}
 int main()
 {
     cout << string(30, '-') << endl;
     vector<int> vect = {1, 2, 3};
-    vector<int> subsequence;
-    printAllSubsequences(vect, subsequence, 0);
+    printSubsequenceWithSumK(vect, 3);
     cout << endl
          << string(30, '-') << endl;
     return 0;
