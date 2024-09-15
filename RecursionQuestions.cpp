@@ -316,6 +316,18 @@ void mergeSort(vector<int> &arr, int low, int high)
     mergeSort(arr, middle + 1, high); // right half
     merge(arr, low, middle, high);    // merging sorted halves
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {3, 1, 2, 4, 1, 5, 2, 6, 4};
+//     mergeSort(arr, 0, arr.size());
+//     for (auto item : arr)
+//         cout << item << " ";
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------------------- Quick Sort --------------------------------------------------------------------------
 int main()
 {
     cout << string(30, '-') << endl;
