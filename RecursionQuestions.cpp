@@ -260,11 +260,69 @@ int countSubSequencesWithSumK(vector<int> &vect, int index, int sum)
     int notTake = countSubSequencesWithSumK(vect, index + 1, sum);
     return take + notTake;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect = {1, 2, 1};
+//     cout << countSubSequencesWithSumK(vect, 0, 2);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------------------- Merge Sort --------------------------------------------------------------------------
+void merge(vector<int> &arr, int low, int middle, int high)
+{
+    vector<int> temp;       // temporary array
+    int left = low;         // starting index of left half of arr
+    int right = middle + 1; // starting index of right half of arr
+    // storing elements in the temporary array in a sorted manner//
+    while (left <= middle && right <= high)
+    {
+        if (arr[left] <= arr[right])
+        {
+            temp.push_back(arr[left]);
+            left++;
+        }
+        else
+        {
+            temp.push_back(arr[right]);
+            right++;
+        }
+    }
+    // if elements on the left half are still left //
+    while (left <= middle)
+    {
+        temp.push_back(arr[left]);
+        left++;
+    }
+    //  if elements on the right half are still left //
+    while (right <= high)
+    {
+        temp.push_back(arr[right]);
+        right++;
+    }
+    // transfering all elements from temporary to arr //
+    for (int i = low; i <= high; i++)
+    {
+        arr[i] = temp[i - low];
+    }
+}
+void mergeSort(vector<int> &arr, int low, int high)
+{
+    if (low >= high)
+        return;
+    int middle = (low + high) / 2;
+    mergeSort(arr, low, middle);      // left half
+    mergeSort(arr, middle + 1, high); // right half
+    merge(arr, low, middle, high);    // merging sorted halves
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> vect = {1, 2, 1};
-    cout << countSubSequencesWithSumK(vect, 0, 2);
+    vector<int> arr = {3, 1, 2, 4, 1, 5, 2, 6, 4};
+    mergeSort(arr, 0, arr.size());
+    for (auto item : arr)
+        cout << item << " ";
     cout << endl
          << string(30, '-') << endl;
     return 0;
