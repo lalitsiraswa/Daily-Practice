@@ -328,11 +328,46 @@ void mergeSort(vector<int> &arr, int low, int high)
 //     return 0;
 // }
 // -------------------------------------------------------------------------------- Quick Sort --------------------------------------------------------------------------
+int findPartition(vector<int> &arr, int low, int high)
+{
+    int pivot = arr[low];
+    int i = low;
+    int j = high;
+    while (i < j)
+    {
+        // find element that is larger then the pivot
+        while (arr[i] <= pivot && i <= high - 1)
+        {
+            i++;
+        }
+        // find element that is smaller then the pivot
+        while (arr[j] > pivot && j >= low + 1)
+        {
+            j--;
+        }
+        // swap them, so that, small element are on the left side
+        // and large element on the right side
+        if (i < j)
+            swap(arr[i], arr[j]);
+    }
+    swap(arr[low], arr[j]);
+    return j;
+}
+void quickSort(vector<int> &arr, int low, int high)
+{
+    if (low < high)
+    {
+        int partitionIndex = findPartition(arr, low, high);
+        quickSort(arr, low, partitionIndex - 1);
+        quickSort(arr, partitionIndex + 1, high);
+    }
+}
+
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr = {3, 1, 2, 4, 1, 5, 2, 6, 4};
-    mergeSort(arr, 0, arr.size());
+    vector<int> arr = {4, 6, 8, 2, 5, 7, 9, 1, 3};
+    quickSort(arr, 0, arr.size() - 1);
     for (auto item : arr)
         cout << item << " ";
     cout << endl
