@@ -363,13 +363,49 @@ void quickSort(vector<int> &arr, int low, int high)
     }
 }
 
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {4, 6, 8, 2, 5, 7, 9, 1, 3};
+//     quickSort(arr, 0, arr.size() - 1);
+//     for (auto item : arr)
+//         cout << item << " ";
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------------- 8. String to Integer (atoi) --------------------------------------------------------------------
+double myAtoiHelper(string &s, int index, double number)
+{
+    if (index >= s.size() || s[index] < '0' || s[index] > '9')
+    {
+        return number;
+    }
+    number = (number * 10) + (s[index] - '0');
+    return myAtoiHelper(s, index + 1, number);
+}
+int myAtoi(string s)
+{
+    int n = s.size();
+    int index = 0;
+    while (s[index] == ' ')
+        index++;
+    bool positive = s[index] == '+';
+    bool negative = s[index] == '-';
+    positive == true ? index++ : index;
+    negative == true ? index++ : index;
+    double number = 0;
+    number = myAtoiHelper(s, index, number);
+    number = negative ? -(number) : number;
+    number = number > INT_MAX ? INT_MAX : number;
+    number = number < INT_MIN ? INT_MIN : number;
+    return number;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr = {4, 6, 8, 2, 5, 7, 9, 1, 3};
-    quickSort(arr, 0, arr.size() - 1);
-    for (auto item : arr)
-        cout << item << " ";
+    string s = "1337c0d3";
+    cout << myAtoi(s) << endl;
     cout << endl
          << string(30, '-') << endl;
     return 0;
