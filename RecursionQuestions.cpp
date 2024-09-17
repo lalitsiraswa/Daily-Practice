@@ -401,6 +401,46 @@ int myAtoi(string s)
     number = number < INT_MIN ? INT_MIN : number;
     return number;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string s = "1337c0d3";
+//     cout << myAtoi(s) << endl;
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------------------- 50. Pow(x, n) -------------------------------------------------------------------------
+double powHelperPositive(double x, int n)
+{
+    if (n == 0)
+        return 1;
+    return x * powHelperPositive(x, n - 1);
+}
+double powHelperNegative(double x, int n)
+{
+    if (n == 0)
+        return 1;
+    return (1 / x * powHelperNegative(x, n + 1));
+}
+double myPow(double x, int n)
+{
+    if (n == INT_MAX)
+        return (x == 1) ? 1 : (x == -1) ? -1
+                                        : 0;
+    if (n == INT_MIN)
+        return (x == 1 || x == -1) ? 1 : 0;
+    double ans = 0;
+    if (n >= 0)
+    {
+        ans = powHelperPositive(x, n);
+    }
+    if (n < 0)
+    {
+        ans = powHelperNegative(x, n);
+    }
+    return ans;
+}
 int main()
 {
     cout << string(30, '-') << endl;
