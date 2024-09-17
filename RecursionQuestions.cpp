@@ -441,11 +441,57 @@ double myPow(double x, int n)
     }
     return ans;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string s = "1337c0d3";
+//     cout << myAtoi(s) << endl;
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------- 1922. Count Good Numbers -------------------------------------------------------------------------
+// ------------ TLE -------------
+int countGoodNumbers(long long n)
+{
+    int ans = 1;
+    for (int i = 0; i < n; i++)
+    {
+        if (i % 2 == 0)
+        {
+            ans *= 5;
+        }
+        else
+        {
+            ans *= 4;
+        }
+    }
+    return ans;
+}
+// -----------------------
+long long powerHelper(long long x, long long n, int &mod)
+{
+    if (n == 0)
+        return 1;
+    if (n % 2 == 0)
+        return powerHelper((x * x) % mod, n / 2, mod);
+    else
+        return (x * powerHelper(x, n - 1, mod)) % mod;
+}
+int countGoodNumbersOtherWay(long long n)
+{
+    int mod = 1e9 + 7;
+    long long evenCount = n / 2 + n % 2;
+    long long oddCount = n / 2;
+    long long first = powerHelper(5, evenCount, mod);
+    long long second = powerHelper(4, oddCount, mod);
+    long long ans = (first * second) % mod;
+    return ans;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    string s = "1337c0d3";
-    cout << myAtoi(s) << endl;
+    cout << countGoodNumbersOtherWay(4) << endl;
     cout << endl
          << string(30, '-') << endl;
     return 0;
