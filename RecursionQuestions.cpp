@@ -570,16 +570,49 @@ void Reverse(stack<int> &St)
 {
     ReverseHelper(St, 0);
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     stack<int> s;
+//     s.push(11);
+//     s.push(2);
+//     s.push(32);
+//     s.push(3);
+//     s.push(41);
+//     Reverse(s);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------------- Generate all binary strings ------------------------------------------------------------------------------
+void generateBinaryStringsHelper(string binaryString, int num, vector<string> &binaryStrings)
+{
+    int n = binaryString.size();
+    if (n == num)
+    {
+        binaryStrings.push_back(binaryString);
+        return;
+    }
+    char lastAddedChar = binaryString[n - 1];
+    generateBinaryStringsHelper(binaryString + "0", num, binaryStrings);
+    if (lastAddedChar != '1')
+    {
+        generateBinaryStringsHelper(binaryString + "1", num, binaryStrings);
+    }
+}
+vector<string> generateBinaryStrings(int num)
+{
+    vector<string> binaryStrings;
+    generateBinaryStringsHelper("0", num, binaryStrings);
+    generateBinaryStringsHelper("1", num, binaryStrings);
+    return binaryStrings;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    stack<int> s;
-    s.push(11);
-    s.push(2);
-    s.push(32);
-    s.push(3);
-    s.push(41);
-    Reverse(s);
+    vector<string> binaryStrings = generateBinaryStrings(4);
+    for (string str : binaryStrings)
+        cout << str << endl;
     cout << endl
          << string(30, '-') << endl;
     return 0;
