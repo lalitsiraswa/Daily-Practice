@@ -488,10 +488,59 @@ int countGoodNumbersOtherWay(long long n)
     long long ans = (first * second) % mod;
     return ans;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     cout << countGoodNumbersOtherWay(4) << endl;
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------- Sort a stack -------------------------------------------------------------------------
+void sortStackHelper(stack<int> &s, int index)
+{
+    if (index == s.size())
+        return;
+    stack<int> temp;
+    int minElement = s.top();
+    s.pop();
+    while (s.size() != index)
+    {
+        int topElement = s.top();
+        if (topElement < minElement)
+        {
+            temp.push(minElement);
+            minElement = topElement;
+        }
+        else
+        {
+            temp.push(topElement);
+        }
+        s.pop();
+    }
+    s.push(minElement);
+    while (!temp.empty())
+    {
+        s.push(temp.top());
+        temp.pop();
+    }
+    sortStackHelper(s, index + 1);
+}
+void SortedStack(stack<int> &s)
+{
+    sortStackHelper(s, 0);
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    cout << countGoodNumbersOtherWay(4) << endl;
+    stack<int> s;
+    s.push(11);
+    s.push(2);
+    s.push(32);
+    s.push(3);
+    s.push(41);
+    cout << s.size() << endl;
+    SortedStack(s);
     cout << endl
          << string(30, '-') << endl;
     return 0;
