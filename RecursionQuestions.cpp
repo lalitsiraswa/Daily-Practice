@@ -530,6 +530,46 @@ void SortedStack(stack<int> &s)
 {
     sortStackHelper(s, 0);
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     stack<int> s;
+//     s.push(11);
+//     s.push(2);
+//     s.push(32);
+//     s.push(3);
+//     s.push(41);
+//     cout << s.size() << endl;
+//     SortedStack(s);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------------- Reverse a Stack ------------------------------------------------------------------------------
+void ReverseHelper(stack<int> &St, int index)
+{
+    if (index == St.size() - 1)
+        return;
+    stack<int> temp;
+    int topElement = St.top();
+    St.pop();
+    while (St.size() != index)
+    {
+        temp.push(St.top());
+        St.pop();
+    }
+    St.push(topElement);
+    while (!temp.empty())
+    {
+        St.push(temp.top());
+        temp.pop();
+    }
+    ReverseHelper(St, index + 1);
+}
+void Reverse(stack<int> &St)
+{
+    ReverseHelper(St, 0);
+}
 int main()
 {
     cout << string(30, '-') << endl;
@@ -539,8 +579,7 @@ int main()
     s.push(32);
     s.push(3);
     s.push(41);
-    cout << s.size() << endl;
-    SortedStack(s);
+    Reverse(s);
     cout << endl
          << string(30, '-') << endl;
     return 0;
