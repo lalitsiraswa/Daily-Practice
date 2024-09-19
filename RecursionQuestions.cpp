@@ -607,12 +607,119 @@ vector<string> generateBinaryStrings(int num)
     generateBinaryStringsHelper("1", num, binaryStrings);
     return binaryStrings;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<string> binaryStrings = generateBinaryStrings(4);
+//     for (string str : binaryStrings)
+//         cout << str << endl;
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------------- 22. Generate Parentheses ------------------------------------------------------------------------------
+void generateParenthesisHelper(int n, vector<string> &parentheses, int openCount, int closeCount, string str)
+{
+    if (openCount + closeCount == n * 2)
+    {
+        parentheses.push_back(str);
+        return;
+    }
+    if (openCount < n)
+    {
+        generateParenthesisHelper(n, parentheses, openCount + 1, closeCount, str + "(");
+    }
+    if (openCount > closeCount)
+    {
+        generateParenthesisHelper(n, parentheses, openCount, closeCount + 1, str + ")");
+    }
+}
+vector<string> generateParenthesis(int n)
+{
+    vector<string> parentheses;
+    generateParenthesisHelper(n, parentheses, 0, 0, "");
+    return parentheses;
+}
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<string> parentheses = generateParenthesis(3);
+//     for (string str : parentheses)
+//         cout << str << endl;
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------------------- 78. Subsets --------------------------------------------------------------------------------
+void subSetsHelper(vector<int> &nums, vector<vector<int>> &subSets, int index, vector<int> &subSet)
+{
+    if (index >= nums.size())
+    {
+        subSets.push_back(subSet);
+        return;
+    }
+    // not-pick
+    subSetsHelper(nums, subSets, index + 1, subSet);
+    // pick
+    subSet.push_back(nums[index]);
+    subSetsHelper(nums, subSets, index + 1, subSet);
+    subSet.pop_back();
+}
+vector<vector<int>> subsets(vector<int> &nums)
+{
+    vector<vector<int>> subSets;
+    vector<int> subSet;
+    subSetsHelper(nums, subSets, 0, subSet);
+    return subSets;
+}
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {1, 2, 3};
+//     vector<vector<int>> subSets = subsets(nums);
+//     for (int i = 0; i < subSets.size(); i++)
+//     {
+//         cout << "[";
+//         for (int j = 0; j < subSets[i].size(); j++)
+//         {
+//             cout << subSets[i][j] << " ";
+//         }
+//         cout << "]" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------------------- Better String --------------------------------------------------------------------------------
+// ------------------ TLE ------------------------
+void findSubsets(string str, set<string> &subSets, string subSet, int index)
+{
+    if (index >= str.size())
+    {
+        subSets.insert(subSet);
+        return;
+    }
+    // not-pick
+    findSubsets(str, subSets, subSet, index + 1);
+    // pick
+    subSet.push_back(str[index]);
+    findSubsets(str, subSets, subSet, index + 1);
+    subSet.pop_back();
+}
+string betterString(string str1, string str2)
+{
+    set<string> str1SubSets;
+    set<string> str2SubSets;
+    findSubsets(str1, str1SubSets, "", 0);
+    findSubsets(str2, str2SubSets, "", 0);
+    return str1SubSets.size() >= str2SubSets.size() ? str1 : str2;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<string> binaryStrings = generateBinaryStrings(4);
-    for (string str : binaryStrings)
-        cout << str << endl;
+    string str1 = "ljmolmti";
+    string str2 = "sqapzwbb";
+    cout << betterString(str1, str2) << endl;
     cout << endl
          << string(30, '-') << endl;
     return 0;
