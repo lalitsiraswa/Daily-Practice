@@ -773,11 +773,57 @@ bool isSubsetPresent(int n, int k, vector<int> &a)
     vector<vector<int>> dp(n, vector<int>(k + 1, -1));
     return isSubsetPresentHelper(k, a, a.size() - 1, dp);
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> a = {4, 2, 5, 6, 7};
+//     cout << isSubsetPresent(a.size(), 14, a);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------------------- 39. Combination Sum --------------------------------------------------------------------------------
+void combinationSumHelper(vector<int> &candidates, int target, int index, vector<int> &combination, vector<vector<int>> &combinations)
+{
+    // base-case
+    if (target == 0)
+    {
+        combinations.push_back(combination);
+        return;
+    }
+    if (index < 0)
+    {
+        return;
+    }
+    // not-pick
+    combinationSumHelper(candidates, target, index - 1, combination, combinations);
+    // pick
+    if (candidates[index] <= target)
+    {
+        combination.push_back(candidates[index]);
+        combinationSumHelper(candidates, target - candidates[index], index, combination, combinations);
+        combination.pop_back();
+    }
+}
+vector<vector<int>> combinationSum(vector<int> &candidates, int target)
+{
+    vector<vector<int>> combinations;
+    vector<int> combination;
+    combinationSumHelper(candidates, target, candidates.size() - 1, combination, combinations);
+    return combinations;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> a = {4, 2, 5, 6, 7};
-    cout << isSubsetPresent(a.size(), 14, a);
+    vector<int> candidates = {2, 3, 5};
+    vector<vector<int>> combinations = combinationSum(candidates, 8);
+    for (int i = 0; i < combinations.size(); i++)
+    {
+        cout << "{";
+        for (int j = 0; j < combinations[i].size(); j++)
+            cout << " " << combinations[i][j];
+        cout << "}" << endl;
+    }
     cout << endl
          << string(30, '-') << endl;
     return 0;
