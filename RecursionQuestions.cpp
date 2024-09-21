@@ -168,39 +168,6 @@ void printSubSequenceWithSumK(vector<int> &vect, vector<int> &subSequence, int i
     subSequence.pop_back();
     printSubSequenceWithSumK(vect, subSequence, index + 1, sum);
 }
-// -------------------------------
-void subSequenceHelper(vector<int> &vect, int index, vector<int> &subSequence, int sum)
-{
-    if (sum == 0)
-    {
-        for (auto item : subSequence)
-            cout << item << ", ";
-        cout << endl;
-    }
-    if (index >= vect.size())
-        return;
-    if (vect[index] <= sum)
-    {
-        subSequence.push_back(vect[index]);
-        subSequenceHelper(vect, index + 1, subSequence, sum - vect[index]);
-        subSequence.pop_back();
-    }
-    else
-    {
-        subSequenceHelper(vect, index + 1, subSequence, sum - vect[index]);
-    }
-}
-void printSubsequenceWithSumK(vector<int> &vect, int sum)
-{
-    for (int index = 0; index < vect.size(); index++)
-    {
-        if (vect[index] <= sum)
-        {
-            vector<int> subSequence = {vect[index]};
-            subSequenceHelper(vect, index + 1, subSequence, sum - vect[index]);
-        }
-    }
-}
 // int main()
 // {
 //     cout << string(30, '-') << endl;
@@ -714,12 +681,74 @@ string betterString(string str1, string str2)
     findSubsets(str2, str2SubSets, "", 0);
     return str1SubSets.size() >= str2SubSets.size() ? str1 : str2;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string str1 = "ljmolmti";
+//     string str2 = "sqapzwbb";
+//     cout << betterString(str1, str2) << endl;
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------------------- Perfect Sum Problem --------------------------------------------------------------------------------
+int perfectSumHelper(int arr[], int n, int sum, int index, int currentSum)
+{
+    if (index >= n)
+    {
+        if (currentSum == sum)
+            return 1;
+        return 0;
+    }
+    // pick
+    int pick = perfectSumHelper(arr, n, sum, index + 1, currentSum + arr[index]);
+    // not-pick
+    int notPick = perfectSumHelper(arr, n, sum, index + 1, currentSum);
+    return pick + notPick;
+}
+int perfectSum(int arr[], int n, int sum)
+{
+    return perfectSumHelper(arr, n, sum, 0, 0);
+}
+// ---------------------------
+int static perfectSumRecursion(int arr[], int index, int sum, vector<vector<int>> &dp, int &MOD)
+{
+    // Base case: If the target sum is 0, we found a valid subset
+    if (sum == 0)
+        return 1;
+
+    // Base case: If we have considered all elements and the target is still not 0, return 0
+    if (index == 0)
+        return (arr[0] == sum) ? 1 : 0;
+
+    // If the result for this state is already calculated, return it
+    if (dp[index][sum] != -1)
+        return dp[index][sum];
+
+    // Recursive cases
+    // 1. Exclude the current element
+    int notTaken = perfectSumRecursion(arr, index - 1, sum, dp, MOD);
+
+    // 2. Include the current element if it doesn't exceed the target
+    int taken = 0;
+    if (arr[index] <= sum)
+        taken = perfectSumRecursion(arr, index - 1, sum - arr[index], dp, MOD);
+
+    // Store the result in the DP table and return
+    return dp[index][sum] = (notTaken + taken) % MOD;
+}
+int perfectSum2(int arr[], int n, int sum)
+{
+    int MOD = 1e9 + 7;
+    vector<vector<int>> dp(n, vector<int>(sum + 1, -1));
+    return perfectSumRecursion(arr, n - 1, sum, dp, MOD);
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    string str1 = "ljmolmti";
-    string str2 = "sqapzwbb";
-    cout << betterString(str1, str2) << endl;
+    int arr[] = {9, 7, 0, 3, 9, 8, 6, 5, 7, 6};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    cout << perfectSum2(arr, n, 31);
     cout << endl
          << string(30, '-') << endl;
     return 0;
