@@ -743,12 +743,41 @@ int perfectSum2(int arr[], int n, int sum)
     vector<vector<int>> dp(n, vector<int>(sum + 1, -1));
     return perfectSumRecursion(arr, n - 1, sum, dp, MOD);
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     int arr[] = {9, 7, 0, 3, 9, 8, 6, 5, 7, 6};
+//     int n = sizeof(arr) / sizeof(arr[0]);
+//     cout << perfectSum2(arr, n, 31);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------------------- Subset Sum --------------------------------------------------------------------------------
+bool isSubsetPresentHelper(int k, vector<int> &a, int index, vector<vector<int>> &dp)
+{
+    if (k == 0)
+        return true;
+    if (index == 0)
+        return a[index] == k;
+    if (dp[index][k] != -1)
+        return dp[index][k];
+    if (isSubsetPresentHelper(k, a, index - 1, dp))
+        return dp[index][k] = true;
+    if (a[index] <= k && isSubsetPresentHelper(k - a[index], a, index - 1, dp))
+        return dp[index][k] = true;
+    return dp[index][k] = false;
+}
+bool isSubsetPresent(int n, int k, vector<int> &a)
+{
+    vector<vector<int>> dp(n, vector<int>(k + 1, -1));
+    return isSubsetPresentHelper(k, a, a.size() - 1, dp);
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    int arr[] = {9, 7, 0, 3, 9, 8, 6, 5, 7, 6};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    cout << perfectSum2(arr, n, 31);
+    vector<int> a = {4, 2, 5, 6, 7};
+    cout << isSubsetPresent(a.size(), 14, a);
     cout << endl
          << string(30, '-') << endl;
     return 0;
