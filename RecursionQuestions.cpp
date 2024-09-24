@@ -812,11 +812,87 @@ vector<vector<int>> combinationSum(vector<int> &candidates, int target)
     combinationSumHelper(candidates, target, candidates.size() - 1, combination, combinations);
     return combinations;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> candidates = {2, 3, 5};
+//     vector<vector<int>> combinations = combinationSum(candidates, 8);
+//     for (int i = 0; i < combinations.size(); i++)
+//     {
+//         cout << "{";
+//         for (int j = 0; j < combinations[i].size(); j++)
+//             cout << " " << combinations[i][j];
+//         cout << "}" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------------------- 40. Combination Sum II --------------------------------------------------------------------------------
+// ---------------- TLE ---------------------
+void combinationSum2Helper(vector<int> &candidates, int target, vector<int> &combination, set<vector<int>> &combinationsSet, int index)
+{
+    if (target == 0)
+    {
+        vector<int> temp(combination.begin(), combination.end());
+        sort(temp.begin(), temp.end());
+        combinationsSet.insert(temp);
+        return;
+    }
+    if (index < 0)
+    {
+        return;
+    }
+    // not-pick
+    combinationSum2Helper(candidates, target, combination, combinationsSet, index - 1);
+    // pick
+    if (candidates[index] <= target)
+    {
+        combination.push_back(candidates[index]);
+        combinationSum2Helper(candidates, target - candidates[index], combination, combinationsSet, index - 1);
+        combination.pop_back();
+    }
+}
+vector<vector<int>> combinationSum2(vector<int> &candidates, int target)
+{
+    set<vector<int>> combinationsSet;
+    vector<int> combination;
+    combinationSum2Helper(candidates, target, combination, combinationsSet, candidates.size() - 1);
+    return {combinationsSet.begin(), combinationsSet.end()};
+}
+// ---------------------------------
+void static findCombinations(int index, int target, vector<int> &candidates, vector<vector<int>> &combinations, vector<int> &ds)
+{
+    if (target == 0)
+    {
+        combinations.push_back(ds);
+        return;
+    }
+    for (int i = index; i < candidates.size(); i++)
+    {
+        if (i > index && candidates[i] == candidates[i - 1])
+            continue;
+        if (candidates[i] > target)
+            break;
+        ds.push_back(candidates[i]);
+        findCombinations(i + 1, target - candidates[i], candidates, combinations, ds);
+        ds.pop_back();
+    }
+}
+vector<vector<int>> combinationSum2_2(vector<int> &candidates, int target)
+{
+    sort(candidates.begin(), candidates.end());
+    vector<vector<int>> combinations;
+    vector<int> ds;
+    findCombinations(0, target, candidates, combinations, ds);
+    return combinations;
+}
+
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> candidates = {2, 3, 5};
-    vector<vector<int>> combinations = combinationSum(candidates, 8);
+    vector<int> candidates = {2, 5, 2, 1, 2};
+    vector<vector<int>> combinations = combinationSum2_2(candidates, 5);
     for (int i = 0; i < combinations.size(); i++)
     {
         cout << "{";
