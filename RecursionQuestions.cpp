@@ -888,18 +888,48 @@ vector<vector<int>> combinationSum2_2(vector<int> &candidates, int target)
     return combinations;
 }
 
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> candidates = {2, 5, 2, 1, 2};
+//     vector<vector<int>> combinations = combinationSum2_2(candidates, 5);
+//     for (int i = 0; i < combinations.size(); i++)
+//     {
+//         cout << "{";
+//         for (int j = 0; j < combinations[i].size(); j++)
+//             cout << " " << combinations[i][j];
+//         cout << "}" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------------------- Subset Sums - GFG --------------------------------------------------------------------------------
+void subsetSumsHelper(vector<int> &arr, vector<int> &subSetSum, int sum, int index)
+{
+    if (index < 0)
+    {
+        subSetSum.push_back(sum);
+        return;
+    }
+    // Not-Pick
+    subsetSumsHelper(arr, subSetSum, sum, index - 1);
+    // Pick
+    subsetSumsHelper(arr, subSetSum, sum + arr[index], index - 1);
+}
+vector<int> subsetSums(vector<int> arr, int n)
+{
+    vector<int> subSetSum;
+    subsetSumsHelper(arr, subSetSum, 0, n - 1);
+    return subSetSum;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> candidates = {2, 5, 2, 1, 2};
-    vector<vector<int>> combinations = combinationSum2_2(candidates, 5);
-    for (int i = 0; i < combinations.size(); i++)
-    {
-        cout << "{";
-        for (int j = 0; j < combinations[i].size(); j++)
-            cout << " " << combinations[i][j];
-        cout << "}" << endl;
-    }
+    vector<int> arr = {1, 2, 1};
+    vector<int> subsets = subsetSums(arr, arr.size());
+    for (auto item : subsets)
+        cout << item << " ";
     cout << endl
          << string(30, '-') << endl;
     return 0;
