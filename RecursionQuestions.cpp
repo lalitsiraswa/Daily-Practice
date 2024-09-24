@@ -923,13 +923,74 @@ vector<int> subsetSums(vector<int> arr, int n)
     subsetSumsHelper(arr, subSetSum, 0, n - 1);
     return subSetSum;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {1, 2, 1};
+//     vector<int> subsets = subsetSums(arr, arr.size());
+//     for (auto item : subsets)
+//         cout << item << " ";
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------------------- 90. Subsets II --------------------------------------------------------------------------------
+void subsetsWithDupHelper(vector<int> &nums, set<vector<int>> &subSets, vector<int> &subSet, int index)
+{
+    if (index < 0)
+    {
+        vector<int> temp(subSet.begin(), subSet.end());
+        sort(temp.begin(), temp.end());
+        subSets.insert(temp);
+        return;
+    }
+    // not-pick
+    subsetsWithDupHelper(nums, subSets, subSet, index - 1);
+    // pick
+    subSet.push_back(nums[index]);
+    subsetsWithDupHelper(nums, subSets, subSet, index - 1);
+    subSet.pop_back();
+}
+vector<vector<int>> subsetsWithDup(vector<int> &nums)
+{
+    set<vector<int>> subSets;
+    vector<int> subSet;
+    subsetsWithDupHelper(nums, subSets, subSet, nums.size() - 1);
+    return {subSets.begin(), subSets.end()};
+}
+// ------------------------
+void subsetsWithDupHelper2(vector<int> &nums, vector<vector<int>> &subSets, vector<int> &subSet, int index)
+{
+    subSets.push_back(subSet);
+    for (int i = index; i < nums.size(); i++)
+    {
+        if (i > index && nums[i] == nums[i - 1])
+            continue;
+        subSet.push_back(nums[i]);
+        subsetsWithDupHelper2(nums, subSets, subSet, i + 1);
+        subSet.pop_back();
+    }
+}
+vector<vector<int>> subsetsWithDup2(vector<int> &nums)
+{
+    sort(nums.begin(), nums.end());
+    vector<vector<int>> subSets;
+    vector<int> subSet;
+    subsetsWithDupHelper2(nums, subSets, subSet, 0);
+    return subSets;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr = {1, 2, 1};
-    vector<int> subsets = subsetSums(arr, arr.size());
-    for (auto item : subsets)
-        cout << item << " ";
+    vector<int> nums = {1, 2, 2};
+    vector<vector<int>> subSets = subsetsWithDup2(nums);
+    for (int i = 0; i < subSets.size(); i++)
+    {
+        cout << "{";
+        for (int j = 0; j < subSets[i].size(); j++)
+            cout << " " << subSets[i][j];
+        cout << "}" << endl;
+    }
     cout << endl
          << string(30, '-') << endl;
     return 0;
