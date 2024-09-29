@@ -979,18 +979,65 @@ vector<vector<int>> subsetsWithDup2(vector<int> &nums)
     subsetsWithDupHelper2(nums, subSets, subSet, 0);
     return subSets;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {1, 2, 2};
+//     vector<vector<int>> subSets = subsetsWithDup2(nums);
+//     for (int i = 0; i < subSets.size(); i++)
+//     {
+//         cout << "{";
+//         for (int j = 0; j < subSets[i].size(); j++)
+//             cout << " " << subSets[i][j];
+//         cout << "}" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------- 17. Letter Combinations of a Phone Number --------------------------------------------------------------------------------
+void letterCombinationsHelper(string digits, vector<string> &letterCombination, string &combination, int index, unordered_map<char, vector<char>> &phoneNumberMap)
+{
+    if (index == digits.size())
+    {
+        letterCombination.push_back(combination);
+        return;
+    }
+    for (int i = 0; i < phoneNumberMap[digits[index]].size(); i++)
+    {
+        combination.push_back(phoneNumberMap[digits[index]][i]);
+        letterCombinationsHelper(digits, letterCombination, combination, index + 1, phoneNumberMap);
+        combination.pop_back();
+    }
+}
+vector<string> letterCombinations(string digits)
+{
+    vector<string> letterCombination;
+    if (digits.size() == 0)
+        return letterCombination;
+    unordered_map<char, vector<char>>
+        phoneNumberMap;
+    phoneNumberMap['0'] = {};
+    phoneNumberMap['1'] = {};
+    phoneNumberMap['2'] = {'a', 'b', 'c'};
+    phoneNumberMap['3'] = {'d', 'e', 'f'};
+    phoneNumberMap['4'] = {'g', 'h', 'i'};
+    phoneNumberMap['5'] = {'j', 'k', 'l'};
+    phoneNumberMap['6'] = {'m', 'n', 'o'};
+    phoneNumberMap['7'] = {'p', 'q', 'r', 's'};
+    phoneNumberMap['8'] = {'t', 'u', 'v'};
+    phoneNumberMap['9'] = {'w', 'x', 'y', 'z'};
+    string combination;
+    letterCombinationsHelper(digits, letterCombination, combination, 0, phoneNumberMap);
+    return letterCombination;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {1, 2, 2};
-    vector<vector<int>> subSets = subsetsWithDup2(nums);
-    for (int i = 0; i < subSets.size(); i++)
-    {
-        cout << "{";
-        for (int j = 0; j < subSets[i].size(); j++)
-            cout << " " << subSets[i][j];
-        cout << "}" << endl;
-    }
+    string digits = "23";
+    vector<string> letterCombination = letterCombinations(digits);
+    for (auto item : letterCombination)
+        cout << item << ",  ";
     cout << endl
          << string(30, '-') << endl;
     return 0;
