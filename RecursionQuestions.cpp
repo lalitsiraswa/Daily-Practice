@@ -1092,16 +1092,165 @@ vector<vector<int>> permute2(vector<int> &nums)
     recurPermute(0, nums, ans);
     return ans;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {1, 2, 3};
+//     vector<vector<int>> permutations = permute2(nums);
+//     for (int i = 0; i < permutations.size(); i++)
+//     {
+//         cout << "{";
+//         for (int j = 0; j < permutations[i].size(); j++)
+//             cout << " " << permutations[i][j];
+//         cout << "}" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------------- 51. N-Queens --------------------------------------------------------------------------------
+bool isSafe(int row, int col, vector<string> &board, int n)
+{
+    // Check upper element
+    int dupRow = row;
+    int dupCol = col;
+    while (row >= 0 && col >= 0)
+    {
+        if (board[row][col] == 'Q')
+            return false;
+        row--;
+        col--;
+    }
+    // Check for horizontal
+    col = dupCol;
+    row = dupRow;
+    while (col >= 0)
+    {
+        if (board[row][col] == 'Q')
+            return false;
+        col--;
+    }
+    // Check for lower elements
+    col = dupCol;
+    row = dupRow;
+    while (row < n && col >= 0)
+    {
+        if (board[row][col] == 'Q')
+            return false;
+        row++;
+        col--;
+    }
+    return true;
+}
+
+void solve(int col, vector<string> &board, vector<vector<string>> &ans, int n)
+{
+    if (col == n)
+    {
+        ans.push_back(board);
+        return;
+    }
+    for (int row = 0; row < n; row++)
+    {
+        if (isSafe(row, col, board, n))
+        {
+            board[row][col] = 'Q';
+            solve(col + 1, board, ans, n);
+            board[row][col] = '.';
+        }
+    }
+}
+vector<vector<string>> solveNQueens(int n)
+{
+    vector<vector<string>> ans;
+    vector<string> board(n);
+    string s(n, '.');
+    for (int i = 0; i < n; i++)
+    {
+        board[i] = s;
+    }
+    solve(0, board, ans, n);
+    return ans;
+}
+// ------------------------------
+void solveNQueensRecursively(int row, vector<int> &rows, vector<int> &columns, vector<string> &chessBoard, int n, vector<vector<string>> &solution)
+{
+    if (n == 0)
+    {
+        solution.push_back(chessBoard);
+        return;
+    }
+    if (row >= chessBoard.size())
+        return;
+    if (rows[row])
+        return;
+    for (int i = 0; i < chessBoard.size(); i++)
+    {
+        if (columns[i])
+            continue;
+        int col = i;
+        bool flag = false;
+        // Check For Upper Diagonal Right
+        for (int m = row; m > 0; m--)
+        {
+            if (col < chessBoard.size() - 1 && chessBoard[m - 1][col + 1] == 'Q')
+            {
+                flag = true;
+                break;
+            }
+            col++;
+        }
+        if (flag)
+            continue;
+        col = i;
+        // Check For Upper Diagonal Left
+        for (int m = row; m > 0; m--)
+        {
+            if (col > 0 && chessBoard[m - 1][col - 1] == 'Q')
+            {
+                flag = true;
+                break;
+            }
+            col--;
+        }
+        if (flag)
+            continue;
+        if (!columns[i] && !rows[row])
+        {
+            rows[row] = 1;
+            columns[i] = 1;
+            chessBoard[row][i] = 'Q';
+            solveNQueensRecursively(row + 1, rows, columns, chessBoard, n - 1, solution);
+            rows[row] = 0;
+            columns[i] = 0;
+            chessBoard[row][i] = '.';
+        }
+    }
+    return;
+}
+vector<vector<string>> solveNQueens2(int n)
+{
+    vector<vector<string>> solution;
+    vector<string> chessBoard;
+    string rowString;
+    for (int i = 0; i < n; i++)
+        rowString.append(".");
+    for (int i = 0; i < n; i++)
+        chessBoard.push_back(rowString);
+    vector<int> rows(n, 0);
+    vector<int> columns(n, 0);
+    solveNQueensRecursively(0, rows, columns, chessBoard, n, solution);
+    return solution;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {1, 2, 3};
-    vector<vector<int>> permutations = permute2(nums);
-    for (int i = 0; i < permutations.size(); i++)
+    vector<vector<string>> nQueens = solveNQueens(4);
+    for (int i = 0; i < nQueens.size(); i++)
     {
         cout << "{";
-        for (int j = 0; j < permutations[i].size(); j++)
-            cout << " " << permutations[i][j];
+        for (int j = 0; j < nQueens[i].size(); j++)
+            cout << " " << nQueens[i][j];
         cout << "}" << endl;
     }
     cout << endl
