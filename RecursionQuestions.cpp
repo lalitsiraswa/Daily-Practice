@@ -1031,13 +1031,79 @@ vector<string> letterCombinations(string digits)
     letterCombinationsHelper(digits, letterCombination, combination, 0, phoneNumberMap);
     return letterCombination;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string digits = "23";
+//     vector<string> letterCombination = letterCombinations(digits);
+//     for (auto item : letterCombination)
+//         cout << item << ",  ";
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------------- 46. Permutations --------------------------------------------------------------------------------
+void permuteHelper(vector<int> &nums, vector<vector<int>> &permutations, vector<int> &permutation, vector<int> &isVisited)
+{
+    if (permutation.size() == nums.size())
+    {
+        permutations.push_back(permutation);
+        return;
+    }
+    for (int index = 0; index < nums.size(); index++)
+    {
+        if (!isVisited[index])
+        {
+            isVisited[index] = 1;
+            permutation.push_back(nums[index]);
+            permuteHelper(nums, permutations, permutation, isVisited);
+            permutation.pop_back();
+            isVisited[index] = 0;
+        }
+    }
+}
+vector<vector<int>> permute(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> isVisited(n, 0);
+    vector<vector<int>> permutations;
+    vector<int> permutation;
+    permuteHelper(nums, permutations, permutation, isVisited);
+    return permutations;
+}
+// ----------------------------------------
+void recurPermute(int index, vector<int> &nums, vector<vector<int>> &ans)
+{
+    if (index == nums.size())
+    {
+        ans.push_back(nums);
+        return;
+    }
+    for (int i = index; i < nums.size(); i++)
+    {
+        swap(nums[index], nums[i]);
+        recurPermute(index + 1, nums, ans);
+        swap(nums[index], nums[i]);
+    }
+}
+vector<vector<int>> permute2(vector<int> &nums)
+{
+    vector<vector<int>> ans;
+    recurPermute(0, nums, ans);
+    return ans;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    string digits = "23";
-    vector<string> letterCombination = letterCombinations(digits);
-    for (auto item : letterCombination)
-        cout << item << ",  ";
+    vector<int> nums = {1, 2, 3};
+    vector<vector<int>> permutations = permute2(nums);
+    for (int i = 0; i < permutations.size(); i++)
+    {
+        cout << "{";
+        for (int j = 0; j < permutations[i].size(); j++)
+            cout << " " << permutations[i][j];
+        cout << "}" << endl;
+    }
     cout << endl
          << string(30, '-') << endl;
     return 0;
