@@ -1242,16 +1242,116 @@ vector<vector<string>> solveNQueens2(int n)
     solveNQueensRecursively(0, rows, columns, chessBoard, n, solution);
     return solution;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<vector<string>> nQueens = solveNQueens(4);
+//     for (int i = 0; i < nQueens.size(); i++)
+//     {
+//         cout << "{";
+//         for (int j = 0; j < nQueens[i].size(); j++)
+//             cout << " " << nQueens[i][j];
+//         cout << "}" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------------- 37. Sudoku Solver --------------------------------------------------------------------------------
+bool isValidMatrix(int row, int column, vector<vector<char>> &board, char data)
+{
+    for (int r = row; r < row + 3; r++)
+    {
+        for (int col = column; col < column + 3; col++)
+        {
+            if (board[r][col] == data)
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+bool isValidData(int row, int column, vector<vector<char>> &board, char data)
+{
+    // check row
+    for (int col = 0; col < 9; col++)
+    {
+        if (board[row][col] == data)
+            return false;
+    }
+    // check column
+    for (int r = 0; r < 9; r++)
+    {
+        if (board[r][column] == data)
+            return false;
+    }
+    // Check in 3*3 matrix
+    int dummyRow = row;
+    int dummyColumn = column;
+    if (row >= 0 && row <= 2)
+        dummyRow = 0;
+    if (row >= 3 && row <= 5)
+        dummyRow = 3;
+    if (row >= 6 && row <= 8)
+        dummyRow = 6;
+    if (column >= 0 && column <= 2)
+        dummyColumn = 0;
+    if (column >= 3 && column <= 5)
+        dummyColumn = 3;
+    if (column >= 6 && column <= 8)
+        dummyColumn = 6;
+    if (!isValidMatrix(dummyRow, dummyColumn, board, data))
+        return false;
+    return true;
+}
+bool solveSudoku(vector<vector<char>> &board, int defaultRow = 0)
+{
+    for (int row = defaultRow; row < 9; row++)
+    {
+        for (int column = 0; column < 9; column++)
+        {
+            if (board[row][column] == '.')
+            {
+                for (int data = 1; data <= 9; data++)
+                {
+                    if (isValidData(row, column, board, data + 48))
+                    {
+                        board[row][column] = data + 48;
+                        if (solveSudoku(board, row))
+                            return true;
+                        board[row][column] = '.';
+                    }
+                }
+                return false;
+            }
+        }
+    }
+    return true;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<vector<string>> nQueens = solveNQueens(4);
-    for (int i = 0; i < nQueens.size(); i++)
+    vector<vector<char>> board = {
+        {'5', '3', '.', '.', '7', '.', '.', '.', '.'},
+        {'6', '.', '.', '1', '9', '5', '.', '.', '.'},
+        {'.', '9', '8', '.', '.', '.', '.', '6', '.'},
+        {'8', '.', '.', '.', '6', '.', '.', '.', '3'},
+        {'4', '.', '.', '8', '.', '3', '.', '.', '1'},
+        {'7', '.', '.', '.', '2', '.', '.', '.', '6'},
+        {'.', '6', '.', '.', '.', '.', '2', '8', '.'},
+        {'.', '.', '.', '4', '1', '9', '.', '.', '5'},
+        {'.', '.', '.', '.', '8', '.', '.', '7', '9'}};
+    solveSudoku(board);
+    for (int i = 0; i < 9; i++)
     {
         cout << "{";
-        for (int j = 0; j < nQueens[i].size(); j++)
-            cout << " " << nQueens[i][j];
-        cout << "}" << endl;
+        for (int j = 0; j < 9; j++)
+        {
+            cout << board[i][j] << "  ";
+        }
+        cout << "}";
+        cout << endl;
     }
     cout << endl
          << string(30, '-') << endl;
