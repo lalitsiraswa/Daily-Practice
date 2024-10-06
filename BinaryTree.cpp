@@ -152,6 +152,81 @@ vector<int> postorderTraversal(TreeNode *root)
     postorderTraversalHelper(root, postOrder);
     return postOrder;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->right = new TreeNode(3);
+//     root->left->left = new TreeNode(4);
+//     root->left->right = new TreeNode(5);
+//     root->right->left = new TreeNode(6);
+//     root->right->right = new TreeNode(7);
+//     vector<int> preOrder = postorderTraversal(root);
+//     for (int data : preOrder)
+//         cout << data << " ";
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------- 102. Binary Tree Level Order Traversal ---------------------------------------------------------------------
+vector<vector<int>> levelOrder(TreeNode *root)
+{
+    vector<vector<int>> levelOrderTraversal;
+    vector<int> result;
+    queue<TreeNode *> que;
+    if (root == nullptr)
+        return levelOrderTraversal;
+    que.push(root);
+    que.push(nullptr);
+    while (!que.empty())
+    {
+        TreeNode *top = que.front();
+        if (top == nullptr)
+        {
+            levelOrderTraversal.push_back(result);
+            if (que.size() == 1)
+                break;
+            result.clear();
+            que.pop();
+            que.push(nullptr);
+            continue;
+        }
+        que.pop();
+        result.push_back(top->val);
+        if (top->left)
+            que.push(top->left);
+        if (top->right)
+            que.push(top->right);
+    }
+    return levelOrderTraversal;
+}
+// --------------------------------
+vector<vector<int>> levelOrder2(TreeNode *root)
+{
+    if (root == nullptr)
+        return {};
+    vector<vector<int>> levelOrderView;
+    queue<TreeNode *> que;
+    que.push(root);
+    while (!que.empty())
+    {
+        vector<int> currLevel;
+        int size = que.size();
+        for (int i = 0; i < size; i++)
+        {
+            TreeNode *node = que.front();
+            que.pop();
+            if (node->left)
+                que.push(node->left);
+            if (node->right)
+                que.push(node->right);
+            currLevel.push_back(node->val);
+        }
+        levelOrderView.push_back(currLevel);
+    }
+    return levelOrderView;
+}
 int main()
 {
     cout << string(35, '-') << endl;
@@ -162,9 +237,15 @@ int main()
     root->left->right = new TreeNode(5);
     root->right->left = new TreeNode(6);
     root->right->right = new TreeNode(7);
-    vector<int> preOrder = postorderTraversal(root);
-    for (int data : preOrder)
-        cout << data << " ";
+    vector<vector<int>> levelOrderTraversal = levelOrder2(root);
+    for (int i = 0; i < levelOrderTraversal.size(); i++)
+    {
+        for (int j = 0; j < levelOrderTraversal[i].size(); j++)
+        {
+            cout << levelOrderTraversal[i][j] << "  ";
+        }
+        cout << endl;
+    }
     cout << endl
          << string(35, '-');
     return 0;
