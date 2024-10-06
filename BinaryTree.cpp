@@ -120,6 +120,38 @@ vector<int> inorderTraversal2(TreeNode *root)
     }
     return inOrder;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->right = new TreeNode(3);
+//     root->left->left = new TreeNode(4);
+//     root->left->right = new TreeNode(5);
+//     root->right->left = new TreeNode(6);
+//     root->right->right = new TreeNode(7);
+//     vector<int> preOrder = inorderTraversal2(root);
+//     for (int data : preOrder)
+//         cout << data << " ";
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------- 145. Binary Tree Postorder Traversal ---------------------------------------------------------------------
+void postorderTraversalHelper(TreeNode *root, vector<int> &postOrder)
+{
+    if (root == nullptr)
+        return;
+    postorderTraversalHelper(root->left, postOrder);
+    postorderTraversalHelper(root->right, postOrder);
+    postOrder.push_back(root->val);
+}
+vector<int> postorderTraversal(TreeNode *root)
+{
+    vector<int> postOrder;
+    postorderTraversalHelper(root, postOrder);
+    return postOrder;
+}
 int main()
 {
     cout << string(35, '-') << endl;
@@ -130,7 +162,7 @@ int main()
     root->left->right = new TreeNode(5);
     root->right->left = new TreeNode(6);
     root->right->right = new TreeNode(7);
-    vector<int> preOrder = inorderTraversal2(root);
+    vector<int> preOrder = postorderTraversal(root);
     for (int data : preOrder)
         cout << data << " ";
     cout << endl
