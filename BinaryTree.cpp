@@ -47,6 +47,27 @@ vector<int> preorderTraversal2(TreeNode *root)
     }
     return preOrder;
 }
+// ------------------
+vector<int> preorderTraversal3(TreeNode *root)
+{
+    vector<int> result;
+    stack<TreeNode *> s;
+    TreeNode *currentNode = root;
+    while (currentNode != NULL || !s.empty())
+    {
+        while (currentNode != NULL)
+        {
+            // cout << currentNode->val << ", ";
+            result.push_back(currentNode->val);
+            s.push(currentNode);
+            currentNode = currentNode->left;
+        }
+        currentNode = s.top();
+        s.pop();
+        currentNode = currentNode->right;
+    }
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
