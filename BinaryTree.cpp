@@ -68,6 +68,58 @@ vector<int> preorderTraversal3(TreeNode *root)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->right = new TreeNode(3);
+//     root->left->left = new TreeNode(4);
+//     root->left->right = new TreeNode(5);
+//     root->right->left = new TreeNode(6);
+//     root->right->right = new TreeNode(7);
+//     vector<int> preOrder = preorderTraversal2(root);
+//     for (int data : preOrder)
+//         cout << data << " ";
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------ 94. Binary Tree Inorder Traversal ---------------------------------------------------------------------
+void inorderTraversalHelper(TreeNode *root, vector<int> &inOrder)
+{
+    if (root == nullptr)
+        return;
+    inorderTraversalHelper(root->left, inOrder);
+    inOrder.push_back(root->val);
+    inorderTraversalHelper(root->right, inOrder);
+}
+vector<int> inorderTraversal(TreeNode *root)
+{
+    vector<int> inOrder;
+    inorderTraversalHelper(root, inOrder);
+    return inOrder;
+}
+// ------------------------------
+vector<int> inorderTraversal2(TreeNode *root)
+{
+    vector<int> inOrder;
+    stack<TreeNode *> s;
+    TreeNode *currentNode = root;
+    while (currentNode != nullptr || !s.empty())
+    {
+        while (currentNode != nullptr)
+        {
+            s.push(currentNode);
+            currentNode = currentNode->left;
+        }
+        TreeNode *top = s.top();
+        inOrder.push_back(top->val);
+        s.pop();
+        currentNode = top->right;
+    }
+    return inOrder;
+}
 int main()
 {
     cout << string(35, '-') << endl;
@@ -78,7 +130,7 @@ int main()
     root->left->right = new TreeNode(5);
     root->right->left = new TreeNode(6);
     root->right->right = new TreeNode(7);
-    vector<int> preOrder = preorderTraversal2(root);
+    vector<int> preOrder = inorderTraversal2(root);
     for (int data : preOrder)
         cout << data << " ";
     cout << endl
