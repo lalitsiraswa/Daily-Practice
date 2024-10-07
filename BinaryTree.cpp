@@ -177,23 +177,23 @@ vector<int> postorderTraversal2(TreeNode *root)
     }
     return postOrder;
 }
-int main()
-{
-    cout << string(35, '-') << endl;
-    TreeNode *root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left = new TreeNode(4);
-    root->left->right = new TreeNode(5);
-    root->right->left = new TreeNode(6);
-    root->right->right = new TreeNode(7);
-    vector<int> preOrder = postorderTraversal2(root);
-    for (int data : preOrder)
-        cout << data << " ";
-    cout << endl
-         << string(35, '-');
-    return 0;
-}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->right = new TreeNode(3);
+//     root->left->left = new TreeNode(4);
+//     root->left->right = new TreeNode(5);
+//     root->right->left = new TreeNode(6);
+//     root->right->right = new TreeNode(7);
+//     vector<int> preOrder = postorderTraversal2(root);
+//     for (int data : preOrder)
+//         cout << data << " ";
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
 // ------------------------------------------------------------- 102. Binary Tree Level Order Traversal ---------------------------------------------------------------------
 vector<vector<int>> levelOrder(TreeNode *root)
 {
@@ -275,3 +275,88 @@ vector<vector<int>> levelOrder2(TreeNode *root)
 //          << string(35, '-');
 //     return 0;
 // }
+// -------------------------------------------------------------- Preorder, Inorder, Postorder Traversals in One Traversal ---------------------------------------------------------------------
+// Function to get the Preorder,
+// Inorder and Postorder traversal
+// Of Binary Tree in One traversal
+vector<int> preInPostTraversal(TreeNode *root)
+{
+    // Vectors to store traversals
+    vector<int> preOrder;
+    vector<int> inOrder;
+    vector<int> postOrder;
+    // If the tree is empty,
+    // return empty traversals
+    if (root == nullptr)
+        return {};
+    // Stack to maintain nodes
+    // and their traversal state
+    stack<pair<TreeNode *, int>> st;
+    // Start with the root node
+    // and state 1 (preorder)
+    st.push({root, 1});
+    while (!st.empty())
+    {
+        pair<TreeNode *, int> top = st.top();
+        st.pop();
+        // this is part of PreOrder
+        if (top.second == 1)
+        {
+            // Store the node's data
+            // in the preorder traversal
+            preOrder.push_back(top.first->val);
+            // Move to state 2
+            // (inorder) for this node
+            top.second = 2;
+            // Push the updated state
+            // back onto the stack
+            st.push(top);
+            // Push left child onto
+            // the stack for processing
+            if (top.first->left != nullptr)
+                st.push({top.first->left, 1});
+        }
+        // this is a part of in
+        else if (top.second == 2)
+        {
+            // Store the node's data
+            // in the inorder traversal
+            inOrder.push_back(top.first->val);
+            // Move to state 3
+            // (postorder) for this node
+            top.second = 3;
+            // Push the updated state
+            // back onto the stack
+            st.push(top);
+            // Push right child onto
+            // the stack for processing
+            if (top.first->right != nullptr)
+                st.push({top.first->right, 1});
+        }
+        // this is part of post (top.second == 3)
+        else
+        {
+            // Store the node's data
+            // in the postorder traversal
+            postOrder.push_back(top.first->val);
+        }
+    }
+    return preOrder;
+}
+int main()
+{
+    cout << string(35, '-') << endl;
+    TreeNode *root = new TreeNode(1);
+    root->left = new TreeNode(2);
+    root->right = new TreeNode(3);
+    root->left->left = new TreeNode(4);
+    root->left->right = new TreeNode(5);
+    root->right->left = new TreeNode(6);
+    root->right->right = new TreeNode(7);
+    vector<int> traversal = preInPostTraversal(root);
+    for (auto item : traversal)
+        cout << item << ", ";
+    cout << endl
+         << string(35, '-');
+    return 0;
+}
