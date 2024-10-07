@@ -343,6 +343,56 @@ vector<int> preInPostTraversal(TreeNode *root)
     }
     return preOrder;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->right = new TreeNode(3);
+//     root->left->left = new TreeNode(4);
+//     root->left->right = new TreeNode(5);
+//     root->right->left = new TreeNode(6);
+//     root->right->right = new TreeNode(7);
+//     vector<int> traversal = preInPostTraversal(root);
+//     for (auto item : traversal)
+//         cout << item << ", ";
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------- 104. Maximum Depth of Binary Tree ---------------------------------------------------------------------
+int maxDepth(TreeNode *root)
+{
+    int maximumDepth = 0;
+    if (root == nullptr)
+        return maximumDepth;
+    queue<TreeNode *> que;
+    que.push(root);
+    while (!que.empty())
+    {
+        maximumDepth += 1;
+        int size = que.size();
+        for (int i = 1; i <= size; i++)
+        {
+            TreeNode *top = que.front();
+            que.pop();
+            if (top->left != nullptr)
+                que.push(top->left);
+            if (top->right != nullptr)
+                que.push(top->right);
+        }
+    }
+    return maximumDepth;
+}
+// -----------------------
+int maxDepthRecursion(TreeNode *root)
+{
+    if (root == nullptr)
+        return 0;
+    int leftSubTreeDepth = maxDepthRecursion(root->left);
+    int rightSubTreeDepth = maxDepthRecursion(root->right);
+    return 1 + max(leftSubTreeDepth, rightSubTreeDepth);
+}
 int main()
 {
     cout << string(35, '-') << endl;
@@ -353,10 +403,6 @@ int main()
     root->left->right = new TreeNode(5);
     root->right->left = new TreeNode(6);
     root->right->right = new TreeNode(7);
-    vector<int> traversal = preInPostTraversal(root);
-    for (auto item : traversal)
-        cout << item << ", ";
-    cout << endl
-         << string(35, '-');
+    cout << "Maimum Depth : " << maxDepthRecursion(root) << endl;
     return 0;
 }
