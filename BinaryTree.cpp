@@ -393,6 +393,40 @@ int maxDepthRecursion(TreeNode *root)
     int rightSubTreeDepth = maxDepthRecursion(root->right);
     return 1 + max(leftSubTreeDepth, rightSubTreeDepth);
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->right = new TreeNode(3);
+//     root->left->left = new TreeNode(4);
+//     root->left->right = new TreeNode(5);
+//     root->right->left = new TreeNode(6);
+//     root->right->right = new TreeNode(7);
+//     cout << "Maimum Depth : " << maxDepthRecursion(root) << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------- 110. Balanced Binary Tree --------------------------------------------------------------------------
+// A height-balanced binary tree is a binary tree in which the depth of the two subtrees of every node never differs by more than one.
+int dfsHeight(TreeNode *root)
+{
+    if (root == nullptr)
+        return 0;
+    int leftSubTreeDepth = dfsHeight(root->left);
+    if (leftSubTreeDepth == -1)
+        return -1;
+    int rightSubTreeDepth = dfsHeight(root->right);
+    if (rightSubTreeDepth == -1)
+        return -1;
+    if (abs(leftSubTreeDepth - rightSubTreeDepth) > 1)
+        return -1;
+    return 1 + max(leftSubTreeDepth, rightSubTreeDepth);
+}
+bool isBalanced(TreeNode *root)
+{
+    int result = dfsHeight(root);
+    return result == -1 ? false : true;
+}
 int main()
 {
     cout << string(35, '-') << endl;
@@ -403,6 +437,6 @@ int main()
     root->left->right = new TreeNode(5);
     root->right->left = new TreeNode(6);
     root->right->right = new TreeNode(7);
-    cout << "Maimum Depth : " << maxDepthRecursion(root) << endl;
+    cout << "Maimum Depth : " << isBalanced(root) << endl;
     return 0;
 }
