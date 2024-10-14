@@ -828,9 +828,10 @@ ListNode *reverseKGroup(ListNode *head, int k)
             counter++;
         }
         if (newHead == nullptr)
+        {
             newHead = previous;
-        if (newPrevious == nullptr)
-            newPrevious = head;
+            newPrevious = dummyHead;
+        }
         else
         {
             newPrevious->next = previous;
@@ -1301,17 +1302,92 @@ ListNode *addTwoNumbers2(ListNode *l1, ListNode *l2)
     }
     return dummyHead->next;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> vect2 = {5};
+//     vector<int> vect1 = {5};
+//     ListNode *head1 = array2LinkedList(vect1);
+//     ListNode *head2 = array2LinkedList(vect2);
+//     printSinglyLinkedList(head1);
+//     printSinglyLinkedList(head2);
+//     head1 = addTwoNumbers2(head1, head2);
+//     printSinglyLinkedList(head1);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------- 61. Rotate List ----------------------------------------------------------------------
+ListNode *rotateRight(ListNode *head, int k)
+{
+    if (head == nullptr)
+        return head;
+    ListNode *temp = head;
+    ListNode *tailNode = nullptr;
+    int listLength = 0;
+    while (temp != nullptr)
+    {
+        listLength++;
+        // storing the last/tail node
+        tailNode = temp;
+        temp = temp->next;
+    }
+    temp = head;
+    k = k % listLength;
+    // k == 0 when k == listLength (5 % 5 == 0)
+    if (k == 0)
+        return head;
+    int counter = 1;
+    while (counter < (listLength - k))
+    {
+        counter++;
+        temp = temp->next;
+    }
+    ListNode *next = temp->next;
+    temp->next = nullptr;
+    tailNode->next = head;
+    head = next;
+    return head;
+}
+// ---------------------
+ListNode *rotateRight2(ListNode *head, int k)
+{
+    if (head == nullptr)
+        return head;
+    ListNode *temp = head;
+    ListNode *tailNode = nullptr;
+    int listLength = 0;
+    while (temp != nullptr)
+    {
+        listLength++;
+        tailNode = temp;
+        temp = temp->next;
+    }
+    k = k % listLength;
+    // k == 0 when k == listLength (5 % 5 == 0)
+    if (k == 0)
+        return head;
+    // connect last/tail node with the head
+    tailNode->next = head;
+    temp = head;
+    int counter = 1;
+    while (counter < (listLength - k))
+    {
+        counter++;
+        temp = temp->next;
+    }
+    head = temp->next;
+    temp->next = nullptr;
+    return head;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> vect2 = {5};
-    vector<int> vect1 = {5};
-    ListNode *head1 = array2LinkedList(vect1);
-    ListNode *head2 = array2LinkedList(vect2);
-    printSinglyLinkedList(head1);
-    printSinglyLinkedList(head2);
-    head1 = addTwoNumbers2(head1, head2);
-    printSinglyLinkedList(head1);
+    vector<int> vect = {1, 2, 3, 4, 5};
+    ListNode *head = array2LinkedList(vect);
+    printSinglyLinkedList(head);
+    head = rotateRight2(head, 0);
+    printSinglyLinkedList(head);
     cout << endl
          << string(30, '-') << endl;
     return 0;
