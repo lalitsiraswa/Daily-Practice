@@ -327,11 +327,16 @@ DLLNode<int> *removeDuplicates(DLLNode<int> *head)
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> vect = {1, 1, 1, 2, 2, 2, 3, 4, 4, 4};
+    vector<int> vect = {2, 2, 10, 8, 4, 2, 5, 2};
     DLLNode<int> *head = array2DoublyLinkedList(vect);
-    printDoublyLinkedList(head);
-    head = removeDuplicates(head);
-    printDoublyLinkedList(head);
+    // printDoublyLinkedList(head);
+    // deleteAllOccurOfX(&head, 2);
+    // printDoublyLinkedList(head);
+    int x = 10;
+    int *y = &x;
+    int **z = &y;
+    cout << *y << endl;
+    cout << **z << endl;
     cout << endl
          << string(30, '-') << endl;
     return 0;

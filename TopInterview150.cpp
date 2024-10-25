@@ -4459,13 +4459,70 @@ int knapsackDP(int targetWeight, vector<int> profit, vector<int> weight)
     }
     return dp[n - 1][targetWeight];
 }
-int main()
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> profit = {1, 2, 3};
+//     vector<int> weight = {4, 5, 1};
+//     cout << knapsack(4, profit, weight);
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------- 76. Minimum Window Substring -------------------------------------------------------------
+string minWindowRevision(string s, string t) {
+  int tUniqueCount = 0;
+  int sUniqueCount = 0;
+  unordered_map<char, int> tMap;
+  unordered_map<char, int> sMap;
+  for(auto ch : t){
+    if(!tMap.count(ch))
+      tUniqueCount++;
+    tMap[ch]++;
+  }
+  int minWindowLength = INT_MAX;
+  int index = 0;
+  int left = 0;
+  for(index; index < s.size(); index++){
+    sMap[s[index]]++;
+    if(sMap[s[index]] == tMap[s[index]])
+      sUniqueCount++;
+    if(tUniqueCount == sUniqueCount){
+      minWindowLength = min(index+1, minWindowLength);
+      break;
+    }
+  }
+  index += 1;
+  while(index < s.size()){
+    sMap[s[index]]++;
+    if(sMap[s[index]] == tMap[s[index]])
+      sUniqueCount++;
+    if(sUniqueCount == tUniqueCount){
+      while(1){
+        minWindowLength = min(minWindowLength, index - left + 1);
+        if(tMap[s[left]] == 0){
+          sMap[s[left]]--;
+        }
+        else{
+          sMap[s[left]]--;
+          if(sMap[s[left]] < tMap[s[left]]){
+            sUniqueCount--;
+            left++;
+            break;
+          }
+        }
+        left++;
+      }
+    }
+    index++;
+  }
+  cout << minWindowLength << endl;
+  return "Lalit";
+}
+int main() 
 {
-    cout << string(35, '-') << endl;
-    vector<int> profit = {1, 2, 3};
-    vector<int> weight = {4, 5, 1};
-    cout << knapsack(4, profit, weight);
-    cout << endl
-         << string(35, '-');
+    string s = "ADOBECODEBANC";
+    string t = "ABC";
+    cout << minWindowRevision(s, t) << endl;
     return 0;
 }
