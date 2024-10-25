@@ -476,6 +476,40 @@ int diameterOfBinaryTree2(TreeNode *root)
     diameterOfBinaryTreeHelper2(root, diameter);
     return diameter;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->right = new TreeNode(3);
+//     root->left->left = new TreeNode(4);
+//     root->left->right = new TreeNode(5);
+//     root->right->left = new TreeNode(6);
+//     root->right->right = new TreeNode(7);
+//     cout << "Diameter Of Binary Tree : " << diameterOfBinaryTree2(root) << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------- 124. Binary Tree Maximum Path Sum --------------------------------------------------------------------------
+int maxPathSumRecursiveCall(TreeNode *root, int &maxPath)
+{
+    if (root == nullptr)
+        return 0;
+    int leftTreeMaxPathSum = maxPathSumRecursiveCall(root->left, maxPath);
+    int rightTreeMaxPathSum = maxPathSumRecursiveCall(root->right, maxPath);
+    maxPath = max(maxPath, root->val + leftTreeMaxPathSum + rightTreeMaxPathSum);
+    maxPath = max(maxPath, root->val + leftTreeMaxPathSum);
+    maxPath = max(maxPath, root->val + rightTreeMaxPathSum);
+    maxPath = max(maxPath, root->val);
+    return max(max(leftTreeMaxPathSum, rightTreeMaxPathSum) + root->val, root->val);
+}
+int maxPathSum(TreeNode *root)
+{
+    if (root == nullptr)
+        return 0;
+    int maxPath = INT_MIN;
+    maxPathSumRecursiveCall(root, maxPath);
+    return maxPath;
+}
 int main()
 {
     cout << string(35, '-') << endl;
@@ -486,6 +520,6 @@ int main()
     root->left->right = new TreeNode(5);
     root->right->left = new TreeNode(6);
     root->right->right = new TreeNode(7);
-    cout << "Diameter Of Binary Tree : " << diameterOfBinaryTree2(root) << endl;
+    cout << "Maximum Path Sum : " << maxPathSum(root) << endl;
     return 0;
 }
