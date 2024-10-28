@@ -510,16 +510,41 @@ int maxPathSum(TreeNode *root)
     maxPathSumRecursiveCall(root, maxPath);
     return maxPath;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->right = new TreeNode(3);
+//     root->left->left = new TreeNode(4);
+//     root->left->right = new TreeNode(5);
+//     root->right->left = new TreeNode(6);
+//     root->right->right = new TreeNode(7);
+//     cout << "Maximum Path Sum : " << maxPathSum(root) << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------- 100. Same Tree --------------------------------------------------------------------------
+bool isSameTree(TreeNode *p, TreeNode *q)
+{
+    // Base case: if both trees are null, they are identical
+    if (p == nullptr && q == nullptr)
+        return true;
+    // If only one tree is null or the values are different, they are not identical
+    if (p == nullptr || q == nullptr || p->val != q->val)
+        return false;
+    if (!isSameTree(p->left, q->left))
+        return false;
+    return isSameTree(p->right, q->right);
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    TreeNode *root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left = new TreeNode(4);
-    root->left->right = new TreeNode(5);
-    root->right->left = new TreeNode(6);
-    root->right->right = new TreeNode(7);
-    cout << "Maximum Path Sum : " << maxPathSum(root) << endl;
+    TreeNode *p = new TreeNode(1);
+    p->left = new TreeNode(2);
+    // p->right = new TreeNode(3);
+    TreeNode *q = new TreeNode(1);
+    q->left = new TreeNode(2);
+    q->right = new TreeNode(3);
+    cout << "Maximum Path Sum : " << isSameTree(p, q) << endl;
     return 0;
 }
