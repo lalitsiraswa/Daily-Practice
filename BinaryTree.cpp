@@ -536,15 +536,140 @@ bool isSameTree(TreeNode *p, TreeNode *q)
         return false;
     return isSameTree(p->right, q->right);
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *p = new TreeNode(1);
+//     p->left = new TreeNode(2);
+//     // p->right = new TreeNode(3);
+//     TreeNode *q = new TreeNode(1);
+//     q->left = new TreeNode(2);
+//     q->right = new TreeNode(3);
+//     cout << "Maximum Path Sum : " << isSameTree(p, q) << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------- 103. Binary Tree Zigzag Level Order Traversal ---------------------------------------------------------------------
+vector<vector<int>> zigzagLevelOrder(TreeNode *root)
+{
+    vector<vector<int>> result;
+    if (root == nullptr)
+        return result;
+    queue<TreeNode *> q;
+    q.push(root);
+    bool isOddLevel = true;
+    while (!q.empty())
+    {
+        vector<int> level;
+        int queueSize = q.size();
+        for (int i = 0; i < queueSize; i++)
+        {
+            TreeNode *treeNode = q.front();
+            level.push_back(treeNode->val);
+            if (treeNode->left)
+                q.push(treeNode->left);
+            if (treeNode->right)
+                q.push(treeNode->right);
+            q.pop();
+        }
+        if (!isOddLevel)
+            reverse(level.begin(), level.end());
+        result.push_back(level);
+        isOddLevel = !isOddLevel;
+    }
+    return result;
+}
+// ------------------------------
+vector<vector<int>> zigzagLevelOrder2(TreeNode *root)
+{
+    vector<vector<int>> result;
+    if (root == nullptr)
+        return result;
+    deque<TreeNode *> q;
+    q.push_back(root);
+    bool isOddLevel = true;
+    while (!q.empty())
+    {
+        vector<int> level;
+        int queueSize = q.size();
+        for (int i = 0; i < queueSize; i++)
+        {
+            TreeNode *treeNode = nullptr;
+            if (isOddLevel)
+            {
+                treeNode = q.front();
+                level.push_back(treeNode->val);
+                if (treeNode->left)
+                    q.push_back(treeNode->left);
+                if (treeNode->right)
+                    q.push_back(treeNode->right);
+                q.pop_front();
+            }
+            else
+            {
+                treeNode = q.back();
+                level.push_back(treeNode->val);
+                if (treeNode->right)
+                    q.push_front(treeNode->right);
+                if (treeNode->left)
+                    q.push_front(treeNode->left);
+                q.pop_back();
+            }
+        }
+        result.push_back(level);
+        isOddLevel = !isOddLevel;
+    }
+    return result;
+}
+// ------------------------------
+vector<vector<int>> zigzagLevelOrder3(TreeNode *root)
+{
+    vector<vector<int>> result;
+    if (root == nullptr)
+        return result;
+    queue<TreeNode *> que;
+    que.push(root);
+    bool isLeftToRight = true;
+    while (!que.empty())
+    {
+        int size = que.size();
+        vector<int> level(size);
+        for (int i = 0; i < size; i++)
+        {
+            TreeNode *node = que.front();
+            // Find position to fill node's value
+            int index = (isLeftToRight) ? i : (size - 1 - i);
+            level[index] = node->val;
+            if (node->left)
+                que.push(node->left);
+            if (node->right)
+                que.push(node->right);
+            que.pop();
+        }
+        // after this level
+        isLeftToRight = !isLeftToRight;
+        result.push_back(level);
+    }
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    TreeNode *p = new TreeNode(1);
-    p->left = new TreeNode(2);
-    // p->right = new TreeNode(3);
-    TreeNode *q = new TreeNode(1);
-    q->left = new TreeNode(2);
-    q->right = new TreeNode(3);
-    cout << "Maximum Path Sum : " << isSameTree(p, q) << endl;
+    TreeNode *root = new TreeNode(1);
+    root->left = new TreeNode(2);
+    root->right = new TreeNode(3);
+    root->left->left = new TreeNode(4);
+    root->left->right = new TreeNode(5);
+    root->right->left = new TreeNode(6);
+    root->right->right = new TreeNode(7);
+    vector<vector<int>> result = zigzagLevelOrder3(root);
+    for (int i = 0; i < result.size(); i++)
+    {
+        cout << "{";
+        for (int j = 0; j < result[i].size(); j++)
+        {
+            cout << result[i][j] << ", ";
+        }
+        cout << "}";
+    }
     return 0;
 }
