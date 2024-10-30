@@ -651,25 +651,187 @@ vector<vector<int>> zigzagLevelOrder3(TreeNode *root)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->right = new TreeNode(3);
+//     root->left->left = new TreeNode(4);
+//     root->left->right = new TreeNode(5);
+//     root->right->left = new TreeNode(6);
+//     root->right->right = new TreeNode(7);
+//     vector<vector<int>> result = zigzagLevelOrder3(root);
+//     for (int i = 0; i < result.size(); i++)
+//     {
+//         cout << "{";
+//         for (int j = 0; j < result[i].size(); j++)
+//         {
+//             cout << result[i][j] << ", ";
+//         }
+//         cout << "}";
+//     }
+//     return 0;
+// }
+// --------------------------------------------------------------- Tree Boundary Traversal ---------------------------------------------------------------------
+void leftBoundary(TreeNode *root, vector<int> &result)
+{
+    if (root == nullptr)
+        return;
+    if (root->left == nullptr && root->right == nullptr)
+        return;
+    result.push_back(root->val);
+    if (root->left)
+        leftBoundary(root->left, result);
+    else
+        leftBoundary(root->right, result);
+}
+void leafNodesInOrder(TreeNode *root, vector<int> &result)
+{
+    if (root == nullptr)
+        return;
+    if (root->left == nullptr && root->right == nullptr)
+        result.push_back(root->val);
+    leafNodesInOrder(root->left, result);
+    leafNodesInOrder(root->right, result);
+}
+void rightBoundary(TreeNode *root, stack<int> &s)
+{
+    if (root == nullptr)
+        return;
+    if (root->left == nullptr && root->right == nullptr)
+        return;
+    s.push(root->val);
+    if (root->right)
+        rightBoundary(root->right, s);
+    else
+        rightBoundary(root->left, s);
+}
+vector<int> boundary(TreeNode *root)
+{
+    vector<int> result;
+    if (root == nullptr)
+        return result;
+    if (root->left || root->right)
+        result.push_back(root->val);
+    leftBoundary(root->left, result);
+    leafNodesInOrder(root, result);
+    stack<int> s;
+    rightBoundary(root->right, s);
+    while (!s.empty())
+    {
+        result.push_back(s.top());
+        s.pop();
+    }
+    return result;
+}
+// -------------------------------------
+// Function to check if a node is a leaf
+bool isLeafNode(TreeNode *root)
+{
+    return !root->left && !root->right;
+}
+// Function to add the left boundary of the tree
+void addLeftBoundary(TreeNode *root, vector<int> &result)
+{
+    TreeNode *current = root->left;
+    while (current)
+    {
+        // If the current node is not a leaf, add its value to the result
+        if (!isLeafNode(current))
+        {
+            result.push_back(current->val);
+        }
+        // Move to the left child if it exists, otherwise move to the right child
+        if (current->left)
+        {
+            current = current->left;
+        }
+        else
+        {
+            current = current->right;
+        }
+    }
+}
+// Function to add the right boundary of the tree
+void addRightBoundary(TreeNode *root, vector<int> &result)
+{
+    TreeNode *current = root->right;
+    vector<int> temp;
+    while (current)
+    {
+        // If the current node is not a leaf, add its value to a temporary vector
+        if (!isLeafNode(current))
+        {
+            temp.push_back(current->val);
+        }
+        // Move to the right child if it exists, otherwise move to the left child
+        if (current->right)
+        {
+            current = current->right;
+        }
+        else
+        {
+            current = current->left;
+        }
+    }
+    // Reverse and add the values from the temporary vector to the result
+    for (int i = temp.size() - 1; i >= 0; --i)
+    {
+        result.push_back(temp[i]);
+    }
+}
+// Function to add the leaves of the tree
+void addLeaves(TreeNode *root, vector<int> &result)
+{
+    // If the current node is a leaf, add its value to the result
+    if (isLeafNode(root))
+    {
+        result.push_back(root->val);
+        return;
+    }
+    // Recursively add leaves of the left and right subtrees
+    if (root->left)
+    {
+        addLeaves(root->left, result);
+    }
+    if (root->right)
+    {
+        addLeaves(root->right, result);
+    }
+}
+vector<int> boundaryTUF(TreeNode *root)
+{
+    vector<int> result;
+    if (root == nullptr)
+        return result;
+    // If the root is not a leaf, add its value to the result
+    if (!isLeafNode(root))
+    {
+        result.push_back(root->val);
+    }
+    // Add the left boundary, leaves, and right boundary in order
+    addLeftBoundary(root, result);
+    addLeaves(root, result);
+    addRightBoundary(root, result);
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
     TreeNode *root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left = new TreeNode(4);
-    root->left->right = new TreeNode(5);
-    root->right->left = new TreeNode(6);
-    root->right->right = new TreeNode(7);
-    vector<vector<int>> result = zigzagLevelOrder3(root);
+    root->left = new TreeNode(100);
+    root->right = new TreeNode(2);
+    root->right->right = new TreeNode(3);
+    root->right->right->right = new TreeNode(4);
+    root->right->right->right->right = new TreeNode(5);
+    root->right->right->right->right->right = new TreeNode(6);
+    vector<int> result = boundary(root);
     for (int i = 0; i < result.size(); i++)
     {
-        cout << "{";
-        for (int j = 0; j < result[i].size(); j++)
-        {
-            cout << result[i][j] << ", ";
-        }
-        cout << "}";
+        cout << result[i] << ", ";
     }
+    cout << endl
+         << string(35, '-') << endl;
     return 0;
 }
