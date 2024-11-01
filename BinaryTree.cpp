@@ -934,6 +934,31 @@ vector<vector<int>> verticalTraversalTUF(TreeNode *root)
     }
     return result;
 }
+// ------------------------------------------
+void verticalTraversalDFS(TreeNode *root, map<int, map<int, multiset<int>>> &mp, int row, int column)
+{
+    if (root == nullptr)
+        return;
+    mp[column][row].insert(root->val);
+    verticalTraversalDFS(root->left, mp, row + 1, column - 1);
+    verticalTraversalDFS(root->right, mp, row + 1, column + 1);
+}
+vector<vector<int>> verticalTraversalDFS(TreeNode *root)
+{
+    map<int, map<int, multiset<int>>> mp;
+    verticalTraversalDFS(root, mp, 0, 0);
+    vector<vector<int>> result;
+    for (auto p : mp)
+    {
+        vector<int> col;
+        for (auto q : p.second)
+        {
+            col.insert(col.end(), q.second.begin(), q.second.end());
+        }
+        result.push_back(col);
+    }
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
@@ -944,7 +969,7 @@ int main()
     root->left->right = new TreeNode(5);
     root->right->left = new TreeNode(6);
     root->right->right = new TreeNode(7);
-    vector<vector<int>> result = verticalTraversalTUF(root);
+    vector<vector<int>> result = verticalTraversalDFS(root);
     for (int i = 0; i < result.size(); i++)
     {
         cout << "{";
