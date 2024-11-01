@@ -1095,6 +1095,98 @@ vector<int> topViewTUF_ORIGINAL(TreeNode *root)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->right = new TreeNode(3);
+//     root->left->left = new TreeNode(4);
+//     root->left->right = new TreeNode(5);
+//     root->right->left = new TreeNode(6);
+//     root->right->right = new TreeNode(7);
+//     vector<int> result = topViewTUF_ORIGINAL(root);
+//     for (int i = 0; i < result.size(); i++)
+//     {
+//         cout << result[i] << ", ";
+//     }
+//     return 0;
+// }
+// --------------------------------------------------------------- Bottom View of Binary Tree ---------------------------------------------------------------------
+vector<int> bottomViewTUF(TreeNode *root)
+{
+    // Vector to store the result
+    vector<int> result;
+    // Check if the tree is empty
+    if (root == nullptr)
+        return result;
+    // Map to store the bottom view nodes based on their vertical/column positions
+    map<int, int> mp;
+    // Queue for BFS traversal, each element is a pair containing nodeand its vertical/column position
+    queue<pair<TreeNode *, int>> q;
+    // Push the root node with its vertical/column position (0) into the queue
+    q.push({root, 0});
+    // BFS traversal
+    while (!q.empty())
+    {
+        // Retrieve the node and its vertical/column position from the front of the queue
+        auto front = q.front();
+        q.pop();
+        TreeNode *node = front.first;
+        int column = front.second;
+        // Update the map with the node's data for the current vertical/column position
+        mp[column] = node->val;
+        // Process left child
+        if (node->left)
+        {
+            // Push the left child with a decreased vertical/column position into the queue
+            q.push({node->left, column - 1});
+        }
+        // Process right child
+        if (node->right)
+        {
+            // Push the right child with an increased vertical/column position into the queue
+            q.push({node->right, column + 1});
+        }
+    }
+    // Transfer values from the map to the result vector
+    for (auto itr : mp)
+    {
+        result.push_back(itr.second);
+    }
+    return result;
+}
+// ------------------------------------------
+void fillBottomViewMap(TreeNode *root, map<int, pair<int, int>> &mp, int row, int column)
+{
+    if (root == nullptr)
+        return;
+
+    // Update the map if the current node is at a greater row depth or if the column is empty
+    if (mp.find(column) == mp.end() || mp[column].first <= row)
+    {
+        mp[column] = {row, root->val};
+    }
+    // Recurse for the left and right children
+    fillBottomViewMap(root->left, mp, row + 1, column - 1);
+    fillBottomViewMap(root->right, mp, row + 1, column + 1);
+}
+vector<int> bottomView(TreeNode *root)
+{
+    vector<int> result;
+    if (root == nullptr)
+        return result;
+    // Map to store the bottom-most node at each column
+    map<int, pair<int, int>> mp; // {column: {row, value}}
+    // Recursive call to fill the map
+    fillBottomViewMap(root, mp, 0, 0);
+    // Collect the values in column order
+    for (const auto &itr : mp)
+    {
+        result.push_back(itr.second.second);
+    }
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
@@ -1103,9 +1195,11 @@ int main()
     root->right = new TreeNode(3);
     root->left->left = new TreeNode(4);
     root->left->right = new TreeNode(5);
+    root->left->right->left = new TreeNode(8);
     root->right->left = new TreeNode(6);
+    root->right->left->right = new TreeNode(9);
     root->right->right = new TreeNode(7);
-    vector<int> result = topViewTUF_ORIGINAL(root);
+    vector<int> result = bottomView(root);
     for (int i = 0; i < result.size(); i++)
     {
         cout << result[i] << ", ";
