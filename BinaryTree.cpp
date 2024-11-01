@@ -959,6 +959,142 @@ vector<vector<int>> verticalTraversalDFS(TreeNode *root)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->right = new TreeNode(3);
+//     root->left->left = new TreeNode(4);
+//     root->left->right = new TreeNode(5);
+//     root->right->left = new TreeNode(6);
+//     root->right->right = new TreeNode(7);
+//     vector<vector<int>> result = verticalTraversalDFS(root);
+//     for (int i = 0; i < result.size(); i++)
+//     {
+//         cout << "{";
+//         for (int j = 0; j < result[i].size(); j++)
+//         {
+//             cout << result[i][j] << ", ";
+//         }
+//         cout << "}";
+//     }
+//     return 0;
+// }
+// --------------------------------------------------------------- Top View of Binary Tree ---------------------------------------------------------------------
+void topView(TreeNode *root, map<int, pair<int, int>> &mp, int row, int column)
+{
+    if (root == nullptr)
+        return;
+    if (!mp.count(column))
+    {
+        mp[column] = {row, root->val};
+    }
+    else if (mp.count(column) && mp[column].first > row)
+    {
+        mp[column] = {row, root->val};
+    }
+    topView(root->left, mp, row + 1, column - 1);
+    topView(root->right, mp, row + 1, column + 1);
+}
+
+vector<int> topView(TreeNode *root)
+{
+    // map<column, pair<row, value>>, 'We only need to collect top element from the column'
+    map<int, pair<int, int>> mp;
+    vector<int> result;
+    if (root == nullptr)
+        return result;
+    topView(root, mp, 0, 0);
+    for (auto itr : mp)
+    {
+        result.push_back(itr.second.second);
+    }
+    return result;
+}
+// ----------------------------------------------
+vector<int> topViewTUF_TRY(TreeNode *root)
+{
+    vector<int> result;
+    if (root == nullptr)
+        return result;
+    // queue<pair<TreeNode *, pair<row, column>>> todo;
+    queue<pair<TreeNode *, pair<int, int>>> todo;
+    // map<column, pair<row, value>> mp;
+    map<int, pair<int, int>> mp;
+    todo.push({root, {0, 0}});
+    while (!todo.empty())
+    {
+        auto front = todo.front();
+        todo.pop();
+        int row = front.second.first;
+        int column = front.second.second;
+        TreeNode *node = front.first;
+        if (!mp.count(column))
+        {
+            mp[column] = {row, node->val};
+        }
+        else if (mp.count(column) && mp[column].first > row)
+        {
+            mp[column] = {row, node->val};
+        }
+        if (node->left)
+            todo.push({node->left, {row + 1, column - 1}});
+        if (node->right)
+            todo.push({node->right, {row + 1, column + 1}});
+    }
+    for (auto itr : mp)
+    {
+        result.push_back(itr.second.second);
+    }
+    return result;
+}
+// ----------------------------------------------
+vector<int> topViewTUF_ORIGINAL(TreeNode *root)
+{
+    // Vector to store the result
+    vector<int> result;
+    // Check if the tree is empty
+    if (root == nullptr)
+        return result;
+    // Map to store the top view nodes based on their vertical/column positions
+    map<int, int> mp;
+    // Queue for BFS traversal, each element is a pair containing node and its vertical/column position
+    queue<pair<TreeNode *, int>> q;
+    // Push the root node with its vertical/column position (0) into the queue
+    q.push({root, 0});
+    // BFS traversal
+    while (!q.empty())
+    {
+        // Retrieve the node and its vertical/column position from the front of the queue
+        auto itr = q.front();
+        q.pop();
+        TreeNode *node = itr.first;
+        int column = itr.second;
+        // If the vertical/column position is not already in the map, add the node's data to the map
+        if (mp.find(column) == mp.end())
+        {
+            mp[column] = node->val;
+        }
+        // Process left child
+        if (node->left)
+        { // Push the left child with a decreased vertical/column position into the queue
+            q.push({node->left, column - 1});
+        }
+        // Process right child
+        if (node->right)
+        {
+            // Push the right child with an increased vertical/column position into the queue
+            q.push({node->right, column + 1});
+        }
+    }
+    // Transfer values from the map to the result vector
+    for (auto it : mp)
+    {
+        result.push_back(it.second);
+    }
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
@@ -969,15 +1105,10 @@ int main()
     root->left->right = new TreeNode(5);
     root->right->left = new TreeNode(6);
     root->right->right = new TreeNode(7);
-    vector<vector<int>> result = verticalTraversalDFS(root);
+    vector<int> result = topViewTUF_ORIGINAL(root);
     for (int i = 0; i < result.size(); i++)
     {
-        cout << "{";
-        for (int j = 0; j < result[i].size(); j++)
-        {
-            cout << result[i][j] << ", ";
-        }
-        cout << "}";
+        cout << result[i] << ", ";
     }
     return 0;
 }
