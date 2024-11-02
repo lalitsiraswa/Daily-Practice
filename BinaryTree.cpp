@@ -1187,22 +1187,90 @@ vector<int> bottomView(TreeNode *root)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->right = new TreeNode(3);
+//     root->left->left = new TreeNode(4);
+//     root->left->right = new TreeNode(5);
+//     root->left->right->left = new TreeNode(8);
+//     root->right->left = new TreeNode(6);
+//     root->right->left->right = new TreeNode(9);
+//     root->right->right = new TreeNode(7);
+//     vector<int> result = bottomView(root);
+//     for (int i = 0; i < result.size(); i++)
+//     {
+//         cout << result[i] << ", ";
+//     }
+//     return 0;
+// }
+// --------------------------------------------------------------- 199. Binary Tree Right Side View ---------------------------------------------------------------------
+// --------------- DFS 'PREFERRED-ONE' ---------------
+void rightSideViewDfsCall(TreeNode *root, vector<int> &rightSideViewList, int currLevel)
+{
+    if (root == nullptr)
+        return;
+    if (currLevel == rightSideViewList.size())
+        rightSideViewList.push_back(root->val);
+    rightSideViewDfsCall(root->right, rightSideViewList, currLevel + 1);
+    rightSideViewDfsCall(root->left, rightSideViewList, currLevel + 1);
+}
+vector<int> rightSideView(TreeNode *root)
+{
+    if (root == nullptr)
+        return {};
+    vector<int> rightSideViewList;
+    rightSideViewDfsCall(root, rightSideViewList, 0);
+    return rightSideViewList;
+}
+// -----------------------------------
+vector<int> rightSideViewBFS(TreeNode *root)
+{
+    vector<int> result;
+    if (root == nullptr)
+        return result;
+    // map<level/row, value> mp;
+    map<int, int> mp;
+    queue<pair<TreeNode *, int>> q;
+    q.push({root, 0});
+    while (!q.empty())
+    {
+        auto front = q.front();
+        q.pop();
+        TreeNode *node = front.first;
+        int level = front.second;
+        mp[level] = node->val;
+        if (node->left)
+            q.push({node->left, level + 1});
+        if (node->right)
+            q.push({node->right, level + 1});
+    }
+    for (auto itr : mp)
+    {
+        result.push_back(itr.second);
+    }
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    TreeNode *root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left = new TreeNode(4);
-    root->left->right = new TreeNode(5);
-    root->left->right->left = new TreeNode(8);
-    root->right->left = new TreeNode(6);
-    root->right->left->right = new TreeNode(9);
-    root->right->right = new TreeNode(7);
-    vector<int> result = bottomView(root);
+    TreeNode *root = new TreeNode(0);
+    root->left = new TreeNode(1);
+    root->right = new TreeNode(2);
+    root->left->right = new TreeNode(3);
+    root->right->left = new TreeNode(4);
+    root->left->right->right = new TreeNode(5);
+    root->right->left->left = new TreeNode(6);
+    root->left->right->right->right = new TreeNode(7);
+    root->right->left->left->left = new TreeNode(8);
+    vector<int> result = rightSideView(root);
     for (int i = 0; i < result.size(); i++)
     {
         cout << result[i] << ", ";
     }
+    cout << endl
+         << string(35, '-') << endl;
     return 0;
 }
