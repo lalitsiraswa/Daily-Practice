@@ -1253,6 +1253,72 @@ vector<int> rightSideViewBFS(TreeNode *root)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(0);
+//     root->left = new TreeNode(1);
+//     root->right = new TreeNode(2);
+//     root->left->right = new TreeNode(3);
+//     root->right->left = new TreeNode(4);
+//     root->left->right->right = new TreeNode(5);
+//     root->right->left->left = new TreeNode(6);
+//     root->left->right->right->right = new TreeNode(7);
+//     root->right->left->left->left = new TreeNode(8);
+//     vector<int> result = rightSideView(root);
+//     for (int i = 0; i < result.size(); i++)
+//     {
+//         cout << result[i] << ", ";
+//     }
+//     cout << endl
+//          << string(35, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------- Left View of Binary Tree ---------------------------------------------------------------------
+vector<int> leftView(TreeNode *root)
+{
+    vector<int> result;
+    if (root == nullptr)
+        return result;
+    queue<pair<TreeNode *, int>> q;
+    // map<level/row, value> mp;
+    map<int, int> mp;
+    q.push({root, 0});
+    while (!q.empty())
+    {
+        auto front = q.front();
+        q.pop();
+        TreeNode *node = front.first;
+        int level = front.second;
+        if (mp.find(level) == mp.end())
+            mp[level] = node->val;
+        if (node->left)
+            q.push({node->left, level + 1});
+        if (node->right)
+            q.push({node->right, level + 1});
+    }
+    for (auto itr : mp)
+        result.push_back(itr.second);
+    return result;
+}
+// -----------------------------
+void leftSideViewDFSCall(TreeNode *root, vector<int> &rightSideViewList, int currLevel)
+{
+    if (root == nullptr)
+        return;
+    if (currLevel == rightSideViewList.size())
+        rightSideViewList.push_back(root->val);
+    leftSideViewDFSCall(root->left, rightSideViewList, currLevel + 1);
+    leftSideViewDFSCall(root->right, rightSideViewList, currLevel + 1);
+}
+vector<int> leftViewDFS(TreeNode *root)
+{
+    if (root == nullptr)
+        return {};
+    vector<int> rightSideViewList;
+    leftSideViewDFSCall(root, rightSideViewList, 0);
+    return rightSideViewList;
+}
 int main()
 {
     cout << string(35, '-') << endl;
@@ -1265,7 +1331,7 @@ int main()
     root->right->left->left = new TreeNode(6);
     root->left->right->right->right = new TreeNode(7);
     root->right->left->left->left = new TreeNode(8);
-    vector<int> result = rightSideView(root);
+    vector<int> result = leftViewDFS(root);
     for (int i = 0; i < result.size(); i++)
     {
         cout << result[i] << ", ";
