@@ -1570,7 +1570,6 @@ int findWaysSpaceOptimization(vector<int> &arr, int k)
 // Same As Counts Subsets with Sum K Above Code
 // Same As Counts Subsets with Sum K Above Code
 // Same As Counts Subsets with Sum K Above Code
-#include <bits/stdc++.h>
 int countPartitionsMemoization(vector<int> &arr, int index, int target, vector<vector<int>> &dp)
 {
     if (index == 0)
@@ -2728,11 +2727,31 @@ int buyAndSellStock2SpaceOptimization(vector<int> &prices)
     // The maximum profit is stored in previousDataStore[0] after all calculations
     return previousDataStore[0];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> prices = {7, 1, 5, 3, 6, 4};
+//     cout << buyAndSellStock2SpaceOptimization(prices);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+
+// ------------------------------------------------------ 70. Climbing Stairs - Revision -------------------------------------------------------------
+int climbStairsRevision(int n)
+{
+    if (n == 0)
+        return 1;
+    int oneStep = climbStairsRevision(n - 1);
+    int twoStep = 0;
+    if (n - 2 >= 0)
+        twoStep = climbStairsRevision(n - 2);
+    return oneStep + twoStep;
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> prices = {7, 1, 5, 3, 6, 4};
-    cout << buyAndSellStock2SpaceOptimization(prices);
+    cout << climbStairsRevision(4);
     cout << endl
          << string(20, '-');
     return 0;
