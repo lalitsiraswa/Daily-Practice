@@ -2759,7 +2759,7 @@ int climbStairsRevision(int n)
 int main()
 {
     cout << string(20, '-') << endl;
-    cout << climbStairsRevision(5);
+    cout << climbStairsRevision(3);
     cout << endl
          << string(20, '-');
     return 0;
