@@ -2738,20 +2738,28 @@ int buyAndSellStock2SpaceOptimization(vector<int> &prices)
 // }
 
 // ------------------------------------------------------ 70. Climbing Stairs - Revision -------------------------------------------------------------
-int climbStairsRevision(int n)
+int climbStairsMemoizationRevision(int n, vector<int> &dp)
 {
     if (n == 0)
-        return 1;
-    int oneStep = climbStairsRevision(n - 1);
+        return dp[n] = 1;
+    if (dp[n] != -1)
+        return dp[n];
+    int oneStep = climbStairsMemoizationRevision(n - 1, dp);
     int twoStep = 0;
     if (n - 2 >= 0)
-        twoStep = climbStairsRevision(n - 2);
-    return oneStep + twoStep;
+        twoStep = climbStairsMemoizationRevision(n - 2, dp);
+    return dp[n] = oneStep + twoStep;
+}
+int climbStairsRevision(int n)
+{
+    vector<int> dp(n + 1, -1);
+    climbStairsMemoizationRevision(n, dp);
+    return dp[n];
 }
 int main()
 {
     cout << string(20, '-') << endl;
-    cout << climbStairsRevision(4);
+    cout << climbStairsRevision(3);
     cout << endl
          << string(20, '-');
     return 0;
