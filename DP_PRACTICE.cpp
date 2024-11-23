@@ -2736,3 +2736,67 @@ int buyAndSellStock2SpaceOptimization(vector<int> &prices)
 //          << string(20, '-');
 //     return 0;
 // }
+// ------------------------------------------------------------------- Geek Jump --------------------------------------------------------------------------
+int minimumEnergyRecursion(vector<int> &height, int n, vector<int> &dp)
+{
+    if (n == 0)
+    {
+        return dp[n] = 0;
+    }
+    if (dp[n] != -1)
+    {
+        return dp[n];
+    }
+    int oneStep = abs(height[n] - height[n - 1]) + minimumEnergyRecursion(height, n - 1, dp);
+    int twoStep = INT_MAX;
+    if (n >= 2)
+    {
+        twoStep = abs(height[n] - height[n - 2]) + minimumEnergyRecursion(height, n - 2, dp);
+    }
+    return dp[n] = min(oneStep, twoStep);
+}
+int minimumEnergy(vector<int> &height, int n)
+{
+    vector<int> dp(n, -1);
+    return minimumEnergyRecursion(height, n - 1, dp);
+}
+// ---------------------------------
+int minimumEnergyTabulation(vector<int> &height, int n)
+{
+    vector<int> dp(n, -1);
+    dp[0] = 0;
+    for (int index = 1; index < n; index++)
+    {
+        int oneStep = abs(height[index] - height[index - 1]) + dp[index - 1];
+        int twoStep = INT_MAX;
+        if (index >= 2)
+        {
+            twoStep = abs(height[index] - height[index - 2]) + dp[index - 2];
+        }
+        dp[index] = min(oneStep, twoStep);
+    }
+    return dp[n - 1];
+}
+// ---------------------------------
+int minimumEnergySpaceOptimize(vector<int> &height, int n)
+{
+    int lastTwoStep = 0;
+    int lastOneStep = abs(height[1] - height[0]);
+    for (int index = 2; index < n; index++)
+    {
+        int oneStep = abs(height[index] - height[index - 1]) + lastOneStep;
+        int twoStep = abs(height[index] - height[index - 2]) + lastTwoStep;
+        lastTwoStep = lastOneStep;
+        lastOneStep = min(oneStep, twoStep);
+    }
+    return lastOneStep;
+}
+int main()
+{
+    cout << string(20, '-') << endl;
+    vector<int> height = {10, 20, 30, 10};
+    cout << minimumEnergySpaceOptimize(height, 4);
+    cout << endl
+         << string(20, '-');
+    return 0;
+}
