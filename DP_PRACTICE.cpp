@@ -2780,22 +2780,86 @@ int minimumEnergyTabulation(vector<int> &height, int n)
 // ---------------------------------
 int minimumEnergySpaceOptimize(vector<int> &height, int n)
 {
-    int lastTwoStep = 0;
-    int lastOneStep = abs(height[1] - height[0]);
+    if (n == 1)
+    {
+        return 0;
+    }
+    int previousTwoStep = 0;
+    int previousOneStep = abs(height[1] - height[0]);
     for (int index = 2; index < n; index++)
     {
-        int oneStep = abs(height[index] - height[index - 1]) + lastOneStep;
-        int twoStep = abs(height[index] - height[index - 2]) + lastTwoStep;
-        lastTwoStep = lastOneStep;
-        lastOneStep = min(oneStep, twoStep);
+        int oneStep = abs(height[index] - height[index - 1]) + previousOneStep;
+        int twoStep = abs(height[index] - height[index - 2]) + previousTwoStep;
+        previousTwoStep = previousOneStep;
+        previousOneStep = min(oneStep, twoStep);
     }
-    return lastOneStep;
+    return previousOneStep;
+}
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> height = {10, 20, 30, 10};
+//     cout << minimumEnergySpaceOptimize(height, 4);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- Minimal Cost --------------------------------------------------------------------------
+int minimizeCostRecursion(int k, vector<int> &arr, int index, vector<int> &dp)
+{
+    if (index == 0)
+    {
+        return dp[index] = 0;
+    }
+    if (dp[index] != -1)
+    {
+        return dp[index];
+    }
+    int minimumCost = INT_MAX;
+    for (int i = 1; i <= k; i++)
+    {
+        int currentCost = INT_MAX;
+        if ((index - i) >= 0)
+        {
+            currentCost = abs(arr[index] - arr[index - i]) + minimizeCostRecursion(k, arr, index - i, dp);
+        }
+        minimumCost = min(minimumCost, currentCost);
+    }
+    return dp[index] = minimumCost;
+}
+int minimizeCost(int k, vector<int> &arr)
+{
+    int n = arr.size();
+    vector<int> dp(n, -1);
+    return minimizeCostRecursion(k, arr, n - 1, dp);
+}
+// -----------------------
+int minimizeCostMemoization(int k, vector<int> &arr)
+{
+    int n = arr.size();
+    vector<int> dp(n, -1);
+    dp[0] = 0;
+    for (int index = 1; index < n; index++)
+    {
+        int minimumCost = INT_MAX;
+        for (int i = 1; i <= k; i++)
+        {
+            int currentCost = INT_MAX;
+            if ((index - i) >= 0)
+            {
+                currentCost = abs(arr[index] - arr[index - i]) + dp[index - i];
+            }
+            minimumCost = min(minimumCost, currentCost);
+        }
+        dp[index] = minimumCost;
+    }
+    return dp[n - 1];
 }
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> height = {10, 20, 30, 10};
-    cout << minimumEnergySpaceOptimize(height, 4);
+    vector<int> arr = {10, 30, 40, 50, 20};
+    cout << minimizeCostMemoization(3, arr);
     cout << endl
          << string(20, '-');
     return 0;
