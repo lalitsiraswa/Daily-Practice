@@ -2855,11 +2855,82 @@ int minimizeCostMemoization(int k, vector<int> &arr)
     }
     return dp[n - 1];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> arr = {10, 30, 40, 50, 20};
+//     cout << minimizeCostMemoization(3, arr);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 198. House Robber --------------------------------------------------------------------------
+int houseRob(vector<int> &nums, int index, vector<int> &dp)
+{
+    if (index == 0)
+    {
+        return dp[index] = nums[0];
+    }
+    if (dp[index] != -1)
+    {
+        return dp[index];
+    }
+    int notRob = 0 + houseRob(nums, index - 1, dp);
+    int rob = nums[index];
+    if (index >= 2)
+    {
+        rob += houseRob(nums, index - 2, dp);
+    }
+    return dp[index] = max(rob, notRob);
+}
+int houseRob(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> dp(n, -1);
+    return houseRob(nums, n - 1, dp);
+}
+// -----------------------------
+int houseRobTabulation(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> dp(n, -1);
+    dp[0] = nums[0];
+    for (int index = 1; index < n; index++)
+    {
+        int notRob = 0 + dp[index - 1];
+        int rob = nums[index];
+        if (index >= 2)
+        {
+            rob += dp[index - 2];
+        }
+        dp[index] = max(rob, notRob);
+    }
+    return dp[n - 1];
+}
+// -----------------------------
+int houseRobSpaceOptimize(vector<int> &nums)
+{
+    int n = nums.size();
+    int previousFirst = nums[0];
+    int previousSecond = 0;
+    for (int index = 1; index < n; index++)
+    {
+        int notRob = 0 + previousFirst;
+        int rob = nums[index];
+        if (index >= 2)
+        {
+            rob += previousSecond;
+        }
+        previousSecond = previousFirst;
+        previousFirst = max(rob, notRob);
+    }
+    return previousFirst;
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> arr = {10, 30, 40, 50, 20};
-    cout << minimizeCostMemoization(3, arr);
+    vector<int> nums = {2, 7, 9, 3, 1};
+    cout << houseRobSpaceOptimize(nums);
     cout << endl
          << string(20, '-');
     return 0;
