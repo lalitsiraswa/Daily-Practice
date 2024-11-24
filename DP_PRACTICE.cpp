@@ -2926,11 +2926,135 @@ int houseRobSpaceOptimize(vector<int> &nums)
     }
     return previousFirst;
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> nums = {2, 7, 9, 3, 1};
+//     cout << houseRobSpaceOptimize(nums);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- Geek's Training --------------------------------------------------------------------------
+int maximumPoints(vector<vector<int>> &points, int day, int lastActivityIndex, vector<vector<int>> &dp)
+{
+    // If the result for this day and last activity is already calculated, return it
+    if (dp[day][lastActivityIndex] != -1)
+        return dp[day][lastActivityIndex];
+    // Base case: When we reach the first day (day == 0)
+    if (day == 0)
+    {
+        int maxi = 0;
+        // Calculate the maximum points for the first day by choosing an activity
+        // different from the last one
+        for (int i = 0; i <= 2; i++)
+        {
+            if (i != lastActivityIndex)
+                maxi = max(maxi, points[0][i]);
+        }
+        // Store the result in dp array and return it
+        return dp[day][lastActivityIndex] = maxi;
+    }
+    int maxi = 0;
+    // Iterate through the activities for the current day
+    for (int i = 0; i <= 2; i++)
+    {
+        if (i != lastActivityIndex)
+        {
+            // Calculate the points for the current activity and add it to the
+            // maximum points obtained so far (recursively calculated)
+            int activity = points[day][i] + maximumPoints(points, day - 1, i, dp);
+            maxi = max(maxi, activity);
+        }
+    }
+    // Store the result in dp array and return it
+    return dp[day][lastActivityIndex] = maxi;
+}
+int maximumPoints(vector<vector<int>> &arr, int n)
+{
+    // Create a memoization table (dp) to store intermediate results
+    vector<vector<int>> dp(n, vector<int>(4, -1));
+    // Start the recursive calculation from the last day with no previous activity
+    return maximumPoints(arr, n - 1, 3, dp);
+}
+// ----------------------
+int maximumPointsTabulation(vector<vector<int>> &points, int n)
+{
+    // Create a 2D DP (Dynamic Programming) table to store the maximum points
+    // dp[i][j] represents the maximum points at day i, considering the last activity as j
+    vector<vector<int>> dp(n, vector<int>(4, 0));
+    // Initialize the DP table for the first day (day 0)
+    dp[0][0] = max(points[0][1], points[0][2]);
+    dp[0][1] = max(points[0][0], points[0][2]);
+    dp[0][2] = max(points[0][0], points[0][1]);
+    dp[0][3] = max(points[0][0], max(points[0][1], points[0][2]));
+    // Iterate through the days starting from day 1
+    for (int day = 1; day < n; day++)
+    {
+        for (int lastActivityIndex = 0; lastActivityIndex < 4; lastActivityIndex++)
+        {
+            dp[day][lastActivityIndex] = 0;
+            // Iterate through the tasks for the current day
+            int maxi = 0;
+            // Iterate through the activities for the current day
+            for (int task = 0; task <= 2; task++)
+            {
+                if (task != lastActivityIndex)
+                {
+                    // Calculate the points for the current activity and add it to the
+                    // maximum points obtained so far (recursively calculated)
+                    int activity = points[day][task] + dp[day - 1][task];
+                    maxi = max(maxi, activity);
+                }
+            }
+            // Update the maximum points for the current day and last activity
+            dp[day][lastActivityIndex] = maxi;
+        }
+    }
+    // The maximum points for the last day with any activity can be found in dp[n-1][3]
+    return dp[n - 1][3];
+}
+// ----------------------
+int maximumPointsSpaceOptimization(vector<vector<int>> &points, int n)
+{
+    // Initialize a vector to store the maximum points for the previous day's activities
+    vector<int> prev(4, 0);
+    // Initialize the DP table for the first day (day 0)
+    prev[0] = max(points[0][1], points[0][2]);
+    prev[1] = max(points[0][0], points[0][2]);
+    prev[2] = max(points[0][0], points[0][1]);
+    prev[3] = max(points[0][0], max(points[0][1], points[0][2]));
+    // Iterate through the days starting from day 1
+    for (int day = 1; day < n; day++)
+    {
+        // Create a temporary vector to store the maximum points for the current day's activities
+        vector<int> temp(4, 0);
+        for (int last = 0; last < 4; last++)
+        {
+            temp[last] = 0;
+            // Iterate through the tasks for the current day
+            for (int task = 0; task <= 2; task++)
+            {
+                if (task != last)
+                {
+                    // Calculate the points for the current activity and add it to the
+                    // maximum points obtained on the previous day (stored in prev)
+                    temp[last] = max(temp[last], points[day][task] + prev[task]);
+                }
+            }
+        }
+        // Update prev with the maximum points for the current day
+        prev = temp;
+    }
+
+    // The maximum points for the last day with any activity can be found in prev[3]
+    return prev[3];
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> nums = {2, 7, 9, 3, 1};
-    cout << houseRobSpaceOptimize(nums);
+    vector<vector<int>> arr = {{1, 2, 5}, {3, 1, 1}, {3, 3, 3}};
+    cout << maximumPointsSpaceOptimization(arr, 3);
     cout << endl
          << string(20, '-');
     return 0;
