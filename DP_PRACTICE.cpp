@@ -3050,11 +3050,96 @@ int maximumPointsSpaceOptimization(vector<vector<int>> &points, int n)
     // The maximum points for the last day with any activity can be found in prev[3]
     return prev[3];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<vector<int>> arr = {{1, 2, 5}, {3, 1, 1}, {3, 3, 3}};
+//     cout << maximumPointsSpaceOptimization(arr, 3);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 62. Unique Paths --------------------------------------------------------------------------
+int uniquePaths(int row, int column, vector<vector<int>> &dp)
+{
+    if (row == 0 && column == 0)
+    {
+        return dp[row][column] = 1;
+    }
+    if (dp[row][column] != -1)
+    {
+        return dp[row][column];
+    }
+    int moveUp = 0;
+    int moveLeft = 0;
+    if (row > 0)
+    {
+        moveUp = uniquePaths(row - 1, column, dp);
+    }
+    if (column > 0)
+    {
+        moveLeft = uniquePaths(row, column - 1, dp);
+    }
+    return dp[row][column] = moveUp + moveLeft;
+}
+int uniquePathsRevision(int m, int n)
+{
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    return uniquePaths(m - 1, n - 1, dp);
+}
+// ----------------------------
+int uniquePathsRevisionTabulation(int m, int n)
+{
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    for (int column = 0; column < n; column++)
+    {
+        dp[0][column] = 1;
+    }
+    for (int row = 1; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            int moveLeft = 0;
+            int moveUp = dp[row - 1][column];
+            if (column > 0)
+            {
+                moveLeft = dp[row][column - 1];
+            }
+            dp[row][column] = moveUp + moveLeft;
+        }
+    }
+    return dp[m - 1][n - 1];
+}
+// ----------------------------
+int uniquePathsRevisionSpaceOptimization(int m, int n)
+{
+    vector<int> prev(n);
+    for (int column = 0; column < n; column++)
+    {
+        prev[column] = 1;
+    }
+    for (int row = 1; row < m; row++)
+    {
+        vector<int> current(n);
+        for (int column = 0; column < n; column++)
+        {
+            int moveLeft = 0;
+            int moveUp = prev[column];
+            if (column > 0)
+            {
+                moveLeft = current[column - 1];
+            }
+            current[column] = moveUp + moveLeft;
+        }
+        prev = current;
+    }
+    return prev[n - 1];
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<vector<int>> arr = {{1, 2, 5}, {3, 1, 1}, {3, 3, 3}};
-    cout << maximumPointsSpaceOptimization(arr, 3);
+    int m = 3, n = 2;
+    cout << uniquePathsRevisionSpaceOptimization(m, n);
     cout << endl
          << string(20, '-');
     return 0;
