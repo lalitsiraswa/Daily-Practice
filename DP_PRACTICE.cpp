@@ -3287,11 +3287,112 @@ int uniquePathsWithObstaclesRevisionSpaceOptimization(vector<vector<int>> &obsta
     }
     return prev[n - 1];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<vector<int>> obstacleGrid = {{0, 0, 0}, {0, 1, 0}, {0, 0, 0}};
+//     cout << uniquePathsWithObstaclesRevisionSpaceOptimization(obstacleGrid);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 64. Minimum Path Sum --------------------------------------------------------------------------
+int minPathSum(vector<vector<int>> &grid, int row, int column, vector<vector<int>> &dp)
+{
+    if (row == 0 && column == 0)
+    {
+        return dp[row][column] = grid[row][column];
+    }
+    if (dp[row][column] != -1)
+    {
+        return dp[row][column];
+    }
+    int moveUp = INT_MAX;
+    int moveLeft = INT_MAX;
+    if (row > 0)
+    {
+        moveUp = grid[row][column] + minPathSum(grid, row - 1, column, dp);
+    }
+    if (column > 0)
+    {
+        moveLeft = grid[row][column] + minPathSum(grid, row, column - 1, dp);
+    }
+    return dp[row][column] = min(moveUp, moveLeft);
+}
+int minPathSumRevision(vector<vector<int>> &grid)
+{
+    int m = grid.size();
+    int n = grid[0].size();
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    return minPathSum(grid, m - 1, n - 1, dp);
+}
+// ------------------------
+int minPathSumRevisionTabulation(vector<vector<int>> &grid)
+{
+    int m = grid.size();
+    int n = grid[0].size();
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    dp[0][0] = grid[0][0];
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            if (row == 0 && column == 0)
+            {
+                continue;
+            }
+            int moveUp = INT_MAX;
+            int moveLeft = INT_MAX;
+            if (row > 0)
+            {
+                moveUp = grid[row][column] + dp[row - 1][column];
+            }
+            if (column > 0)
+            {
+                moveLeft = grid[row][column] + dp[row][column - 1];
+            }
+            dp[row][column] = min(moveUp, moveLeft);
+        }
+    }
+    return dp[m - 1][n - 1];
+}
+// ------------------------
+int minPathSumRevisionSpaceOptimization(vector<vector<int>> &grid)
+{
+    int m = grid.size();
+    int n = grid[0].size();
+    vector<int> prev(n);
+    vector<int> temp(n);
+    temp[0] = grid[0][0];
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            if (row == 0 && column == 0)
+            {
+                continue;
+            }
+            int moveUp = 1e9;
+            int moveLeft = 1e9;
+            if (row > 0)
+            {
+                moveUp = grid[row][column] + prev[column];
+            }
+            if (column > 0)
+            {
+                moveLeft = grid[row][column] + temp[column - 1];
+            }
+            temp[column] = min(moveUp, moveLeft);
+        }
+        prev = temp;
+    }
+    return prev[n - 1];
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<vector<int>> obstacleGrid = {{0, 0, 0}, {0, 1, 0}, {0, 0, 0}};
-    cout << uniquePathsWithObstaclesRevisionSpaceOptimization(obstacleGrid);
+    vector<vector<int>> grid = {{1, 3, 1}, {1, 5, 1}, {4, 2, 1}};
+    cout << minPathSumRevisionSpaceOptimization(grid);
     cout << endl
          << string(20, '-');
     return 0;
