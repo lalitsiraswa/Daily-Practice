@@ -3135,11 +3135,163 @@ int uniquePathsRevisionSpaceOptimization(int m, int n)
     }
     return prev[n - 1];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     int m = 3, n = 2;
+//     cout << uniquePathsRevisionSpaceOptimization(m, n);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 63. Unique Paths II --------------------------------------------------------------------------
+
+int uniquePathsWithObstacles2(vector<vector<int>> &obstacleGrid, int row, int column, vector<vector<int>> &dp)
+{
+    if (obstacleGrid[row][column] == 1)
+    {
+        return 0;
+    }
+    if (row == 0 && column == 0)
+    {
+        return dp[row][column] = 1;
+    }
+    if (dp[row][column] != -1)
+    {
+        return dp[row][column];
+    }
+    int moveUp = 0;
+    int moveLeft = 0;
+    if (row > 0)
+    {
+        moveUp = uniquePathsWithObstacles2(obstacleGrid, row - 1, column, dp);
+    }
+    if (column > 0)
+    {
+        moveLeft = uniquePathsWithObstacles2(obstacleGrid, row, column - 1, dp);
+    }
+    return dp[row][column] = moveUp + moveLeft;
+}
+int uniquePathsWithObstaclesRevision2(vector<vector<int>> &obstacleGrid)
+{
+    int m = obstacleGrid.size();
+    int n = obstacleGrid[0].size();
+    if (obstacleGrid[m - 1][n - 1] == 1 || obstacleGrid[0][0] == 1)
+    {
+        return 0;
+    }
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    return uniquePathsWithObstacles2(obstacleGrid, m - 1, n - 1, dp);
+}
+// ----------------------------
+int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid, int row, int column, vector<vector<int>> &dp)
+{
+    if (row == 0 && column == 0)
+    {
+        return dp[row][column] = 1;
+    }
+    if (dp[row][column] != -1)
+    {
+        return dp[row][column];
+    }
+    int moveUp = 0;
+    int moveLeft = 0;
+    if (row > 0 && obstacleGrid[row - 1][column] != 1)
+    {
+        moveUp = uniquePathsWithObstacles(obstacleGrid, row - 1, column, dp);
+    }
+    if (column > 0 && obstacleGrid[row][column - 1] != 1)
+    {
+        moveLeft = uniquePathsWithObstacles(obstacleGrid, row, column - 1, dp);
+    }
+    return dp[row][column] = moveUp + moveLeft;
+}
+int uniquePathsWithObstaclesRevision(vector<vector<int>> &obstacleGrid)
+{
+    int m = obstacleGrid.size();
+    int n = obstacleGrid[0].size();
+    if (obstacleGrid[m - 1][n - 1] == 1 || obstacleGrid[0][0] == 1)
+    {
+        return 0;
+    }
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    return uniquePathsWithObstacles(obstacleGrid, m - 1, n - 1, dp);
+}
+// ----------------------------------
+int uniquePathsWithObstaclesRevisionTabulation(vector<vector<int>> &obstacleGrid)
+{
+    int m = obstacleGrid.size();
+    int n = obstacleGrid[0].size();
+    if (obstacleGrid[m - 1][n - 1] == 1 || obstacleGrid[0][0] == 1)
+    {
+        return 0;
+    }
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    dp[0][0] = 1;
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            if (row == 0 && column == 0)
+            {
+                continue;
+            }
+            int moveUp = 0;
+            int moveLeft = 0;
+            if (row > 0 && obstacleGrid[row - 1][column] != 1)
+            {
+                moveUp = dp[row - 1][column];
+            }
+            if (column > 0 && obstacleGrid[row][column - 1] != 1)
+            {
+                moveLeft = dp[row][column - 1];
+            }
+            dp[row][column] = moveUp + moveLeft;
+        }
+    }
+    return dp[m - 1][n - 1];
+}
+// ----------------------------------
+int uniquePathsWithObstaclesRevisionSpaceOptimization(vector<vector<int>> &obstacleGrid)
+{
+    int m = obstacleGrid.size();
+    int n = obstacleGrid[0].size();
+    if (obstacleGrid[m - 1][n - 1] == 1 || obstacleGrid[0][0] == 1)
+    {
+        return 0;
+    }
+    vector<int> prev(n);
+    vector<int> temp(n);
+    temp[0] = 1;
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            if (row == 0 && column == 0)
+            {
+                continue;
+            }
+            int moveUp = 0;
+            int moveLeft = 0;
+            if (row > 0 && obstacleGrid[row - 1][column] != 1)
+            {
+                moveUp = prev[column];
+            }
+            if (column > 0 && obstacleGrid[row][column - 1] != 1)
+            {
+                moveLeft = temp[column - 1];
+            }
+            temp[column] = moveUp + moveLeft;
+        }
+        prev = temp;
+    }
+    return prev[n - 1];
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    int m = 3, n = 2;
-    cout << uniquePathsRevisionSpaceOptimization(m, n);
+    vector<vector<int>> obstacleGrid = {{0, 0, 0}, {0, 1, 0}, {0, 0, 0}};
+    cout << uniquePathsWithObstaclesRevisionSpaceOptimization(obstacleGrid);
     cout << endl
          << string(20, '-');
     return 0;
