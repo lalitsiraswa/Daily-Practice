@@ -3388,11 +3388,110 @@ int minPathSumRevisionSpaceOptimization(vector<vector<int>> &grid)
     }
     return prev[n - 1];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<vector<int>> grid = {{1, 3, 1}, {1, 5, 1}, {4, 2, 1}};
+//     cout << minPathSumRevisionSpaceOptimization(grid);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 120. Triangle --------------------------------------------------------------------------
+int minimumTotal(vector<vector<int>> &triangle, int &m, int &n, int row, int column, vector<vector<int>> &dp)
+{
+    if (row == m - 1)
+    {
+        return triangle[row][column];
+    }
+    if (dp[row][column] != -1)
+    {
+        return dp[row][column];
+    }
+    int moveDown = 1e9;
+    int moveDownRight = 1e9;
+    if (row < m - 1)
+    {
+        moveDown = triangle[row][column] + minimumTotal(triangle, m, n, row + 1, column, dp);
+    }
+    if (column < n - 1)
+    {
+        moveDownRight = triangle[row][column] + minimumTotal(triangle, m, n, row + 1, column + 1, dp);
+    }
+    return dp[row][column] = min(moveDown, moveDownRight);
+}
+int minimumTotalRevision(vector<vector<int>> &triangle)
+{
+    int m = triangle.size();
+    int n = triangle[m - 1].size();
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    return minimumTotal(triangle, m, n, 0, 0, dp);
+}
+// ----------------------------------
+int minimumTotalRevisionTabulation(vector<vector<int>> &triangle)
+{
+    int m = triangle.size();
+    int n = triangle[m - 1].size();
+    vector<vector<int>> dp(m, vector<int>(n, -1));
+    for (int column = 0; column < n; column++)
+    {
+        dp[m - 1][column] = triangle[m - 1][column];
+    }
+    for (int row = m - 2; row >= 0; row--)
+    {
+        for (int column = 0; column <= row; column++)
+        {
+            int moveDown = 1e9;
+            int moveDownRight = 1e9;
+            if (row < m - 1)
+            {
+                moveDown = triangle[row][column] + dp[row + 1][column];
+            }
+            if (column < n - 1)
+            {
+                moveDownRight = triangle[row][column] + dp[row + 1][column + 1];
+            }
+            dp[row][column] = min(moveDown, moveDownRight);
+        }
+    }
+    return dp[0][0];
+}
+// ----------------------------------
+int minimumTotalRevisionSpaceOptimization(vector<vector<int>> &triangle)
+{
+    int m = triangle.size();
+    int n = triangle[m - 1].size();
+    vector<int> prev(n);
+    for (int column = 0; column < n; column++)
+    {
+        prev[column] = triangle[m - 1][column];
+    }
+    for (int row = m - 2; row >= 0; row--)
+    {
+        vector<int> temp(n);
+        for (int column = 0; column <= row; column++)
+        {
+            int moveDown = 1e9;
+            int moveDownRight = 1e9;
+            if (row < m - 1)
+            {
+                moveDown = triangle[row][column] + prev[column];
+            }
+            if (column < n - 1)
+            {
+                moveDownRight = triangle[row][column] + prev[column + 1];
+            }
+            temp[column] = min(moveDown, moveDownRight);
+        }
+        prev = temp;
+    }
+    return prev[0];
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<vector<int>> grid = {{1, 3, 1}, {1, 5, 1}, {4, 2, 1}};
-    cout << minPathSumRevisionSpaceOptimization(grid);
+    vector<vector<int>> triangle = {{2}, {3, 4}, {6, 5, 7}, {4, 1, 8, 3}};
+    cout << minimumTotalRevisionSpaceOptimization(triangle);
     cout << endl
          << string(20, '-');
     return 0;
