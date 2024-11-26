@@ -3487,11 +3487,127 @@ int minimumTotalRevisionSpaceOptimization(vector<vector<int>> &triangle)
     }
     return prev[0];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<vector<int>> triangle = {{2}, {3, 4}, {6, 5, 7}, {4, 1, 8, 3}};
+//     cout << minimumTotalRevisionSpaceOptimization(triangle);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 931. Minimum Falling Path Sum --------------------------------------------------------------------------
+int minFallingPathSumFun(vector<vector<int>> &matrix, int row, int column, int &size, vector<vector<int>> &dp)
+{
+    if (row == 0)
+    {
+        return dp[row][column] = matrix[row][column];
+    }
+    if (dp[row][column] != -1)
+    {
+        return dp[row][column];
+    }
+    int moveUp = matrix[row][column] + minFallingPathSumFun(matrix, row - 1, column, size, dp);
+    int moveUpLeft = INT_MAX;
+    int moveUpRight = INT_MAX;
+    if (column > 0)
+    {
+        moveUpLeft = matrix[row][column] + minFallingPathSumFun(matrix, row - 1, column - 1, size, dp);
+    }
+    if (column < size - 1)
+    {
+        moveUpRight = matrix[row][column] + minFallingPathSumFun(matrix, row - 1, column + 1, size, dp);
+    }
+    return dp[row][column] = min(moveUp, min(moveUpLeft, moveUpRight));
+}
+int minFallingPathSumRevision(vector<vector<int>> &matrix)
+{
+    int size = matrix.size();
+    vector<vector<int>> dp(size, vector<int>(size, -1));
+    int minFallingPathSum = INT_MAX;
+    for (int column = 0; column < size; column++)
+    {
+        int currentFallingPath = minFallingPathSumFun(matrix, size - 1, column, size, dp);
+        dp[size - 1][column] = currentFallingPath;
+        minFallingPathSum = min(minFallingPathSum, currentFallingPath);
+    }
+    return minFallingPathSum;
+}
+// -------------------------------
+int minFallingPathSumRevisionTabulation(vector<vector<int>> &matrix)
+{
+    int size = matrix.size();
+    vector<vector<int>> dp(size, vector<int>(size, -1));
+    int minFallingPathSum = INT_MAX;
+    for (int column = 0; column < size; column++)
+    {
+        dp[0][column] = matrix[0][column];
+    }
+    for (int row = 1; row < size; row++)
+    {
+        for (int column = 0; column < size; column++)
+        {
+            int moveUp = matrix[row][column] + dp[row - 1][column];
+            int moveUpLeft = INT_MAX;
+            int moveUpRight = INT_MAX;
+            if (column > 0)
+            {
+                moveUpLeft = matrix[row][column] + dp[row - 1][column - 1];
+            }
+            if (column < size - 1)
+            {
+                moveUpRight = matrix[row][column] + dp[row - 1][column + 1];
+            }
+            dp[row][column] = min(moveUp, min(moveUpLeft, moveUpRight));
+        }
+    }
+    for (int column = 0; column < size; column++)
+    {
+        minFallingPathSum = min(minFallingPathSum, dp[size - 1][column]);
+    }
+    return minFallingPathSum;
+}
+// -------------------------------
+int minFallingPathSumRevisionSpaceOptimization(vector<vector<int>> &matrix)
+{
+    int size = matrix.size();
+    vector<int> prev(size);
+    int minFallingPathSum = INT_MAX;
+    for (int column = 0; column < size; column++)
+    {
+        prev[column] = matrix[0][column];
+    }
+    for (int row = 1; row < size; row++)
+    {
+        vector<int> temp(size);
+        for (int column = 0; column < size; column++)
+        {
+            int moveUp = matrix[row][column] + prev[column];
+            int moveUpLeft = INT_MAX;
+            int moveUpRight = INT_MAX;
+            if (column > 0)
+            {
+                moveUpLeft = matrix[row][column] + prev[column - 1];
+            }
+            if (column < size - 1)
+            {
+                moveUpRight = matrix[row][column] + prev[column + 1];
+            }
+            temp[column] = min(moveUp, min(moveUpLeft, moveUpRight));
+        }
+        prev = temp;
+    }
+    for (int column = 0; column < size; column++)
+    {
+        minFallingPathSum = min(minFallingPathSum, prev[column]);
+    }
+    return minFallingPathSum;
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<vector<int>> triangle = {{2}, {3, 4}, {6, 5, 7}, {4, 1, 8, 3}};
-    cout << minimumTotalRevisionSpaceOptimization(triangle);
+    vector<vector<int>> matrix = {{2, 1, 3}, {6, 5, 4}, {7, 8, 9}};
+    cout << minFallingPathSumRevisionSpaceOptimization(matrix);
     cout << endl
          << string(20, '-');
     return 0;
