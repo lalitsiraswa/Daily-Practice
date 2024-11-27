@@ -3603,11 +3603,153 @@ int minFallingPathSumRevisionSpaceOptimization(vector<vector<int>> &matrix)
     }
     return minFallingPathSum;
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<vector<int>> matrix = {{2, 1, 3}, {6, 5, 4}, {7, 8, 9}};
+//     cout << minFallingPathSumRevisionSpaceOptimization(matrix);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- Subset Sum Problem --------------------------------------------------------------------------
+bool isSubsetSum(vector<int> &arr, int target, int index, vector<vector<int>> &dp)
+{
+    if (target == 0)
+    {
+        return dp[index][target] = true;
+    }
+    if (index == 0)
+    {
+        return dp[index][target] = target == arr[0];
+    }
+    if (dp[index][target] != -1)
+    {
+        return dp[index][target];
+    }
+    bool notTake = isSubsetSum(arr, target, index - 1, dp);
+    if (notTake)
+    {
+        return dp[index][target] = true;
+    }
+    bool take = false;
+    if (target >= arr[index])
+    {
+        take = isSubsetSum(arr, target - arr[index], index - 1, dp);
+    }
+    if (take)
+    {
+        return dp[index][target] = true;
+    }
+    return dp[index][target] = false;
+}
+bool isSubsetSum(vector<int> &arr, int target)
+{
+    int n = arr.size();
+    vector<vector<int>> dp(n, vector<int>(target + 1, -1));
+    return isSubsetSum(arr, target, n - 1, dp);
+}
+// ----------------------------
+bool isSubsetSumTabulation(vector<int> &arr, int target)
+{
+    int m = arr.size();
+    vector<vector<int>> dp(m, vector<int>(target + 1, -1));
+    for (int row = 0; row < m; row++)
+    {
+        dp[row][0] = 1;
+    }
+    for (int tar = 1; tar <= target; tar++)
+    {
+        if (tar == arr[0])
+        {
+            dp[0][tar] = 1;
+        }
+        else
+        {
+            dp[0][tar] = 0;
+        }
+    }
+    for (int row = 1; row < m; row++)
+    {
+        for (int column = 1; column <= target; column++)
+        {
+            bool notTake = dp[row - 1][column];
+            bool take = false;
+            if (column >= arr[row])
+            {
+                take = dp[row - 1][column - arr[row]];
+            }
+            dp[row][column] = (take || notTake);
+        }
+    }
+    return dp[m - 1][target];
+}
+// ----------------------------
+bool isSubsetSumSpaceOptimization(vector<int> &arr, int target)
+{
+    int m = arr.size();
+    vector<int> prev(target + 1);
+    prev[0] = 1;
+    for (int tar = 1; tar <= target; tar++)
+    {
+        if (tar == arr[0])
+        {
+            prev[tar] = 1;
+        }
+        else
+        {
+            prev[tar] = 0;
+        }
+    }
+    for (int row = 1; row < m; row++)
+    {
+        vector<int> temp(target + 1);
+        temp[0] = 1;
+        for (int column = 1; column <= target; column++)
+        {
+            bool notTake = prev[column];
+            bool take = false;
+            if (column >= arr[row])
+            {
+                take = prev[column - arr[row]];
+            }
+            temp[column] = (take || notTake);
+        }
+        prev = temp;
+    }
+    return prev[target];
+}
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> arr = {2, 3, 1, 1};
+//     cout << isSubsetSumSpaceOptimization(arr, 4);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 416. Partition Equal Subset Sum --------------------------------------------------------------------------
+// Similar to the "Subset Sum Problem"
+bool canPartitionRevision(vector<int> &nums)
+{
+    int size = nums.size();
+    int totalSum = 0;
+    for (int index = 0; index < size; index++)
+    {
+        totalSum += nums[index];
+    }
+    if (totalSum % 2 != 0)
+    {
+        return false;
+    }
+    int target = totalSum / 2;
+    return isSubsetSumSpaceOptimization(nums, target);
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<vector<int>> matrix = {{2, 1, 3}, {6, 5, 4}, {7, 8, 9}};
-    cout << minFallingPathSumRevisionSpaceOptimization(matrix);
+    vector<int> nums = {1, 5, 11, 5};
+    cout << canPartitionRevision(nums);
     cout << endl
          << string(20, '-');
     return 0;
