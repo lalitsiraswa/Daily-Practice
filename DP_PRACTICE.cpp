@@ -3745,11 +3745,109 @@ bool canPartitionRevision(vector<int> &nums)
     int target = totalSum / 2;
     return isSubsetSumSpaceOptimization(nums, target);
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> nums = {1, 5, 11, 5};
+//     cout << canPartitionRevision(nums);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- Perfect Sum Problem --------------------------------------------------------------------------
+int perfectSum(vector<int> &arr, int index, int target, vector<vector<int>> &dp)
+{
+    if (index == 0)
+    {
+        if (target == 0 && arr[0] == 0)
+            return dp[index][target] = 2;
+        if (target == 0 || target == arr[0])
+            return dp[index][target] = 1;
+        return dp[index][target] = 0;
+    }
+    if (dp[index][target] != -1)
+    {
+        return dp[index][target];
+    }
+    int notTake = perfectSum(arr, index - 1, target, dp);
+    int take = 0;
+    if (target >= arr[index])
+    {
+        take = perfectSum(arr, index - 1, target - arr[index], dp);
+    }
+    return dp[index][target] = (take + notTake);
+}
+int perfectSum(vector<int> &arr, int target)
+{
+    int n = arr.size();
+    vector<vector<int>> dp(n, vector<int>(target + 1, -1));
+    return perfectSum(arr, n - 1, target, dp);
+}
+// ------------------------------
+int perfectSumTabulation(vector<int> &arr, int target)
+{
+    int n = arr.size();
+    vector<vector<int>> dp(n, vector<int>(target + 1, -1));
+    for (int tar = 0; tar <= target; tar++)
+    {
+        if (tar == 0 && arr[0] == 0)
+            dp[0][tar] = 2;
+        else if (tar == 0 || tar == arr[0])
+            dp[0][tar] = 1;
+        else
+            dp[0][tar] = 0;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        for (int tar = 0; tar <= target; tar++)
+        {
+            int notTake = dp[index - 1][tar];
+            int take = 0;
+            if (tar >= arr[index])
+            {
+                take = dp[index - 1][tar - arr[index]];
+            }
+            dp[index][tar] = (take + notTake);
+        }
+    }
+    return dp[n - 1][target];
+}
+// ------------------------------
+int perfectSumSpaceOptimization(vector<int> &arr, int target)
+{
+    int n = arr.size();
+    vector<int> prev(target + 1);
+    for (int tar = 0; tar <= target; tar++)
+    {
+        if (tar == 0 && arr[0] == 0)
+            prev[tar] = 2;
+        else if (tar == 0 || tar == arr[0])
+            prev[tar] = 1;
+        else
+            prev[tar] = 0;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        vector<int> temp(target + 1);
+        for (int tar = 0; tar <= target; tar++)
+        {
+            int notTake = prev[tar];
+            int take = 0;
+            if (tar >= arr[index])
+            {
+                take = prev[tar - arr[index]];
+            }
+            temp[tar] = (take + notTake);
+        }
+        prev = temp;
+    }
+    return prev[target];
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> nums = {1, 5, 11, 5};
-    cout << canPartitionRevision(nums);
+    vector<int> arr = {27, 0, 24};
+    cout << perfectSumSpaceOptimization(arr, 24);
     cout << endl
          << string(20, '-');
     return 0;
