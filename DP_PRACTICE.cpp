@@ -3853,6 +3853,7 @@ int perfectSumSpaceOptimization(vector<int> &arr, int target)
 //     return 0;
 // }
 // ------------------------------------------------------------------- Partitions with Given Difference --------------------------------------------------------------------------
+// Similar to the Perfect Sum Problem
 int countPartitions(vector<int> &arr, int index, int target, vector<vector<int>> &dp)
 {
     if (index == 0)
@@ -3879,15 +3880,77 @@ int countPartitionsRevision(vector<int> &arr, int d)
 {
     int n = arr.size();
     int totalSum = accumulate(arr.begin(), arr.end(), 0);
+    if ((totalSum - d) < 0 || (totalSum - d) % 2 != 0)
+    {
+        return 0;
+    }
     int target = (totalSum - d) / 2;
     vector<vector<int>> dp(n, vector<int>(target + 1, -1));
     return countPartitions(arr, n - 1, target, dp);
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> arr = {1, 3, 3, 2, 1};
+//     cout << countPartitionsRevision(arr, 5);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 455. Assign Cookies --------------------------------------------------------------------------
+// TLE
+int findContentChildren(vector<int> &g, vector<int> &s)
+{
+    sort(g.begin(), g.end());
+    sort(s.begin(), s.end());
+    int g_size = g.size();
+    int s_size = s.size();
+    vector<int> isVisited(s_size, 0);
+    for (int i = 0; i < g_size; i++)
+    {
+        for (int j = 0; j < s_size; j++)
+        {
+            if (isVisited[j] == 0 && s[j] >= g[i])
+            {
+                isVisited[j] = 1;
+                break;
+            }
+        }
+    }
+    int totalContentChildren = 0;
+    for (int i = 0; i < s_size; i++)
+    {
+        totalContentChildren += isVisited[i];
+    }
+    return totalContentChildren;
+}
+// -------------
+int findContentChildrenTwoPointerApproach(vector<int> &g, vector<int> &s)
+{
+    // Sort both greed factors and cookie sizes
+    sort(g.begin(), g.end());
+    sort(s.begin(), s.end());
+    int i = 0; // pointer for children
+    int j = 0; // pointer for cookies
+    // Traverse both arrays
+    while (i < g.size() && j < s.size())
+    {
+        if (s[j] >= g[i])
+        {
+            // If the cookie satisfies the child's greed
+            i++; // move to the next child
+        }
+        // Move to the next cookie regardless of whether it satisfied the child or not
+        j++;
+    }
+    return i; // i represents the number of content children
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> arr = {1, 3, 3, 2, 1};
-    cout << countPartitionsRevision(arr, 5);
+    vector<int> g = {1, 5, 3, 3, 4};
+    vector<int> s = {4, 2, 1, 2, 1, 3};
+    cout << findContentChildrenTwoPointerApproach(g, s);
     cout << endl
          << string(20, '-');
     return 0;
