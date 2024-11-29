@@ -3945,12 +3945,147 @@ int findContentChildrenTwoPointerApproach(vector<int> &g, vector<int> &s)
     }
     return i; // i represents the number of content children
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> g = {1, 5, 3, 3, 4};
+//     vector<int> s = {4, 2, 1, 2, 1, 3};
+//     cout << findContentChildrenTwoPointerApproach(g, s);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+
+// ---------------------------------------- DP 19. 0/1 Knapsack | Recursion to Single Array Space Optimised Approach | DP on Subsequences --------------------------------
+int knapsackRevision(vector<int> &weight, vector<int> &values, int index, int bagWeight, vector<vector<int>> &dp)
+{
+    if (index == 0)
+    {
+        if (bagWeight >= weight[0])
+        {
+            return dp[index][bagWeight] = values[0];
+        }
+        return dp[index][bagWeight] = 0;
+    }
+    if (dp[index][bagWeight] != -1)
+    {
+        return dp[index][bagWeight];
+    }
+    int notPick = 0 + knapsackRevision(weight, values, index - 1, bagWeight, dp);
+    int pick = INT_MIN;
+    if (bagWeight >= weight[index])
+    {
+        pick = values[index] + knapsackRevision(weight, values, index - 1, bagWeight - weight[index], dp);
+    }
+    return dp[index][bagWeight] = max(pick, notPick);
+}
+int knapsackRevision(vector<int> &weight, vector<int> &values, int bagWeight)
+{
+    int n = weight.size();
+    vector<vector<int>> dp(n, vector<int>(bagWeight + 1, -1));
+    return knapsackRevision(weight, values, n - 1, bagWeight, dp);
+}
+// -----------------------------
+int knapsackRevisionTabulation(vector<int> &weight, vector<int> &values, int bagWeight)
+{
+    int n = weight.size();
+    vector<vector<int>> dp(n, vector<int>(bagWeight + 1, -1));
+    for (int wt = 0; wt <= bagWeight; wt++)
+    {
+        if (wt >= weight[0])
+        {
+            dp[0][wt] = values[0];
+        }
+        else
+        {
+            dp[0][wt] = 0;
+        }
+    }
+    for (int index = 1; index < n; index++)
+    {
+        for (int wt = 0; wt <= bagWeight; wt++)
+        {
+            int notPick = 0 + dp[index - 1][wt];
+            int pick = INT_MIN;
+            if (wt >= weight[index])
+            {
+                pick = values[index] + dp[index - 1][wt - weight[index]];
+            }
+            dp[index][wt] = max(pick, notPick);
+        }
+    }
+    return dp[n - 1][bagWeight];
+}
+// -----------------------------
+int knapsackRevisionSpaceOptimization(vector<int> &weight, vector<int> &values, int bagWeight)
+{
+    int n = weight.size();
+    vector<int> prev(bagWeight + 1);
+    for (int wt = 0; wt <= bagWeight; wt++)
+    {
+        if (wt >= weight[0])
+        {
+            prev[wt] = values[0];
+        }
+        else
+        {
+            prev[wt] = 0;
+        }
+    }
+    for (int index = 1; index < n; index++)
+    {
+        vector<int> temp(bagWeight + 1);
+        for (int wt = 0; wt <= bagWeight; wt++)
+        {
+            int notPick = 0 + prev[wt];
+            int pick = INT_MIN;
+            if (wt >= weight[index])
+            {
+                pick = values[index] + prev[wt - weight[index]];
+            }
+            temp[wt] = max(pick, notPick);
+        }
+        prev = temp;
+    }
+    return prev[bagWeight];
+}
+// -----------------------------
+int knapsackRevisionSpaceOptimization2(vector<int> &weight, vector<int> &values, int bagWeight)
+{
+    int n = weight.size();
+    vector<int> prev(bagWeight + 1);
+    for (int wt = 0; wt <= bagWeight; wt++)
+    {
+        if (wt >= weight[0])
+        {
+            prev[wt] = values[0];
+        }
+        else
+        {
+            prev[wt] = 0;
+        }
+    }
+    for (int index = 1; index < n; index++)
+    {
+        for (int wt = 0; wt <= bagWeight; wt++)
+        {
+            int notPick = 0 + prev[wt];
+            int pick = INT_MIN;
+            if (wt >= weight[index])
+            {
+                pick = values[index] + prev[wt - weight[index]];
+            }
+            prev[wt] = max(pick, notPick);
+        }
+    }
+    return prev[bagWeight];
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> g = {1, 5, 3, 3, 4};
-    vector<int> s = {4, 2, 1, 2, 1, 3};
-    cout << findContentChildrenTwoPointerApproach(g, s);
+    vector<int> weight = {1, 2, 4, 5};
+    vector<int> values = {5, 4, 8, 6};
+    cout << knapsackRevisionSpaceOptimization2(weight, values, 5);
     cout << endl
          << string(20, '-');
     return 0;
