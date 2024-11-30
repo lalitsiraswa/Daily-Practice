@@ -144,15 +144,53 @@ int diameterOfBinaryTree(TreeNode *root)
     diameterOfBinaryTree(root, diameter);
     return diameter;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->right = new TreeNode(3);
+//     root->left->left = new TreeNode(4);
+//     root->left->right = new TreeNode(5);
+//     cout << diameterOfBinaryTree(root) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// -------------------------------------------------------------------------- 124. Binary Tree Maximum Path Sum ---------------------------------------------------------------------
+int maxPathSum(TreeNode *root, int &maxPath)
+{
+    if (root == nullptr)
+        return 0;
+    int leftTreeMaxPathSum = maxPathSum(root->left, maxPath);
+    int rightTreeMaxPathSum = maxPathSum(root->right, maxPath);
+    maxPath = max(maxPath, root->val + leftTreeMaxPathSum + rightTreeMaxPathSum);
+    maxPath = max(maxPath, root->val + leftTreeMaxPathSum);
+    maxPath = max(maxPath, root->val + rightTreeMaxPathSum);
+    maxPath = max(maxPath, root->val);
+    return max(max(leftTreeMaxPathSum, rightTreeMaxPathSum) + root->val, root->val);
+}
+int maxPathSum(TreeNode *root)
+{
+    if (root == nullptr)
+        return 0;
+    int maxPath = INT_MIN;
+    maxPathSum(root, maxPath);
+    return maxPath;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    TreeNode *root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left = new TreeNode(4);
-    root->left->right = new TreeNode(5);
-    cout << diameterOfBinaryTree(root) << endl;
+    TreeNode *root = new TreeNode(9);
+    root->left = new TreeNode(6);
+    root->right = new TreeNode(-3);
+    root->right->left = new TreeNode(-6);
+    root->right->right = new TreeNode(2);
+    root->right->right->left = new TreeNode(2);
+    root->right->right->left->left = new TreeNode(-6);
+    root->right->right->left->right = new TreeNode(-6);
+    root->right->right->left->left->left = new TreeNode(-6);
+    cout << maxPathSum(root) << endl;
     cout << endl
          << string(35, '-');
     return 0;
