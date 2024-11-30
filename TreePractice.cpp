@@ -66,15 +66,53 @@ int maxDepthOtherWay(TreeNode *root)
     int rightSubTreeDepth = maxDepth(root->right);
     return 1 + max(leftSubTreeDepth, rightSubTreeDepth);
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(3);
+//     root->left = new TreeNode(9);
+//     root->right = new TreeNode(20);
+//     root->right->left = new TreeNode(15);
+//     root->right->right = new TreeNode(7);
+//     cout << maxDepthOtherWay(root) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// -------------------------------------------------------------------------- 110. Balanced Binary Tree ---------------------------------------------------------------------
+int isBalancedHeightHelper(TreeNode *root)
+{
+    if (root == 0)
+        return 0;
+    int leftSubTreeHeight = isBalancedHeightHelper(root->left);
+    if (leftSubTreeHeight == -1)
+        return -1;
+    int rightSubTreeHeight = isBalancedHeightHelper(root->right);
+    if (rightSubTreeHeight == -1)
+        return -1;
+    int heightDifference = abs(leftSubTreeHeight - rightSubTreeHeight);
+    if (heightDifference > 1)
+        return -1;
+    return 1 + max(leftSubTreeHeight, rightSubTreeHeight);
+}
+bool isBalanced(TreeNode *root)
+{
+    if (root == nullptr)
+        return true;
+    int result = isBalancedHeightHelper(root);
+    return result == -1 ? false : true;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    TreeNode *root = new TreeNode(3);
-    root->left = new TreeNode(9);
-    root->right = new TreeNode(20);
-    root->right->left = new TreeNode(15);
-    root->right->right = new TreeNode(7);
-    cout << maxDepthOtherWay(root) << endl;
+    TreeNode *root = new TreeNode(1);
+    root->left = new TreeNode(2);
+    root->right = new TreeNode(2);
+    root->left->left = new TreeNode(3);
+    root->left->right = new TreeNode(3);
+    root->left->left->left = new TreeNode(4);
+    root->left->left->right = new TreeNode(4);
+    cout << isBalanced(root) << endl;
     cout << endl
          << string(35, '-');
     return 0;
