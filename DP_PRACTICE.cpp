@@ -4080,12 +4080,117 @@ int knapsackRevisionSpaceOptimization2(vector<int> &weight, vector<int> &values,
     }
     return prev[bagWeight];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> weight = {1, 2, 4, 5};
+//     vector<int> values = {5, 4, 8, 6};
+//     cout << knapsackRevisionSpaceOptimization2(weight, values, 5);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 322. Coin Change --------------------------------------------------------------------------
+int coinChange(vector<int> &coins, int index, int amount, vector<vector<int>> &dp)
+{
+    if (index == 0)
+    {
+        if (amount % coins[index] == 0)
+            return dp[index][amount] = amount / coins[index];
+        else
+            return dp[index][amount] = 1e9;
+    }
+    if (dp[index][amount] != -1)
+    {
+        return dp[index][amount];
+    }
+    int notTake = 0 + coinChange(coins, index - 1, amount, dp);
+    int take = INT_MAX;
+    if (amount >= coins[index])
+    {
+        take = 1 + coinChange(coins, index, amount - coins[index], dp);
+    }
+    return dp[index][amount] = min(take, notTake);
+}
+int coinChangeRevision(vector<int> &coins, int amount)
+{
+    int n = coins.size();
+    int m = amount + 1;
+    vector<vector<int>> dp(n, vector<int>(m, -1));
+    if (!amount)
+        return amount;
+    int minimumCoins = coinChange(coins, n - 1, amount, dp);
+    return (minimumCoins > amount) ? -1 : minimumCoins;
+}
+// -------------------------------
+int coinChangeRevisionTabulation(vector<int> &coins, int amount)
+{
+    int n = coins.size();
+    int m = amount + 1;
+    vector<vector<int>> dp(n, vector<int>(m, -1));
+    if (!amount)
+        return amount;
+    for (int amt = 0; amt <= amount; amt++)
+    {
+        if (amt % coins[0] == 0)
+            dp[0][amt] = amt / coins[0];
+        else
+            dp[0][amt] = 1e9;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        for (int amt = 0; amt <= amount; amt++)
+        {
+            int notTake = 0 + dp[index - 1][amt];
+            int take = INT_MAX;
+            if (amt >= coins[index])
+            {
+                take = 1 + dp[index][amt - coins[index]];
+            }
+            dp[index][amt] = min(take, notTake);
+        }
+    }
+    int minimumCoins = dp[n - 1][amount];
+    return (minimumCoins > amount) ? -1 : minimumCoins;
+}
+// -------------------------------
+int coinChangeRevisionSpaceOptimization(vector<int> &coins, int amount)
+{
+    int n = coins.size();
+    int m = amount + 1;
+    vector<int> prev(m);
+    if (!amount)
+        return amount;
+    for (int amt = 0; amt <= amount; amt++)
+    {
+        if (amt % coins[0] == 0)
+            prev[amt] = amt / coins[0];
+        else
+            prev[amt] = 1e9;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        vector<int> temp(m);
+        for (int amt = 0; amt <= amount; amt++)
+        {
+            int notTake = 0 + prev[amt];
+            int take = INT_MAX;
+            if (amt >= coins[index])
+            {
+                take = 1 + temp[amt - coins[index]];
+            }
+            temp[amt] = min(take, notTake);
+        }
+        prev = temp;
+    }
+    int minimumCoins = prev[amount];
+    return (minimumCoins > amount) ? -1 : minimumCoins;
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> weight = {1, 2, 4, 5};
-    vector<int> values = {5, 4, 8, 6};
-    cout << knapsackRevisionSpaceOptimization2(weight, values, 5);
+    vector<int> coins = {1, 2, 5};
+    cout << coinChangeRevisionSpaceOptimization(coins, 11);
     cout << endl
          << string(20, '-');
     return 0;
