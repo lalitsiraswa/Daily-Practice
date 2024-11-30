@@ -102,17 +102,57 @@ bool isBalanced(TreeNode *root)
     int result = isBalancedHeightHelper(root);
     return result == -1 ? false : true;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->right = new TreeNode(2);
+//     root->left->left = new TreeNode(3);
+//     root->left->right = new TreeNode(3);
+//     root->left->left->left = new TreeNode(4);
+//     root->left->left->right = new TreeNode(4);
+//     cout << isBalanced(root) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// -------------------------------------------------------------------------- 543. Diameter of Binary Tree ---------------------------------------------------------------------
+int diameterOfBinaryTree(TreeNode *root, int &diameter)
+{
+    if (root == nullptr)
+        return 0;
+    int leftSubTreeEdgeCount = 0;
+    if (root->left)
+    {
+        leftSubTreeEdgeCount = 1 + diameterOfBinaryTree(root->left, diameter);
+    }
+    int rightSubTreeEdgeCount = 0;
+    if (root->right)
+    {
+        rightSubTreeEdgeCount = 1 + diameterOfBinaryTree(root->right, diameter);
+    }
+    int currentDiameter = leftSubTreeEdgeCount + rightSubTreeEdgeCount;
+    diameter = max(diameter, currentDiameter);
+    return max(leftSubTreeEdgeCount, rightSubTreeEdgeCount);
+}
+int diameterOfBinaryTree(TreeNode *root)
+{
+    if (root == nullptr)
+        return 0;
+    int diameter = 0;
+    diameterOfBinaryTree(root, diameter);
+    return diameter;
+}
 int main()
 {
     cout << string(35, '-') << endl;
     TreeNode *root = new TreeNode(1);
     root->left = new TreeNode(2);
-    root->right = new TreeNode(2);
-    root->left->left = new TreeNode(3);
-    root->left->right = new TreeNode(3);
-    root->left->left->left = new TreeNode(4);
-    root->left->left->right = new TreeNode(4);
-    cout << isBalanced(root) << endl;
+    root->right = new TreeNode(3);
+    root->left->left = new TreeNode(4);
+    root->left->right = new TreeNode(5);
+    cout << diameterOfBinaryTree(root) << endl;
     cout << endl
          << string(35, '-');
     return 0;
