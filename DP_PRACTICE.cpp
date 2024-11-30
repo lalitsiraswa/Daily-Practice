@@ -4196,6 +4196,7 @@ int coinChangeRevisionSpaceOptimization(vector<int> &coins, int amount)
 //     return 0;
 // }
 // ------------------------------------------------------------------- 494. Target Sum --------------------------------------------------------------------------
+// Similar to the Perfect Sum Problem
 int findTargetSumWays(vector<int> &nums, int index, int target, vector<vector<int>> &dp)
 {
     if (index == 0)
@@ -4226,11 +4227,95 @@ int findTargetSumWaysRevision(vector<int> &nums, int targetValue)
     vector<vector<int>> dp(n, vector<int>(target + 1, -1));
     return findTargetSumWays(nums, n - 1, target, dp);
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> nums = {1, 1, 1, 1, 1};
+//     cout << findTargetSumWaysRevision(nums, 3);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 518. Coin Change II --------------------------------------------------------------------------
+int change(vector<int> &coins, int index, int amount, vector<vector<int>> &dp)
+{
+    if (index == 0)
+    {
+        if (amount % coins[0] == 0)
+            return dp[index][amount] = 1;
+        return dp[index][amount] = 0;
+    }
+    if (dp[index][amount] != -1)
+        return dp[index][amount];
+    int notTake = change(coins, index - 1, amount, dp);
+    int take = 0;
+    if (coins[index] <= amount)
+        take = change(coins, index, amount - coins[index], dp);
+    return dp[index][amount] = (take + notTake);
+}
+int changeRevision(int amount, vector<int> &coins)
+{
+    int n = coins.size();
+    vector<vector<int>> dp(n, vector<int>(amount + 1, -1));
+    return change(coins, n - 1, amount, dp);
+}
+// -----------------------------
+int changeRevisionTabulation(int amount, vector<int> &coins)
+{
+    int n = coins.size();
+    vector<vector<int>> dp(n, vector<int>(amount + 1, -1));
+    for (int targetAmount = 0; targetAmount <= amount; targetAmount++)
+    {
+        if (targetAmount % coins[0] == 0)
+            dp[0][targetAmount] = 1;
+        else
+            dp[0][targetAmount] = 0;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        for (int targetAmount = 0; targetAmount <= amount; targetAmount++)
+        {
+            long long notTake = dp[index - 1][targetAmount];
+            long long take = 0;
+            if (coins[index] <= targetAmount)
+                take = dp[index][targetAmount - coins[index]];
+            dp[index][targetAmount] = (take + notTake);
+        }
+    }
+    return dp[n - 1][amount];
+}
+// -----------------------------
+int changeRevisionSpaceOptimization(int amount, vector<int> &coins)
+{
+    int n = coins.size();
+    vector<int> previousDataStore(amount + 1, -1);
+    for (int targetAmount = 0; targetAmount <= amount; targetAmount++)
+    {
+        if (targetAmount % coins[0] == 0)
+            previousDataStore[targetAmount] = 1;
+        else
+            previousDataStore[targetAmount] = 0;
+    }
+    for (int index = 1; index < n; index++)
+    {
+        vector<int> currentDataStore(amount + 1, -1);
+        for (int targetAmount = 0; targetAmount <= amount; targetAmount++)
+        {
+            long long notTake = previousDataStore[targetAmount];
+            long long take = 0;
+            if (coins[index] <= targetAmount)
+                take = currentDataStore[targetAmount - coins[index]];
+            currentDataStore[targetAmount] = (take + notTake);
+        }
+        previousDataStore = currentDataStore;
+    }
+    return previousDataStore[amount];
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> nums = {1, 1, 1, 1, 1};
-    cout << findTargetSumWaysRevision(nums, 3);
+    vector<int> coins = {1, 2, 5};
+    cout << changeRevisionSpaceOptimization(5, coins);
     cout << endl
          << string(20, '-');
     return 0;
