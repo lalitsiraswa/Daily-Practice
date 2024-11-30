@@ -4186,11 +4186,51 @@ int coinChangeRevisionSpaceOptimization(vector<int> &coins, int amount)
     int minimumCoins = prev[amount];
     return (minimumCoins > amount) ? -1 : minimumCoins;
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> coins = {1, 2, 5};
+//     cout << coinChangeRevisionSpaceOptimization(coins, 11);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 494. Target Sum --------------------------------------------------------------------------
+int findTargetSumWays(vector<int> &nums, int index, int target, vector<vector<int>> &dp)
+{
+    if (index == 0)
+    {
+        if (target == 0 && nums[0] == 0)
+            return dp[index][target] = 2;
+        if (target == 0 || target == nums[0])
+            return dp[index][target] = 1;
+        return dp[index][target] = 0;
+    }
+    if (dp[index][target] != -1)
+        return dp[index][target];
+    int notPick = findTargetSumWaysMemoization(nums, index - 1, target, dp);
+    int pick = 0;
+    if (nums[index] <= target)
+        pick = findTargetSumWaysMemoization(nums, index - 1, target - nums[index], dp);
+    return dp[index][target] = pick + notPick;
+}
+int findTargetSumWaysRevision(vector<int> &nums, int targetValue)
+{
+    int n = nums.size();
+    int totalSum = 0;
+    for (int index = 0; index < n; index++)
+        totalSum += nums[index];
+    if ((totalSum - targetValue) < 0 || (totalSum - targetValue) % 2 != 0)
+        return 0;
+    int target = (totalSum - targetValue) / 2;
+    vector<vector<int>> dp(n, vector<int>(target + 1, -1));
+    return findTargetSumWays(nums, n - 1, target, dp);
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> coins = {1, 2, 5};
-    cout << coinChangeRevisionSpaceOptimization(coins, 11);
+    vector<int> nums = {1, 1, 1, 1, 1};
+    cout << findTargetSumWaysRevision(nums, 3);
     cout << endl
          << string(20, '-');
     return 0;
