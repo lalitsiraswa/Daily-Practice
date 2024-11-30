@@ -178,19 +178,81 @@ int maxPathSum(TreeNode *root)
     maxPathSum(root, maxPath);
     return maxPath;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(9);
+//     root->left = new TreeNode(6);
+//     root->right = new TreeNode(-3);
+//     root->right->left = new TreeNode(-6);
+//     root->right->right = new TreeNode(2);
+//     root->right->right->left = new TreeNode(2);
+//     root->right->right->left->left = new TreeNode(-6);
+//     root->right->right->left->right = new TreeNode(-6);
+//     root->right->right->left->left->left = new TreeNode(-6);
+//     cout << maxPathSum(root) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// -------------------------------------------------------------------------- 124. Binary Tree Maximum Path Sum ---------------------------------------------------------------------
+vector<vector<int>> zigzagLevelOrder(TreeNode *root)
+{
+    if (root == nullptr)
+        return {};
+    vector<vector<int>> result;
+    bool isEvenLevel = true;
+    deque<TreeNode *> dque;
+    dque.push_back(root);
+    while (!dque.empty())
+    {
+        vector<int> temp;
+        int size = dque.size();
+        for (int i = 1; i <= size; i++)
+        {
+            if (isEvenLevel)
+            {
+                TreeNode *front = dque.front();
+                dque.pop_front();
+                temp.push_back(front->val);
+                if (front->left)
+                    dque.push_back(front->left);
+                if (front->right)
+                    dque.push_back(front->right);
+            }
+            else
+            {
+                TreeNode *back = dque.back();
+                dque.pop_back();
+                temp.push_back(back->val);
+                if (back->right)
+                    dque.push_front(back->right);
+                if (back->left)
+                    dque.push_front(back->left);
+            }
+        }
+        result.push_back(temp);
+        isEvenLevel = !isEvenLevel;
+    }
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    TreeNode *root = new TreeNode(9);
-    root->left = new TreeNode(6);
-    root->right = new TreeNode(-3);
-    root->right->left = new TreeNode(-6);
-    root->right->right = new TreeNode(2);
-    root->right->right->left = new TreeNode(2);
-    root->right->right->left->left = new TreeNode(-6);
-    root->right->right->left->right = new TreeNode(-6);
-    root->right->right->left->left->left = new TreeNode(-6);
-    cout << maxPathSum(root) << endl;
+    TreeNode *root = new TreeNode(1);
+    root->left = new TreeNode(2);
+    root->right = new TreeNode(3);
+    root->left->left = new TreeNode(4);
+    root->right->right = new TreeNode(5);
+    vector<vector<int>> result = zigzagLevelOrder(root);
+    for (int i = 0; i < result.size(); i++)
+    {
+        for (int j = 0; j < result[i].size(); j++)
+        {
+            cout << result[i][j] << ", ";
+        }
+        cout << endl;
+    }
     cout << endl
          << string(35, '-');
     return 0;
