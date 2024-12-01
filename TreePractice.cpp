@@ -405,16 +405,16 @@ vector<vector<int>> verticalTraversal(TreeNode *root)
     }
     // Prepare the final result vector by combining values from the map
     vector<vector<int>> result;
-    for (auto p : nodes)
+    for (auto &col : nodes)
     {
-        vector<int> col;
-        for (auto q : p.second)
+        vector<int> temp;
+        for (auto &row : col.second)
         {
             // Insert node values into the column vector
-            col.insert(col.end(), q.second.begin(), q.second.end());
+            temp.insert(temp.end(), row.second.begin(), row.second.end());
         }
         // Add the column vector to the final result
-        result.push_back(col);
+        result.push_back(temp);
     }
     return result;
 }
