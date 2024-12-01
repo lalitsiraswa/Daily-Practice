@@ -199,17 +199,17 @@ bool isCycleDFS(int V, vector<int> *adjacencyList)
     }
     return false;
 }
-int main()
-{
-    cout << string(35, '-') << endl;
-    vector<int> adjacencyList[] = {{}, {2, 3}, {1, 5}, {1, 4, 6}, {3}, {2, 7}, {3, 7}, {5, 6}};
-    // vector<int> adjacencyList[] = {{0, 1}, {1, 2}, {1, 4}, {2, 3}, {3, 4}};
-    int V = 8;
-    cout << isCycleDFS(V, adjacencyList) << endl;
-    cout << endl
-         << string(35, '-');
-    return 0;
-}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<int> adjacencyList[] = {{}, {2, 3}, {1, 5}, {1, 4, 6}, {3}, {2, 7}, {3, 7}, {5, 6}};
+//     // vector<int> adjacencyList[] = {{0, 1}, {1, 2}, {1, 4}, {2, 3}, {3, 4}};
+//     int V = 8;
+//     cout << isCycleDFS(V, adjacencyList) << endl;
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
 // ---------------------------------------------------------- Detect A Cycle In A Directed Grph Using DFS ----------------------------------------------------
 bool dfsCheck(int source, vector<int> *adjacencyList, int *isVisited, int *pathVisited)
 {
@@ -423,4 +423,76 @@ vector<int> dijkstraUsingStack(int V, vector<vector<int>> adjacencyList[], int S
     // Return the list containing shortest distances
     // from source to all the nodes.
     return dist;
+}
+// ---------------------------------------------------------------- BFS of graph ----------------------------------------------------------
+// --------- The Below Code Is For Not-Connected Undirected Graph ----------
+vector<int> bfsOfGraph(vector<vector<int>> &adj)
+{
+    int size = adj.size();
+    vector<int> isVisited(size, 0);
+    vector<int> result;
+    queue<int> q;
+    for (int i = 0; i < size; i++)
+    {
+        if (!isVisited[i])
+        {
+            q.push(i);
+            isVisited[i] = 1;
+            while (!q.empty())
+            {
+                int q_size = q.size();
+                for (int index = 0; index < q_size; index++)
+                {
+                    int node = q.front();
+                    q.pop();
+                    result.push_back(node);
+                    for (auto neighbour : adj[node])
+                    {
+                        if (!isVisited[neighbour])
+                        {
+                            isVisited[neighbour] = 1;
+                            q.push(neighbour);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return result;
+}
+// --------- The Below Code Is For Connected Undirected Graph ----------
+vector<int> bfsOfGraphTUF(vector<vector<int>> &adj)
+{
+    int size = adj.size();
+    vector<int> isVisited(size, 0);
+    vector<int> bfs;
+    queue<int> q;
+    q.push(0);
+    isVisited[0] = 1;
+    while (!q.empty())
+    {
+        int node = q.front();
+        q.pop();
+        bfs.push_back(node);
+        for (auto neighbour : adj[node])
+        {
+            if (!isVisited[neighbour])
+            {
+                isVisited[neighbour] = 1;
+                q.push(neighbour);
+            }
+        }
+    }
+    return bfs;
+}
+int main()
+{
+    cout << string(35, '-') << endl;
+    vector<vector<int>> adjacencyList = {{0, 2}, {2, 1}, {0, 1}};
+    vector<int> result = bfsOfGraphTUF(adjacencyList);
+    for (auto item : result)
+        cout << item << ", ";
+    cout << endl
+         << string(35, '-');
+    return 0;
 }
