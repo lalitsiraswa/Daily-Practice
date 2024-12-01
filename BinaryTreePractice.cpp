@@ -418,22 +418,71 @@ vector<vector<int>> verticalTraversal(TreeNode *root)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(3);
+//     root->left = new TreeNode(9);
+//     root->right = new TreeNode(20);
+//     root->right->left = new TreeNode(15);
+//     root->right->right = new TreeNode(7);
+//     vector<vector<int>> result = verticalTraversal(root);
+//     for (int i = 0; i < result.size(); i++)
+//     {
+//         for (int j = 0; j < result[i].size(); j++)
+//         {
+//             cout << result[i][j] << ", ";
+//         }
+//         cout << endl;
+//     }
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------- 199. Binary Tree Right Side View ---------------------------------------------------------------------
+vector<int> rightSideView(TreeNode *root)
+{
+    if (root == nullptr)
+        return {};
+    // map<level/row, value> mp;
+    map<int, int> nodex;
+    queue<pair<TreeNode *, int>> todo;
+    todo.push({root, 0});
+    while (!todo.empty())
+    {
+        int size = todo.size();
+        for (int i = 0; i < size; i++)
+        {
+            auto front = todo.front();
+            todo.pop();
+            TreeNode *node = front.first;
+            int level = front.second;
+            nodex[level] = node->val;
+            if (node->left)
+                todo.push({node->left, level + 1});
+            if (node->right)
+                todo.push({node->right, level + 1});
+        }
+    }
+    vector<int> result;
+    for (auto itr : nodex)
+    {
+        result.push_back(itr.second);
+    }
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    TreeNode *root = new TreeNode(3);
-    root->left = new TreeNode(9);
-    root->right = new TreeNode(20);
-    root->right->left = new TreeNode(15);
-    root->right->right = new TreeNode(7);
-    vector<vector<int>> result = verticalTraversal(root);
+    TreeNode *root = new TreeNode(1);
+    root->left = new TreeNode(2);
+    root->right = new TreeNode(3);
+    root->left->left = new TreeNode(4);
+    root->left->left->left = new TreeNode(5);
+    vector<int> result = {1, 2, 3, 4};
     for (int i = 0; i < result.size(); i++)
     {
-        for (int j = 0; j < result[i].size(); j++)
-        {
-            cout << result[i][j] << ", ";
-        }
-        cout << endl;
+        cout << result[i] << ", ";
     }
     cout << endl
          << string(35, '-');
