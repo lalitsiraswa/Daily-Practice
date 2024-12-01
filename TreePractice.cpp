@@ -195,7 +195,7 @@ int maxPathSum(TreeNode *root)
 //          << string(35, '-');
 //     return 0;
 // }
-// -------------------------------------------------------------------------- 124. Binary Tree Maximum Path Sum ---------------------------------------------------------------------
+// ---------------------------------------------------------- 103. Binary Tree Zigzag Level Order Traversal ---------------------------------------------------------------------
 vector<vector<int>> zigzagLevelOrder(TreeNode *root)
 {
     if (root == nullptr)
@@ -236,6 +236,111 @@ vector<vector<int>> zigzagLevelOrder(TreeNode *root)
     }
     return result;
 }
+// -------------------------------------
+vector<vector<int>> zigzagLevelOrderTUF(TreeNode *root)
+{
+    if (root == nullptr)
+        return {};
+    vector<vector<int>> zigzagOrderView;
+    queue<TreeNode *> que;
+    que.push(root);
+    bool isLeftToRight = true;
+    while (!que.empty())
+    {
+        int size = que.size();
+        vector<int> currentLevel(size);
+        for (int i = 0; i < size; i++)
+        {
+            TreeNode *treeNode = que.front();
+            que.pop();
+            int index = (isLeftToRight) ? i : (size - 1 - i);
+            currentLevel[index] = treeNode->val;
+            if (treeNode->left)
+                que.push(treeNode->left);
+            if (treeNode->right)
+                que.push(treeNode->right);
+        }
+        isLeftToRight = !isLeftToRight;
+        zigzagOrderView.push_back(currentLevel);
+    }
+    return zigzagOrderView;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->right = new TreeNode(3);
+//     root->left->left = new TreeNode(4);
+//     root->right->right = new TreeNode(5);
+//     vector<vector<int>> result = zigzagLevelOrderTUF(root);
+//     for (int i = 0; i < result.size(); i++)
+//     {
+//         for (int j = 0; j < result[i].size(); j++)
+//         {
+//             cout << result[i][j] << ", ";
+//         }
+//         cout << endl;
+//     }
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------- Tree Boundary Traversal ---------------------------------------------------------------------
+void leftBoundary(TreeNode *root, vector<int> &result)
+{
+    if (root == nullptr)
+        return;
+    if (root->left == nullptr && root->right == nullptr)
+        return;
+    result.push_back(root->val);
+    if (root->left)
+        leftBoundary(root->left, result);
+    else if (root->right)
+        leftBoundary(root->right, result);
+}
+void leafNodesInOrder(TreeNode *root, vector<int> &result)
+{
+    if (root == nullptr)
+        return;
+    if (root->left == nullptr && root->right == nullptr)
+    {
+        result.push_back(root->val);
+        return;
+    }
+    leafNodesInOrder(root->left, result);
+    leafNodesInOrder(root->right, result);
+}
+void rightBoundary(TreeNode *root, stack<int> &s)
+{
+    if (root == nullptr)
+        return;
+    if (root->left == nullptr && root->right == nullptr)
+        return;
+    s.push(root->val);
+    if (root->right)
+        rightBoundary(root->right, s);
+    else if (root->left)
+        rightBoundary(root->left, s);
+}
+vector<int> boundaryTraversal(TreeNode *root)
+{
+    vector<int> result;
+    if (root == nullptr)
+        return result;
+    if (root->left || root->right)
+        result.push_back(root->val);
+    leftBoundary(root->left, result);
+    leafNodesInOrder(root, result);
+    stack<int> s;
+    rightBoundary(root->right, s);
+    while (!s.empty())
+    {
+        result.push_back(s.top());
+        s.pop();
+    }
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
@@ -243,15 +348,15 @@ int main()
     root->left = new TreeNode(2);
     root->right = new TreeNode(3);
     root->left->left = new TreeNode(4);
-    root->right->right = new TreeNode(5);
-    vector<vector<int>> result = zigzagLevelOrder(root);
+    root->left->right = new TreeNode(5);
+    root->right->left = new TreeNode(6);
+    root->right->right = new TreeNode(7);
+    root->left->right->left = new TreeNode(8);
+    root->left->right->right = new TreeNode(9);
+    vector<int> result = boundaryTraversal(root);
     for (int i = 0; i < result.size(); i++)
     {
-        for (int j = 0; j < result[i].size(); j++)
-        {
-            cout << result[i][j] << ", ";
-        }
-        cout << endl;
+        cout << result[i] << ", ";
     }
     cout << endl
          << string(35, '-');
