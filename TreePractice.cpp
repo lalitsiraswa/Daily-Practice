@@ -341,22 +341,99 @@ vector<int> boundaryTraversal(TreeNode *root)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->right = new TreeNode(3);
+//     root->left->left = new TreeNode(4);
+//     root->left->right = new TreeNode(5);
+//     root->right->left = new TreeNode(6);
+//     root->right->right = new TreeNode(7);
+//     root->left->right->left = new TreeNode(8);
+//     root->left->right->right = new TreeNode(9);
+//     vector<int> result = boundaryTraversal(root);
+//     for (int i = 0; i < result.size(); i++)
+//     {
+//         cout << result[i] << ", ";
+//     }
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------- 987. Vertical Order Traversal of a Binary Tree ---------------------------------------------------------------------
+vector<vector<int>> verticalTraversal(TreeNode *root)
+{
+    // Map to store nodes based on vertical/column and level/row information
+    // map<column, map<row, multiset<int>>> nodes;
+    map<int, map<int, multiset<int>>> nodes;
+    // Queue for BFS traversal, each element is a pair containing node and its vertical and level information
+    // vertical and level are like column and row
+    // queue<pair<TreeNode *, pair<column, row>>> todo;
+    queue<pair<TreeNode *, pair<int, int>>> todo;
+    // Push the root node with initial vertical/column and level/row values (0, 0)
+    todo.push({root, {0, 0}});
+    // BFS traversal
+    while (!todo.empty())
+    {
+        // Retrieve the node and its vertical/column and level/row information from the front of the queue
+        auto p = todo.front();
+        todo.pop();
+        TreeNode *temp = p.first;
+        // Extract the vertical/column and level/row information (row & column information)
+        // x -> vertical/column
+        int x = p.second.first;
+        // y -> level/row
+        int y = p.second.second;
+        // Insert the node value into the corresponding vertical and level in the map
+        nodes[x][y].insert(temp->val);
+        // Process left child
+        if (temp->left)
+        {
+            // Move left in terms of vertical/column and
+            // Move down in terms of level/row
+            todo.push({temp->left, {x - 1, y + 1}});
+        }
+        // Process right child
+        if (temp->right)
+        {
+            // Move right interms of vertical/column and
+            // Move down in terms of level/row
+            todo.push({temp->right, {x + 1, y + 1}});
+        }
+    }
+    // Prepare the final result vector by combining values from the map
+    vector<vector<int>> result;
+    for (auto p : nodes)
+    {
+        vector<int> col;
+        for (auto q : p.second)
+        {
+            // Insert node values into the column vector
+            col.insert(col.end(), q.second.begin(), q.second.end());
+        }
+        // Add the column vector to the final result
+        result.push_back(col);
+    }
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    TreeNode *root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left = new TreeNode(4);
-    root->left->right = new TreeNode(5);
-    root->right->left = new TreeNode(6);
+    TreeNode *root = new TreeNode(3);
+    root->left = new TreeNode(9);
+    root->right = new TreeNode(20);
+    root->right->left = new TreeNode(15);
     root->right->right = new TreeNode(7);
-    root->left->right->left = new TreeNode(8);
-    root->left->right->right = new TreeNode(9);
-    vector<int> result = boundaryTraversal(root);
+    vector<vector<int>> result = verticalTraversal(root);
     for (int i = 0; i < result.size(); i++)
     {
-        cout << result[i] << ", ";
+        for (int j = 0; j < result[i].size(); j++)
+        {
+            cout << result[i][j] << ", ";
+        }
+        cout << endl;
     }
     cout << endl
          << string(35, '-');
