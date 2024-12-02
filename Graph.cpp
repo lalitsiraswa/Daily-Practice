@@ -496,7 +496,7 @@ vector<int> bfsOfGraphTUF(vector<vector<int>> &adj)
 //          << string(35, '-');
 //     return 0;
 // }
-// ---------------------------------------------------------------- BFS of graph ----------------------------------------------------------
+// ---------------------------------------------------------------- DFS of graph ----------------------------------------------------------
 void dfsOfGraph(vector<vector<int>> &adj, int node, vector<int> &dfs, vector<int> &isVisited)
 {
     dfs.push_back(node);
@@ -517,13 +517,233 @@ vector<int> dfsOfGraph(vector<vector<int>> &adj)
     dfsOfGraph(adj, 0, dfs, isVisited);
     return dfs;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<vector<int>> adjacencyList = {{2, 3, 1}, {0}, {0, 4}, {0}, {2}};
+//     vector<int> result = dfsOfGraph(adjacencyList);
+//     for (auto item : result)
+//         cout << item << ", ";
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------- 547. Number of Provinces ----------------------------------------------------------
+int findCircleNum(vector<vector<int>> &isConnected)
+{
+    int size = isConnected.size();
+    vector<int> isVisisted(size, 0);
+    int provincesCount = 0;
+    queue<int> q;
+    for (int i = 0; i < size; i++)
+    {
+        if (!isVisisted[i])
+        {
+            provincesCount += 1;
+            q.push(i);
+            isVisisted[i] = 1;
+            while (!q.empty())
+            {
+                int node = q.front();
+                q.pop();
+                for (int j = 0; j < size; j++)
+                {
+                    if (isConnected[node][j] && !isVisisted[j])
+                    {
+                        q.push(j);
+                        isVisisted[j] = 1;
+                    }
+                }
+            }
+        }
+    }
+    return provincesCount;
+}
+// ---------------------------------
+void findCircleNum(vector<vector<int>> &isConnected, vector<int> &isVisisted, int node)
+{
+    isVisisted[node] = 1;
+    for (int j = 0; j < isConnected.size(); j++)
+    {
+        if (isConnected[node][j] && !isVisisted[j])
+        {
+            findCircleNum(isConnected, isVisisted, j);
+        }
+    }
+}
+int findCircleNumDfs(vector<vector<int>> &isConnected)
+{
+    int size = isConnected.size();
+    vector<int> isVisisted(size, 0);
+    int provincesCount = 0;
+    for (int i = 0; i < size; i++)
+    {
+        if (!isVisisted[i])
+        {
+            provincesCount += 1;
+            findCircleNum(isConnected, isVisisted, i);
+        }
+    }
+    return provincesCount;
+}
+// ---------------------------------
+void dfs(vector<vector<int>> &adj, vector<int> &isVisited, int node)
+{
+    isVisited[node] = 1;
+    for (auto neighbour : adj[node])
+    {
+        if (!isVisited[neighbour])
+        {
+            dfs(adj, isVisited, neighbour);
+        }
+    }
+}
+int findCircleNumTUF(vector<vector<int>> &isConnected)
+{
+    int size = isConnected.size();
+    vector<int> isVisisted(size, 0);
+    vector<vector<int>> adj(size);
+    int provincesCount = 0;
+    // to change adjacency matrix to list
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+        {
+            // self nodes are not considered
+            if (isConnected[i][j] == 1 && i != j)
+            {
+                adj[i].push_back(j);
+                adj[j].push_back(i);
+            }
+        }
+    }
+    for (int i = 0; i < size; i++)
+    {
+        // if the node is not visited
+        if (!isVisisted[i])
+        {
+            // counter to count the number of provinces
+            provincesCount += 1;
+            dfs(adj, isVisisted, i);
+        }
+    }
+    return provincesCount;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<vector<int>> isConnected = {{1, 1, 0}, {1, 1, 0}, {0, 0, 1}};
+//     cout << findCircleNumTUF(isConnected);
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------- 200. Number of Islands ----------------------------------------------------------
+void numIslandsBfs(vector<vector<char>> &grid, vector<vector<int>> &isVisited, int &i, int &j, int &m, int &n)
+{
+    queue<pair<int, int>> q;
+    q.push({i, j});
+    isVisited[i][j] = 1;
+    while (!q.empty())
+    {
+        auto node = q.front();
+        q.pop();
+        int row = node.first;
+        int column = node.second;
+        // UP
+        if (row > 0 && grid[row - 1][column] == '1' && isVisited[row - 1][column] == 0)
+        {
+            q.push({row - 1, column});
+            isVisited[row - 1][column] = 1;
+        }
+        // DOWN
+        if (row < m - 1 && grid[row + 1][column] == '1' && isVisited[row + 1][column] == 0)
+        {
+            q.push({row + 1, column});
+            isVisited[row + 1][column] = 1;
+        }
+        // LEFT
+        if (column > 0 && grid[row][column - 1] == '1' && isVisited[row][column - 1] == 0)
+        {
+            q.push({row, column - 1});
+            isVisited[row][column - 1] = 1;
+        }
+        // RIGHT
+        if (column < n - 1 && grid[row][column + 1] == '1' && isVisited[row][column + 1] == 0)
+        {
+            q.push({row, column + 1});
+            isVisited[row][column + 1] = 1;
+        }
+    }
+}
+int numIslands(vector<vector<char>> &grid)
+{
+    int m = grid.size();
+    int n = grid[0].size();
+    vector<vector<int>> isVisited(m, vector<int>(n, 0));
+    int islandCount = 0;
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (!isVisited[i][j] && grid[i][j] == '1')
+            {
+                islandCount += 1;
+                numIslandsBfs(grid, isVisited, i, j, m, n);
+            }
+        }
+    }
+    return islandCount;
+}
+// -----------------------------
+void numIslandsDfs(vector<vector<char>> &grid, vector<vector<int>> &isVisited, int row, int column, int &m, int &n)
+{
+    isVisited[row][column] = 1;
+    // UP
+    if (row > 0 && grid[row - 1][column] == '1' && isVisited[row - 1][column] == 0)
+    {
+        numIslandsDfs(grid, isVisited, row - 1, column, m, n);
+    }
+    // DOWN
+    if (row < m - 1 && grid[row + 1][column] == '1' && isVisited[row + 1][column] == 0)
+    {
+        numIslandsDfs(grid, isVisited, row + 1, column, m, n);
+    }
+    // LEFT
+    if (column > 0 && grid[row][column - 1] == '1' && isVisited[row][column - 1] == 0)
+    {
+        numIslandsDfs(grid, isVisited, row, column - 1, m, n);
+    }
+    // RIGHT
+    if (column < n - 1 && grid[row][column + 1] == '1' && isVisited[row][column + 1] == 0)
+    {
+        numIslandsDfs(grid, isVisited, row, column + 1, m, n);
+    }
+}
+int numIslandsDfs(vector<vector<char>> &grid)
+{
+    int m = grid.size();
+    int n = grid[0].size();
+    vector<vector<int>> isVisited(m, vector<int>(n, 0));
+    int islandCount = 0;
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (!isVisited[i][j] && grid[i][j] == '1')
+            {
+                islandCount += 1;
+                numIslandsDfs(grid, isVisited, i, j, m, n);
+            }
+        }
+    }
+    return islandCount;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<vector<int>> adjacencyList = {{2, 3, 1}, {0}, {0, 4}, {0}, {2}};
-    vector<int> result = dfsOfGraph(adjacencyList);
-    for (auto item : result)
-        cout << item << ", ";
+    vector<vector<char>> grid = {{'1', '1', '0', '0', '0'}, {'1', '1', '0', '0', '0'}, {'0', '0', '1', '0', '0'}, {'0', '0', '0', '1', '1'}};
+    cout << numIslandsDfs(grid);
     cout << endl
          << string(35, '-');
     return 0;
