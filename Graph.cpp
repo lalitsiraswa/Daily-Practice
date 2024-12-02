@@ -485,11 +485,43 @@ vector<int> bfsOfGraphTUF(vector<vector<int>> &adj)
     }
     return bfs;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<vector<int>> adjacencyList = {{0, 2}, {2, 1}, {0, 1}};
+//     vector<int> result = bfsOfGraphTUF(adjacencyList);
+//     for (auto item : result)
+//         cout << item << ", ";
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------- BFS of graph ----------------------------------------------------------
+void dfsOfGraph(vector<vector<int>> &adj, int node, vector<int> &dfs, vector<int> &isVisited)
+{
+    dfs.push_back(node);
+    isVisited[node] = 1;
+    for (auto neighbour : adj[node])
+    {
+        if (!isVisited[neighbour])
+        {
+            dfsOfGraph(adj, neighbour, dfs, isVisited);
+        }
+    }
+}
+vector<int> dfsOfGraph(vector<vector<int>> &adj)
+{
+    int size = adj.size();
+    vector<int> dfs;
+    vector<int> isVisited(size, 0);
+    dfsOfGraph(adj, 0, dfs, isVisited);
+    return dfs;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<vector<int>> adjacencyList = {{0, 2}, {2, 1}, {0, 1}};
-    vector<int> result = bfsOfGraphTUF(adjacencyList);
+    vector<vector<int>> adjacencyList = {{2, 3, 1}, {0}, {0, 4}, {0}, {2}};
+    vector<int> result = dfsOfGraph(adjacencyList);
     for (auto item : result)
         cout << item << ", ";
     cout << endl
