@@ -749,29 +749,29 @@ int numIslandsDfs(vector<vector<char>> &grid)
 //     return 0;
 // }
 // ---------------------------------------------------------------- 733. Flood Fill ----------------------------------------------------------
-void floodFill(vector<vector<int>> &image, vector<vector<int>> &isVisited, int row, int column, int color, int &m, int &n)
+void floodFill(vector<vector<int>> &image, vector<vector<int>> &isVisited, int row, int column, int color, int &m, int &n, int &targetColor)
 {
     isVisited[row][column] = 1;
     image[row][column] = color;
     // UP
-    if (row > 0 && image[row - 1][column] == 1 && isVisited[row - 1][column] == 0)
+    if (row > 0 && image[row - 1][column] == targetColor && isVisited[row - 1][column] == 0)
     {
-        floodFill(image, isVisited, row - 1, column, color, m, n);
+        floodFill(image, isVisited, row - 1, column, color, m, n, targetColor);
     }
     // DOWN
-    if (row < m - 1 && image[row + 1][column] == 1 && isVisited[row + 1][column] == 0)
+    if (row < m - 1 && image[row + 1][column] == targetColor && isVisited[row + 1][column] == 0)
     {
-        floodFill(image, isVisited, row + 1, column, color, m, n);
+        floodFill(image, isVisited, row + 1, column, color, m, n, targetColor);
     }
     // LEFT
-    if (column > 0 && image[row][column - 1] == 1 && isVisited[row][column - 1] == 0)
+    if (column > 0 && image[row][column - 1] == targetColor && isVisited[row][column - 1] == 0)
     {
-        floodFill(image, isVisited, row, column - 1, color, m, n);
+        floodFill(image, isVisited, row, column - 1, color, m, n, targetColor);
     }
     // RIGHT
-    if (column < n - 1 && image[row][column + 1] == 1 && isVisited[row][column + 1] == 0)
+    if (column < n - 1 && image[row][column + 1] == targetColor && isVisited[row][column + 1] == 0)
     {
-        floodFill(image, isVisited, row, column + 1, color, m, n);
+        floodFill(image, isVisited, row, column + 1, color, m, n, targetColor);
     }
 }
 vector<vector<int>> floodFill(vector<vector<int>> &image, int sr, int sc, int color)
@@ -779,21 +779,91 @@ vector<vector<int>> floodFill(vector<vector<int>> &image, int sr, int sc, int co
     int m = image.size();
     int n = image[0].size();
     vector<vector<int>> isVisited(m, vector<int>(n, 0));
-    floodFill(image, isVisited, sr, sc, color, m, n);
+    int targetColor = image[sr][sc];
+    floodFill(image, isVisited, sr, sc, color, m, n, targetColor);
     return image;
+}
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<vector<int>> image = {{1, 1, 1}, {1, 1, 0}, {1, 0, 1}};
+//     vector<vector<int>> result = floodFill(image, 1, 1, 2);
+//     for (auto row : result)
+//     {
+//         for (int data : row)
+//         {
+//             cout << data << ", ";
+//         }
+//     }
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------- 994. Rotting Oranges ----------------------------------------------------------
+int orangesRotting(vector<vector<int>> &grid)
+{
+    // figure out the grid size
+    int m = grid.size();
+    int n = grid[0].size();
+    // store {{row, column}, time}
+    queue<pair<pair<int, int>, int>> q;
+    vector<vector<int>> isVisited(m, vector<int>(n, 0));
+    int countFresh = 0;
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            // if cell contains rotten orange
+            if (grid[row][column] == 2)
+            {
+                q.push({{row, column}, 0});
+                // mark as visited (rotten) in visited array
+                isVisited[row][column] = 2;
+            }
+            if (grid[row][column] == 1)
+                countFresh += 1;
+        }
+    }
+    int time = 0;
+    // delta row and delta column
+    int drow[] = {-1, 0, +1, 0};
+    int dcol[] = {0, 1, 0, -1};
+    int count = 0;
+    // bfs traversal (until the queue becomes empty)
+    while (!q.empty())
+    {
+        int r = q.front().first.first;
+        int c = q.front().first.second;
+        int t = q.front().second;
+        time = max(time, t);
+        q.pop();
+        // exactly 4 neighbours
+        for (int i = 0; i < 4; i++)
+        {
+            // neighbouring row and column
+            int nrow = r + drow[i];
+            int ncol = c + dcol[i];
+            // check for valid cell and then for unvisited fresh orange
+            if (nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && isVisited[nrow][ncol] == 0 && grid[nrow][ncol] == 1)
+            {
+                // push in queue with timer increased
+                q.push({{nrow, ncol}, t + 1});
+                // mark as rotten
+                isVisited[nrow][ncol] = 2;
+                count++;
+            }
+        }
+    }
+    // if all oranges are not rotten
+    if (count != countFresh)
+        return -1;
+    return time;
 }
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<vector<int>> image = {{1, 1, 1}, {1, 1, 0}, {1, 0, 1}};
-    vector<vector<int>> result = floodFill(image, 1, 1, 2);
-    for (auto row : result)
-    {
-        for (int data : row)
-        {
-            cout << data << ", ";
-        }
-    }
+    vector<vector<int>> grid = {{0, 1, 2}, {0, 1, 1}, {2, 1, 1}};
+    cout << orangesRotting(grid);
     cout << endl
          << string(35, '-');
     return 0;
