@@ -739,11 +739,61 @@ int numIslandsDfs(vector<vector<char>> &grid)
     }
     return islandCount;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<vector<char>> grid = {{'1', '1', '0', '0', '0'}, {'1', '1', '0', '0', '0'}, {'0', '0', '1', '0', '0'}, {'0', '0', '0', '1', '1'}};
+//     cout << numIslandsDfs(grid);
+//     cout << endl
+//          << string(35, '-');
+//     return 0;
+// }
+// ---------------------------------------------------------------- 733. Flood Fill ----------------------------------------------------------
+void floodFill(vector<vector<int>> &image, vector<vector<int>> &isVisited, int row, int column, int color, int &m, int &n)
+{
+    isVisited[row][column] = 1;
+    image[row][column] = color;
+    // UP
+    if (row > 0 && image[row - 1][column] == 1 && isVisited[row - 1][column] == 0)
+    {
+        floodFill(image, isVisited, row - 1, column, color, m, n);
+    }
+    // DOWN
+    if (row < m - 1 && image[row + 1][column] == 1 && isVisited[row + 1][column] == 0)
+    {
+        floodFill(image, isVisited, row + 1, column, color, m, n);
+    }
+    // LEFT
+    if (column > 0 && image[row][column - 1] == 1 && isVisited[row][column - 1] == 0)
+    {
+        floodFill(image, isVisited, row, column - 1, color, m, n);
+    }
+    // RIGHT
+    if (column < n - 1 && image[row][column + 1] == 1 && isVisited[row][column + 1] == 0)
+    {
+        floodFill(image, isVisited, row, column + 1, color, m, n);
+    }
+}
+vector<vector<int>> floodFill(vector<vector<int>> &image, int sr, int sc, int color)
+{
+    int m = image.size();
+    int n = image[0].size();
+    vector<vector<int>> isVisited(m, vector<int>(n, 0));
+    floodFill(image, isVisited, sr, sc, color, m, n);
+    return image;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<vector<char>> grid = {{'1', '1', '0', '0', '0'}, {'1', '1', '0', '0', '0'}, {'0', '0', '1', '0', '0'}, {'0', '0', '0', '1', '1'}};
-    cout << numIslandsDfs(grid);
+    vector<vector<int>> image = {{1, 1, 1}, {1, 1, 0}, {1, 0, 1}};
+    vector<vector<int>> result = floodFill(image, 1, 1, 2);
+    for (auto row : result)
+    {
+        for (int data : row)
+        {
+            cout << data << ", ";
+        }
+    }
     cout << endl
          << string(35, '-');
     return 0;
