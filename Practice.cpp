@@ -3864,45 +3864,40 @@ int findLongestChainMemoization(vector<vector<int>> &pairs)
 // ---------------------------------------------------------------- 32. Longest Valid Parentheses ----------------------------------------------------------------------
 int longestValidParentheses(string s)
 {
-    int n = s.size();
-    stack<char> charStack;
-    int maxLength = 0;
-    int currLength = 0;
-    int i = 0;
-    while (i < n)
+    stack<int> st;
+    // Push -1 as the initial index to
+    // handle the edge case
+    st.push(-1);
+    int maxLen = 0;
+    // Traverse the string
+    for (int i = 0; i < s.length(); i++)
     {
+        // If we encounter an opening parenthesis,
+        // push its index
         if (s[i] == '(')
         {
-            charStack.push(s[i]);
-            i += 1;
-        }
-        else if (charStack.empty())
-        {
-            maxLength = max(maxLength, currLength);
-            currLength = 0;
-            i += 1;
+            st.push(i);
         }
         else
         {
-            while (!charStack.empty() && s[i] == ')')
+            // If we encounter a closing parenthesis,
+            // pop the stack
+            st.pop();
+            // If stack is empty, push the current index
+            // as a base for the next valid substring
+            if (st.empty())
             {
-                i += 1;
-                charStack.pop();
-                currLength += 2;
+                st.push(i);
             }
-            if (!charStack.empty())
+            else
             {
-                maxLength = max(maxLength, currLength);
-                currLength = 0;
+                // Update maxLength with the current length
+                // of the valid parentheses substring
+                maxLen = max(maxLen, i - st.top());
             }
-            while (!charStack.empty())
-            {
-                charStack.pop();
-            }
-            i += 1;
         }
     }
-    return maxLength;
+    return maxLen;
 }
 int main()
 {
