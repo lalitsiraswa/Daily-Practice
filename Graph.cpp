@@ -828,7 +828,7 @@ int orangesRotting(vector<vector<int>> &grid)
     // delta row and delta column
     int drow[] = {-1, 0, +1, 0};
     int dcol[] = {0, 1, 0, -1};
-    int count = 0;
+    int tempCountFresh = 0;
     // bfs traversal (until the queue becomes empty)
     while (!q.empty())
     {
@@ -841,21 +841,21 @@ int orangesRotting(vector<vector<int>> &grid)
         for (int i = 0; i < 4; i++)
         {
             // neighbouring row and column
-            int nrow = r + drow[i];
-            int ncol = c + dcol[i];
+            int neighbourRow = r + drow[i];
+            int neighbourCol = c + dcol[i];
             // check for valid cell and then for unvisited fresh orange
-            if (nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && isVisited[nrow][ncol] == 0 && grid[nrow][ncol] == 1)
+            if (neighbourRow >= 0 && neighbourRow < m && neighbourCol >= 0 && neighbourCol < n && isVisited[neighbourRow][neighbourCol] == 0 && grid[neighbourRow][neighbourCol] == 1)
             {
                 // push in queue with timer increased
-                q.push({{nrow, ncol}, t + 1});
+                q.push({{neighbourRow, neighbourCol}, t + 1});
                 // mark as rotten
-                isVisited[nrow][ncol] = 2;
-                count++;
+                isVisited[neighbourRow][neighbourCol] = 2;
+                tempCountFresh++;
             }
         }
     }
     // if all oranges are not rotten
-    if (count != countFresh)
+    if (tempCountFresh != countFresh)
         return -1;
     return time;
 }
