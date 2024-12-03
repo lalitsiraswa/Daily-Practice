@@ -3853,11 +3853,62 @@ int findLongestChainMemoization(vector<vector<int>> &pairs)
     vector<vector<int>> dp(n, vector<int>(n + 1, -1));
     return findLongestChain(0, -1, pairs, n, dp);
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     vector<vector<int>> pairs = {{-10, -8}, {8, 9}, {-5, 0}, {6, 10}, {-6, -4}, {1, 7}, {9, 10}, {-4, 7}};
+//     cout << findLongestChainMemoization(pairs);
+//     cout << endl
+//          << string(35, '-') << endl;
+// }
+// ---------------------------------------------------------------- 32. Longest Valid Parentheses ----------------------------------------------------------------------
+int longestValidParentheses(string s)
+{
+    int n = s.size();
+    stack<char> charStack;
+    int maxLength = 0;
+    int currLength = 0;
+    int i = 0;
+    while (i < n)
+    {
+        if (s[i] == '(')
+        {
+            charStack.push(s[i]);
+            i += 1;
+        }
+        else if (charStack.empty())
+        {
+            maxLength = max(maxLength, currLength);
+            currLength = 0;
+            i += 1;
+        }
+        else
+        {
+            while (!charStack.empty() && s[i] == ')')
+            {
+                i += 1;
+                charStack.pop();
+                currLength += 2;
+            }
+            if (!charStack.empty())
+            {
+                maxLength = max(maxLength, currLength);
+                currLength = 0;
+            }
+            while (!charStack.empty())
+            {
+                charStack.pop();
+            }
+            i += 1;
+        }
+    }
+    return maxLength;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<vector<int>> pairs = {{-10, -8}, {8, 9}, {-5, 0}, {6, 10}, {-6, -4}, {1, 7}, {9, 10}, {-4, 7}};
-    cout << findLongestChainMemoization(pairs);
+    string s = ")()())";
+    cout << longestValidParentheses(s);
     cout << endl
          << string(35, '-') << endl;
 }
