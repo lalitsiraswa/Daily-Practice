@@ -2,13 +2,6 @@
 #include <algorithm>
 using namespace std;
 
-int main()
-{
-    if ("lalit" == "lalit")
-        cout << "Hello World!";
-    return 0;
-}
-
 // ----------------------------------------------
 // int main()
 // {
@@ -3803,3 +3796,68 @@ bool circularArrayLoop(vector<int> &nums)
 //     cout << circularArrayLoop(nums) << endl;
 //     cout << string(35, '-') << endl;
 // }
+// ---------------------------------------------------------------- 646. Maximum Length of Pair Chain ----------------------------------------------------------------------
+// --------------- Lengthy Approach ------------
+int findLongestChain(vector<vector<int>> &pairs, int index, int n, vector<int> &dp)
+{
+    if (dp[index] != -1)
+    {
+        return dp[index];
+    }
+    int maxLength = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (i != index && pairs[index][1] < pairs[i][0])
+        {
+            int currLength = findLongestChain(pairs, i, n, dp);
+            maxLength = max(currLength, maxLength);
+        }
+    }
+    return dp[index] = maxLength + 1;
+}
+int findLongestChain(vector<vector<int>> &pairs)
+{
+    int n = pairs.size();
+    int maxLength = 0;
+    vector<int> dp(n, -1);
+    for (int index = 0; index < n; index++)
+    {
+        int currLength = findLongestChain(pairs, index, n, dp);
+        maxLength = max(currLength, maxLength);
+    }
+    return maxLength;
+}
+// ---------------------
+int findLongestChain(int index, int previous, vector<vector<int>> &pairs, int n, vector<vector<int>> &dp)
+{
+    if (index == n)
+    {
+        return 0;
+    }
+    if (dp[index][previous + 1] != -1)
+    {
+        return dp[index][previous + 1];
+    }
+    int pick = INT_MIN;
+    if (previous == -1 || pairs[previous][1] < pairs[index][0])
+    {
+        pick = 1 + findLongestChain(index + 1, index, pairs, n, dp);
+    }
+    int notPick = findLongestChain(index + 1, previous, pairs, n, dp);
+    return dp[index][previous + 1] = max(pick, notPick);
+}
+int findLongestChainMemoization(vector<vector<int>> &pairs)
+{
+    int n = pairs.size();
+    sort(pairs.begin(), pairs.end());
+    vector<vector<int>> dp(n, vector<int>(n + 1, -1));
+    return findLongestChain(0, -1, pairs, n, dp);
+}
+int main()
+{
+    cout << string(35, '-') << endl;
+    vector<vector<int>> pairs = {{-10, -8}, {8, 9}, {-5, 0}, {6, 10}, {-6, -4}, {1, 7}, {9, 10}, {-4, 7}};
+    cout << findLongestChainMemoization(pairs);
+    cout << endl
+         << string(35, '-') << endl;
+}
