@@ -3899,11 +3899,32 @@ int longestValidParentheses(string s)
     }
     return maxLen;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     string s = ")()())";
+//     cout << longestValidParentheses(s);
+//     cout << endl
+//          << string(35, '-') << endl;
+// }
+// ---------------------------------------------------------------- 53. Maximum Subarray ----------------------------------------------------------------------
+int maxSubArray(vector<int> &nums)
+{
+    int n = nums.size();
+    int current = nums[0];
+    int maxSubArraySum = nums[0];
+    for (int i = 1; i < n; i++)
+    {
+        current = max(nums[i] + current, nums[i]);
+        maxSubArraySum = max(current, maxSubArraySum);
+    }
+    return maxSubArraySum;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    string s = ")()())";
-    cout << longestValidParentheses(s);
+    vector<int> nums = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+    cout << maxSubArray(nums);
     cout << endl
          << string(35, '-') << endl;
 }
