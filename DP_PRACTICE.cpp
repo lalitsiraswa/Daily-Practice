@@ -4311,11 +4311,52 @@ int changeRevisionSpaceOptimization(int amount, vector<int> &coins)
     }
     return previousDataStore[amount];
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> coins = {1, 2, 5};
+//     cout << changeRevisionSpaceOptimization(5, coins);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 121. Best Time to Buy and Sell Stock --------------------------------------------------------------------------
+int maxProfitRevision1(vector<int> &prices)
+{
+    int buyPrice = INT_MAX;
+    int sellPrice = INT_MIN;
+    int max_profit = 0;
+    for (int index = 0; index < prices.size(); index++)
+    {
+        if (buyPrice > prices[index])
+        {
+            buyPrice = prices[index];
+            sellPrice = prices[index];
+        }
+        else if (sellPrice < prices[index])
+            sellPrice = prices[index];
+        max_profit = max(max_profit, sellPrice - buyPrice);
+    }
+    return max_profit;
+}
+// ----------------------------
+int maxProfitRevision2(vector<int> &prices)
+{
+    int maxProfit = 0;
+    int minPrice = prices[0];
+    for (int index = 1; index < prices.size(); index++)
+    {
+        int currProfit = prices[index] - minPrice;
+        maxProfit = max(currProfit, maxProfit);
+        minPrice = min(minPrice, prices[index]);
+    }
+    return maxProfit;
+}
 int main()
 {
     cout << string(20, '-') << endl;
-    vector<int> coins = {1, 2, 5};
-    cout << changeRevisionSpaceOptimization(5, coins);
+    vector<int> prices = {7, 1, 5, 3, 6, 4};
+    cout << maxProfit(prices);
     cout << endl
          << string(20, '-');
     return 0;
