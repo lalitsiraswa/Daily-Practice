@@ -4352,11 +4352,136 @@ int maxProfitRevision2(vector<int> &prices)
     }
     return maxProfit;
 }
+// int main()
+// {
+//     cout << string(20, '-') << endl;
+//     vector<int> prices = {7, 1, 5, 3, 6, 4};
+//     cout << maxProfit(prices);
+//     cout << endl
+//          << string(20, '-');
+//     return 0;
+// }
+// ------------------------------------------------------------------- 122. Best Time to Buy and Sell Stock II --------------------------------------------------------------------------
+int buyAndSellStock_2(vector<int> &prices, int index, int buy, int n, vector<vector<int>> &dp)
+{
+    // Base case: When we reach the end of the array, there are no more decisions to make.
+    if (index == n)
+    {
+        return 0;
+    }
+    // If the result for this state has already been calculated, return it
+    if (dp[index][buy] != -1)
+    {
+        return dp[index][buy];
+    }
+    long profit = 0;
+    // We can buy the stock
+    if (buy == 0)
+    {
+        long notBuyStock = 0 + buyAndSellStock_2(prices, index + 1, 0, n, dp);
+        long buyStack = -prices[index] + buyAndSellStock_2(prices, index + 1, 1, n, dp);
+        profit = max(buyStack, notBuyStock);
+    }
+    // We can sell the stock
+    if (buy == 1)
+    {
+        long notSellStock = 0 + buyAndSellStock_2(prices, index + 1, 1, n, dp);
+        long sellStock = prices[index] + buyAndSellStock_2(prices, index + 1, 0, n, dp);
+        profit = max(notSellStock, sellStock);
+    }
+    // Store the calculated profit in the DP table and return it
+    return dp[index][buy] = profit;
+}
+int buyAndSellStock_2(vector<int> &prices)
+{
+    int n = prices.size();
+    // Create a DP table to memoize results
+    vector<vector<int>> dp(n, vector<int>(2, -1));
+    if (n == 0)
+    {
+        return 0;
+    }
+    return buyAndSellStock_2(prices, 0, 0, n, dp);
+}
+// ----------------------------------
+int buyAndSellStock_2_Tabulation(vector<int> &prices)
+{
+    int n = prices.size();
+    // Create a DP table to memoize results
+    vector<vector<long>> dp(n + 1, vector<long>(2, -1));
+    // Base condition: When we have no stocks left, the profit is 0.
+    dp[n][0] = dp[n][1] = 0;
+    long profit;
+    // Loop through the array in reverse order
+    for (int index = n - 1; index >= 0; index--)
+    {
+        for (int buy = 0; buy <= 1; buy++)
+        {
+            // We can buy the stock
+            if (buy == 0)
+            {
+                long notBuyStock = 0 + dp[index + 1][0];
+                long buyStock = -prices[index] + dp[index + 1][1];
+                profit = max(notBuyStock, buyStock);
+            }
+            // We can sell the stock
+            if (buy == 1)
+            {
+                long notSellStock = 0 + dp[index + 1][1];
+                long sellStock = prices[index] + dp[index + 1][0];
+                profit = max(notSellStock, sellStock);
+            }
+            // Store the calculated profit in the DP table and return it
+            dp[index][buy] = profit;
+        }
+    }
+    // The maximum profit is stored in dp[0][0] after all calculations
+    return dp[0][0];
+}
+// ----------------------------------
+int buyAndSellStock_2_SpaceOptimization(vector<int> &prices)
+{
+    int n = prices.size();
+    if (n == 0)
+        return 0;
+    vector<int> previousDataStore(2, -1);
+    // Base condition: When there are no stocks left, the profit is 0.
+    previousDataStore[0] = 0;
+    previousDataStore[1] = 0;
+    long profit;
+    // Loop through the array in reverse order
+    for (int index = n - 1; index >= 0; index--)
+    {
+        vector<int> currentDataDataStore(2, -1);
+        for (int buy = 0; buy <= 1; buy++)
+        {
+            // We can buy the stock
+            if (buy == 0)
+            {
+                long notBuyStock = 0 + previousDataStore[0];
+                long buyStock = -prices[index] + previousDataStore[1];
+                profit = max(notBuyStock, buyStock);
+            }
+            // We can sell the stock
+            if (buy == 1)
+            {
+                long notSellStock = 0 + previousDataStore[1];
+                long sellStock = prices[index] + previousDataStore[0];
+                profit = max(notSellStock, sellStock);
+            }
+            currentDataDataStore[buy] = profit;
+        }
+        // Update the "previousDataStore" array with the current values
+        previousDataStore = currentDataDataStore;
+    }
+    // The maximum profit is stored in previousDataStore[0] after all calculations
+    return previousDataStore[0];
+}
 int main()
 {
     cout << string(20, '-') << endl;
     vector<int> prices = {7, 1, 5, 3, 6, 4};
-    cout << maxProfit(prices);
+    cout << buyAndSellStock_2_SpaceOptimization(prices);
     cout << endl
          << string(20, '-');
     return 0;
