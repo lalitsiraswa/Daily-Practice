@@ -3908,6 +3908,21 @@ int longestValidParentheses(string s)
 //          << string(35, '-') << endl;
 // }
 // ---------------------------------------------------------------- 53. Maximum Subarray ----------------------------------------------------------------------
+int maxSubArrayKadaneAlgorithm(vector<int> &nums)
+{
+    int max_so_for = INT_MIN;
+    int max_ending_here = 0;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        max_ending_here += nums[i];
+        if (max_ending_here > max_so_for)
+            max_so_for = max_ending_here;
+        if (max_ending_here < 0)
+            max_ending_here = 0;
+    }
+    return max_so_for;
+}
+// -----------------------
 int maxSubArray(vector<int> &nums)
 {
     int n = nums.size();
@@ -3919,6 +3934,34 @@ int maxSubArray(vector<int> &nums)
         maxSubArraySum = max(current, maxSubArraySum);
     }
     return maxSubArraySum;
+}
+// ------------------------
+//  Print subarray with maximum subarray sum (extended version of above problem)
+void printMaxSubArray(vector<int> &nums)
+{
+    int max_so_for = INT_MIN;
+    int max_ending_here = 0;
+    int maxSubArrayStartIndex = -1;
+    int maxSubArrayEndingIndex = -1;
+    int start;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        if (max_ending_here == 0)
+            start = i;
+        max_ending_here += nums[i];
+        if (max_ending_here > max_so_for)
+        {
+            max_so_for = max_ending_here;
+            maxSubArrayStartIndex = start;
+            maxSubArrayEndingIndex = i;
+        }
+        if (max_ending_here < 0)
+            max_ending_here = 0;
+    }
+    for (int index = maxSubArrayStartIndex; index <= maxSubArrayEndingIndex; index++)
+    {
+        cout << nums[index] << " ";
+    }
 }
 int main()
 {
