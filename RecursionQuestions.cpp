@@ -1487,10 +1487,64 @@ int countGoodNumbersRevision(long long n)
     return result;
 }
 
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     cout << countGoodNumbersRevision(4);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------------- Sort a stack Revision --------------------------------------------------------------------------------
+void sortRevision(stack<int> &s)
+{
+    stack<int> duplicate = s;
+    stack<int> temp;
+    while (!s.empty())
+    {
+        s.pop();
+    }
+    s.push(duplicate.top());
+    duplicate.pop();
+    while (!duplicate.empty())
+    {
+        if (!s.empty() && duplicate.top() < s.top())
+        {
+            while (!s.empty() && s.top() > duplicate.top())
+            {
+                temp.push(s.top());
+                s.pop();
+            }
+            s.push(duplicate.top());
+            duplicate.pop();
+            while (!temp.empty())
+            {
+                s.push(temp.top());
+                temp.pop();
+            }
+        }
+        else
+        {
+            s.push(duplicate.top());
+            duplicate.pop();
+        }
+    }
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    cout << countGoodNumbersRevision(4);
+    stack<int> s;
+    s.push(41);
+    s.push(3);
+    s.push(32);
+    s.push(2);
+    s.push(11);
+    sortRevision(s);
+    while (!s.empty())
+    {
+        cout << s.top() << ", ";
+        s.pop();
+    }
     cout << endl
          << string(30, '-') << endl;
     return 0;
