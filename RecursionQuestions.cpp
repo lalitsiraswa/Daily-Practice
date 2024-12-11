@@ -1329,30 +1329,75 @@ bool solveSudoku(vector<vector<char>> &board, int defaultRow = 0)
     }
     return true;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<vector<char>> board = {
+//         {'5', '3', '.', '.', '7', '.', '.', '.', '.'},
+//         {'6', '.', '.', '1', '9', '5', '.', '.', '.'},
+//         {'.', '9', '8', '.', '.', '.', '.', '6', '.'},
+//         {'8', '.', '.', '.', '6', '.', '.', '.', '3'},
+//         {'4', '.', '.', '8', '.', '3', '.', '.', '1'},
+//         {'7', '.', '.', '.', '2', '.', '.', '.', '6'},
+//         {'.', '6', '.', '.', '.', '.', '2', '8', '.'},
+//         {'.', '.', '.', '4', '1', '9', '.', '.', '5'},
+//         {'.', '.', '.', '.', '8', '.', '.', '7', '9'}};
+//     solveSudoku(board);
+//     for (int i = 0; i < 9; i++)
+//     {
+//         cout << "{";
+//         for (int j = 0; j < 9; j++)
+//         {
+//             cout << board[i][j] << "  ";
+//         }
+//         cout << "}";
+//         cout << endl;
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------------- 8. String to Integer (atoi) Revision --------------------------------------------------------------------------------
+int myAtoiRevision(string s)
+{
+    double result = 0;
+    int size = s.size();
+    int index = 0;
+    // 1. Whitespace: Ignore any leading whitespace (" ").
+    while (s[index] == ' ')
+    {
+        index++;
+    }
+    // 2. Signedness: Determine the sign by checking if the next character is '-' or '+', assuming positivity if neither present.
+    bool isNegative = s[index] == '-';
+    if (isNegative || s[index] == '+')
+    {
+        index++;
+    }
+    // 3. Conversion: Read the integer by skipping leading zeros until a non-digit character is encountered or the end of the string is reached. If no digits were read, then the result is 0.
+    while (s[index] == '0')
+    {
+        index++;
+    }
+    while (s[index] >= '0' && s[index] <= '9')
+    {
+        result = (result * 10) + s[index] - '0';
+        index++;
+    }
+    if (isNegative)
+    {
+        result *= -1;
+    }
+    // 4. Rounding: If the integer is out of the 32-bit signed integer range [-231, 231 - 1], then round the integer to remain in the range. Specifically, integers less than -231 should be rounded to -231, and integers greater than 231 - 1 should be rounded to 231 - 1.
+    result = result > INT_MAX ? INT_MAX : result;
+    result = result < INT_MIN ? INT_MIN : result;
+    return int(result);
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<vector<char>> board = {
-        {'5', '3', '.', '.', '7', '.', '.', '.', '.'},
-        {'6', '.', '.', '1', '9', '5', '.', '.', '.'},
-        {'.', '9', '8', '.', '.', '.', '.', '6', '.'},
-        {'8', '.', '.', '.', '6', '.', '.', '.', '3'},
-        {'4', '.', '.', '8', '.', '3', '.', '.', '1'},
-        {'7', '.', '.', '.', '2', '.', '.', '.', '6'},
-        {'.', '6', '.', '.', '.', '.', '2', '8', '.'},
-        {'.', '.', '.', '4', '1', '9', '.', '.', '5'},
-        {'.', '.', '.', '.', '8', '.', '.', '7', '9'}};
-    solveSudoku(board);
-    for (int i = 0; i < 9; i++)
-    {
-        cout << "{";
-        for (int j = 0; j < 9; j++)
-        {
-            cout << board[i][j] << "  ";
-        }
-        cout << "}";
-        cout << endl;
-    }
+    string s = "1337c0d3";
+    cout << myAtoiRevision(s);
     cout << endl
          << string(30, '-') << endl;
     return 0;
