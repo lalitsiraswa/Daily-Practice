@@ -1393,11 +1393,75 @@ int myAtoiRevision(string s)
     result = result < INT_MIN ? INT_MIN : result;
     return int(result);
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string s = "1337c0d3";
+//     cout << myAtoiRevision(s);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------------- 50. Pow(x, n) Revision --------------------------------------------------------------------------------
+double calculatePower(double x, int n)
+{
+    if (n == 0)
+    {
+        return 1;
+    }
+    return x * calculatePower(x, n - 1);
+}
+double myPowRevision(double x, int n)
+{
+    if (n == INT_MAX)
+        return (x == 1) ? 1 : (x == -1) ? -1
+                                        : 0;
+    if (n == INT_MIN)
+        return (x == 1 || x == -1) ? 1 : 0;
+    int isNegativePower = (n < 0);
+    if (isNegativePower)
+    {
+        n *= -1;
+    }
+    double result = calculatePower(x, n);
+    if (isNegativePower)
+    {
+        result = 1 / result;
+    }
+    return result;
+}
+// ----------------------------
+double myPowTUF(double x, int n)
+{
+    double result = 1.0;
+    long long N = n;
+    if (N < 0)
+    {
+        N = -1 * N;
+    }
+    while (N)
+    {
+        if (N % 2 == 0)
+        {
+            x = x * x;
+            N = N / 2;
+        }
+        else
+        {
+            result = result * x;
+            N = N - 1;
+        }
+    }
+    if (n < 0)
+    {
+        result = (double)(1.0) / (double)(result);
+    }
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    string s = "1337c0d3";
-    cout << myAtoiRevision(s);
+    cout << myPowTUF(2, 12);
     cout << endl
          << string(30, '-') << endl;
     return 0;
