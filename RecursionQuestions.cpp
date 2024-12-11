@@ -1458,10 +1458,39 @@ double myPowTUF(double x, int n)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     cout << myPowTUF(2, 12);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------------- 1922. Count Good Numbers Revision --------------------------------------------------------------------------------
+long long powerCalculate(long long x, long long n, int &mod)
+{
+    if (n == 0)
+        return 1;
+    if (n % 2 == 0)
+        return powerCalculate((x * x) % mod, n / 2, mod);
+    else
+        return (x * powerCalculate(x, n - 1, mod)) % mod;
+}
+int countGoodNumbersRevision(long long n)
+{
+    int mod = 1e9 + 7;
+    long long evenCount = n / 2 + n % 2;
+    long long oddCount = n / 2;
+    long long first = powerCalculate(5, evenCount, mod);
+    long long second = powerCalculate(4, oddCount, mod);
+    long long result = (first * second) % mod;
+    return result;
+}
+
 int main()
 {
     cout << string(30, '-') << endl;
-    cout << myPowTUF(2, 12);
+    cout << countGoodNumbersRevision(4);
     cout << endl
          << string(30, '-') << endl;
     return 0;
