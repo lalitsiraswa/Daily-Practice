@@ -1530,16 +1530,53 @@ void sortRevision(stack<int> &s)
         }
     }
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     stack<int> s;
+//     s.push(41);
+//     s.push(3);
+//     s.push(32);
+//     s.push(2);
+//     s.push(11);
+//     sortRevision(s);
+//     while (!s.empty())
+//     {
+//         cout << s.top() << ", ";
+//         s.pop();
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------------------- Reverse a Stack Revision ---------------------------------------------------------------------------------------
+void reverseRevision(stack<int> &s, queue<int> &q)
+{
+    if (s.empty())
+    {
+        return;
+    }
+    q.push(s.top());
+    s.pop();
+    reverseRevision(s, q);
+    s.push(q.front());
+    q.pop();
+}
+void reverseRevision(stack<int> &s)
+{
+    queue<int> q;
+    reverseRevision(s, q);
+}
 int main()
 {
     cout << string(30, '-') << endl;
     stack<int> s;
-    s.push(41);
-    s.push(3);
-    s.push(32);
+    s.push(1);
     s.push(2);
-    s.push(11);
-    sortRevision(s);
+    s.push(3);
+    s.push(4);
+    s.push(5);
+    reverseRevision(s);
     while (!s.empty())
     {
         cout << s.top() << ", ";
