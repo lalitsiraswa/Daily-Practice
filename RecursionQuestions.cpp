@@ -1567,20 +1567,89 @@ void reverseRevision(stack<int> &s)
     queue<int> q;
     reverseRevision(s, q);
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     stack<int> s;
+//     s.push(1);
+//     s.push(2);
+//     s.push(3);
+//     s.push(4);
+//     s.push(5);
+//     reverseRevision(s);
+//     while (!s.empty())
+//     {
+//         cout << s.top() << ", ";
+//         s.pop();
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------------------- Generate all binary strings Revision ---------------------------------------------------------------------------------------
+void generateBinaryStrings(string &s, int index, vector<string> &binaryStrings)
+{
+    if (index >= s.size())
+    {
+        binaryStrings.push_back(s);
+        return;
+    }
+    // NOT PLACE 1 - NOT_TAKE
+    generateBinaryStrings(s, index + 1, binaryStrings);
+    // PLACE 1 - TAKE
+    s[index] = '1';
+    generateBinaryStrings(s, index + 2, binaryStrings);
+    s[index] = '0';
+}
+vector<string> generateBinaryStringsRevision(int num)
+{
+    vector<string> binaryStrings;
+    string s = string(num, '0');
+    generateBinaryStrings(s, 0, binaryStrings);
+    return binaryStrings;
+}
+// ------------------
+void generateBinaryStringsHelper2(string &binaryString, int num, vector<string> &binaryStrings)
+{
+    int n = binaryString.size();
+    if (n == num)
+    {
+        binaryStrings.push_back(binaryString);
+        return;
+    }
+    // PLACE 0
+    binaryString.push_back('0');
+    generateBinaryStringsHelper2(binaryString, num, binaryStrings);
+    binaryString.pop_back();
+    char lastInsertedChar = binaryString[n - 1];
+    if (lastInsertedChar != '1')
+    {
+        // PLACE 1
+        binaryString.push_back('1');
+        generateBinaryStringsHelper2(binaryString, num, binaryStrings);
+        binaryString.pop_back();
+    }
+}
+vector<string> generateBinaryStrings2(int num)
+{
+    vector<string> binaryStrings;
+    string binaryString = "0";
+    generateBinaryStringsHelper2(binaryString, num, binaryStrings);
+    binaryString = "1";
+    generateBinaryStringsHelper2(binaryString, num, binaryStrings);
+    return binaryStrings;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    stack<int> s;
-    s.push(1);
-    s.push(2);
-    s.push(3);
-    s.push(4);
-    s.push(5);
-    reverseRevision(s);
-    while (!s.empty())
+    vector<string> binaryStrings = generateBinaryStrings2(4);
+    for (auto str : binaryStrings)
     {
-        cout << s.top() << ", ";
-        s.pop();
+        for (auto ch : str)
+        {
+            cout << ch;
+        }
+        cout << ", ";
     }
     cout << endl
          << string(30, '-') << endl;
