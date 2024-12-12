@@ -1639,11 +1639,55 @@ vector<string> generateBinaryStrings2(int num)
     generateBinaryStringsHelper2(binaryString, num, binaryStrings);
     return binaryStrings;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<string> binaryStrings = generateBinaryStrings2(4);
+//     for (auto str : binaryStrings)
+//     {
+//         for (auto ch : str)
+//         {
+//             cout << ch;
+//         }
+//         cout << ", ";
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------------------- 22. Generate Parentheses Revision ---------------------------------------------------------------------------------------
+void generateParenthesis(string &parenthesis, int n, vector<string> &result, int openBracketCount, int closeBracketCount)
+{
+    if (parenthesis.size() == n * 2)
+    {
+        result.push_back(parenthesis);
+        return;
+    }
+    if (openBracketCount < n)
+    {
+        parenthesis.push_back('(');
+        generateParenthesis(parenthesis, n, result, openBracketCount + 1, closeBracketCount);
+        parenthesis.pop_back();
+    }
+    if (closeBracketCount < openBracketCount)
+    {
+        parenthesis.push_back(')');
+        generateParenthesis(parenthesis, n, result, openBracketCount, closeBracketCount + 1);
+        parenthesis.pop_back();
+    }
+}
+vector<string> generateParenthesisPractice(int n)
+{
+    vector<string> result;
+    string parenthesis;
+    generateParenthesis(parenthesis, n, result, 0, 0);
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<string> binaryStrings = generateBinaryStrings2(4);
-    for (auto str : binaryStrings)
+    vector<string> parenthesis = generateParenthesisPractice(3);
+    for (auto str : parenthesis)
     {
         for (auto ch : str)
         {
