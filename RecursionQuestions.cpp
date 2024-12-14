@@ -1683,18 +1683,128 @@ vector<string> generateParenthesisPractice(int n)
     generateParenthesis(parenthesis, n, result, 0, 0);
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<string> parenthesis = generateParenthesisPractice(3);
+//     for (auto str : parenthesis)
+//     {
+//         for (auto ch : str)
+//         {
+//             cout << ch;
+//         }
+//         cout << ", ";
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------------------------------ 78. Subsets Revision -------------------------------------------------------------------------------------------------
+void subsets(vector<int> &nums, int index, vector<vector<int>> &result, vector<int> &subset)
+{
+    if (index == nums.size())
+    {
+        result.push_back(subset);
+        return;
+    }
+    // NOT-TAKE
+    subsets(nums, index + 1, result, subset);
+    // TAKE
+    subset.push_back(nums[index]);
+    subsets(nums, index + 1, result, subset);
+    subset.pop_back();
+}
+vector<vector<int>> subsetsRevision(vector<int> &nums)
+{
+    vector<vector<int>> result;
+    vector<int> subset;
+    int n = nums.size();
+    subsets(nums, 0, result, subset);
+    return result;
+}
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {1, 2, 3};
+//     vector<vector<int>> subsets = subsetsRevision(nums);
+//     for (vector<int> set : subsets)
+//     {
+//         cout << "{";
+//         for (int val : set)
+//         {
+//             cout << val << ", ";
+//         }
+//         cout << "}" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------------------------------ Better String Revision -------------------------------------------------------------------------------------------------
+// ------------ TLE -------------
+void findSubsequences(string &subsequence, set<string> &subsequences, int index, string &str)
+{
+    if (index >= str.size())
+    {
+        subsequences.insert(subsequence);
+        return;
+    }
+    // NOT-TAKE
+    findSubsequences(subsequence, subsequences, index + 1, str);
+    // TAKE
+    subsequence.push_back(str[index]);
+    findSubsequences(subsequence, subsequences, index + 1, str);
+    subsequence.pop_back();
+}
+string betterStringRevision(string str1, string str2)
+{
+    int n = str1.size();
+    string subsequence;
+    set<string> str1Subsequences;
+    findSubsequences(subsequence, str1Subsequences, 0, str1);
+    set<string> str2Subsequences;
+    findSubsequences(subsequence, str2Subsequences, 0, str2);
+    return (str1Subsequences.size() >= str2Subsequences.size()) ? str1 : str2;
+}
+// -----------------------------
+// Function to count the number of distinct subsequences
+int countDistinctSubsequences(string str)
+{
+    int n = str.size();
+    // dp array to store counts
+    vector<int> dp(n + 1, 0);
+    // Empty string has one subsequence
+    dp[0] = 1;
+    // To store the last occurrence index of each character
+    vector<int> last(26, -1);
+    for (int i = 1; i <= n; i++)
+    {
+        // Double the count from the previous position
+        dp[i] = 2 * dp[i - 1];
+        // If the current character has occurred before
+        if (last[str[i - 1] - 97] != -1)
+        {
+            // Subtract the count of subsequences ending at the last occurrence
+            dp[i] = dp[i] - dp[last[str[i - 1] - 97]];
+        }
+        // Update the last occurrence index of the current character
+        last[str[i - 1] - 97] = i - 1;
+    }
+    // Return the total count of distinct subsequences
+    return dp[n];
+}
+// Function to compare two strings based on the count of
+// distinct subsequences
+string betterStringRevisionGFG(string str1, string str2)
+{
+    int str1SubsequenceCount = countDistinctSubsequences(str1);
+    int str2SubsequenceCount = countDistinctSubsequences(str2);
+    return str1SubsequenceCount >= str2SubsequenceCount ? str1 : str2;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<string> parenthesis = generateParenthesisPractice(3);
-    for (auto str : parenthesis)
-    {
-        for (auto ch : str)
-        {
-            cout << ch;
-        }
-        cout << ", ";
-    }
+    cout << betterStringRevisionGFG("abcbca", "ggg");
     cout << endl
          << string(30, '-') << endl;
     return 0;
