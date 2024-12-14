@@ -1920,11 +1920,56 @@ int perfectSumSpaceOptimizationRevision(vector<int> &arr, int target)
     }
     return prev[target];
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {1, 0, 2, 0};
+//     cout << perfectSumSpaceOptimizationRevision(arr, 2);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ---------------------------------------------------------------------- 39. Combination Sum Revision -----------------------------------------------------------------------------
+void CombinationSumRecursive(vector<vector<int>> &combinations, vector<int> &combination, int index, int target, vector<int> &candidates)
+{
+    if (target == 0)
+    {
+        combinations.push_back(combination);
+        return;
+    }
+    if (index == candidates.size())
+        return;
+    // NOT-PICK
+    CombinationSumRecursive(combinations, combination, index + 1, target, candidates);
+    // PICK
+    if (candidates[index] <= target)
+    {
+        combination.push_back(candidates[index]);
+        CombinationSumRecursive(combinations, combination, index, target - candidates[index], candidates);
+        combination.pop_back();
+    }
+}
+vector<vector<int>> combinationSumRevision(vector<int> &candidates, int target)
+{
+    vector<vector<int>> combinations;
+    vector<int> combination;
+    CombinationSumRecursive(combinations, combination, 0, target, candidates);
+    return combinations;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr = {1, 0, 2, 0};
-    cout << perfectSumSpaceOptimizationRevision(arr, 2);
+    vector<int> candidates = {2, 3, 5};
+    vector<vector<int>> combinations = combinationSumRevision(candidates, 8);
+    for (vector<int> combination : combinations)
+    {
+        cout << "{";
+        for (int val : combination)
+        {
+            cout << val << ", ";
+        }
+        cout << "}" << endl;
+    }
     cout << endl
          << string(30, '-') << endl;
     return 0;
