@@ -1956,11 +1956,66 @@ vector<vector<int>> combinationSumRevision(vector<int> &candidates, int target)
     CombinationSumRecursive(combinations, combination, 0, target, candidates);
     return combinations;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> candidates = {2, 3, 5};
+//     vector<vector<int>> combinations = combinationSumRevision(candidates, 8);
+//     for (vector<int> combination : combinations)
+//     {
+//         cout << "{";
+//         for (int val : combination)
+//         {
+//             cout << val << ", ";
+//         }
+//         cout << "}" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ---------------------------------------------------------------------- 40. Combination Sum II Revision -----------------------------------------------------------------------------
+void CombinationSum2Recursive(vector<vector<int>> &combinations, vector<int> &combination, int index, int target, vector<int> &candidates)
+{
+    if (target == 0)
+    {
+        combinations.push_back(combination);
+        return;
+    }
+    if (index == candidates.size())
+        return;
+    for (int i = index; i < candidates.size(); i++)
+    {
+        if (i != index && candidates[i] == candidates[i - 1])
+        {
+            // Skip Duplicates
+            continue;
+        }
+        if (candidates[i] > target)
+        {
+            break;
+        }
+        if (candidates[i] <= target)
+        {
+            combination.push_back(candidates[i]);
+            CombinationSum2Recursive(combinations, combination, i + 1, target - candidates[i], candidates);
+            combination.pop_back();
+        }
+    }
+}
+vector<vector<int>> combinationSum2Practice(vector<int> &candidates, int target)
+{
+    sort(candidates.begin(), candidates.end());
+    vector<vector<int>> combinations;
+    vector<int> combination;
+    CombinationSum2Recursive(combinations, combination, 0, target, candidates);
+    return combinations;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> candidates = {2, 3, 5};
-    vector<vector<int>> combinations = combinationSumRevision(candidates, 8);
+    vector<int> candidates = {2, 5, 2, 1, 2};
+    vector<vector<int>> combinations = combinationSum2Practice(candidates, 5);
     for (vector<int> combination : combinations)
     {
         cout << "{";
