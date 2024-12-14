@@ -1801,10 +1801,130 @@ string betterStringRevisionGFG(string str1, string str2)
     int str2SubsequenceCount = countDistinctSubsequences(str2);
     return str1SubsequenceCount >= str2SubsequenceCount ? str1 : str2;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     cout << betterStringRevisionGFG("abcbca", "ggg");
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------------------------------ Perfect Sum Problem Revision -------------------------------------------------------------------------------------------------
+int findSubsequenceCount(vector<int> &arr, int index, int target, vector<vector<int>> &dp)
+{
+    if (index == 0)
+    {
+        if (target == 0 && arr[0] == 0)
+        {
+            return dp[index][target] = 2;
+        }
+        if (target == 0 || arr[0] == target)
+        {
+            return dp[index][target] = 1;
+        }
+        return dp[index][target] = 0;
+    }
+    if (dp[index][target] != -1)
+    {
+        return dp[index][target];
+    }
+    // NOT-TAKE
+    int notTake = findSubsequenceCount(arr, index - 1, target, dp);
+    // TAKE
+    int take = 0;
+    if (arr[index] <= target)
+    {
+        take = findSubsequenceCount(arr, index - 1, target - arr[index], dp);
+    }
+    return dp[index][target] = (take + notTake);
+}
+int perfectSumRevision(vector<int> &arr, int target)
+{
+    int n = arr.size();
+    vector<vector<int>> dp(n, vector<int>(target + 1, -1));
+    return findSubsequenceCount(arr, n - 1, target, dp);
+}
+// ---------------------------
+int perfectSumTabulationRevision(vector<int> &arr, int target)
+{
+    int n = arr.size();
+    vector<vector<int>> dp(n, vector<int>(target + 1, -1));
+    for (int tempTarget = 0; tempTarget <= target; tempTarget++)
+    {
+        if (tempTarget == 0 && arr[0] == 0)
+        {
+            dp[0][tempTarget] = 2;
+        }
+        else if (tempTarget == 0 || arr[0] == tempTarget)
+        {
+            dp[0][tempTarget] = 1;
+        }
+        else
+        {
+            dp[0][tempTarget] = 0;
+        }
+    }
+    for (int index = 1; index < n; index++)
+    {
+        for (int tempTarget = 0; tempTarget <= target; tempTarget++)
+        {
+            // NOT-TAKE
+            int notTake = dp[index - 1][tempTarget];
+            // TAKE
+            int take = 0;
+            if (arr[index] <= tempTarget)
+            {
+                take = dp[index - 1][tempTarget - arr[index]];
+            }
+            dp[index][tempTarget] = (take + notTake);
+        }
+    }
+    return dp[n - 1][target];
+}
+// ---------------------------
+int perfectSumSpaceOptimizationRevision(vector<int> &arr, int target)
+{
+    int n = arr.size();
+    vector<int> prev(target + 1, -1);
+    for (int tempTarget = 0; tempTarget <= target; tempTarget++)
+    {
+        if (tempTarget == 0 && arr[0] == 0)
+        {
+            prev[tempTarget] = 2;
+        }
+        else if (tempTarget == 0 || arr[0] == tempTarget)
+        {
+            prev[tempTarget] = 1;
+        }
+        else
+        {
+            prev[tempTarget] = 0;
+        }
+    }
+    for (int index = 1; index < n; index++)
+    {
+        vector<int> temp(target + 1, -1);
+        for (int tempTarget = 0; tempTarget <= target; tempTarget++)
+        {
+            // NOT-TAKE
+            int notTake = prev[tempTarget];
+            // TAKE
+            int take = 0;
+            if (arr[index] <= tempTarget)
+            {
+                take = prev[tempTarget - arr[index]];
+            }
+            temp[tempTarget] = (take + notTake);
+        }
+        prev = temp;
+    }
+    return prev[target];
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    cout << betterStringRevisionGFG("abcbca", "ggg");
+    vector<int> arr = {1, 0, 2, 0};
+    cout << perfectSumSpaceOptimizationRevision(arr, 2);
     cout << endl
          << string(30, '-') << endl;
     return 0;
