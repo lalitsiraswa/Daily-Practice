@@ -2011,19 +2011,78 @@ vector<vector<int>> combinationSum2Practice(vector<int> &candidates, int target)
     CombinationSum2Recursive(combinations, combination, 0, target, candidates);
     return combinations;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> candidates = {2, 5, 2, 1, 2};
+//     vector<vector<int>> combinations = combinationSum2Practice(candidates, 5);
+//     for (vector<int> combination : combinations)
+//     {
+//         cout << "{";
+//         for (int val : combination)
+//         {
+//             cout << val << ", ";
+//         }
+//         cout << "}" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ---------------------------------------------------------------------- Subset Sums Revision -----------------------------------------------------------------------------
+void subsetSums(vector<int> &arr, vector<int> &subsetSum, int index, int &sum)
+{
+    if (index >= arr.size())
+    {
+        subsetSum.push_back(sum);
+        return;
+    }
+    // NOT-TAKE
+    subsetSums(arr, subsetSum, index + 1, sum);
+    // TAKE
+    sum += arr[index];
+    subsetSums(arr, subsetSum, index + 1, sum);
+    sum -= arr[index];
+}
+vector<int> subsetSumsRevision(vector<int> &arr)
+{
+    int n = arr.size();
+    vector<int> subsetSum;
+    int sum = 0;
+    subsetSums(arr, subsetSum, 0, sum);
+    return subsetSum;
+}
+// --------------------------------
+void subsetSums2(vector<int> &arr, vector<int> &subsetSum, int index, int &sum)
+{
+    subsetSum.push_back(sum);
+    if (index >= arr.size())
+    {
+        return;
+    }
+    for (int i = index; i < arr.size(); i++)
+    {
+        sum += arr[i];
+        subsetSums2(arr, subsetSum, i + 1, sum);
+        sum -= arr[i];
+    }
+}
+vector<int> subsetSumsRevision2(vector<int> &arr)
+{
+    int n = arr.size();
+    vector<int> subsetSum;
+    int sum = 0;
+    subsetSums2(arr, subsetSum, 0, sum);
+    return subsetSum;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> candidates = {2, 5, 2, 1, 2};
-    vector<vector<int>> combinations = combinationSum2Practice(candidates, 5);
-    for (vector<int> combination : combinations)
+    vector<int> arr = {2, 3};
+    vector<int> subsetSum = subsetSumsRevision2(arr);
+    for (auto sum : subsetSum)
     {
-        cout << "{";
-        for (int val : combination)
-        {
-            cout << val << ", ";
-        }
-        cout << "}" << endl;
+        cout << sum << ", ";
     }
     cout << endl
          << string(30, '-') << endl;
