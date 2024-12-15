@@ -2075,14 +2075,60 @@ vector<int> subsetSumsRevision2(vector<int> &arr)
     subsetSums2(arr, subsetSum, 0, sum);
     return subsetSum;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {2, 3};
+//     vector<int> subsetSum = subsetSumsRevision2(arr);
+//     for (auto sum : subsetSum)
+//     {
+//         cout << sum << ", ";
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ---------------------------------------------------------------------- 90. Subsets II Revision -----------------------------------------------------------------------------
+void subsetsWithDup(vector<int> &nums, vector<vector<int>> &subsets, vector<int> &subset, int index)
+{
+    subsets.push_back(subset);
+    if (index >= nums.size())
+    {
+        return;
+    }
+    for (int i = index; i < nums.size(); i++)
+    {
+        if (i != index && nums[i] == nums[i - 1])
+        {
+            continue;
+        }
+        subset.push_back(nums[i]);
+        subsetsWithDup(nums, subsets, subset, i + 1);
+        subset.pop_back();
+    }
+}
+vector<vector<int>> subsetsWithDupRevision(vector<int> &nums)
+{
+    sort(nums.begin(), nums.end());
+    int n = nums.size();
+    vector<vector<int>> subsets;
+    vector<int> subset;
+    subsetsWithDup(nums, subsets, subset, 0);
+    return subsets;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr = {2, 3};
-    vector<int> subsetSum = subsetSumsRevision2(arr);
-    for (auto sum : subsetSum)
+    vector<int> nums = {1, 2, 2};
+    vector<vector<int>> subsets = subsetsWithDupRevision(nums);
+    for (vector<int> subset : subsets)
     {
-        cout << sum << ", ";
+        cout << "{";
+        for (int val : subset)
+        {
+            cout << val << ", ";
+        }
+        cout << "}" << endl;
     }
     cout << endl
          << string(30, '-') << endl;
