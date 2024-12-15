@@ -2185,17 +2185,73 @@ vector<vector<int>> permuteRevision2(vector<int> &nums)
     permute(0, nums, permutations);
     return permutations;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {1, 2, 3};
+//     vector<vector<int>> subsets = permuteRevision2(nums);
+//     for (vector<int> subset : subsets)
+//     {
+//         cout << "{";
+//         for (int val : subset)
+//         {
+//             cout << val << ", ";
+//         }
+//         cout << "}" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ---------------------------------------------------------------------- 17. Letter Combinations of a Phone Number Revision -----------------------------------------------------------------------------
+void letterCombinations(vector<string> mapping, vector<string> &combinations, string &combination, int index)
+{
+    if (index >= mapping.size())
+    {
+        combinations.push_back(combination);
+        return;
+    }
+    for (int i = 0; i < mapping[index].size(); i++)
+    {
+        combination.push_back(mapping[index][i]);
+        letterCombinations(mapping, combinations, combination, index + 1);
+        combination.pop_back();
+    }
+}
+vector<string> letterCombinationsRevision(string digits)
+{
+    if (!digits.size())
+        return {};
+    unordered_map<char, string> digitToLetters;
+    digitToLetters['1'] = "";
+    digitToLetters['2'] = "abc";
+    digitToLetters['3'] = "def";
+    digitToLetters['4'] = "ghi";
+    digitToLetters['5'] = "jkl";
+    digitToLetters['6'] = "mno";
+    digitToLetters['7'] = "pqrs";
+    digitToLetters['8'] = "tuv";
+    digitToLetters['9'] = "wxyz";
+    vector<string> mapping;
+    for (auto ch : digits)
+    {
+        mapping.push_back(digitToLetters[ch]);
+    }
+    vector<string> combinations;
+    string combination;
+    letterCombinations(mapping, combinations, combination, 0);
+    return combinations;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {1, 2, 3};
-    vector<vector<int>> subsets = permuteRevision2(nums);
-    for (vector<int> subset : subsets)
+    vector<string> combinations = letterCombinationsRevision("23");
+    for (auto &combination : combinations)
     {
         cout << "{";
-        for (int val : subset)
+        for (auto &ch : combination)
         {
-            cout << val << ", ";
+            cout << ch << ", ";
         }
         cout << "}" << endl;
     }
