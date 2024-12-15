@@ -2116,11 +2116,80 @@ vector<vector<int>> subsetsWithDupRevision(vector<int> &nums)
     subsetsWithDup(nums, subsets, subset, 0);
     return subsets;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {1, 2, 2};
+//     vector<vector<int>> subsets = subsetsWithDupRevision(nums);
+//     for (vector<int> subset : subsets)
+//     {
+//         cout << "{";
+//         for (int val : subset)
+//         {
+//             cout << val << ", ";
+//         }
+//         cout << "}" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ---------------------------------------------------------------------- 46. Permutations Revision -----------------------------------------------------------------------------
+void permute(vector<int> &nums, vector<vector<int>> &permutations, vector<int> &permutation, vector<int> &isVisitedIndex)
+{
+    if (permutation.size() == nums.size())
+    {
+        permutations.push_back(permutation);
+        return;
+    }
+    for (int i = 0; i < nums.size(); i++)
+    {
+        if (isVisitedIndex[i])
+        {
+            continue;
+        }
+        permutation.push_back(nums[i]);
+        isVisitedIndex[i] = 1;
+        permute(nums, permutations, permutation, isVisitedIndex);
+        permutation.pop_back();
+        isVisitedIndex[i] = 0;
+    }
+}
+vector<vector<int>> permuteRevision(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<vector<int>> permutations;
+    vector<int> permutation;
+    vector<int> isVisitedIndex(n);
+    permute(nums, permutations, permutation, isVisitedIndex);
+    return permutations;
+}
+// -------------------------------
+void permute(int currIndex, vector<int> &nums, vector<vector<int>> &permutations)
+{
+    if (currIndex == nums.size())
+    {
+        permutations.push_back(nums);
+        return;
+    }
+    for (int index = currIndex; index < nums.size(); index++)
+    {
+        swap(nums[currIndex], nums[index]);
+        permute(currIndex + 1, nums, permutations);
+        swap(nums[currIndex], nums[index]);
+    }
+}
+vector<vector<int>> permuteRevision2(vector<int> &nums)
+{
+    vector<vector<int>> permutations;
+    permute(0, nums, permutations);
+    return permutations;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {1, 2, 2};
-    vector<vector<int>> subsets = subsetsWithDupRevision(nums);
+    vector<int> nums = {1, 2, 3};
+    vector<vector<int>> subsets = permuteRevision2(nums);
     for (vector<int> subset : subsets)
     {
         cout << "{";
