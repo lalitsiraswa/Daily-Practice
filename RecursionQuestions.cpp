@@ -2242,18 +2242,100 @@ vector<string> letterCombinationsRevision(string digits)
     letterCombinations(mapping, combinations, combination, 0);
     return combinations;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<string> combinations = letterCombinationsRevision("23");
+//     for (auto &combination : combinations)
+//     {
+//         cout << "{";
+//         for (auto &ch : combination)
+//         {
+//             cout << ch << ", ";
+//         }
+//         cout << "}" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ---------------------------------------------------------------------------------- 51. N-Queens Revision --------------------------------------------------------------------------------------
+bool isValidPosition(int row, int column, vector<int> &isRowVisited, vector<int> &isColumnVisited, vector<string> &board, int &n)
+{
+    if (isRowVisited[row] || isColumnVisited[column])
+    {
+        return false;
+    }
+    // Check for diagonal right
+    for (int R = row - 1, C = column + 1; R >= 0 && C < n; R--, C++)
+    {
+        if (board[R][C] == 'Q')
+        {
+            return false;
+        }
+    }
+    // Check for diagonal left
+    for (int R = row - 1, C = column - 1; R >= 0 && C >= 0; R--, C--)
+    {
+        if (board[R][C] == 'Q')
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+void solveNQueens(int &n, vector<vector<string>> &result, vector<string> &board, int rowIndex, vector<int> &isRowVisited, vector<int> &isColumnVisited)
+{
+    if (rowIndex >= n)
+    {
+        result.push_back(board);
+        return;
+    }
+    for (int column = 0; column < n; column++)
+    {
+        if (isValidPosition(rowIndex, column, isRowVisited, isColumnVisited, board, n))
+        {
+            isRowVisited[rowIndex] = 1;
+            isColumnVisited[column] = 1;
+            board[rowIndex][column] = 'Q';
+            solveNQueens(n, result, board, rowIndex + 1, isRowVisited, isColumnVisited);
+            isRowVisited[rowIndex] = 0;
+            isColumnVisited[column] = 0;
+            board[rowIndex][column] = '.';
+        }
+    }
+}
+vector<vector<string>> solveNQueensRevision(int n)
+{
+    if (n == 0)
+    {
+        return {};
+    }
+    vector<vector<string>> result;
+    vector<string> board;
+    string boardRow(n, '.');
+    for (int i = 1; i <= n; i++)
+    {
+        board.push_back(boardRow);
+    }
+    vector<int> isRowVisited(n, 0);
+    vector<int> isColumnVisited(n, 0);
+    solveNQueens(n, result, board, 0, isRowVisited, isColumnVisited);
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<string> combinations = letterCombinationsRevision("23");
+    vector<vector<string>> combinations = solveNQueensRevision(4);
     for (auto &combination : combinations)
     {
-        cout << "{";
-        for (auto &ch : combination)
+        cout << "[";
+        for (auto &str : combination)
         {
-            cout << ch << ", ";
+            cout << str << ", ";
         }
-        cout << "}" << endl;
+        cout << "]" << endl;
     }
     cout << endl
          << string(30, '-') << endl;
