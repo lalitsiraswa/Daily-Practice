@@ -2324,16 +2324,114 @@ vector<vector<string>> solveNQueensRevision(int n)
     solveNQueens(n, result, board, 0, isRowVisited, isColumnVisited);
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<vector<string>> combinations = solveNQueensRevision(4);
+//     for (auto &combination : combinations)
+//     {
+//         cout << "[";
+//         for (auto &str : combination)
+//         {
+//             cout << str << ", ";
+//         }
+//         cout << "]" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// ------------------------------------------------------------------ 37. Sudoku Solver Revision ----------------------------------------------------------------------
+bool isValidMatrixRevision(int row, int column, vector<vector<char>> &board, char data)
+{
+    for (int r = row; r < row + 3; r++)
+    {
+        for (int col = column; col < column + 3; col++)
+        {
+            if (board[r][col] == data)
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+bool isValidDataRevision(int row, int column, vector<vector<char>> &board, char data)
+{
+    // check row
+    for (int col = 0; col < 9; col++)
+    {
+        if (board[row][col] == data)
+            return false;
+    }
+    // check column
+    for (int r = 0; r < 9; r++)
+    {
+        if (board[r][column] == data)
+            return false;
+    }
+    // Check in 3*3 matrix
+    int dummyRow = row;
+    int dummyColumn = column;
+    if (row >= 0 && row <= 2)
+        dummyRow = 0;
+    if (row >= 3 && row <= 5)
+        dummyRow = 3;
+    if (row >= 6 && row <= 8)
+        dummyRow = 6;
+    if (column >= 0 && column <= 2)
+        dummyColumn = 0;
+    if (column >= 3 && column <= 5)
+        dummyColumn = 3;
+    if (column >= 6 && column <= 8)
+        dummyColumn = 6;
+    if (!isValidMatrixRevision(dummyRow, dummyColumn, board, data))
+        return false;
+    return true;
+}
+bool solveSudokuRevision(vector<vector<char>> &board, int defaultRow = 0)
+{
+    for (int row = defaultRow; row < 9; row++)
+    {
+        for (int column = 0; column < 9; column++)
+        {
+            if (board[row][column] == '.')
+            {
+                for (int data = 1; data <= 9; data++)
+                {
+                    if (isValidDataRevision(row, column, board, data + 48))
+                    {
+                        board[row][column] = data + 48;
+                        if (solveSudokuRevision(board, row))
+                            return true;
+                        board[row][column] = '.';
+                    }
+                }
+                return false;
+            }
+        }
+    }
+    return true;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<vector<string>> combinations = solveNQueensRevision(4);
-    for (auto &combination : combinations)
+    vector<vector<char>> board = {{'5', '3', '.', '.', '7', '.', '.', '.', '.'},
+                                  {'6', '.', '.', '1', '9', '5', '.', '.', '.'},
+                                  {'.', '9', '8', '.', '.', '.', '.', '6', '.'},
+                                  {'8', '.', '.', '.', '6', '.', '.', '.', '3'},
+                                  {'4', '.', '.', '8', '.', '3', '.', '.', '1'},
+                                  {'7', '.', '.', '.', '2', '.', '.', '.', '6'},
+                                  {'.', '6', '.', '.', '.', '.', '2', '8', '.'},
+                                  {'.', '.', '.', '4', '1', '9', '.', '.', '5'},
+                                  {'.', '.', '.', '.', '8', '.', '.', '7', '9'}};
+    solveSudokuRevision(board);
+    for (vector<char> &row : board)
     {
         cout << "[";
-        for (auto &str : combination)
+        for (auto &ch : row)
         {
-            cout << str << ", ";
+            cout << ch << ", ";
         }
         cout << "]" << endl;
     }
