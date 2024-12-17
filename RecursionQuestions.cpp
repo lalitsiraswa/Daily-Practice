@@ -2413,28 +2413,134 @@ bool solveSudokuRevision(vector<vector<char>> &board, int defaultRow = 0)
     }
     return true;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<vector<char>> board = {{'5', '3', '.', '.', '7', '.', '.', '.', '.'},
+//                                   {'6', '.', '.', '1', '9', '5', '.', '.', '.'},
+//                                   {'.', '9', '8', '.', '.', '.', '.', '6', '.'},
+//                                   {'8', '.', '.', '.', '6', '.', '.', '.', '3'},
+//                                   {'4', '.', '.', '8', '.', '3', '.', '.', '1'},
+//                                   {'7', '.', '.', '.', '2', '.', '.', '.', '6'},
+//                                   {'.', '6', '.', '.', '.', '.', '2', '8', '.'},
+//                                   {'.', '.', '.', '4', '1', '9', '.', '.', '5'},
+//                                   {'.', '.', '.', '.', '8', '.', '.', '7', '9'}};
+//     solveSudokuRevision(board);
+//     for (vector<char> &row : board)
+//     {
+//         cout << "[";
+//         for (auto &ch : row)
+//         {
+//             cout << ch << ", ";
+//         }
+//         cout << "]" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------- M-Coloring Problem I.M.P. ------------------------------------------------------------------------
+bool graphColoring(vector<vector<int>> &adjList, vector<vector<int>> &colouredVertices, int vertexIndex, int &m, int &v)
+{
+    if (vertexIndex == v)
+    {
+        return true;
+    }
+    for (int colour = 0; colour < m; colour++)
+    {
+        int isSameColour = false;
+        // Check if the neighbour have the same color or not, if any neighbout having the same colour, we can't use that colour again.
+        for (int neighbour : adjList[vertexIndex])
+        {
+            // Get all the vertices having the colour(0, 1, 2, ...) etc
+            for (int colourFilledVeritex : colouredVertices[colour])
+            {
+                // If the neighbour is already using the above colour break the loop, we can't use that color again.
+                if (colourFilledVeritex == neighbour)
+                {
+                    isSameColour = true;
+                    break;
+                }
+            }
+            if (isSameColour)
+            {
+                break;
+            }
+        }
+        // If the colour is not use by any neighbour, we will use it for current vertex.
+        if (!isSameColour)
+        {
+            colouredVertices[colour].push_back(vertexIndex);
+            if (graphColoring(adjList, colouredVertices, vertexIndex + 1, m, v))
+            {
+                return true;
+            }
+            colouredVertices[colour].pop_back();
+        }
+    }
+    return false;
+}
+bool graphColoring(int v, vector<pair<int, int>> &edges, int m)
+{
+    vector<vector<int>> adjList(v);
+    for (auto edge : edges)
+    {
+        adjList[edge.first].push_back(edge.second);
+        adjList[edge.second].push_back(edge.first);
+    }
+    vector<vector<int>> colouredVertices(m);
+    return graphColoring(adjList, colouredVertices, 0, m, v);
+}
+// ------------------------------------------
+bool graphColoring(vector<vector<int>> &adjList, vector<int> &colouredVertices, int vertexIndex, int &m, int &v)
+{
+    if (vertexIndex == v)
+    {
+        return true;
+    }
+    for (int colour = 0; colour < m; colour++)
+    {
+        int isSameColour = false;
+        // Check if the neighbour have the same color or not, if any neighbout having the same colour, we can't use that colour again.
+        for (int neighbour : adjList[vertexIndex])
+        {
+            // If the neighbour is already visited and using the above colour break the loop, we can't use that color again.
+            if (colouredVertices[neighbour] == colour)
+            {
+                isSameColour = true;
+                break;
+            }
+        }
+        // If the colour is not use by any neighbour, we will use it for current vertex.
+        if (!isSameColour)
+        {
+            colouredVertices[vertexIndex] = colour;
+            if (graphColoring(adjList, colouredVertices, vertexIndex + 1, m, v))
+            {
+                return true;
+            }
+            colouredVertices[vertexIndex] = -1;
+        }
+    }
+    return false;
+}
+bool graphColoringOtherWay(int v, vector<pair<int, int>> &edges, int m)
+{
+    vector<vector<int>> adjList(v);
+    for (auto edge : edges)
+    {
+        adjList[edge.first].push_back(edge.second);
+        adjList[edge.second].push_back(edge.first);
+    }
+    // It is just like isVisited but it contains the colour information (0, 1, 2 .... n)
+    vector<int> colouredVertices(v, -1);
+    return graphColoring(adjList, colouredVertices, 0, m, v);
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<vector<char>> board = {{'5', '3', '.', '.', '7', '.', '.', '.', '.'},
-                                  {'6', '.', '.', '1', '9', '5', '.', '.', '.'},
-                                  {'.', '9', '8', '.', '.', '.', '.', '6', '.'},
-                                  {'8', '.', '.', '.', '6', '.', '.', '.', '3'},
-                                  {'4', '.', '.', '8', '.', '3', '.', '.', '1'},
-                                  {'7', '.', '.', '.', '2', '.', '.', '.', '6'},
-                                  {'.', '6', '.', '.', '.', '.', '2', '8', '.'},
-                                  {'.', '.', '.', '4', '1', '9', '.', '.', '5'},
-                                  {'.', '.', '.', '.', '8', '.', '.', '7', '9'}};
-    solveSudokuRevision(board);
-    for (vector<char> &row : board)
-    {
-        cout << "[";
-        for (auto &ch : row)
-        {
-            cout << ch << ", ";
-        }
-        cout << "]" << endl;
-    }
+    vector<pair<int, int>> edges = {{0, 1}, {1, 2}, {2, 3}, {3, 0}, {0, 2}};
+    cout << graphColoring(4, edges, 3);
     cout << endl
          << string(30, '-') << endl;
     return 0;
