@@ -1201,11 +1201,38 @@ int findKthPositiveBinarySearch(vector<int> &arr, int k)
     }
     return k + high + 1;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {2, 3, 4, 7, 11};
+//     cout << findKthPositiveBinarySearch(arr, 5) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ---------------------------------------------------------------------------- Floor in a Sorted Array Revision ----------------------------------------------------------------------------
+int findFloorRevision(vector<int> &arr, int k)
+{
+    int floorIndex = -1;
+    int n = arr.size();
+    int low = 0, high = n - 1;
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        if (arr[mid] <= k)
+        {
+            floorIndex = mid;
+            low = mid + 1;
+        }
+        else
+            high = mid - 1;
+    }
+    return floorIndex;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr = {2, 3, 4, 7, 11};
-    cout << findKthPositiveBinarySearch(arr, 5) << endl;
+    vector<int> arr = {1, 2, 8, 10, 11, 12, 19};
+    cout << findFloorRevision(arr, 5) << endl;
     cout << endl
          << string(30, '-');
 }
