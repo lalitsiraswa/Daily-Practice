@@ -1125,11 +1125,87 @@ bool searchMatrix_2_TUF(vector<vector<int>> &matrix, int target)
     }
     return false;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<vector<int>> matrix = {{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}};
+//     cout << searchMatrix_2_TUF(matrix, 5) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ---------------------------------------------------------------------------- 1539. Kth Missing Positive Number Revision ----------------------------------------------------------------------------
+int findKthPositiveRevision(vector<int> &arr, int k)
+{
+    int integerNumber = 1;
+    int missingCount = 0;
+    int i = 0;
+    while (i < arr.size())
+    {
+        if (arr[i] == integerNumber)
+            i += 1;
+        else
+            missingCount += 1;
+        if (missingCount == k)
+            return integerNumber;
+        integerNumber += 1;
+    }
+    return arr[arr.size() - 1] + (k - missingCount);
+}
+// -----------------------------------
+int findKthPositiveBruteForce(vector<int> &arr, int k)
+{
+    int n = arr.size();
+    for (int i = 0; i < n; i++)
+    {
+        if (arr[i] <= k)
+            // Shifting
+            k++;
+        else
+            break;
+    }
+    return k;
+}
+// -----------------------------------
+// INDEX - [0, 1, 2, 3, 4, 5]
+// ARRAY - [1, 2, 3, 4, 5, 6]
+// ARRAY[INDEX] == INDEX + 1;
+// MISSING COUNT = ARRAY[INDEX] - INDEX + 1;
+// (1 - (0 + 1)) = 0;
+// (2 - (1 + 1)) = 0;
+// (3- (2 + 1)) = 0;
+// (4 - (3 + 1)) = 0;
+// (5- (4 + 1)) = 0;
+// (6 - (5 + 1)) = 0;
+// ------------------
+// INDEX - {0, 1, 2, 3, 4}
+// ARRAY - {2, 3, 4, 7, 11}
+// ARRAY[INDEX] == INDEX + 1;
+// MISSING COUNT = ARRAY[INDEX] - INDEX + 1;
+// (2 - (0 + 1)) = 1;
+// (3 - (1 + 1)) = 1;
+// (4- (2 + 1)) = 1;
+// (7 - (3 + 1)) = 3;
+// (11- (4 + 1)) = 6;
+int findKthPositiveBinarySearch(vector<int> &arr, int k)
+{
+    int n = arr.size();
+    int low = 0, high = n - 1;
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        int missingCount = arr[mid] - (mid + 1);
+        if (missingCount < k)
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+    return k + high + 1;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<vector<int>> matrix = {{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}};
-    cout << searchMatrix_2_TUF(matrix, 5) << endl;
+    vector<int> arr = {2, 3, 4, 7, 11};
+    cout << findKthPositiveBinarySearch(arr, 5) << endl;
     cout << endl
          << string(30, '-');
 }
