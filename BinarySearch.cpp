@@ -1253,12 +1253,57 @@ vector<int> getFloorAndCeilRevision(int x, vector<int> &arr)
     int ceilIndex = findCeilRevision(arr, x);
     return {floorIndex, ceilIndex};
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {5, 6, 8, 9, 6, 5, 5, 6};
+//     vector<int> floorCeil = getFloorAndCeilRevision(7, arr);
+//     cout << "Floor : " << floorCeil[0] << ", Ceil : " << floorCeil[1] << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ---------------------------------------------------------- 34. Find First and Last Position of Element in Sorted Array Revision ----------------------------------------------------------------------------
+vector<int> searchRangeRevision(vector<int> &nums, int target)
+{
+    int startingIndex = -1;
+    int endingIndex = -1;
+    int n = nums.size();
+    int low = 0, high = n - 1;
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        if (nums[mid] < target)
+            low = mid + 1;
+        if (nums[mid] > target)
+            high = mid - 1;
+        if (nums[mid] == target)
+        {
+            startingIndex = mid;
+            high = mid - 1;
+        }
+    }
+    low = 0, high = n - 1;
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        if (nums[mid] < target)
+            low = mid + 1;
+        if (nums[mid] > target)
+            high = mid - 1;
+        if (nums[mid] == target)
+        {
+            endingIndex = mid;
+            low = mid + 1;
+        }
+    }
+    return {startingIndex, endingIndex};
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr = {5, 6, 8, 9, 6, 5, 5, 6};
-    vector<int> floorCeil = getFloorAndCeilRevision(7, arr);
-    cout << "Floor : " << floorCeil[0] << ", Ceil : " << floorCeil[1] << endl;
+    vector<int> nums = {5, 7, 7, 8, 8, 10};
+    vector<int> startEndIndex = searchRangeRevision(nums, 8);
+    cout << "Floor : " << startEndIndex[0] << ", Ceil : " << startEndIndex[1] << endl;
     cout << endl
          << string(30, '-');
 }
