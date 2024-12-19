@@ -1209,7 +1209,7 @@ int findKthPositiveBinarySearch(vector<int> &arr, int k)
 //     cout << endl
 //          << string(30, '-');
 // }
-// ---------------------------------------------------------------------------- Floor in a Sorted Array Revision ----------------------------------------------------------------------------
+// ------------------------------------------------ Floor in a Sorted Array, Ceil The Floor Revision ----------------------------------------------------------------------------
 int findFloorRevision(vector<int> &arr, int k)
 {
     int floorIndex = -1;
@@ -1226,13 +1226,39 @@ int findFloorRevision(vector<int> &arr, int k)
         else
             high = mid - 1;
     }
-    return floorIndex;
+    return floorIndex != -1 ? arr[floorIndex] : -1;
+}
+int findCeilRevision(vector<int> &arr, int k)
+{
+    int ceilIndex = -1;
+    int n = arr.size();
+    int low = 0, high = n - 1;
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        if (arr[mid] >= k)
+        {
+            ceilIndex = mid;
+            high = mid - 1;
+        }
+        else
+            low = mid + 1;
+    }
+    return ceilIndex != -1 ? arr[ceilIndex] : -1;
+}
+vector<int> getFloorAndCeilRevision(int x, vector<int> &arr)
+{
+    sort(arr.begin(), arr.end());
+    int floorIndex = findFloorRevision(arr, x);
+    int ceilIndex = findCeilRevision(arr, x);
+    return {floorIndex, ceilIndex};
 }
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr = {1, 2, 8, 10, 11, 12, 19};
-    cout << findFloorRevision(arr, 5) << endl;
+    vector<int> arr = {5, 6, 8, 9, 6, 5, 5, 6};
+    vector<int> floorCeil = getFloorAndCeilRevision(7, arr);
+    cout << "Floor : " << floorCeil[0] << ", Ceil : " << floorCeil[1] << endl;
     cout << endl
          << string(30, '-');
 }
