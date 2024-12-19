@@ -2536,11 +2536,74 @@ bool graphColoringOtherWay(int v, vector<pair<int, int>> &edges, int m)
     vector<int> colouredVertices(v, -1);
     return graphColoring(adjList, colouredVertices, 0, m, v);
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<pair<int, int>> edges = {{0, 1}, {1, 2}, {2, 3}, {3, 0}, {0, 2}};
+//     cout << graphColoring(4, edges, 3);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 0;
+// }
+// -------------------------------------------------------------------- 131. Palindrome Partitioning ------------------------------------------------------------------------
+bool isSubstringPalindrome(string &substring)
+{
+    int left = 0, right = substring.size() - 1;
+    while (left <= right)
+    {
+        if (substring[left] != substring[right])
+        {
+            return false;
+        }
+        left += 1;
+        right -= 1;
+    }
+    return true;
+}
+void partitionHelper(string &s, vector<vector<string>> &partitions, vector<string> &partition, int index)
+{
+    // Base case:
+    if (index == s.size())
+    {
+        partitions.push_back(partition);
+        return;
+    }
+    string substring;
+    for (int i = index; i < s.size(); i++)
+    {
+        substring.push_back(s[i]);
+        // Check if the substring is palindrome or not
+        if (isSubstringPalindrome(substring))
+        {
+            // If it is palindrome include that in the partition
+            partition.push_back(substring);
+            partitionHelper(s, partitions, partition, i + 1);
+            // Backtracking
+            partition.pop_back();
+        }
+    }
+}
+vector<vector<string>> partition(string &s)
+{
+    vector<vector<string>> partitions;
+    vector<string> partition;
+    partitionHelper(s, partitions, partition, 0);
+    return partitions;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<pair<int, int>> edges = {{0, 1}, {1, 2}, {2, 3}, {3, 0}, {0, 2}};
-    cout << graphColoring(4, edges, 3);
+    string s = "aab";
+    vector<vector<string>> partitions = partition(s);
+    for (auto &partition : partitions)
+    {
+        cout << "[";
+        for (auto &str : partition)
+        {
+            cout << str << ", ";
+        }
+        cout << "]" << endl;
+    }
     cout << endl
          << string(30, '-') << endl;
     return 0;
