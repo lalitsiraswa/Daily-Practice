@@ -1298,12 +1298,102 @@ vector<int> searchRangeRevision(vector<int> &nums, int target)
     }
     return {startingIndex, endingIndex};
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {5, 7, 7, 8, 8, 10};
+//     vector<int> startEndIndex = searchRangeRevision(nums, 8);
+//     cout << "Floor : " << startEndIndex[0] << ", Ceil : " << startEndIndex[1] << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- 33. Search in Rotated Sorted Array Revision ------------------------------------------------------------------------------
+int searchRevision(vector<int> &nums, int target)
+{
+    int n = nums.size();
+    int low = 0;
+    int high = n - 1;
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        if (nums[mid] == target)
+        {
+            return mid;
+        }
+        if (nums[low] <= nums[mid])
+        {
+            if (nums[low] <= target && target <= nums[mid])
+            {
+                high = mid - 1;
+            }
+            else
+            {
+                low = mid + 1;
+            }
+        }
+        else
+        {
+            if (nums[mid] <= target && target <= nums[high])
+            {
+                low = mid + 1;
+            }
+            else
+            {
+                high = mid - 1;
+            }
+        }
+    }
+    return -1;
+}
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {4, 5, 6, 7, 0, 1, 2};
+//     cout << searchRevision(nums, 3) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- 410. Split Array Largest Sum ------------------------------------------------------------------------------
+// ----- MLE -----
+void splitArrayHelper(vector<int> &nums, int k, int n, int index, vector<int> &subarraySum, vector<vector<int>> &subarraySumCollection)
+{
+    if (index == n)
+    {
+        subarraySumCollection.push_back(subarraySum);
+        return;
+    }
+    int sum = 0;
+    for (int i = index; i < n; i++)
+    {
+        sum += nums[i];
+        if (k == 1 && i != n - 1)
+        {
+            continue;
+        }
+        subarraySum.push_back(sum);
+        splitArrayHelper(nums, k - 1, n, i + 1, subarraySum, subarraySumCollection);
+        subarraySum.pop_back();
+    }
+}
+int splitArray(vector<int> &nums, int k)
+{
+    int n = nums.size();
+    vector<int> subarraySum;
+    vector<vector<int>> subarraySumCollection;
+    splitArrayHelper(nums, k, n, 0, subarraySum, subarraySumCollection);
+    int minimizedSum = INT_MAX;
+    for (int i = 0; i < subarraySumCollection.size(); i++)
+    {
+        int subarrayMaxSum = *(max_element(subarraySumCollection[i].begin(), subarraySumCollection[i].end()));
+        minimizedSum = min(minimizedSum, subarrayMaxSum);
+    }
+    return minimizedSum;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {5, 7, 7, 8, 8, 10};
-    vector<int> startEndIndex = searchRangeRevision(nums, 8);
-    cout << "Floor : " << startEndIndex[0] << ", Ceil : " << startEndIndex[1] << endl;
+    vector<int> nums = {7, 2, 5, 10, 8};
+    cout << splitArray(nums, 2) << endl;
     cout << endl
          << string(30, '-');
 }
