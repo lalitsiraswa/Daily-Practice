@@ -1493,11 +1493,56 @@ int findMinRevision(vector<int> &nums)
     }
     return minValue;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {3, 4, 5, 1, 2};
+//     cout << findMinRevision(nums) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- Find Kth Rotation Revision ------------------------------------------------------------------------------
+int findKRotationRevision(vector<int> &arr)
+{
+    int n = arr.size();
+    int low = 0;
+    int high = n - 1;
+    int minElementIndex = 0;
+    while (low <= high)
+    {
+        // search space is already sorted
+        // then arr[low] will always be
+        // the minimum in that search space:
+        if (arr[low] <= arr[high])
+        {
+            minElementIndex = (arr[minElementIndex] > arr[low]) ? low : minElementIndex;
+            break;
+        }
+        int mid = (low + high) / 2;
+        // if left part is sorted:
+        if (arr[low] <= arr[mid])
+        {
+            // keep the minimum:
+            minElementIndex = (arr[minElementIndex] > arr[low]) ? low : minElementIndex;
+            // Eliminate left half:
+            low = mid + 1;
+        }
+        // if right part is sorted:
+        else
+        {
+            // keep the minimum:
+            minElementIndex = (arr[minElementIndex] > arr[mid]) ? mid : minElementIndex;
+            // Eliminate right half:
+            high = mid - 1;
+        }
+    }
+    return minElementIndex;
+}
 int main()
 {
     cout << string(30, '-') << endl;
     vector<int> nums = {3, 4, 5, 1, 2};
-    cout << findMinRevision(nums) << endl;
+    cout << findKRotationRevision(nums) << endl;
     cout << endl
          << string(30, '-');
 }
