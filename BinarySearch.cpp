@@ -1538,11 +1538,78 @@ int findKRotationRevision(vector<int> &arr)
     }
     return minElementIndex;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {3, 4, 5, 1, 2};
+//     cout << findKRotationRevision(nums) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- 540. Single Element in a Sorted Array REVISION ------------------------------------------------------------------------------
+// INDEX : [0, 1, 2, 3, 4, 5, 6, 7]
+// NUMS :  [1, 1, 2, 2, 3, 3, 4, 4]
+// FOR ODD INDEX -> LEFT INDEX SHOULD MATCH
+// FOR EVEN INDEX -> RIGHT INDEX SHOULD MATCH
+int singleNonDuplicateRevision(vector<int> &nums)
+{
+    int n = nums.size();
+    if (n == 1)
+    {
+        return nums[0];
+    }
+    if (nums[0] != nums[1])
+    {
+        return nums[0];
+    }
+    if (nums[n - 1] != nums[n - 2])
+    {
+        return nums[n - 1];
+    }
+    int low = 0;
+    int high = n - 1;
+    int singleElement;
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        if (nums[mid] != nums[mid - 1] && nums[mid] != nums[mid + 1])
+        {
+            singleElement = nums[mid];
+            break;
+        }
+        // EVEN INDEX
+        if (mid % 2 == 0)
+        {
+            if (nums[mid] == nums[mid + 1])
+            {
+                low = mid + 1;
+            }
+            else
+            {
+                high = mid - 1;
+            }
+        }
+        // ODD INDEX
+        else
+        {
+            if (nums[mid] == nums[mid - 1])
+            {
+                low = mid + 1;
+            }
+            else
+            {
+                high = mid - 1;
+            }
+        }
+    }
+    return singleElement;
+}
+
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {3, 4, 5, 1, 2};
-    cout << findKRotationRevision(nums) << endl;
+    vector<int> nums = {1, 1, 2, 3, 3, 4, 4, 8, 8};
+    cout << singleNonDuplicateRevision(nums) << endl;
     cout << endl
          << string(30, '-');
 }
