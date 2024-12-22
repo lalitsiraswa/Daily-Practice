@@ -1389,11 +1389,71 @@ int splitArray(vector<int> &nums, int k)
     }
     return minimizedSum;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {7, 2, 5, 10, 8};
+//     cout << splitArray(nums, 2) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- 81. Search in Rotated Sorted Array II Revision ------------------------------------------------------------------------------
+// Dry Run
+// [3, 1, 2, 3, 3, 3, 3] target = 2
+// [1, 0, 1, 1, 1] target = 0
+bool search2Revision(vector<int> &nums, int target)
+{
+    int n = nums.size(); // size of the array.
+    int low = 0, high = n - 1;
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        // if mid points the target
+        if (nums[middle] == target)
+            return true;
+        // Edge case:
+        if (nums[low] == nums[middle] && nums[middle] == nums[high])
+        {
+            low = low + 1;
+            high = high - 1;
+            continue;
+        }
+        // if left part is sorted:
+        if (nums[low] <= nums[middle])
+        {
+            if (nums[low] <= target && target <= nums[middle])
+            {
+                // element exists:
+                high = middle - 1;
+            }
+            else
+            {
+                // element does not exist:
+                low = middle + 1;
+            }
+        }
+        // if right part is sorted:
+        else
+        {
+            if (nums[middle] <= target && target <= nums[high])
+            {
+                // element exists:
+                low = middle + 1;
+            }
+            else
+            {
+                // element does not exist:
+                high = middle - 1;
+            }
+        }
+    }
+    return false;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {7, 2, 5, 10, 8};
-    cout << splitArray(nums, 2) << endl;
+    vector<int> nums = {3, 1, 2, 3, 3, 3, 3};
+    cout << search2Revision(nums, 1) << endl;
     cout << endl
          << string(30, '-');
 }
