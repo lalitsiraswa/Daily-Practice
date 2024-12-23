@@ -1605,11 +1605,55 @@ int singleNonDuplicateRevision(vector<int> &nums)
     return singleElement;
 }
 
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {1, 1, 2, 3, 3, 4, 4, 8, 8};
+//     cout << singleNonDuplicateRevision(nums) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- 162. Find Peak Element REVISION ------------------------------------------------------------------------------
+// Dry Run
+// [1, 5, 1, 2, 1]
+int findPeakElementRevision(vector<int> &nums)
+{
+    int n = nums.size(); // Size of array.
+    // Edge cases:
+    if (n == 1)
+        return 0;
+    if (nums[0] > nums[1])
+        return 0;
+    if (nums[n - 1] > nums[n - 2])
+        return n - 1;
+    int low = 1, high = n - 2;
+    while (low <= high)
+    {
+        int middle = low + (high - low) / 2;
+        // If arr[mid] is the peak:
+        if (nums[middle - 1] < nums[middle] && nums[middle] > nums[middle + 1])
+            return middle;
+        // If we are in the left:
+        else if (nums[middle] > nums[middle - 1])
+            low = middle + 1;
+        // If we are in the right:
+        else if (nums[middle] > nums[middle + 1])
+            high = middle - 1;
+        // We can move either left ot right
+        // nums[middle] is a common point:
+        else
+        {
+            low = middle + 1;
+            // high = middle - 1;
+        }
+    }
+    return -1;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {1, 1, 2, 3, 3, 4, 4, 8, 8};
-    cout << singleNonDuplicateRevision(nums) << endl;
+    vector<int> nums = {1, 5, 1, 2, 1};
+    cout << findPeakElementRevision(nums) << endl;
     cout << endl
          << string(30, '-');
 }
