@@ -1713,10 +1713,50 @@ int nthRootRevision(int n, int m)
     }
     return root;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     cout << nthRootRevision(3, 9) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- 875. Koko Eating Bananas ------------------------------------------------------------------------------
+int minEatingSpeed(vector<int> &piles, int h)
+{
+    long long maxElement = INT_MIN;
+    // Find the maximum:
+    for (int val : piles)
+    {
+        if (val > maxElement)
+            maxElement = val;
+    }
+    long long low = 1;
+    long long high = maxElement;
+    long long minBananaPerHour;
+    while (low <= high)
+    {
+        int mid = low + (high - low) / 2;
+        long long totalHour = 0;
+        // Find total hours:
+        for (int val : piles)
+        {
+            totalHour += (val + mid - 1) / mid;
+        }
+        if (totalHour <= h)
+        {
+            minBananaPerHour = mid;
+            high = mid - 1;
+        }
+        else
+            low = mid + 1;
+    }
+    return minBananaPerHour;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    cout << nthRootRevision(3, 9) << endl;
+    vector<int> piles = {312884470};
+    cout << minEatingSpeed(piles, 312884469) << endl;
     cout << endl
          << string(30, '-');
 }
