@@ -1663,7 +1663,7 @@ int floorSqrtRevision(int n)
     if (n == 1)
         return 1;
     int low = 1;
-    int high = n;
+    int high = n / 2;
     int flootSqrt;
     while (low <= high)
     {
