@@ -1649,11 +1649,39 @@ int findPeakElementRevision(vector<int> &nums)
     }
     return -1;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {1, 5, 1, 2, 1};
+//     cout << findPeakElementRevision(nums) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- Square Root REVISION ------------------------------------------------------------------------------
+int floorSqrtRevision(int n)
+{
+    if (n == 1)
+        return 1;
+    int low = 1;
+    int high = n;
+    int flootSqrt;
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        if (mid * mid <= n)
+        {
+            flootSqrt = mid;
+            low = mid + 1;
+        }
+        else
+            high = mid - 1;
+    }
+    return flootSqrt;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {1, 5, 1, 2, 1};
-    cout << findPeakElementRevision(nums) << endl;
+    cout << floorSqrtRevision(11) << endl;
     cout << endl
          << string(30, '-');
 }
