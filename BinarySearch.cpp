@@ -1678,10 +1678,45 @@ int floorSqrtRevision(int n)
     }
     return flootSqrt;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     cout << floorSqrtRevision(11) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- Find nth root of m REVISION ------------------------------------------------------------------------------
+int nthRootRevision(int n, int m)
+{
+    if (n == 1)
+        return m;
+    int low = 1;
+    int high = m / n;
+    int root = -1;
+    while (low <= high)
+    {
+        int mid = low + (high - low) / 2;
+        int tempRoot = 1;
+        for (int i = 1; i <= n; i++)
+        {
+            tempRoot *= mid;
+        }
+        if (tempRoot == m)
+        {
+            root = mid;
+            break;
+        }
+        if (tempRoot < m)
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+    return root;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    cout << floorSqrtRevision(11) << endl;
+    cout << nthRootRevision(3, 9) << endl;
     cout << endl
          << string(30, '-');
 }
