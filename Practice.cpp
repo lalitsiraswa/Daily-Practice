@@ -3966,8 +3966,15 @@ void printMaxSubArray(vector<int> &nums)
 int main()
 {
     cout << string(35, '-') << endl;
-    vector<int> nums = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
-    cout << maxSubArray(nums);
+    // vector<int> nums = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+    // deque<int> dque;
+    // cout << maxSubArray(nums);
+    deque<int> dque;
+    dque.push_back(5);
+    dque.push_back(0);
+    dque.push_back(2);
+    dque.push_back(4);
+    cout << dque.front();
     cout << endl
          << string(35, '-') << endl;
 }

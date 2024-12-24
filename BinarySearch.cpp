@@ -1752,11 +1752,83 @@ int minEatingSpeed(vector<int> &piles, int h)
     }
     return minBananaPerHour;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> piles = {312884470};
+//     cout << minEatingSpeed(piles, 312884469) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- 1482. Minimum Number of Days to Make m Bouquets ------------------------------------------------------------------------------
+int minDays(vector<int> &bloomDay, int m, int k)
+{
+    long long minRequiredDay = INT_MAX;
+    long long maxRequiredDay = INT_MIN;
+    for (int day : bloomDay)
+    {
+        if (day < minRequiredDay)
+            minRequiredDay = day;
+        if (day > maxRequiredDay)
+            maxRequiredDay = day;
+    }
+    long long low = minRequiredDay;
+    long long high = maxRequiredDay;
+    long long minDay;
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        int tempm = 0;
+        int tempk = 0;
+        int i = 0;
+        while (i < bloomDay.size())
+        {
+            if (bloomDay[i] <= mid)
+            {
+                tempk = 1;
+                for (int j = 1; j < bloomDay.size(); j++)
+                {
+                    if (bloomDay[j] <= mid && bloomDay[j - 1] <= bloomDay[j])
+                    {
+                        tempk += 1;
+                    }
+                    else
+                    {
+                        tempk = 0;
+                    }
+                    if (tempk == k)
+                    {
+                        tempk = 0;
+                        tempm += 1;
+                    }
+                    if (tempm == m)
+                    {
+                        i = j + 1;
+                        break;
+                    }
+                }
+                if (tempm == m)
+                {
+                    break;
+                }
+            }
+            i++;
+        }
+        if (tempm == m)
+        {
+            minDay = mid;
+            high = mid - 1;
+        }
+        else
+            low = mid + 1;
+    }
+    return minDay;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> piles = {312884470};
-    cout << minEatingSpeed(piles, 312884469) << endl;
+    vector<int> bloomDay = {7, 7, 7, 7, 12, 7, 7};
+    cout << minDays(bloomDay, 2, 3) << endl;
     cout << endl
          << string(30, '-');
 }
