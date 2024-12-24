@@ -1848,11 +1848,79 @@ int minDays(vector<int> &bloomDay, int m, int k)
     }
     return minDay;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> bloomDay = {1, 10, 3, 10, 2};
+//     cout << minDays(bloomDay, 3, 1) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------ 1283. Find the Smallest Divisor Given a Threshold REVISION ------------------------------------------------------------------------------
+// TLE
+int smallestDivisorRevision(vector<int> &nums, int threshold)
+{
+    int maxElement = INT_MIN;
+    int minDivisor = INT_MAX;
+    for (int val : nums)
+    {
+        maxElement = max(maxElement, val);
+    }
+    for (int divisor = 1; divisor <= maxElement; divisor++)
+    {
+        int currentThreshold = 0;
+        for (int val : nums)
+        {
+            currentThreshold += (val + divisor - 1) / divisor;
+        }
+        if (currentThreshold <= threshold)
+        {
+            minDivisor = divisor;
+            break;
+        }
+    }
+    return minDivisor;
+}
+// --------- Binary Search ------------
+int smallestDivisorBinarySearch(vector<int> &nums, int threshold)
+{
+    int n = nums.size();
+    if (n > threshold)
+        return -1;
+    int maxElement = INT_MIN;
+    int minDivisor = INT_MAX;
+    for (int val : nums)
+    {
+        maxElement = max(maxElement, val);
+    }
+    int low = 1;
+    int high = maxElement;
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        int currentThreshold = 0;
+        for (int val : nums)
+        {
+            currentThreshold += ceil((double)(val) / (double)(mid));
+            // currentThreshold += (val + mid - 1) / mid;
+            if (currentThreshold > threshold)
+                break;
+        }
+        if (currentThreshold <= threshold)
+        {
+            minDivisor = mid;
+            high = mid - 1;
+        }
+        else
+            low = mid + 1;
+    }
+    return minDivisor;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> bloomDay = {1, 10, 3, 10, 2};
-    cout << minDays(bloomDay, 3, 1) << endl;
+    vector<int> nums = {44, 22, 33, 11, 1};
+    cout << smallestDivisorBinarySearch(nums, 5) << endl;
     cout << endl
          << string(30, '-');
 }
