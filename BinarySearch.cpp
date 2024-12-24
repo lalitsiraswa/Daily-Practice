@@ -1761,10 +1761,40 @@ int minEatingSpeed(vector<int> &piles, int h)
 //          << string(30, '-');
 // }
 // --------------------------------------------------------------------- 1482. Minimum Number of Days to Make m Bouquets ------------------------------------------------------------------------------
+bool possible(vector<int> &arr, int day, int m, int k)
+{
+    // Size of the array
+    int n = arr.size();
+    int adjacentFlowerCount = 0;
+    int bouquetCount = 0;
+    // Count the number of bouquets:
+    for (int i = 0; i < n; i++)
+    {
+        if (arr[i] <= day)
+        {
+            adjacentFlowerCount += 1;
+        }
+        else
+        {
+            bouquetCount += (adjacentFlowerCount / k);
+            adjacentFlowerCount = 0;
+        }
+    }
+    bouquetCount += (adjacentFlowerCount / k);
+    return bouquetCount >= m;
+}
 int minDays(vector<int> &bloomDay, int m, int k)
 {
-    long long minRequiredDay = INT_MAX;
-    long long maxRequiredDay = INT_MIN;
+    // 1ll is a literal of type long long.
+    long long val = m * 1ll * k * 1ll;
+    // Impossible case:
+    if (val > bloomDay.size())
+    {
+        return -1;
+    }
+    // Find maximum and minimum:
+    int minRequiredDay = INT_MAX;
+    int maxRequiredDay = INT_MIN;
     for (int day : bloomDay)
     {
         if (day < minRequiredDay)
@@ -1772,49 +1802,43 @@ int minDays(vector<int> &bloomDay, int m, int k)
         if (day > maxRequiredDay)
             maxRequiredDay = day;
     }
-    long long low = minRequiredDay;
-    long long high = maxRequiredDay;
-    long long minDay;
+    int low = minRequiredDay;
+    int high = maxRequiredDay;
+    int minDay = -1;
+    // Apply binary search:
     while (low <= high)
     {
         int mid = (low + high) / 2;
-        int tempm = 0;
-        int tempk = 0;
-        int i = 0;
-        while (i < bloomDay.size())
+        int bouquetCount = 0;
+        int adjacentFlowerCount = 0;
+        // We can also use the above possible() function or we can use the below for-loop code in that function:
+        // Count the number of bouquets:
+        for (int i = 0; i < bloomDay.size(); i++)
         {
+            // If adjacent flower is bloom:
             if (bloomDay[i] <= mid)
             {
-                tempk = 1;
-                for (int j = 1; j < bloomDay.size(); j++)
-                {
-                    if (bloomDay[j] <= mid && bloomDay[j - 1] <= bloomDay[j])
-                    {
-                        tempk += 1;
-                    }
-                    else
-                    {
-                        tempk = 0;
-                    }
-                    if (tempk == k)
-                    {
-                        tempk = 0;
-                        tempm += 1;
-                    }
-                    if (tempm == m)
-                    {
-                        i = j + 1;
-                        break;
-                    }
-                }
-                if (tempm == m)
-                {
-                    break;
-                }
+                adjacentFlowerCount += 1;
             }
-            i++;
+            // If adjacent flower is not bloom:
+            else
+            {
+                adjacentFlowerCount = 0;
+                continue;
+            }
+            // If adjacentFlowerCount equals to the required flower (i.e k) to make a single bouquet, we increase the bouquetCount by 1:
+            if (adjacentFlowerCount == k)
+            {
+                adjacentFlowerCount = 0;
+                bouquetCount += 1;
+            }
+            // If bouquetCount equals to the the required number of bouquets (i.e m) we will break loop:
+            if (bouquetCount == m)
+            {
+                break;
+            }
         }
-        if (tempm == m)
+        if (bouquetCount == m)
         {
             minDay = mid;
             high = mid - 1;
@@ -1827,8 +1851,8 @@ int minDays(vector<int> &bloomDay, int m, int k)
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> bloomDay = {7, 7, 7, 7, 12, 7, 7};
-    cout << minDays(bloomDay, 2, 3) << endl;
+    vector<int> bloomDay = {1, 10, 3, 10, 2};
+    cout << minDays(bloomDay, 3, 1) << endl;
     cout << endl
          << string(30, '-');
 }
