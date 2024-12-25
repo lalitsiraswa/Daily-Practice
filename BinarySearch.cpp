@@ -1916,11 +1916,111 @@ int smallestDivisorBinarySearch(vector<int> &nums, int threshold)
     }
     return minDivisor;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {44, 22, 33, 11, 1};
+//     cout << smallestDivisorBinarySearch(nums, 5) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------ 1011. Capacity To Ship Packages Within D Days ------------------------------------------------------------------------------
+int shipWithinDays(vector<int> &weights, int days)
+{
+    // Find the maximum and the summation:
+    int low = *max_element(weights.begin(), weights.end());
+    int high = accumulate(weights.begin(), weights.end(), 0);
+    int minShipCapacity = INT_MAX;
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        int currentWeight = 0;
+        // First day:
+        int currentDays = 1;
+        for (int weight : weights)
+        {
+            if (currentWeight + weight <= mid)
+            {
+                // Load the weight on the same day:
+                currentWeight += weight;
+            }
+            else
+            {
+                // Move to next day:
+                currentDays += 1;
+                // Load the weight:
+                currentWeight = weight;
+            }
+        }
+        if (currentDays <= days)
+        {
+            minShipCapacity = mid;
+            // Eliminate right half:
+            high = mid - 1;
+        }
+        else
+        {
+            // Eliminate left half:
+            low = mid + 1;
+        }
+    }
+    return minShipCapacity;
+}
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> weights = {1, 2, 3, 1, 1};
+//     cout << shipWithinDays(weights, 4) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------ Row with max 1s REVISION ------------------------------------------------------------------
+int findLowerBoundHelper(vector<int> &nums)
+{
+    int n = nums.size();
+    int low = 0;
+    int high = n - 1;
+    int lowerBoundIndex = n;
+    while (low <= high)
+    {
+        int middle = (low + high) / 2;
+        if (nums[middle] >= 1)
+        {
+            lowerBoundIndex = middle;
+            high = middle - 1;
+        }
+        else
+        {
+            low = middle + 1;
+        }
+    }
+    return lowerBoundIndex;
+}
+int rowWithMax1sRevision(vector<vector<int>> &arr)
+{
+    int n = arr.size();
+    int m = arr[0].size();
+    int rowIndex = -1;
+    int previousRowSum = 0;
+    for (int index = 0; index < n; index++)
+    {
+        int sum = m - findLowerBoundHelper(arr[index]);
+        if (sum > previousRowSum)
+        {
+            previousRowSum = sum;
+            rowIndex = index;
+        }
+    }
+    return rowIndex;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {44, 22, 33, 11, 1};
-    cout << smallestDivisorBinarySearch(nums, 5) << endl;
+    vector<vector<int>> arr = {{0, 1, 1, 1},
+                               {0, 0, 1, 1},
+                               {1, 1, 1, 1},
+                               {0, 0, 0, 0}};
+    cout << rowWithMax1sRevision(arr) << endl;
     cout << endl
          << string(30, '-');
 }
