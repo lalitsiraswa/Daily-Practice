@@ -4470,56 +4470,66 @@ int knapsackDP(int targetWeight, vector<int> profit, vector<int> weight)
 //     return 0;
 // }
 // ------------------------------------------------------------- 76. Minimum Window Substring -------------------------------------------------------------
-string minWindowRevision(string s, string t) {
-  int tUniqueCount = 0;
-  int sUniqueCount = 0;
-  unordered_map<char, int> tMap;
-  unordered_map<char, int> sMap;
-  for(auto ch : t){
-    if(!tMap.count(ch))
-      tUniqueCount++;
-    tMap[ch]++;
-  }
-  int minWindowLength = INT_MAX;
-  int index = 0;
-  int left = 0;
-  for(index; index < s.size(); index++){
-    sMap[s[index]]++;
-    if(sMap[s[index]] == tMap[s[index]])
-      sUniqueCount++;
-    if(tUniqueCount == sUniqueCount){
-      minWindowLength = min(index+1, minWindowLength);
-      break;
+string minWindowRevision(string s, string t)
+{
+    int tUniqueCount = 0;
+    int sUniqueCount = 0;
+    unordered_map<char, int> tMap;
+    unordered_map<char, int> sMap;
+    for (auto ch : t)
+    {
+        if (!tMap.count(ch))
+            tUniqueCount++;
+        tMap[ch]++;
     }
-  }
-  index += 1;
-  while(index < s.size()){
-    sMap[s[index]]++;
-    if(sMap[s[index]] == tMap[s[index]])
-      sUniqueCount++;
-    if(sUniqueCount == tUniqueCount){
-      while(1){
-        minWindowLength = min(minWindowLength, index - left + 1);
-        if(tMap[s[left]] == 0){
-          sMap[s[left]]--;
-        }
-        else{
-          sMap[s[left]]--;
-          if(sMap[s[left]] < tMap[s[left]]){
-            sUniqueCount--;
-            left++;
+    int minWindowLength = INT_MAX;
+    int index = 0;
+    int left = 0;
+    for (index; index < s.size(); index++)
+    {
+        sMap[s[index]]++;
+        if (sMap[s[index]] == tMap[s[index]])
+            sUniqueCount++;
+        if (tUniqueCount == sUniqueCount)
+        {
+            minWindowLength = min(index + 1, minWindowLength);
             break;
-          }
         }
-        left++;
-      }
     }
-    index++;
-  }
-  cout << minWindowLength << endl;
-  return "Lalit";
+    index += 1;
+    while (index < s.size())
+    {
+        sMap[s[index]]++;
+        if (sMap[s[index]] == tMap[s[index]])
+            sUniqueCount++;
+        if (sUniqueCount == tUniqueCount)
+        {
+            while (1)
+            {
+                minWindowLength = min(minWindowLength, index - left + 1);
+                if (tMap[s[left]] == 0)
+                {
+                    sMap[s[left]]--;
+                }
+                else
+                {
+                    sMap[s[left]]--;
+                    if (sMap[s[left]] < tMap[s[left]])
+                    {
+                        sUniqueCount--;
+                        left++;
+                        break;
+                    }
+                }
+                left++;
+            }
+        }
+        index++;
+    }
+    cout << minWindowLength << endl;
+    return "Lalit";
 }
-int main() 
+int main()
 {
     string s = "ADOBECODEBANC";
     string t = "ABC";
