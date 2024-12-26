@@ -158,11 +158,107 @@ int lengthOfLongestSubstringTuf(string &s)
     }
     return maxSubstringLength;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string s = "pwwkew";
+//     cout << lengthOfLongestSubstringTuf(s);
+//     cout << endl
+//          << string(30, '-');
+// }
+// -------------------------------------------------------------- 1004. Max Consecutive Ones III ------------------------------------------------------
+int longestOnes(vector<int> &nums, int k)
+{
+    int n = nums.size();
+    int maxOneCount = 0;
+    int low = 0;
+    while (low < n)
+    {
+        int zeroCount = 0;
+        int high = low;
+        while (high < n)
+        {
+            if (nums[high] == 0)
+            {
+                zeroCount += 1;
+            }
+            // If we fliped 0 more than k times break the loop:
+            if (zeroCount > k)
+                break;
+            high += 1;
+        }
+        maxOneCount = max(maxOneCount, high - low);
+        low += 1;
+        if (high == n)
+        {
+            break;
+        }
+    }
+    return maxOneCount;
+}
+// -------------------------
+int longestOnesTwoPointer(vector<int> &nums, int k)
+{
+    int n = nums.size();
+    int maxOneCount = 0;
+    int low = 0;
+    int high = 0;
+    int zeroCount = 0;
+    while (high < n)
+    {
+        if (nums[high] == 0)
+        {
+            zeroCount += 1;
+        }
+        while (zeroCount > k)
+        {
+            if (nums[low] == 0)
+            {
+                zeroCount -= 1;
+            }
+            low += 1;
+        }
+        // 0 based indenxing that's why we need to add 1:
+        maxOneCount = max(maxOneCount, (high - low) + 1);
+        high += 1;
+    }
+    return maxOneCount;
+}
+// ------------- TUF ------------
+int longestOnesTUF(vector<int> &nums, int k)
+{
+    int n = nums.size();
+    int maxOneCount = 0;
+    int low = 0;
+    int high = 0;
+    int zeroCount = 0;
+    while (high < n)
+    {
+        if (nums[high] == 0)
+        {
+            zeroCount += 1;
+        }
+        if (zeroCount > k)
+        {
+            if (nums[low] == 0)
+            {
+                zeroCount -= 1;
+            }
+            low += 1;
+        }
+        if (zeroCount <= k)
+        {
+            maxOneCount = max(maxOneCount, high - low + 1);
+        }
+        high += 1;
+    }
+    return maxOneCount;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    string s = "pwwkew";
-    cout << lengthOfLongestSubstringTuf(s);
+    vector<int> nums = {1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0};
+    cout << longestOnesTUF(nums, 2);
     cout << endl
          << string(30, '-');
 }
