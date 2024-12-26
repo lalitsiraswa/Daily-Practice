@@ -254,11 +254,164 @@ int longestOnesTUF(vector<int> &nums, int k)
     }
     return maxOneCount;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0};
+//     cout << longestOnesTUF(nums, 2);
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- Fruit Into Baskets ---------------------------------------------------------------------
+int totalFruits(vector<int> &arr)
+{
+    int n = arr.size();
+    int maxFruitCount = 0;
+    for (int i = 0; i < n; i++)
+    {
+        int firstBasket = arr[i];
+        int secondBasket = -1;
+        int currentFruitCount = 1;
+        for (int j = i + 1; j < n; j++)
+        {
+            if (arr[j] == firstBasket || arr[j] == secondBasket)
+            {
+                currentFruitCount += 1;
+            }
+            else if (secondBasket == -1)
+            {
+                secondBasket = arr[j];
+                currentFruitCount += 1;
+            }
+            else
+            {
+                break;
+            }
+        }
+        maxFruitCount = max(maxFruitCount, currentFruitCount);
+    }
+    return maxFruitCount;
+}
+// ----------------------
+int totalFruits2(vector<int> &arr)
+{
+    int n = arr.size();
+    int maxFruitCount = 0;
+    int low = 0;
+    int high = 0;
+    int firstBasket = arr[0];
+    int secondBasket = -1;
+    int firstBasketCount = 0;
+    int secondBasketCount = 0;
+    while (high < n)
+    {
+        if (arr[high] == firstBasket)
+        {
+            firstBasketCount += 1;
+        }
+        else if (arr[high] == secondBasket)
+        {
+            secondBasketCount += 1;
+        }
+        else if (secondBasket == -1)
+        {
+            secondBasket = arr[high];
+            secondBasketCount = 1;
+        }
+        else
+        {
+            while (true)
+            {
+                if (arr[low] == firstBasket)
+                {
+                    firstBasketCount -= 1;
+                }
+                if (arr[low] == secondBasket)
+                {
+                    secondBasketCount -= 1;
+                }
+                low += 1;
+                if (firstBasketCount == 0)
+                {
+                    firstBasket = arr[high];
+                    firstBasketCount = 1;
+                    break;
+                }
+                if (secondBasketCount == 0)
+                {
+                    secondBasket = arr[high];
+                    secondBasketCount = 1;
+                    break;
+                }
+            }
+        }
+        maxFruitCount = max(maxFruitCount, high - low + 1);
+        high += 1;
+    }
+    return maxFruitCount;
+}
+// ----------------------
+int totalFruitsTufSlidingWindow(vector<int> &arr)
+{
+    int n = arr.size();
+    // unordered_map<value, frequency> umap;
+    unordered_map<int, int> umap;
+    int maxFruitCount = 0;
+    int low = 0;
+    int high = 0;
+    while (high < n)
+    {
+        umap[arr[high]] += 1;
+        // Only two diffrent type of basket we have:
+        while (umap.size() > 2)
+        {
+            umap[arr[low]] -= 1;
+            if (umap[arr[low]] == 0)
+            {
+                umap.erase(arr[low]);
+            }
+            low += 1;
+        }
+        maxFruitCount = max(maxFruitCount, (high - low) + 1);
+        high += 1;
+    }
+    return maxFruitCount;
+}
+// ----------------------
+int totalFruitsTufSlidingWindow2(vector<int> &arr)
+{
+    int n = arr.size();
+    // unordered_map<value, frequency> umap;
+    unordered_map<int, int> umap;
+    int maxFruitCount = 0;
+    int low = 0;
+    int high = 0;
+    while (high < n)
+    {
+        umap[arr[high]] += 1;
+        // Only two diffrent type of basket we have:
+        if (umap.size() > 2)
+        {
+            umap[arr[low]] -= 1;
+            if (umap[arr[low]] == 0)
+            {
+                umap.erase(arr[low]);
+            }
+            low += 1;
+        }
+        if (umap.size() <= 2)
+        {
+            maxFruitCount = max(maxFruitCount, (high - low) + 1);
+        }
+        high += 1;
+    }
+    return maxFruitCount;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0};
-    cout << longestOnesTUF(nums, 2);
+    vector<int> nums = {1, 1, 5, 6, 7, 8, 9};
+    cout << totalFruitsTufSlidingWindow2(nums);
     cout << endl
          << string(30, '-');
 }
