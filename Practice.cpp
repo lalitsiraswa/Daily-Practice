@@ -3963,18 +3963,85 @@ void printMaxSubArray(vector<int> &nums)
         cout << nums[index] << " ";
     }
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     // vector<int> nums = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+//     // deque<int> dque;
+//     // cout << maxSubArray(nums);
+//     deque<int> dque;
+//     dque.push_back(5);
+//     dque.push_back(0);
+//     dque.push_back(2);
+//     dque.push_back(4);
+//     cout << dque.front();
+//     cout << endl
+//          << string(35, '-') << endl;
+// }
+// ---------------------------------------------------------------- 134. Gas Station ----------------------------------------------------------------------
+// ------------- TLE --------------
+int canCompleteCircuit(vector<int> &gas, vector<int> &cost)
+{
+    int n = gas.size();
+    for (int startIndex = 0; startIndex < n; startIndex++)
+    {
+        if (gas[startIndex] < cost[startIndex])
+        {
+            continue;
+        }
+        int index = startIndex;
+        int totalTankGas = gas[index];
+        while (true)
+        {
+            totalTankGas -= cost[index];
+            if (totalTankGas < 0)
+            {
+                break;
+            }
+            index = (index + 1) % n;
+            totalTankGas += gas[index];
+            if (index == startIndex)
+            {
+                return startIndex;
+            }
+        }
+    }
+    return -1;
+}
+// ----------- GREEDY APPROACH -----------
+int canCompleteCircuit(vector<int> &gas, vector<int> &cost)
+{
+    int n = gas.size();
+    int totalTankGas = 0;
+    int total_fuel = 0;
+    int total_cost = 0;
+    int startingGasStation = 0;
+    for (int i = 0; i < n; i++)
+    {
+        total_fuel += gas[i];
+        total_cost += cost[i];
+    }
+    if (total_cost > total_fuel)
+    {
+        return -1;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        totalTankGas += gas[i] - cost[i];
+        if (totalTankGas < 0)
+        {
+            totalTankGas = 0;
+            startingGasStation = i + 1;
+        }
+    }
+    return startingGasStation;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    // vector<int> nums = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
-    // deque<int> dque;
-    // cout << maxSubArray(nums);
-    deque<int> dque;
-    dque.push_back(5);
-    dque.push_back(0);
-    dque.push_back(2);
-    dque.push_back(4);
-    cout << dque.front();
+    vector<int> gas = {5, 1, 2, 3, 4};
+    vector<int> cost = {4, 4, 1, 5, 1};
+    cout << canCompleteCircuit(gas, cost);
     cout << endl
          << string(35, '-') << endl;
 }
