@@ -495,11 +495,85 @@ int longestKSubstrSlidingWindow2(string &s, int k)
     }
     return maxSubstringLength;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string s = "aabacbebebe";
+//     cout << longestKSubstrSlidingWindow2(s, 3);
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------ 1358. Number of Substrings Containing All Three Characters ---------------------------------------------------------------------
+// TLE
+int numberOfSubstrings(string s)
+{
+    int n = s.size();
+    int totalNumberOfSubstring = 0;
+    for (int i = 0; i < n; i++)
+    {
+        unordered_map<char, int> frequency;
+        for (int j = i; j < n; j++)
+        {
+            frequency[s[j]] += 1;
+            if (frequency.size() == 3)
+            {
+                totalNumberOfSubstring += (n - j);
+                break;
+            }
+        }
+    }
+    return totalNumberOfSubstring;
+}
+// Sliding Window || Two Pointer
+// "aaaabc" -> Dry Run -> 4
+int numberOfSubstringsSlidingWindow(string s)
+{
+    int n = s.size();
+    int totalNumberOfSubstring = 0;
+    unordered_map<char, int> frequency;
+    int low = 0;
+    int high = 0;
+    while (high < n)
+    {
+        frequency[s[high]] += 1;
+        while (frequency.size() == 3)
+        {
+            totalNumberOfSubstring += (n - high);
+            frequency[s[low]] -= 1;
+            if (frequency[s[low]] == 0)
+            {
+                frequency.erase(s[low]);
+            }
+            low += 1;
+        }
+        high += 1;
+    }
+    return totalNumberOfSubstring;
+}
+// TUF -> Dry Run
+int numberOfSubstringsSlidingWindowTUF(string s)
+{
+    int n = s.size();
+    int totalNumberOfSubstring = 0;
+    int lastSeen[3] = {-1, -1, -1};
+    // Find the minimum window with all 3 characters (a, b, c):
+    for (int i = 0; i < n; i++)
+    {
+        // Update the last seen index:
+        lastSeen[s[i] - 'a'] = i;
+        if (lastSeen[0] != -1 && lastSeen[1] != -1 && lastSeen[2] != -1)
+        {
+            // All the character before the min index character will be a substring:
+            totalNumberOfSubstring += 1 + min(lastSeen[0], min(lastSeen[1], lastSeen[2]));
+        }
+    }
+    return totalNumberOfSubstring;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    string s = "aabacbebebe";
-    cout << longestKSubstrSlidingWindow2(s, 3);
+    string s = "abcabc";
+    cout << numberOfSubstringsSlidingWindowTUF(s);
     cout << endl
          << string(30, '-');
 }
