@@ -407,11 +407,99 @@ int totalFruitsTufSlidingWindow2(vector<int> &arr)
     }
     return maxFruitCount;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {1, 1, 5, 6, 7, 8, 9};
+//     cout << totalFruitsTufSlidingWindow2(nums);
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------- Longest Substring with K Uniques ---------------------------------------------------------------------
+// TLE
+int longestKSubstr(string &s, int k)
+{
+    int n = s.size();
+    int maxSubstringLength = -1;
+    for (int i = 0; i < n; i++)
+    {
+        unordered_map<char, int> frequency;
+        for (int j = i; j < n; j++)
+        {
+            frequency[s[j]] += 1;
+            if (frequency.size() == k)
+            {
+                maxSubstringLength = max(maxSubstringLength, (j - i) + 1);
+            }
+            if (frequency.size() > k)
+            {
+                break;
+            }
+        }
+    }
+    return maxSubstringLength;
+}
+// ---------- Sliding Window || Two Pointer -------------
+int longestKSubstrSlidingWindow(string &s, int k)
+{
+    int n = s.size();
+    int maxSubstringLength = -1;
+    unordered_map<char, int> frequency;
+    int low = 0;
+    int high = 0;
+    while (high < n)
+    {
+        frequency[s[high]] += 1;
+        while (frequency.size() > k)
+        {
+            frequency[s[low]] -= 1;
+            if (frequency[s[low]] == 0)
+            {
+                frequency.erase(s[low]);
+            }
+            low += 1;
+        }
+        if (frequency.size() == k)
+        {
+            maxSubstringLength = max(maxSubstringLength, (high - low) + 1);
+        }
+        high += 1;
+    }
+    return maxSubstringLength;
+}
+// ---------- Sliding Window || Two Pointer -------------
+int longestKSubstrSlidingWindow2(string &s, int k)
+{
+    int n = s.size();
+    int maxSubstringLength = -1;
+    unordered_map<char, int> frequency;
+    int low = 0;
+    int high = 0;
+    while (high < n)
+    {
+        frequency[s[high]] += 1;
+        if (frequency.size() > k)
+        {
+            frequency[s[low]] -= 1;
+            if (frequency[s[low]] == 0)
+            {
+                frequency.erase(s[low]);
+            }
+            low += 1;
+        }
+        if (frequency.size() == k)
+        {
+            maxSubstringLength = max(maxSubstringLength, (high - low) + 1);
+        }
+        high += 1;
+    }
+    return maxSubstringLength;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {1, 1, 5, 6, 7, 8, 9};
-    cout << totalFruitsTufSlidingWindow2(nums);
+    string s = "aabacbebebe";
+    cout << longestKSubstrSlidingWindow2(s, 3);
     cout << endl
          << string(30, '-');
 }
