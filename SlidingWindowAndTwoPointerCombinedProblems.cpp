@@ -569,11 +569,107 @@ int numberOfSubstringsSlidingWindowTUF(string s)
     }
     return totalNumberOfSubstring;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string s = "abcabc";
+//     cout << numberOfSubstringsSlidingWindowTUF(s);
+//     cout << endl
+//          << string(30, '-');
+// }
+// ---------------------------------------------------------------- 424. Longest Repeating Character Replacement -------------------------------------------------------------------------
+// TLE
+int characterReplacement(string s, int k)
+{
+    int n = s.size();
+    int maxSubstringLen = 0;
+    for (int i = 0; i < n; i++)
+    {
+        unordered_map<char, int> frequency;
+        int maxFrequency = 0;
+        for (int j = i; j < n; j++)
+        {
+            frequency[s[j]] += 1;
+            maxFrequency = max(maxFrequency, frequency[s[j]]);
+            int charReplacementCount = ((j - i) + 1) - maxFrequency;
+            if (charReplacementCount <= k)
+            {
+                maxSubstringLen = max(maxSubstringLen, (j - i) + 1);
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    return maxSubstringLen;
+}
+// -----------------
+int characterReplacementSlidingWindow(string s, int k)
+{
+    int n = s.size();
+    int maxSubstringLen = 0;
+    unordered_map<char, int> frequency;
+    int maxFrequency = 0;
+    int low = 0;
+    int high = 0;
+    while (high < n)
+    {
+        frequency[s[high]] += 1;
+        maxFrequency = max(maxFrequency, frequency[s[high]]);
+        int charReplacementCount = ((high - low) + 1) - maxFrequency;
+        while (charReplacementCount > k)
+        {
+            frequency[s[low]] -= 1;
+            if (frequency[s[low]] == 0)
+            {
+                frequency.erase(s[low]);
+            }
+            maxFrequency = 0;
+            for (auto item : frequency)
+            {
+                maxFrequency = max(maxFrequency, item.second);
+            }
+            low += 1;
+            charReplacementCount = ((high - low) + 1) - maxFrequency;
+        }
+        maxSubstringLen = max(maxSubstringLen, (high - low) + 1);
+        high += 1;
+    }
+    return maxSubstringLen;
+}
+// ---------------------
+int characterReplacementTuf(string s, int k)
+{
+    int n = s.size();
+    int maxSubstringLen = 0;
+    unordered_map<char, int> frequency;
+    int maxFrequency = 0;
+    int left = 0;
+    for (int right = 0; right < n; right++)
+    {
+        frequency[s[right]]++;
+        maxFrequency = max(maxFrequency, frequency[s[right]]);
+        int windowSize = right - left + 1;
+        int charReplacementCount = windowSize - maxFrequency;
+        if (charReplacementCount > k)
+        {
+            frequency[s[left]]--;
+            left++;
+        }
+        if (charReplacementCount <= k)
+        {
+            maxSubstringLen = max(maxSubstringLen, right - left + 1);
+        }
+    }
+    return maxSubstringLen;
+}
+
 int main()
 {
     cout << string(30, '-') << endl;
-    string s = "abcabc";
-    cout << numberOfSubstringsSlidingWindowTUF(s);
+    string s = "AABABBA";
+    cout << characterReplacementTuf(s, 1);
     cout << endl
          << string(30, '-');
 }
