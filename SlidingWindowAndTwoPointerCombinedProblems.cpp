@@ -665,11 +665,82 @@ int characterReplacementTuf(string s, int k)
     return maxSubstringLen;
 }
 
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string s = "AABABBA";
+//     cout << characterReplacementTuf(s, 1);
+//     cout << endl
+//          << string(30, '-');
+// }
+// ---------------------------------------------------------------- 560. Subarray Sum Equals K -------------------------------------------------------------------------
+int subarraySum(vector<int> &nums, int k)
+{
+    int n = nums.size();             // take the size of the array
+    vector<int> cumulativeSum(n, 0); // make a prefix array to store prefix sum
+    cumulativeSum[0] = nums[0];      // for element at index at zero, it is same
+    // making our prefix array
+    for (int i = 1; i < n; i++)
+        cumulativeSum[i] = (nums[i] + cumulativeSum[i - 1]);
+    unordered_map<int, int> umap; // declare an unordered map
+    int numOfSubArray = 0;        // to store the number of our subarrays having sum as 'k'
+    for (int i = 0; i < n; i++)   // traverse from the prefix array
+    {
+        if (cumulativeSum[i] == k) // if it already becomes equal to k, then increment ans
+            numOfSubArray++;
+        // now, find whether (prefix[i] - k) present in map or not
+        if (umap.find(cumulativeSum[i] - k) != umap.end())
+            numOfSubArray += umap[cumulativeSum[i] - k]; // if yes, then add it our answer
+        umap[cumulativeSum[i]]++;                        // put prefix sum into our map
+    }
+    return numOfSubArray; // and at last, return our answer
+}
+// ----------------------------------
+int subarraySum2(vector<int> &nums, int K)
+{
+    map<long long, int> preSumMap;
+    int sum = 0;
+    int subarrayCount = 0;
+    for (int index = 0; index < nums.size(); index++)
+    {
+        sum += nums[index];
+        if (sum == K)
+            subarrayCount++;
+        int remaining = sum - K;
+        if (preSumMap.find(remaining) != preSumMap.end())
+            subarrayCount += preSumMap[remaining];
+        preSumMap[sum] = preSumMap[sum] + 1;
+    }
+    return subarrayCount;
+}
+// TUF
+int subarraySumTUF(vector<int> &nums, int k)
+{
+    // Size of the given arrays:
+    int n = nums.size();
+    map<long long, int> preSumMap;
+    int preSum = 0;
+    int subarrayCount = 0;
+    // Setting 0 in the map:
+    preSumMap[0] = 1;
+    for (int index = 0; index < n; index++)
+    {
+        // Add current element to prefix sum:
+        preSum += nums[index];
+        // Calculate x-k:
+        int remove = preSum - k;
+        // Add the number of subarrays to be removed:
+        subarrayCount += preSumMap[remove];
+        // Update the count of prefix sum in the map:
+        preSumMap[preSum] += 1;
+    }
+    return subarrayCount;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    string s = "AABABBA";
-    cout << characterReplacementTuf(s, 1);
+    vector<int> nums = {1};
+    cout << subarraySum(nums, 0);
     cout << endl
          << string(30, '-');
 }
