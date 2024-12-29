@@ -825,11 +825,87 @@ int countSubarraysWithExactSum(const vector<int> &nums, int targetSum)
     return countSubarraysWithSumLessThanOrEqualToK(nums, targetSum) -
            countSubarraysWithSumLessThanOrEqualToK(nums, targetSum - 1);
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {1, 0, 1, 0, 1};
+//     cout << countSubarraysWithExactSum(nums, 2);
+//     cout << endl
+//          << string(30, '-');
+// }
+// ---------------------------------------------------------------- 1248. Count Number of Nice Subarrays -------------------------------------------------------------------------
+// TLE
+int numberOfSubarraysBruteForce(vector<int> &nums, int k)
+{
+    int n = nums.size();
+    int subarraysCount = 0;
+    for (int i = 0; i < n; i++)
+    {
+        int oddElementCount = 0;
+        for (int j = i; j < n; j++)
+        {
+            if (nums[j] % 2 != 0)
+            {
+                oddElementCount += 1;
+            }
+            if (oddElementCount == k)
+            {
+                subarraysCount += 1;
+            }
+            if (oddElementCount > k)
+            {
+                break;
+            }
+        }
+    }
+    return subarraysCount;
+}
+// ----------------------
+int countSubarraysWithAtMostKOddElements(const vector<int> &nums, int k)
+{
+    int n = nums.size();
+    int subarrayCount = 0;
+    int oddCount = 0;
+    int start = 0;
+    // Edge Case: If k is negative, no valid subarray can exist
+    if (k < 0)
+    {
+        return 0;
+    }
+    for (int end = 0; end < n; ++end)
+    {
+        // Increment odd count if the current element is odd
+        if (nums[end] % 2 != 0)
+        {
+            oddCount++;
+        }
+        // Shrink the window until the number of odd elements is <= k
+        while (oddCount > k)
+        {
+            if (nums[start] % 2 != 0)
+            {
+                oddCount--;
+            }
+            start++;
+        }
+        // All subarrays ending at 'end' and starting from indices >= 'start' are valid
+        subarrayCount += (end - start + 1);
+    }
+    return subarrayCount;
+}
+int numberOfSubarraysWithExactKOddElements(const vector<int> &nums, int k)
+{
+    // Subarrays with exactly k odd elements are:
+    // Subarrays with at most k odd elements
+    // minus Subarrays with at most (k-1) odd elements
+    return countSubarraysWithAtMostKOddElements(nums, k) -
+           countSubarraysWithAtMostKOddElements(nums, k - 1);
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {1, 0, 1, 0, 1};
-    cout << countSubarraysWithExactSum(nums, 2);
+    vector<int> nums = {2, 2, 2, 1, 2, 2, 1, 2, 2, 2};
+    cout << numberOfSubarraysBruteForce(nums, 2);
     cout << endl
          << string(30, '-');
 }
