@@ -736,11 +736,100 @@ int subarraySumTUF(vector<int> &nums, int k)
     }
     return subarrayCount;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {1, 2, 3, -3, 1, 1, 1, 4, 2, -3};
+//     cout << subarraySumTUF(nums, 3);
+//     cout << endl
+//          << string(30, '-');
+// }
+// ---------------------------------------------------------------- 930. Binary Subarrays With Sum -------------------------------------------------------------------------
+// TLE
+int numSubarraysWithSumBruteForce(vector<int> &nums, int goal)
+{
+    int n = nums.size();
+    int subarrayCount = 0;
+    for (int i = 0; i < n; i++)
+    {
+        int sum = 0;
+        for (int j = i; j < n; j++)
+        {
+            sum += nums[j];
+            if (sum == goal)
+            {
+                subarrayCount += 1;
+            }
+            if (sum > goal)
+            {
+                break;
+            }
+        }
+    }
+    return subarrayCount;
+}
+// ----------------
+int numSubarraysWithSum(vector<int> &nums, int goal)
+{
+    // Size of the given arrays:
+    int n = nums.size();
+    map<long long, int> preSumMap;
+    int preSum = 0;
+    int subarrayCount = 0;
+    // Setting 0 in the map:
+    preSumMap[0] = 1;
+    for (int index = 0; index < n; index++)
+    {
+        // Add current element to prefix sum:
+        preSum += nums[index];
+        // Calculate x-k:
+        int remove = preSum - goal;
+        // Add the number of subarrays to be removed:
+        subarrayCount += preSumMap[remove];
+        // Update the count of prefix sum in the map:
+        preSumMap[preSum] += 1;
+    }
+    return subarrayCount;
+}
+// -------- TUF --------
+int countSubarraysWithSumLessThanOrEqualToK(const vector<int> &nums, int k)
+{
+    int n = nums.size();
+    int subarrayCount = 0;
+    int currentSum = 0;
+    int start = 0;
+    // Edge Case: If k is negative, no valid subarray can exist
+    if (k < 0)
+    {
+        return 0;
+    }
+    for (int end = 0; end < n; ++end)
+    {
+        currentSum += nums[end];
+        // Shrink the window if the current sum exceeds k
+        while (currentSum > k)
+        {
+            currentSum -= nums[start];
+            ++start;
+        }
+        // All subarrays ending at 'end' and starting from indices >= 'start' are valid
+        subarrayCount += (end - start + 1);
+    }
+    return subarrayCount;
+}
+int countSubarraysWithExactSum(const vector<int> &nums, int targetSum)
+{
+    // Subarrays with sum exactly equal to targetSum can be derived by:
+    // Count of subarrays with sum <= targetSum
+    // minus Count of subarrays with sum < targetSum
+    return countSubarraysWithSumLessThanOrEqualToK(nums, targetSum) -
+           countSubarraysWithSumLessThanOrEqualToK(nums, targetSum - 1);
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {1, 2, 3, -3, 1, 1, 1, 4, 2, -3};
-    cout << subarraySumTUF(nums, 3);
+    vector<int> nums = {1, 0, 1, 0, 1};
+    cout << countSubarraysWithExactSum(nums, 2);
     cout << endl
          << string(30, '-');
 }
