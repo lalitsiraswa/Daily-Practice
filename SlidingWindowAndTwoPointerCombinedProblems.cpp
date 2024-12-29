@@ -739,8 +739,8 @@ int subarraySumTUF(vector<int> &nums, int k)
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {1};
-    cout << subarraySum(nums, 0);
+    vector<int> nums = {1, 2, 3, -3, 1, 1, 1, 4, 2, -3};
+    cout << subarraySumTUF(nums, 3);
     cout << endl
          << string(30, '-');
 }
