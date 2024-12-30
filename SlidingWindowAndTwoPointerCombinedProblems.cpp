@@ -901,11 +901,82 @@ int numberOfSubarraysWithExactKOddElements(const vector<int> &nums, int k)
     return countSubarraysWithAtMostKOddElements(nums, k) -
            countSubarraysWithAtMostKOddElements(nums, k - 1);
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {2, 2, 2, 1, 2, 2, 1, 2, 2, 2};
+//     cout << numberOfSubarraysBruteForce(nums, 2);
+//     cout << endl
+//          << string(30, '-');
+// }
+// ---------------------------------------------------------------- 992. Subarrays with K Different Integers -------------------------------------------------------------------------
+// TLE
+int subarraysWithKDistinctBruteForce(vector<int> &nums, int k)
+{
+    int n = nums.size();
+    int subarraysCount = 0;
+    for (int i = 0; i < n; i++)
+    {
+        unordered_set<int> distinctSet;
+        for (int j = i; j < n; j++)
+        {
+            distinctSet.insert(nums[j]);
+            if (distinctSet.size() == k)
+            {
+                subarraysCount += 1;
+            }
+            if (distinctSet.size() > k)
+            {
+                break;
+            }
+        }
+    }
+    return subarraysCount;
+}
+// ---------------------
+int countSubarraysWithAtMostKDistinctElements(const vector<int> &nums, int k)
+{
+    int n = nums.size();
+    int subarrayCount = 0;
+    int start = 0;
+    unordered_map<int, int> elementFrequency;
+    // Edge Case: If k is negative, no valid subarray can exist
+    if (k < 0)
+    {
+        return 0;
+    }
+    for (int end = 0; end < n; ++end)
+    {
+        // Add the current element to the window
+        elementFrequency[nums[end]]++;
+        // Shrink the window until the number of distinct elements is <= k
+        while (elementFrequency.size() > k)
+        {
+            elementFrequency[nums[start]]--;
+            if (elementFrequency[nums[start]] == 0)
+            {
+                elementFrequency.erase(nums[start]);
+            }
+            ++start;
+        }
+        // All subarrays ending at 'end' and starting from indices >= 'start' are valid
+        subarrayCount += (end - start + 1);
+    }
+    return subarrayCount;
+}
+int subarraysWithKDistinct(const vector<int> &nums, int k)
+{
+    // Subarrays with exactly k distinct elements are:
+    // Subarrays with at most k distinct elements
+    // minus Subarrays with at most (k-1) distinct elements
+    return countSubarraysWithAtMostKDistinctElements(nums, k) -
+           countSubarraysWithAtMostKDistinctElements(nums, k - 1);
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {2, 2, 2, 1, 2, 2, 1, 2, 2, 2};
-    cout << numberOfSubarraysBruteForce(nums, 2);
+    vector<int> nums = {1, 2, 1, 2, 3};
+    cout << subarraysWithKDistinct(nums, 2);
     cout << endl
          << string(30, '-');
 }
