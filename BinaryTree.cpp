@@ -1526,7 +1526,9 @@ int main()
     root->left->right->right = new TreeNode(4);
     root->right->left = new TreeNode(0);
     root->right->right = new TreeNode(8);
-    TreeNode *lowestAncestor = lowestCommonAncestorTuf(root, new TreeNode(5), new TreeNode(4));
+    TreeNode *p = root->left;
+    TreeNode *q = root->left->right->right;
+    TreeNode *lowestAncestor = lowestCommonAncestorTuf(root, p, q);
     cout << lowestAncestor->val;
     cout << endl
          << string(35, '-') << endl;
