@@ -972,11 +972,152 @@ int subarraysWithKDistinct(const vector<int> &nums, int k)
     return countSubarraysWithAtMostKDistinctElements(nums, k) -
            countSubarraysWithAtMostKDistinctElements(nums, k - 1);
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {1, 2, 1, 2, 3};
+//     cout << subarraysWithKDistinct(nums, 2);
+//     cout << endl
+//          << string(30, '-');
+// }
+// ---------------------------------------------------------------- 76. Minimum Window Substring -------------------------------------------------------------------------
+// TLE
+string minWindow(string s, string t)
+{
+    if (t.size() > s.size())
+    {
+        return "";
+    }
+    int n = s.size();
+    string minSubstring = "";
+    for (int i = 0; i < n; i++)
+    {
+        unordered_map<char, int> requiredFrequency;
+        for (auto ch : t)
+        {
+            requiredFrequency[ch] += 1;
+        }
+        int isAllVisisted = false;
+        string currentSubstring;
+        for (int j = i; j < n; j++)
+        {
+            isAllVisisted = true;
+            currentSubstring.push_back(s[j]);
+            if (requiredFrequency.count(s[j]))
+            {
+                requiredFrequency[s[j]] -= 1;
+                if (requiredFrequency[s[j]] < 0)
+                {
+                    requiredFrequency[s[j]] = 0;
+                }
+            }
+            for (auto item : requiredFrequency)
+            {
+                if (item.second != 0)
+                {
+                    isAllVisisted = false;
+                }
+            }
+            if (isAllVisisted)
+            {
+                break;
+            }
+        }
+        if (isAllVisisted && (currentSubstring.size() < minSubstring.size() || minSubstring.size() == 0))
+        {
+            minSubstring = currentSubstring;
+        }
+    }
+    return minSubstring;
+}
+// ----------- TLE -----------
+string minWindow2(string s, string t)
+{
+    int n = s.size();
+    int m = t.size();
+    int minLen = INT_MAX;
+    int startingIndex = -1;
+    if (m > n)
+    {
+        return "";
+    }
+    for (int i = 0; i < n; i++)
+    {
+        unordered_map<char, int> frequency;
+        int count = 0;
+        for (auto ch : t)
+        {
+            frequency[ch] += 1;
+        }
+        for (int j = i; j < n; j++)
+        {
+            if (frequency[s[j]] > 0)
+            {
+                count += 1;
+            }
+            frequency[s[j]] -= 1;
+            if (count == m)
+            {
+                if ((j - i) + 1 < minLen)
+                {
+                    minLen = (j - i) + 1;
+                    startingIndex = i;
+                    break;
+                }
+            }
+        }
+    }
+    string minSubstring = (minLen == INT_MAX) ? "" : s.substr(startingIndex, minLen);
+    return minSubstring;
+}
+// ----------- Sliding Window || Two pointer -----------
+string minWindowSlidingWindow(string s, string t)
+{
+    if (t == "")
+    {
+        return "";
+    }
+    unordered_map<char, int> reqCount;
+    unordered_map<char, int> window;
+    for (int i = 0; i < t.size(); i++)
+    {
+        reqCount[t.at(i)] += 1;
+    }
+    int required = reqCount.size();
+    int current = 0;
+    int resLen = INT_MAX;
+    int left = 0;
+    vector<int> res = {-1, -1};
+    for (int right = 0; right < s.size(); right++)
+    {
+        char c = s.at(right);
+        if (reqCount[c])
+            window[c] += 1;
+        if (reqCount[c] && reqCount[c] == window[c])
+            current += 1;
+        while (current == required)
+        {
+            if (right - left + 1 < resLen)
+            {
+                resLen = right - left + 1;
+                res = {left, right};
+            }
+            char c = s.at(left);
+            if (reqCount[c] > 0)
+                window[c] -= 1;
+            if (reqCount[c] && window[c] < reqCount[c])
+                current -= 1;
+            left += 1;
+        }
+    }
+    int leftIndex = res.at(0);
+    return resLen != INT_MAX ? s.substr(leftIndex, resLen) : "";
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {1, 2, 1, 2, 3};
-    cout << subarraysWithKDistinct(nums, 2);
+    string s = "ddaaabbca", t = "abc";
+    cout << minWindowSlidingWindow(s, t);
     cout << endl
          << string(30, '-');
 }
