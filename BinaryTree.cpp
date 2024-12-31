@@ -1382,18 +1382,12 @@ void Paths(TreeNode *root, vector<vector<int>> &paths, vector<int> &path)
         path.pop_back();
         return;
     }
+    path.push_back(root->val);
     if (root->left)
-    {
-        path.push_back(root->val);
         Paths(root->left, paths, path);
-        path.pop_back();
-    }
     if (root->right)
-    {
-        path.push_back(root->val);
         Paths(root->right, paths, path);
-        path.pop_back();
-    }
+    path.pop_back();
 }
 vector<vector<int>> Paths(TreeNode *root)
 {
