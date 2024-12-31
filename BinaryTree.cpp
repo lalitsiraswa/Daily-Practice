@@ -1429,24 +1429,105 @@ vector<vector<int>> rootToPaths(TreeNode *root, TreeNode *target)
     rootToPaths(root, paths, path, target);
     return paths;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->right = new TreeNode(3);
+//     root->left->left = new TreeNode(4);
+//     root->left->right = new TreeNode(5);
+//     vector<vector<int>> paths = rootToPaths(root, new TreeNode(5));
+//     for (int i = 0; i < paths.size(); i++)
+//     {
+//         cout << "{";
+//         for (int j = 0; j < paths[i].size(); j++)
+//         {
+//             cout << paths[i][j] << ", ";
+//         }
+//         cout << "}";
+//     }
+//     cout << endl
+//          << string(35, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------- 236. Lowest Common Ancestor of a Binary Tree ---------------------------------------------------------------------
+bool findPathFromRoot(TreeNode *root, vector<TreeNode *> &path, TreeNode *target)
+{
+    if (root == nullptr)
+    {
+        return false;
+    }
+    path.push_back(root);
+    if (root->val == target->val)
+    {
+        return true;
+    }
+    if (findPathFromRoot(root->left, path, target))
+    {
+        return true;
+    }
+    if (findPathFromRoot(root->right, path, target))
+    {
+        return true;
+    }
+    path.pop_back();
+    return false;
+}
+TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
+{
+    vector<TreeNode *> pathToReachP;
+    vector<TreeNode *> pathToReachQ;
+    // Contains the list of nodes from root to target node p:
+    findPathFromRoot(root, pathToReachP, p);
+    // Contains the list of nodes from root to target node q:
+    findPathFromRoot(root, pathToReachQ, q);
+    TreeNode *lowestAncenstor = nullptr;
+    // Find the lowest common ancestor by comparing the path:
+    int n = pathToReachP.size() < pathToReachQ.size() ? pathToReachP.size() : pathToReachQ.size();
+    for (int index = 0; index < n; index++)
+    {
+        if (pathToReachP[index] == pathToReachQ[index])
+        {
+            lowestAncenstor = pathToReachP[index];
+        }
+        else
+        {
+            break;
+        }
+    }
+    return lowestAncenstor;
+}
+// --------------------------
+TreeNode *lowestCommonAncestorTuf(TreeNode *root, TreeNode *p, TreeNode *q)
+{
+    // Base Case
+    if (root == nullptr || root == p || root == q)
+        return root;
+    TreeNode *leftSubtTree = lowestCommonAncestorTuf(root->left, p, q);
+    TreeNode *rightSubTree = lowestCommonAncestorTuf(root->right, p, q);
+    if (leftSubtTree == nullptr)
+        return rightSubTree;
+    if (rightSubTree == nullptr)
+        return leftSubtTree;
+    // Both left and right are not null, we found our result
+    else
+        return root;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    TreeNode *root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left = new TreeNode(4);
-    root->left->right = new TreeNode(5);
-    vector<vector<int>> paths = rootToPaths(root, new TreeNode(5));
-    for (int i = 0; i < paths.size(); i++)
-    {
-        cout << "{";
-        for (int j = 0; j < paths[i].size(); j++)
-        {
-            cout << paths[i][j] << ", ";
-        }
-        cout << "}";
-    }
+    TreeNode *root = new TreeNode(3);
+    root->left = new TreeNode(5);
+    root->right = new TreeNode(1);
+    root->left->left = new TreeNode(6);
+    root->left->right = new TreeNode(2);
+    root->left->right->left = new TreeNode(7);
+    root->left->right->right = new TreeNode(4);
+    root->right->left = new TreeNode(0);
+    root->right->right = new TreeNode(8);
+    TreeNode *lowestAncestor = lowestCommonAncestorTuf(root, new TreeNode(5), new TreeNode(4));
+    cout << lowestAncestor->val;
     cout << endl
          << string(35, '-') << endl;
     return 0;
