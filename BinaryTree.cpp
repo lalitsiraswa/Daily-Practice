@@ -1319,23 +1319,55 @@ vector<int> leftViewDFS(TreeNode *root)
     leftSideViewDFSCall(root, rightSideViewList, 0);
     return rightSideViewList;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(0);
+//     root->left = new TreeNode(1);
+//     root->right = new TreeNode(2);
+//     root->left->right = new TreeNode(3);
+//     root->right->left = new TreeNode(4);
+//     root->left->right->right = new TreeNode(5);
+//     root->right->left->left = new TreeNode(6);
+//     root->left->right->right->right = new TreeNode(7);
+//     root->right->left->left->left = new TreeNode(8);
+//     vector<int> result = leftViewDFS(root);
+//     for (int i = 0; i < result.size(); i++)
+//     {
+//         cout << result[i] << ", ";
+//     }
+//     cout << endl
+//          << string(35, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------- 101. Symmetric Tree ---------------------------------------------------------------------
+bool isSymmetric(TreeNode *leftNode, TreeNode *rightNode)
+{
+    if (leftNode == nullptr || rightNode == nullptr)
+        return (leftNode == rightNode);
+    if (leftNode->val != rightNode->val)
+        return false;
+    if (!isSymmetric(leftNode->left, rightNode->right))
+        return false;
+    return isSymmetric(leftNode->right, rightNode->left);
+}
+bool isSymmetric(TreeNode *root)
+{
+    if (root == nullptr)
+        return true;
+    return isSymmetric(root->left, root->right);
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    TreeNode *root = new TreeNode(0);
-    root->left = new TreeNode(1);
+    TreeNode *root = new TreeNode(1);
+    root->left = new TreeNode(2);
     root->right = new TreeNode(2);
-    root->left->right = new TreeNode(3);
+    root->left->left = new TreeNode(3);
+    root->left->right = new TreeNode(4);
     root->right->left = new TreeNode(4);
-    root->left->right->right = new TreeNode(5);
-    root->right->left->left = new TreeNode(6);
-    root->left->right->right->right = new TreeNode(7);
-    root->right->left->left->left = new TreeNode(8);
-    vector<int> result = leftViewDFS(root);
-    for (int i = 0; i < result.size(); i++)
-    {
-        cout << result[i] << ", ";
-    }
+    root->right->right = new TreeNode(3);
+    cout << isSymmetric(root);
     cout << endl
          << string(35, '-') << endl;
     return 0;
