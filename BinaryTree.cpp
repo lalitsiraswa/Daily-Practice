@@ -1357,17 +1357,102 @@ bool isSymmetric(TreeNode *root)
         return true;
     return isSymmetric(root->left, root->right);
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->right = new TreeNode(2);
+//     root->left->left = new TreeNode(3);
+//     root->left->right = new TreeNode(4);
+//     root->right->left = new TreeNode(4);
+//     root->right->right = new TreeNode(3);
+//     cout << isSymmetric(root);
+//     cout << endl
+//          << string(35, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------- Root to Leaf Paths ---------------------------------------------------------------------
+void Paths(TreeNode *root, vector<vector<int>> &paths, vector<int> &path)
+{
+    if (root->left == nullptr && root->right == nullptr)
+    {
+        path.push_back(root->val);
+        paths.push_back(path);
+        path.pop_back();
+        return;
+    }
+    if (root->left)
+    {
+        path.push_back(root->val);
+        Paths(root->left, paths, path);
+        path.pop_back();
+    }
+    if (root->right)
+    {
+        path.push_back(root->val);
+        Paths(root->right, paths, path);
+        path.pop_back();
+    }
+}
+vector<vector<int>> Paths(TreeNode *root)
+{
+    if (root == nullptr)
+    {
+        return {};
+    }
+    vector<vector<int>> paths;
+    vector<int> path;
+    Paths(root, paths, path);
+    return paths;
+}
+// ------------ Root To Node Path ------------
+bool rootToPaths(TreeNode *root, vector<vector<int>> &paths, vector<int> &path, TreeNode *target)
+{
+    if (root == nullptr)
+        return false;
+    path.push_back(root->val);
+    if (root->val == target->val)
+    {
+        paths.push_back(path);
+        return true;
+    }
+    if (rootToPaths(root->left, paths, path, target))
+        return true;
+    if (rootToPaths(root->right, paths, path, target))
+        return true;
+    path.pop_back();
+    return false;
+}
+vector<vector<int>> rootToPaths(TreeNode *root, TreeNode *target)
+{
+    if (root == nullptr)
+    {
+        return {};
+    }
+    vector<vector<int>> paths;
+    vector<int> path;
+    rootToPaths(root, paths, path, target);
+    return paths;
+}
 int main()
 {
     cout << string(35, '-') << endl;
     TreeNode *root = new TreeNode(1);
     root->left = new TreeNode(2);
-    root->right = new TreeNode(2);
-    root->left->left = new TreeNode(3);
-    root->left->right = new TreeNode(4);
-    root->right->left = new TreeNode(4);
-    root->right->right = new TreeNode(3);
-    cout << isSymmetric(root);
+    root->right = new TreeNode(3);
+    root->left->left = new TreeNode(4);
+    root->left->right = new TreeNode(5);
+    vector<vector<int>> paths = rootToPaths(root, new TreeNode(5));
+    for (int i = 0; i < paths.size(); i++)
+    {
+        cout << "{";
+        for (int j = 0; j < paths[i].size(); j++)
+        {
+            cout << paths[i][j] << ", ";
+        }
+        cout << "}";
+    }
     cout << endl
          << string(35, '-') << endl;
     return 0;
