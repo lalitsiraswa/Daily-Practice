@@ -1514,22 +1514,183 @@ TreeNode *lowestCommonAncestorTuf(TreeNode *root, TreeNode *p, TreeNode *q)
     else
         return root;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(3);
+//     root->left = new TreeNode(5);
+//     root->right = new TreeNode(1);
+//     root->left->left = new TreeNode(6);
+//     root->left->right = new TreeNode(2);
+//     root->left->right->left = new TreeNode(7);
+//     root->left->right->right = new TreeNode(4);
+//     root->right->left = new TreeNode(0);
+//     root->right->right = new TreeNode(8);
+//     TreeNode *p = root->left;
+//     TreeNode *q = root->left->right->right;
+//     TreeNode *lowestAncestor = lowestCommonAncestorTuf(root, p, q);
+//     cout << lowestAncestor->val;
+//     cout << endl
+//          << string(35, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------- 662. Maximum Width of Binary Tree ---------------------------------------------------------------------
+// TRY BUT NOT WORKED
+int widthOfBinaryTree(TreeNode *root)
+{
+    // Store level order traversal
+    vector<vector<TreeNode *>> levelOrder;
+    queue<TreeNode *> todo;
+    todo.push(root);
+    // Level with the maximum nodes
+    int maxNodeLevel = 0;
+    int maxNodeCount = 0;
+    // Current level
+    int level = -1;
+    while (!todo.empty())
+    {
+        // Increment the level by 1
+        level += 1;
+        int size = todo.size();
+        // Collect the nodes on current level
+        vector<TreeNode *> currentLevel;
+        bool isAllNull = true;
+        int currentNodeCount = 0;
+        for (int i = 1; i <= size; i++)
+        {
+            TreeNode *node = todo.front();
+            if (node != nullptr)
+            {
+                currentNodeCount += 1;
+                isAllNull = false;
+            }
+            todo.pop();
+            currentLevel.push_back(node);
+            if (node == nullptr)
+            {
+                todo.push(nullptr);
+                todo.push(nullptr);
+                continue;
+            }
+            if (node->left)
+                todo.push(node->left);
+            else
+                todo.push(nullptr);
+            if (node->right)
+                todo.push(node->right);
+            else
+                todo.push(nullptr);
+        }
+        if (isAllNull == true)
+        {
+            break;
+        }
+        //  If currentNodeCount is greater than the maxNodeCount update the maxNodeLevel and maxNodeCount
+        if (currentNodeCount >= maxNodeCount)
+        {
+            maxNodeLevel = level;
+            maxNodeCount = currentNodeCount;
+        }
+        levelOrder.push_back(currentLevel);
+    }
+    vector<TreeNode *> levelWithMaxNode = levelOrder[maxNodeLevel];
+    int maxWidth = levelWithMaxNode.size();
+    int i = 0;
+    // Ignore all the null nodes from the front
+    while (levelWithMaxNode[i] == nullptr)
+    {
+        maxWidth -= 1;
+        i += 1;
+    }
+    // Ignore all the nodes from the back
+    i = levelWithMaxNode.size() - 1;
+    while (levelWithMaxNode[i] == nullptr)
+    {
+        maxWidth -= 1;
+        i -= 1;
+    }
+    return maxWidth;
+}
+// ---------------- TUF -------------------
+// '0' based indexing
+// Left : 2 * Index + 1;
+// Right : 2 * Index + 2;
+// Root Index : 0
+// ----------------------
+// '1' based indexing
+// Left : 2 * Index;
+// Right : 2 * Index + 1;
+// Root Index : 1
+int widthOfBinaryTreeTuf(TreeNode *root)
+{
+    // If the root is null, the width is zero:
+    if (root == nullptr)
+    {
+        return 0;
+    }
+    // Initialize a variable 'maxWidth' to store the maximum width:
+    int maxWidth = 0;
+    // Create a queue to perform level-order traversal, where each element is a pair of TreeNode* and its position in the level:
+    // queue<pair<TreeNode *, position>> todo;
+    queue<pair<TreeNode *, int>> todo;
+    // Push the root node and its position (0) into the queue:
+    todo.push({root, 0});
+    // Perform level-order traversal:
+    while (!todo.empty())
+    {
+        // Get the number of nodes at the current level:
+        int size = todo.size();
+        // Get the position of the front node in the current level:
+        int minValueOfLevel = todo.front().second;
+        // Store the first and last positions of nodes in the current level:
+        int firstPosition, lastPosition;
+        // Process each node in the current level:
+        for (int i = 0; i < size; i++)
+        {
+            // Calculate current position relative to the minimum position in the level:
+            long long currPosition = todo.front().second - minValueOfLevel;
+            // Get the current node:
+            TreeNode *node = todo.front().first;
+            // Pop the front node from the queue:
+            todo.pop();
+            // If this is the first node in the level, update the 'firstPosition' variable:
+            if (i == 0)
+            {
+                firstPosition = currPosition;
+            }
+            // If this is the last node in the level, update the 'lastPosition' variable:
+            if (i == size - 1)
+            {
+                lastPosition = currPosition;
+            }
+            // Enqueue the left child of the current node with its position:
+            if (node->left)
+            {
+                todo.push({node->left, 2 * currPosition + 1});
+            }
+            // Enqueue the right child of the current node with its position:
+            if (node->right)
+            {
+                todo.push({node->right, 2 * currPosition + 2});
+            }
+        }
+        // Update the maximum width by calculating the difference between the first and last positions, and adding 1:
+        maxWidth = max(maxWidth, (lastPosition - firstPosition) + 1);
+    }
+    // Return the maximum width of the binary tree:
+    return maxWidth;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    TreeNode *root = new TreeNode(3);
-    root->left = new TreeNode(5);
-    root->right = new TreeNode(1);
-    root->left->left = new TreeNode(6);
-    root->left->right = new TreeNode(2);
-    root->left->right->left = new TreeNode(7);
-    root->left->right->right = new TreeNode(4);
-    root->right->left = new TreeNode(0);
-    root->right->right = new TreeNode(8);
-    TreeNode *p = root->left;
-    TreeNode *q = root->left->right->right;
-    TreeNode *lowestAncestor = lowestCommonAncestorTuf(root, p, q);
-    cout << lowestAncestor->val;
+    TreeNode *root = new TreeNode(1);
+    root->left = new TreeNode(3);
+    root->right = new TreeNode(2);
+    root->left->left = new TreeNode(5);
+    root->left->left->left = new TreeNode(6);
+    root->right->right = new TreeNode(9);
+    root->right->right->left = new TreeNode(7);
+    cout << widthOfBinaryTree(root);
     cout << endl
          << string(35, '-') << endl;
     return 0;
