@@ -1680,25 +1680,76 @@ int widthOfBinaryTreeTuf(TreeNode *root)
     // Return the maximum width of the binary tree:
     return maxWidth;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(1);
+//     root->left = new TreeNode(2);
+//     root->left->left = new TreeNode(4);
+//     root->left->left->left = new TreeNode(8);
+//     root->left->left->right = new TreeNode(9);
+//     root->left->right = new TreeNode(5);
+//     root->left->right->left = new TreeNode(10);
+//     root->left->right->right = new TreeNode(11);
+//     root->right = new TreeNode(3);
+//     root->right->left = new TreeNode(6);
+//     root->right->left->left = new TreeNode(12);
+//     root->right->left->right = new TreeNode(13);
+//     root->right->right = new TreeNode(7);
+//     root->right->right->left = new TreeNode(14);
+//     root->right->right->right = new TreeNode(15);
+//     cout << widthOfBinaryTreeTuf(root);
+//     cout << endl
+//          << string(35, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------- 662. Maximum Width of Binary Tree ---------------------------------------------------------------------
+int isSumPropertyHelper(TreeNode *root)
+{
+    if (root == nullptr)
+    {
+        return 0;
+    }
+    int left = isSumPropertyHelper(root->left);
+    if (left == -1)
+    {
+        return -1;
+    }
+    int right = isSumPropertyHelper(root->right);
+    if (right == -1)
+    {
+        return -1;
+    }
+    if (left + right == 0)
+    {
+        return root->val;
+    }
+    if (left + right != root->val)
+    {
+        return -1;
+    }
+    return root->val;
+}
+int isSumProperty(TreeNode *root)
+{
+    if (root == nullptr)
+    {
+        return 0;
+    }
+    int result = isSumPropertyHelper(root);
+    return result == -1 ? 0 : 1;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    TreeNode *root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->left->left = new TreeNode(4);
-    root->left->left->left = new TreeNode(8);
-    root->left->left->right = new TreeNode(9);
+    TreeNode *root = new TreeNode(35);
+    root->left = new TreeNode(20);
+    root->left->left = new TreeNode(15);
     root->left->right = new TreeNode(5);
-    root->left->right->left = new TreeNode(10);
-    root->left->right->right = new TreeNode(11);
-    root->right = new TreeNode(3);
-    root->right->left = new TreeNode(6);
-    root->right->left->left = new TreeNode(12);
-    root->right->left->right = new TreeNode(13);
-    root->right->right = new TreeNode(7);
-    root->right->right->left = new TreeNode(14);
-    root->right->right->right = new TreeNode(15);
-    cout << widthOfBinaryTreeTuf(root);
+    root->right = new TreeNode(15);
+    root->right->left = new TreeNode(10);
+    root->right->right = new TreeNode(5);
+    cout << isSumProperty(root);
     cout << endl
          << string(35, '-') << endl;
     return 0;
