@@ -1739,17 +1739,109 @@ int isSumProperty(TreeNode *root)
     int result = isSumPropertyHelper(root);
     return result == -1 ? 0 : 1;
 }
+// int main()
+// {
+//     cout << string(35, '-') << endl;
+//     TreeNode *root = new TreeNode(35);
+//     root->left = new TreeNode(20);
+//     root->left->left = new TreeNode(15);
+//     root->left->right = new TreeNode(5);
+//     root->right = new TreeNode(15);
+//     root->right->left = new TreeNode(10);
+//     root->right->right = new TreeNode(5);
+//     cout << isSumProperty(root);
+//     cout << endl
+//          << string(35, '-') << endl;
+//     return 0;
+// }
+// --------------------------------------------------------------- 662. Maximum Width of Binary Tree ---------------------------------------------------------------------
+void makeParents(TreeNode *root, unordered_map<TreeNode *, TreeNode *> &parent_track, TreeNode *target)
+{
+    queue<TreeNode *> todo;
+    todo.push(root);
+    while (!todo.empty())
+    {
+        TreeNode *current = todo.front();
+        todo.pop();
+        if (current->left)
+        {
+            parent_track[current->left] = current;
+            todo.push(current->left);
+        }
+        if (current->right)
+        {
+            parent_track[current->right] = current;
+            todo.push(current->right);
+        }
+    }
+}
+vector<int> distanceK(TreeNode *root, TreeNode *target, int k)
+{
+    // node -> parent
+    unordered_map<TreeNode *, TreeNode *> parent_track;
+    makeParents(root, parent_track, target);
+    unordered_map<TreeNode *, bool> visited;
+    queue<TreeNode *> todo;
+    todo.push(target);
+    visited[target] = true;
+    int current_level = 0;
+    // Second BFS to go upto K level from target node, using our hashtable info. i.e parent_track:
+    while (!todo.empty())
+    {
+        int size = todo.size();
+        if (current_level == k)
+        {
+            break;
+        }
+        current_level += 1;
+        for (int i = 0; i < size; i++)
+        {
+            TreeNode *current = todo.front();
+            todo.pop();
+            if (current->left && !visited[current->left])
+            {
+                todo.push(current->left);
+                visited[current->left] = true;
+            }
+            if (current->right && !visited[current->right])
+            {
+                todo.push(current->right);
+                visited[current->right] = true;
+            }
+            if (parent_track[current] && !visited[parent_track[current]])
+            {
+                todo.push(parent_track[current]);
+                visited[parent_track[current]] = true;
+            }
+        }
+    }
+    vector<int> result;
+    while (!todo.empty())
+    {
+        TreeNode *current = todo.front();
+        todo.pop();
+        result.push_back(current->val);
+    }
+    return result;
+}
 int main()
 {
     cout << string(35, '-') << endl;
-    TreeNode *root = new TreeNode(35);
-    root->left = new TreeNode(20);
-    root->left->left = new TreeNode(15);
-    root->left->right = new TreeNode(5);
-    root->right = new TreeNode(15);
-    root->right->left = new TreeNode(10);
-    root->right->right = new TreeNode(5);
-    cout << isSumProperty(root);
+    TreeNode *root = new TreeNode(3);
+    root->left = new TreeNode(5);
+    root->left->left = new TreeNode(6);
+    root->left->right = new TreeNode(2);
+    root->left->right->left = new TreeNode(7);
+    root->left->right->right = new TreeNode(4);
+    root->right = new TreeNode(1);
+    root->right->left = new TreeNode(0);
+    root->right->right = new TreeNode(8);
+    TreeNode *target = root->left;
+    vector<int> result = distanceK(root, target, 2);
+    for (auto item : result)
+    {
+        cout << item << ", ";
+    }
     cout << endl
          << string(35, '-') << endl;
     return 0;
