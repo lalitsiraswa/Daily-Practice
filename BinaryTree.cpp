@@ -1690,7 +1690,7 @@ int main()
     root->left->left->left = new TreeNode(6);
     root->right->right = new TreeNode(9);
     root->right->right->left = new TreeNode(7);
-    cout << widthOfBinaryTree(root);
+    cout << widthOfBinaryTreeTuf(root);
     cout << endl
          << string(35, '-') << endl;
     return 0;
