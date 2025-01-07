@@ -67,12 +67,56 @@ int findContentChildrenTuf(vector<int> &greed, vector<int> &cookieSize)
     // The value of r at the end of the loop represents the number of children that were satisfied:
     return greedPointer;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> greed = {1, 5, 3, 3, 4};
+//     vector<int> cookieSize = {4, 2, 1, 2, 1, 3};
+//     cout << findContentChildrenTuf(greed, cookieSize);
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------------- Fractional Knapsack ---------------------------------------------------------------------------
+bool customComparator(pair<int, int> &a, pair<int, int> &b)
+{
+    double result1 = (double)a.first / (double)a.second;
+    double result2 = (double)b.first / (double)b.second;
+    return result1 > result2;
+}
+double fractionalKnapsack(vector<int> &val, vector<int> &wt, int capacity)
+{
+    // vector<pair<value, weight>> items;
+    vector<pair<int, int>> items;
+    for (int index = 0; index < val.size(); index++)
+    {
+        items.push_back(pair<int, int>{val.at(index), wt.at(index)});
+    }
+    sort(items.begin(), items.end(), customComparator);
+    int currentWeight = 0;
+    double finalValue = 0.0;
+    for (int index = 0; index < val.size(); index++)
+    {
+        if (currentWeight + items[index].second <= capacity)
+        {
+            currentWeight += items[index].second;
+            finalValue += items[index].first;
+        }
+        else
+        {
+            int remain = capacity - currentWeight;
+            finalValue += (items[index].first / (double)items[index].second) * (double)remain;
+            break;
+        }
+    }
+    return finalValue;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> greed = {1, 5, 3, 3, 4};
-    vector<int> cookieSize = {4, 2, 1, 2, 1, 3};
-    cout << findContentChildrenTuf(greed, cookieSize);
+    vector<int> val = {100, 60, 100, 200};
+    vector<int> wt = {20, 10, 50, 50};
+    int capacity = 90;
+    cout << fractionalKnapsack(val, wt, capacity);
     cout << endl
          << string(30, '-');
 }
