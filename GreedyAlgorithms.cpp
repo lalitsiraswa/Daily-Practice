@@ -110,13 +110,42 @@ double fractionalKnapsack(vector<int> &val, vector<int> &wt, int capacity)
     }
     return finalValue;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> val = {100, 60, 100, 200};
+//     vector<int> wt = {20, 10, 50, 50};
+//     int capacity = 90;
+//     cout << fractionalKnapsack(val, wt, capacity);
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------------- Greedy algorithm to find minimum number of coins ---------------------------------------------------------------------------
+vector<int> minPartition(int N)
+{
+    vector<int> currency = {2000, 500, 200, 100, 50, 20, 10, 5, 2, 1};
+    vector<int> minCurrency;
+    int index = 0;
+    while (index < currency.size())
+    {
+        if (currency[index] > N)
+        {
+            index++;
+            continue;
+        }
+        minCurrency.push_back(currency[index]);
+        N -= currency[index];
+    }
+    return minCurrency;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> val = {100, 60, 100, 200};
-    vector<int> wt = {20, 10, 50, 50};
-    int capacity = 90;
-    cout << fractionalKnapsack(val, wt, capacity);
+    vector<int> minCoins = minPartition(1000);
+    for (auto item : minCoins)
+    {
+        cout << item << ", ";
+    }
     cout << endl
          << string(30, '-');
 }
