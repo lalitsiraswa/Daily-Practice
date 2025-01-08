@@ -138,14 +138,114 @@ vector<int> minPartition(int N)
     }
     return minCurrency;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> minCoins = minPartition(1000);
+//     for (auto item : minCoins)
+//     {
+//         cout << item << ", ";
+//     }
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------------- 860. Lemonade Change ---------------------------------------------------------------------------
+bool lemonadeChange(vector<int> &bills)
+{
+    unordered_map<int, int> dollerFrequency;
+    for (int i = 0; i < bills.size(); i++)
+    {
+        dollerFrequency[bills[i]] += 1;
+        int requiredChange = bills[i] - 5;
+        while (requiredChange != 0)
+        {
+            // We always first check for the 10 then 5: try to dry-run the eg: [5, 5, 5, 10, 20], by
+            // 1. once consider 10 as the first check then 5 as the other check and
+            // 2. once consider 5 as the first check then 10 as the other check:
+            if (10 <= requiredChange && dollerFrequency[10] > 0)
+            {
+                dollerFrequency[10] -= 1;
+                requiredChange -= 10;
+            }
+            else if (5 <= requiredChange && dollerFrequency[5] > 0)
+            {
+                dollerFrequency[5] -= 1;
+                requiredChange -= 5;
+            }
+            // If it is not possible to return the required change to the customer return false:
+            else
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+// ----------------------
+bool lemonadeChangeTuf(vector<int> &bills)
+{
+    // Initialize a counter for $5 bills:
+    int dollerFiveCount = 0;
+    // Initialize a counter for $10 bills:
+    int dollerTenCount = 0;
+    // Iterate through each customer's bill;
+    for (int i = 0; i < bills.size(); i++)
+    {
+        // If the customer's bill is $5:
+        if (bills[i] == 5)
+        {
+            // Increment the count of $5 bills:
+            dollerFiveCount += 1;
+        }
+        // If the customer's bill is $10:
+        else if (bills[i] == 10)
+        {
+            // Check if there are $5 bills available to give change:
+            if (dollerFiveCount)
+            {
+                // Use one $5 bill to give change:
+                dollerFiveCount -= 1;
+                // Receive one $10 bill:
+                dollerTenCount += 1;
+            }
+            // If no $5 bill available, return false:
+            else
+            {
+                return false;
+            }
+        }
+        // If the customer's bill is $20:
+        else
+        {
+            // Check if there are both $5 and $10 bills available to give change:
+            if (dollerFiveCount && dollerTenCount)
+            {
+                // Use one $5 bill:
+                dollerFiveCount -= 1;
+                // Use one $10 bill
+                dollerTenCount -= 1;
+            }
+            // If there are not enough $10 bills, check if there are at least three $5 bills available:
+            else if (dollerFiveCount >= 3)
+            {
+                // Use three $5 bills to give change:
+                dollerFiveCount -= 3;
+            }
+            // If unable to give change, return false:
+            else
+            {
+                return false;
+            }
+        }
+    }
+    // Return true if all customers are served with correct change:
+    return true;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> minCoins = minPartition(1000);
-    for (auto item : minCoins)
-    {
-        cout << item << ", ";
-    }
+    vector<int> bills = {5, 5, 5, 10, 20};
+    cout << lemonadeChangeTuf(bills);
     cout << endl
          << string(30, '-');
 }
