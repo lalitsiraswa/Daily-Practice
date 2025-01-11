@@ -413,11 +413,87 @@ long long solveOtherWay(vector<int> &bt)
     }
     return totalWatingTime / n;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> burstTime = {4, 3, 7, 1, 2};
+//     cout << solveOtherWay(burstTime);
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------------- 55. Jump Game ---------------------------------------------------------------------------
+bool canJump(vector<int> &nums, int index, vector<int> &dp)
+{
+    if (index >= nums.size() - 1)
+    {
+        return true;
+    }
+    if (dp[index] != -1)
+    {
+        return dp[index];
+    }
+    for (int i = 1; i <= nums[index]; i++)
+    {
+        if (canJump(nums, index + i, dp))
+        {
+            return dp[index] = true;
+        }
+    }
+    return dp[index] = false;
+}
+bool canJump(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> dp(n, -1);
+    return canJump(nums, 0, dp);
+}
+// --------------------------
+bool canJumpTabulation(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> dp(n, 0);
+    dp[n - 1] = 1;
+    for (int index = n - 2; index >= 0; index--)
+    {
+        bool result = false;
+        for (int i = 1; i <= nums[index]; i++)
+        {
+            if (index + i < n)
+            {
+                result = result || dp[index + i];
+            }
+        }
+        dp[index] = result;
+    }
+    return dp[0];
+}
+// --------------------------
+bool canJumpTuf(vector<int> &nums)
+{
+    // Initialize the maximum index that can be reached:
+    int maxIndex = 0;
+    // Iterate through each index of the array:
+    for (int index = 0; index < nums.size(); index++)
+    {
+        // If the current index is greater than the maximum reachable index
+        // it means we cannot move forward and should return false:
+        if (index > maxIndex)
+        {
+            return false;
+        }
+        // Update the maximum index that can be reached by comparing
+        // the current maxIndex with the sum of the current index and the
+        // maximum jump from that index:
+        maxIndex = max(maxIndex, index + nums[index]);
+    }
+    // If we complete the loop, it means we can reach the last index:
+    return true;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> burstTime = {4, 3, 7, 1, 2};
-    cout << solveOtherWay(burstTime);
+    vector<int> nums = {1, 2, 4, 1, 10, 2, 5};
+    cout << canJumpTabulation(nums);
     cout << endl
          << string(30, '-');
 }
