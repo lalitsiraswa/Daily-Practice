@@ -375,11 +375,49 @@ bool checkValidStringSpaceOptimization(string s)
     }
     return previous[0];
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string s = "(*()";
+//     cout << checkValidStringSpaceOptimization(s);
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------------- Job Sequencing Problem ---------------------------------------------------------------------------
+long long solve(vector<int> &bt)
+{
+    sort(bt.begin(), bt.end());
+    int n = bt.size();
+    vector<int> waitingTime(n);
+    waitingTime[0] = 0;
+    for (int index = 1; index < n; index++)
+    {
+        waitingTime[index] = waitingTime[index - 1] + bt[index - 1];
+    }
+    int totalWatingTime = accumulate(waitingTime.begin(), waitingTime.end(), 0);
+    return totalWatingTime / n;
+}
+// -------------------
+long long solveOtherWay(vector<int> &bt)
+{
+    sort(bt.begin(), bt.end());
+    int n = bt.size();
+    int totalWatingTime = 0;
+    int currentWaitingTime = 0;
+    int previousWaitingTime = 0;
+    for (int index = 1; index < n; index++)
+    {
+        currentWaitingTime = previousWaitingTime + bt[index - 1];
+        totalWatingTime += currentWaitingTime;
+        previousWaitingTime = currentWaitingTime;
+    }
+    return totalWatingTime / n;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    string s = "(*()";
-    cout << checkValidStringSpaceOptimization(s);
+    vector<int> burstTime = {4, 3, 7, 1, 2};
+    cout << solveOtherWay(burstTime);
     cout << endl
          << string(30, '-');
 }
