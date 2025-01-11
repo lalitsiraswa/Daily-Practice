@@ -241,11 +241,145 @@ bool lemonadeChangeTuf(vector<int> &bills)
     // Return true if all customers are served with correct change:
     return true;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> bills = {5, 5, 5, 10, 20};
+//     cout << lemonadeChangeTuf(bills);
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------------- 678. Valid Parenthesis String ---------------------------------------------------------------------------
+bool checkValidString(string s, int index, int count, vector<vector<int>> &dp)
+{
+    if (count < 0)
+    {
+        return false;
+    }
+    if (index == s.size())
+    {
+        return dp[index][count] = count == 0;
+    }
+    if (dp[index][count] != -1)
+    {
+        return dp[index][count];
+    }
+    if (s[index] == '(')
+    {
+        return dp[index][count] = checkValidString(s, index + 1, count + 1, dp);
+    }
+    if (s[index] == ')')
+    {
+        return dp[index][count] = checkValidString(s, index + 1, count - 1, dp);
+    }
+    // s[index] == '*':
+    return dp[index][count] = checkValidString(s, index + 1, count + 1, dp) || checkValidString(s, index + 1, count - 1, dp) || checkValidString(s, index + 1, count, dp);
+}
+bool checkValidString(string s)
+{
+    int n = s.size();
+    vector<vector<int>> dp(n + 1, vector<int>(n + 1, -1));
+    return dp[0][0];
+}
+// ------------------------
+bool checkValidStringTabulation(string s)
+{
+    int n = s.size();
+    vector<vector<int>> dp(n + 1, vector<int>(n + 1, -1));
+    for (int count = 0; count <= n; count++)
+    {
+        dp[n][count] = count == 0;
+    }
+    for (int index = n - 1; index >= 0; index--)
+    {
+        for (int count = 0; count <= n; count++)
+        {
+            int result = 0;
+            if (s[index] == '(')
+            {
+                if (count < n)
+                {
+                    result = dp[index + 1][count + 1];
+                }
+            }
+            else if (s[index] == ')')
+            {
+                if (count > 0)
+                {
+                    result = dp[index + 1][count - 1];
+                }
+            }
+            // s[index] == '*':
+            else
+            {
+                if (count < n)
+                {
+                    result = dp[index + 1][count + 1];
+                }
+                if (count > 0)
+                {
+                    result = result || dp[index + 1][count - 1];
+                }
+                result = result || dp[index + 1][count];
+            }
+            dp[index][count] = result;
+        }
+    }
+    return dp[0][0];
+}
+// ------------------------
+bool checkValidStringSpaceOptimization(string s)
+{
+    int n = s.size();
+    vector<int> previous(n + 1, -1);
+    for (int count = 0; count <= n; count++)
+    {
+        previous[count] = count == 0;
+    }
+    for (int index = n - 1; index >= 0; index--)
+    {
+        vector<int> current(n + 1, -1);
+        for (int count = 0; count <= n; count++)
+        {
+            int result = 0;
+            if (s[index] == '(')
+            {
+                if (count < n)
+                {
+                    result = previous[count + 1];
+                }
+            }
+            else if (s[index] == ')')
+            {
+                if (count > 0)
+                {
+                    result = previous[count - 1];
+                }
+            }
+            // s[index] == '*':
+            else
+            {
+                if (count < n)
+                {
+                    result = previous[count + 1];
+                }
+                if (count > 0)
+                {
+                    result = result || previous[count - 1];
+                }
+                result = result || previous[count];
+            }
+            current[count] = result;
+        }
+        previous = current;
+    }
+    return previous[0];
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> bills = {5, 5, 5, 10, 20};
-    cout << lemonadeChangeTuf(bills);
+    string s = "(*()";
+    cout << checkValidStringSpaceOptimization(s);
     cout << endl
          << string(30, '-');
 }
