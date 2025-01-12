@@ -554,6 +554,9 @@ int jumpTabulation(vector<int> &nums)
     return dp[0];
 }
 // ------------------------------
+// Dry-Run the below examples
+// [2, 3, 1, 4, 1, 1, 1, 2]
+// [3, 4, 5, 2, 3, 1, 4, 2]
 int jumpGreedy(vector<int> &nums)
 {
     int minJumps = 0;
