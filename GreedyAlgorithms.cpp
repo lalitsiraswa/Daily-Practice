@@ -614,16 +614,16 @@ vector<int> JobSequencing(vector<int> &id, vector<int> &deadline, vector<int> &p
     {
         maxDeadline = max(maxDeadline, jobs[index].deadline);
     }
-    vector<int> slot(maxDeadline + 1, -1);
+    vector<int> slotDays(maxDeadline + 1, -1);
     int countJobs = 0;
     int jobProfit = 0;
     for (int index = 0; index < jobs.size(); index++)
     {
-        for (int j = jobs[index].deadline; j > 0; j--)
+        for (int day = jobs[index].deadline; day > 0; day--)
         {
-            if (slot[j] == -1)
+            if (slotDays[day] == -1)
             {
-                slot[j] = jobs[index].id;
+                slotDays[day] = jobs[index].id;
                 countJobs += 1;
                 jobProfit += jobs[index].profit;
                 break;
