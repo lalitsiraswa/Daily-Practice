@@ -489,11 +489,93 @@ bool canJumpTuf(vector<int> &nums)
     // If we complete the loop, it means we can reach the last index:
     return true;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {1, 2, 4, 1, 10, 2, 5};
+//     cout << canJumpTabulation(nums);
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------------- 45. Jump Game II ---------------------------------------------------------------------------
+int jump(vector<int> &nums, int index, vector<int> &dp)
+{
+    if (index >= nums.size() - 1)
+    {
+        return 0;
+    }
+    if (nums[index] == 0)
+    {
+        return dp[index] = INT_MAX;
+    }
+    if (dp[index] != -1)
+    {
+        return dp[index];
+    }
+    int minJumps = INT_MAX;
+    for (int i = 1; i <= nums[index]; i++)
+    {
+        int currentJumps = jump(nums, index + i, dp);
+        if (currentJumps != INT_MAX && currentJumps + 1 < minJumps)
+        {
+            minJumps = currentJumps + 1;
+        }
+    }
+    return dp[index] = minJumps;
+}
+int jump(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> dp(n, -1);
+    return jump(nums, 0, dp);
+}
+// ------------------------------
+int jumpTabulation(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> dp(n, -1);
+    dp[n - 1] = 0;
+    for (int index = n - 2; index >= 0; index--)
+    {
+        int minJumps = INT_MAX;
+        for (int i = 1; i <= nums[index]; i++)
+        {
+            if (index + i < n)
+            {
+                int currentJumps = dp[index + i];
+                if (currentJumps != INT_MAX && currentJumps + 1 < minJumps)
+                {
+                    minJumps = currentJumps + 1;
+                }
+            }
+        }
+        dp[index] = minJumps;
+    }
+    return dp[0];
+}
+// ------------------------------
+int jumpGreedy(vector<int> &nums)
+{
+    int minJumps = 0;
+    int currentEnd = 0;
+    int currentFarthest = 0;
+    for (int index = 0; index < nums.size() - 1; index++)
+    {
+        currentFarthest = max(currentFarthest, index + nums[index]);
+        if (index == currentEnd)
+        {
+            minJumps += 1;
+            currentEnd = currentFarthest;
+        }
+    }
+    return minJumps;
+}
+
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {1, 2, 4, 1, 10, 2, 5};
-    cout << canJumpTabulation(nums);
+    vector<int> nums = {2, 3, 1, 1, 4};
+    cout << jumpGreedy(nums);
     cout << endl
          << string(30, '-');
 }
