@@ -574,11 +574,72 @@ int jumpGreedy(vector<int> &nums)
     return minJumps;
 }
 
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {2, 3, 1, 1, 4};
+//     cout << jumpGreedy(nums);
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------------- Job Sequencing Problem ---------------------------------------------------------------------------
+// A structure to represent a job :
+struct Job
+{
+    // Job Id:
+    int id;
+    // Deadline of job:
+    int deadline;
+    // Profit if job is over before or on deadline:
+    int profit;
+    Job(int id, int deadline, int profit) : id(id), deadline(deadline), profit(profit) {};
+};
+bool jobComparator(Job a, Job b)
+{
+    return a.profit > b.profit;
+}
+vector<int> JobSequencing(vector<int> &id, vector<int> &deadline, vector<int> &profit)
+{
+    int n = id.size();
+    vector<Job> jobs;
+    for (int index = 0; index < n; index++)
+    {
+        jobs.push_back(Job(id[index], deadline[index], profit[index]));
+    }
+    // Now short the jobs based on the profit (descending order)
+    sort(jobs.begin(), jobs.end(), jobComparator);
+    // Find the max deadline
+    int maxDeadline = 0;
+    for (int index = 0; index < n; index++)
+    {
+        maxDeadline = max(maxDeadline, jobs[index].deadline);
+    }
+    vector<int> slot(maxDeadline + 1, -1);
+    int countJobs = 0;
+    int jobProfit = 0;
+    for (int index = 0; index < jobs.size(); index++)
+    {
+        for (int j = jobs[index].deadline; j > 0; j--)
+        {
+            if (slot[j] == -1)
+            {
+                slot[j] = jobs[index].id;
+                countJobs += 1;
+                jobProfit += jobs[index].profit;
+                break;
+            }
+        }
+    }
+    return {countJobs, jobProfit};
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {2, 3, 1, 1, 4};
-    cout << jumpGreedy(nums);
+    vector<int> id = {1, 2, 3, 4};
+    vector<int> deadline = {4, 1, 1, 1};
+    vector<int> profit = {20, 1, 40, 30};
+    vector<int> result = JobSequencing(id, deadline, profit);
+    cout << "{" << result[0] << ", " << result[1] << "}";
     cout << endl
          << string(30, '-');
 }
