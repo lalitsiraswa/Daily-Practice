@@ -632,14 +632,63 @@ vector<int> JobSequencing(vector<int> &id, vector<int> &deadline, vector<int> &p
     }
     return {countJobs, jobProfit};
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> id = {1, 2, 3, 4};
+//     vector<int> deadline = {4, 1, 1, 1};
+//     vector<int> profit = {20, 1, 40, 30};
+//     vector<int> result = JobSequencing(id, deadline, profit);
+//     cout << "{" << result[0] << ", " << result[1] << "}";
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------------- N meetings in one room ---------------------------------------------------------------------------
+struct Meeting
+{
+    int start;
+    int end;
+    int position;
+    Meeting(int start, int end, int position) : start(start), end(end), position(position) {};
+};
+bool meetingComparator(Meeting &m1, Meeting m2)
+{
+    if (m1.end < m2.end)
+        return true;
+    else if (m1.end > m2.end)
+        return false;
+    else if (m1.position < m2.position)
+        return true;
+    return false;
+}
+int maxMeetings(vector<int> &start, vector<int> &end)
+{
+    int n = start.size();
+    vector<Meeting> meetings;
+    for (int index = 0; index < n; index++)
+    {
+        meetings.push_back(Meeting(start[index], end[index], index + 1));
+    }
+    sort(meetings.begin(), meetings.end(), meetingComparator);
+    vector<int> meetingOrder;
+    int previousMeetingEndTime = meetings[0].end;
+    meetingOrder.push_back(meetings[0].position);
+    for (int index = 1; index < n; index++)
+    {
+        if (meetings[index].start > previousMeetingEndTime)
+        {
+            previousMeetingEndTime = meetings[index].end;
+            meetingOrder.push_back(meetings[index].position);
+        }
+    }
+    return meetingOrder.size();
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> id = {1, 2, 3, 4};
-    vector<int> deadline = {4, 1, 1, 1};
-    vector<int> profit = {20, 1, 40, 30};
-    vector<int> result = JobSequencing(id, deadline, profit);
-    cout << "{" << result[0] << ", " << result[1] << "}";
+    vector<int> start = {1, 3, 0, 5, 8, 5};
+    vector<int> end = {2, 4, 6, 7, 9, 9};
+    cout << maxMeetings(start, end);
     cout << endl
          << string(30, '-');
 }
