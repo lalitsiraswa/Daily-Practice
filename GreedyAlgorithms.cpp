@@ -782,12 +782,47 @@ vector<vector<int>> insertOtherWay(vector<vector<int>> &intervals, vector<int> &
     result.push_back(newInterval);
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<vector<int>> intervals = {{1, 2}, {3, 5}, {6, 7}, {8, 10}, {12, 16}};
+//     vector<int> newInterval = {4, 8};
+//     intervals = insertOtherWay(intervals, newInterval);
+//     for (int i = 0; i < intervals.size(); i++)
+//     {
+//         cout << "{" << intervals[i][0] << ", " << intervals[i][1] << "}" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------------- 56. Merge Intervals ---------------------------------------------------------------------------
+vector<vector<int>> merge(vector<vector<int>> &intervals)
+{
+    vector<vector<int>> result;
+    int n = intervals.size();
+    sort(intervals.begin(), intervals.end());
+    vector<int> interval = intervals[0];
+    for (int i = 1; i < n; i++)
+    {
+        if (intervals[i][0] <= interval[1])
+        {
+            interval[0] = min(interval[0], intervals[i][0]);
+            interval[1] = max(interval[1], intervals[i][1]);
+        }
+        else
+        {
+            result.push_back(interval);
+            interval = intervals[i];
+        }
+    }
+    result.push_back(interval);
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<vector<int>> intervals = {{1, 2}, {3, 5}, {6, 7}, {8, 10}, {12, 16}};
-    vector<int> newInterval = {4, 8};
-    intervals = insertOtherWay(intervals, newInterval);
+    vector<vector<int>> intervals = {{1, 3}, {2, 6}, {8, 10}, {15, 18}};
+    intervals = merge(intervals);
     for (int i = 0; i < intervals.size(); i++)
     {
         cout << "{" << intervals[i][0] << ", " << intervals[i][1] << "}" << endl;
