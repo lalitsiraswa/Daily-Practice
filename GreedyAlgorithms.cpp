@@ -683,12 +683,42 @@ int maxMeetings(vector<int> &start, vector<int> &end)
     }
     return meetingOrder.size();
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> start = {1, 3, 0, 5, 8, 5};
+//     vector<int> end = {2, 4, 6, 7, 9, 9};
+//     cout << maxMeetings(start, end);
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------------- 435. Non-overlapping Intervals ---------------------------------------------------------------------------
+bool intervalComparator(vector<int> &a, vector<int> &b)
+{
+    return a[1] < b[1];
+}
+int eraseOverlapIntervals(vector<vector<int>> &intervals)
+{
+    int n = intervals.size();
+    sort(intervals.begin(), intervals.end(), intervalComparator);
+    vector<int> currentInterval = intervals[0];
+    int eraseCount = 0;
+    for (int index = 1; index < n; index++)
+    {
+        if (intervals[index][0] >= currentInterval[1])
+        {
+            currentInterval = intervals[index];
+            continue;
+        }
+        eraseCount += 1;
+    }
+    return eraseCount;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> start = {1, 3, 0, 5, 8, 5};
-    vector<int> end = {2, 4, 6, 7, 9, 9};
-    cout << maxMeetings(start, end);
+    vector<vector<int>> intervals = {{1, 2}, {2, 3}, {3, 4}, {1, 3}};
+    cout << eraseOverlapIntervals(intervals);
     cout << endl
          << string(30, '-');
 }
