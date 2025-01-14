@@ -714,11 +714,84 @@ int eraseOverlapIntervals(vector<vector<int>> &intervals)
     }
     return eraseCount;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<vector<int>> intervals = {{1, 2}, {2, 3}, {3, 4}, {1, 3}};
+//     cout << eraseOverlapIntervals(intervals);
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------------- 57. Insert Interval ---------------------------------------------------------------------------
+vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInterval)
+{
+    int n = intervals.size();
+    vector<vector<int>> result;
+    int index = 0;
+    while (index < n)
+    {
+        if (intervals[index][1] < newInterval[0])
+        {
+            result.push_back(intervals[index]);
+            index += 1;
+            continue;
+        }
+        break;
+    }
+    while (index < n)
+    {
+        if (intervals[index][0] <= newInterval[1])
+        {
+            newInterval[0] = min(newInterval[0], intervals[index][0]);
+            newInterval[1] = max(newInterval[1], intervals[index][1]);
+            index += 1;
+            continue;
+        }
+        break;
+    }
+    result.push_back(newInterval);
+    while (index < n)
+    {
+        result.push_back(intervals[index]);
+        index += 1;
+    }
+    return result;
+}
+// ----------------------
+vector<vector<int>> insertOtherWay(vector<vector<int>> &intervals, vector<int> &newInterval)
+{
+    int n = intervals.size();
+    vector<vector<int>> result;
+    for (int index = 0; index < n; index++)
+    {
+        if (intervals[index][1] < newInterval[0])
+        {
+            result.push_back(intervals[index]);
+        }
+        else if (intervals[index][0] <= newInterval[1])
+        {
+            newInterval[0] = min(newInterval[0], intervals[index][0]);
+            newInterval[1] = max(newInterval[1], intervals[index][1]);
+        }
+        else
+        {
+            result.push_back(newInterval);
+            newInterval = intervals[index];
+        }
+    }
+    result.push_back(newInterval);
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<vector<int>> intervals = {{1, 2}, {2, 3}, {3, 4}, {1, 3}};
-    cout << eraseOverlapIntervals(intervals);
+    vector<vector<int>> intervals = {{1, 2}, {3, 5}, {6, 7}, {8, 10}, {12, 16}};
+    vector<int> newInterval = {4, 8};
+    intervals = insertOtherWay(intervals, newInterval);
+    for (int i = 0; i < intervals.size(); i++)
+    {
+        cout << "{" << intervals[i][0] << ", " << intervals[i][1] << "}" << endl;
+    }
     cout << endl
          << string(30, '-');
 }
