@@ -818,15 +818,86 @@ vector<vector<int>> merge(vector<vector<int>> &intervals)
     result.push_back(interval);
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<vector<int>> intervals = {{1, 3}, {2, 6}, {8, 10}, {15, 18}};
+//     intervals = merge(intervals);
+//     for (int i = 0; i < intervals.size(); i++)
+//     {
+//         cout << "{" << intervals[i][0] << ", " << intervals[i][1] << "}" << endl;
+//     }
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------------- Minimum Platforms ---------------------------------------------------------------------------
+int findPlatform(vector<int> &arr, vector<int> &dep)
+{
+    int n = arr.size();
+    // vector<pair<arrival-Time, departure-Time>> trainTiming;
+    vector<pair<int, int>> trainTiming;
+    for (int index = 0; index < n; index++)
+    {
+        trainTiming.push_back({arr[index], dep[index]});
+    }
+    sort(trainTiming.begin(), trainTiming.end());
+    vector<pair<int, int>> requiredPlatformTime;
+    requiredPlatformTime.push_back(trainTiming[0]);
+    for (int i = 1; i < n; i++)
+    {
+        bool isAnyPlatformFree = false;
+        // Check whether the current train arrival time is after the departure time of the existing train in any platform:
+        for (int j = 0; j < requiredPlatformTime.size(); j++)
+        {
+            if (trainTiming[i].first > requiredPlatformTime[j].second)
+            {
+                isAnyPlatformFree = true;
+                requiredPlatformTime[j].second = max(trainTiming[i].second, requiredPlatformTime[j].second);
+                break;
+            }
+        }
+        // If the current train arrival time is less than all the trains departure time, then we need one more platform for the current train:
+        if (!isAnyPlatformFree)
+        {
+            requiredPlatformTime.push_back(trainTiming[i]);
+        }
+    }
+    return requiredPlatformTime.size();
+}
+// -----------------------------------
+int findPlatformTuf(vector<int> &arr, vector<int> &dep)
+{
+    int n = arr.size();
+    sort(arr.begin(), arr.end());
+    sort(dep.begin(), dep.end());
+    int result = 0;
+    int count = 0;
+    int i = 0, j = 0;
+    while (i < n && j < n)
+    {
+        // One more platform needed:
+        if (arr[i] <= dep[j])
+        {
+            count += 1;
+            i += 1;
+        }
+        // One platform can be reduced:
+        else
+        {
+            count -= 1;
+            j += 1;
+        }
+        // Updating the value with the current maximum:
+        result = max(result, count);
+    }
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<vector<int>> intervals = {{1, 3}, {2, 6}, {8, 10}, {15, 18}};
-    intervals = merge(intervals);
-    for (int i = 0; i < intervals.size(); i++)
-    {
-        cout << "{" << intervals[i][0] << ", " << intervals[i][1] << "}" << endl;
-    }
+    vector<int> arr = {1114, 825, 357, 1415, 54};
+    vector<int> dep = {1740, 1110, 2238, 1535, 2323};
+    cout << findPlatformTuf(arr, dep);
     cout << endl
          << string(30, '-');
 }
