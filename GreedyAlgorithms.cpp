@@ -892,12 +892,50 @@ int findPlatformTuf(vector<int> &arr, vector<int> &dep)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {1114, 825, 357, 1415, 54};
+//     vector<int> dep = {1740, 1110, 2238, 1535, 2323};
+//     cout << findPlatformTuf(arr, dep);
+//     cout << endl
+//          << string(30, '-');
+// }
+// --------------------------------------------------------------------------- 135. Candy ---------------------------------------------------------------------------
+int candy(vector<int> &ratings)
+{
+    int n = ratings.size();
+    if (n == 1)
+    {
+        return 1;
+    }
+    vector<int> candies(n, 1);
+    for (int i = 1; i < n; i++)
+    {
+        if (ratings[i] > ratings[i - 1] && candies[i] <= candies[i - 1])
+        {
+            candies[i] = candies[i - 1] + 1;
+        }
+    }
+    for (int i = n - 2; i >= 0; i--)
+    {
+        if (ratings[i] > ratings[i + 1] && candies[i] <= candies[i + 1])
+        {
+            candies[i] = candies[i + 1] + 1;
+        }
+    }
+    int totalCandies = 0;
+    for (int i = 0; i < n; i++)
+    {
+        totalCandies += candies[i];
+    }
+    return totalCandies;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr = {1114, 825, 357, 1415, 54};
-    vector<int> dep = {1740, 1110, 2238, 1535, 2323};
-    cout << findPlatformTuf(arr, dep);
+    vector<int> ratings = {0, 2, 4, 3, 2, 1, 1, 3, 5, 6, 4, 0, 0};
+    cout << candy(ratings);
     cout << endl
          << string(30, '-');
 }
