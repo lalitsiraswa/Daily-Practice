@@ -2294,12 +2294,95 @@ int findDuplicate2(vector<int> &nums)
     // return the fast pointer as it'll be pointing to the duplicate number in the array
     return fast;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     // vector<int> nums = {1, 3, 4, 2, 2};
+//     vector<int> nums = {3, 1, 3, 4, 2};
+//     cout << findDuplicate2(nums) << endl;
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------------------ 229. Majority Element II Revision ------------------------------------------------------------------------------------
+vector<int> majorityElementRevision(vector<int> &nums)
+{
+    int n = nums.size();
+    unordered_map<int, int> frequency;
+    for (auto item : nums)
+    {
+        frequency[item] += 1;
+    }
+    vector<int> result;
+    unordered_map<int, int>::iterator itr;
+    for (itr = frequency.begin(); itr != frequency.end(); itr++)
+    {
+        if (itr->second > (n / 3))
+        {
+            result.push_back(itr->first);
+        }
+    }
+    return result;
+}
+// -------------------
+vector<int> majorityElementRevisionTuf(vector<int> &nums)
+{
+    int n = nums.size();        // size of the array
+    int count1 = 0, count2 = 0; // counts
+    int element1 = INT_MIN;     // element 1
+    int element2 = INT_MIN;     // element 2
+    // applying the Extended Boyer Moore's Voting Algorithm:
+    for (int i = 0; i < n; i++)
+    {
+        if (count1 == 0 && element2 != nums[i])
+        {
+            count1 = 1;
+            element1 = nums[i];
+        }
+        else if (count2 == 0 && element1 != nums[i])
+        {
+            count2 = 1;
+            element2 = nums[i];
+        }
+        else if (element1 == nums[i])
+            count1++;
+        else if (element2 == nums[i])
+            count2++;
+        else
+        {
+            count1--;
+            count2--;
+        }
+    }
+    vector<int> result; // list of answers
+    // Manually check if the stored elements in
+    // element1 and element2 are the majority elements:
+    count1 = 0, count2 = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (element1 == nums[i])
+            count1++;
+        if (element2 == nums[i])
+            count2++;
+    }
+    int majorityCount = n / 3 + 1;
+    if (count1 >= majorityCount)
+        result.push_back(element1);
+    if (count2 >= majorityCount)
+        result.push_back(element2);
+    // Uncomment the following line
+    // if it is told to sort the answer array:
+    // sort(ls.begin(), ls.end()); //TC --> O(2*log2) ~ O(1);
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    // vector<int> nums = {1, 3, 4, 2, 2};
-    vector<int> nums = {3, 1, 3, 4, 2};
-    cout << findDuplicate2(nums) << endl;
+    vector<int> nums = {1, 2};
+    vector<int> result = majorityElementRevisionTuf(nums);
+    for (auto item : result)
+    {
+        cout << item << ", ";
+    }
     cout << endl
          << string(30, '-');
 }
