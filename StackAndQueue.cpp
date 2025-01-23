@@ -76,11 +76,88 @@ bool isValid(string s)
     }
     return bracketStack.empty();
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string s = "()[]{{}";
+//     cout << isValid(s) << endl;
+//     cout << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------------ Queue Using Array ---------------------------------------------------------------------------
+class Queue
+{
+    int *arr;
+    int start, end, currSize, maxSize;
+
+public:
+    Queue() : arr(new int[16]), start(-1), end(-1), currSize(0), maxSize(16) {};
+    Queue(int maxSize) : maxSize(maxSize), arr(new int[maxSize]), start(-1), end(-1), currSize(0) {};
+    void push(int newElement)
+    {
+        if (currSize == maxSize)
+        {
+            cout << "Queue is full\nExiting..." << endl;
+            exit(1);
+        }
+        if (end == -1)
+        {
+            start = 0;
+            end = 0;
+        }
+        else
+        {
+            end = (end + 1) % maxSize;
+        }
+        arr[end] = newElement;
+        cout << "The element pushed is " << newElement << endl;
+        currSize++;
+    }
+    int pop()
+    {
+        if (start == -1)
+        {
+            cout << "Queue Empty\nExiting..." << endl;
+            exit(1);
+        }
+        int popped = arr[start];
+        if (currSize == 1)
+        {
+            start = -1;
+            end = -1;
+        }
+        else
+        {
+            start = (start + 1) % maxSize;
+        }
+        currSize -= 1;
+        return popped;
+    }
+    int top()
+    {
+        if (start == -1)
+        {
+            cout << "Queue is Empty" << endl;
+            exit(1);
+        }
+        return arr[start];
+    }
+    int size()
+    {
+        return currSize;
+    }
+};
 int main()
 {
     cout << string(30, '-') << endl;
-    string s = "()[]{{}";
-    cout << isValid(s) << endl;
+    Queue q;
+    q.push(2);
+    q.push(4);
+    q.push(6);
+    cout << q.pop() << endl;
+    cout << q.pop() << endl;
+    cout << q.pop() << endl;
+    cout << q.pop() << endl;
     cout << string(30, '-') << endl;
     return 1;
 }
