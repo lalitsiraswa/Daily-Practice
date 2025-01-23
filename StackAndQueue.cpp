@@ -147,17 +147,24 @@ public:
         return currSize;
     }
 };
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     Queue q;
+//     q.push(2);
+//     q.push(4);
+//     q.push(6);
+//     cout << q.pop() << endl;
+//     cout << q.pop() << endl;
+//     cout << q.pop() << endl;
+//     cout << q.pop() << endl;
+//     cout << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------------ Stack using Linked List ---------------------------------------------------------------------------
 int main()
 {
     cout << string(30, '-') << endl;
-    Queue q;
-    q.push(2);
-    q.push(4);
-    q.push(6);
-    cout << q.pop() << endl;
-    cout << q.pop() << endl;
-    cout << q.pop() << endl;
-    cout << q.pop() << endl;
     cout << string(30, '-') << endl;
     return 1;
 }
