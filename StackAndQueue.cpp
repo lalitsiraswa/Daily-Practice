@@ -162,9 +162,70 @@ public:
 //     return 1;
 // }
 // ------------------------------------------------------------------------------ Stack using Linked List ---------------------------------------------------------------------------
+struct StackNode
+{
+    int data;
+    StackNode *next;
+    StackNode() : data(0), next(nullptr) {};
+    StackNode(int data) : data(data), next(nullptr) {};
+};
+struct StackImpl
+{
+    StackNode *top;
+    int size;
+    StackImpl() : top(nullptr), size(0) {};
+
+    void stackPush(int data)
+    {
+        StackNode *newNode = new StackNode(data);
+        newNode->next = top;
+        top = newNode;
+        size += 1;
+        cout << "Element pushed : " << data << endl;
+    }
+    int stackPop()
+    {
+        if (top == nullptr)
+        {
+            return -1;
+        }
+        int topData = top->data;
+        StackNode *temp = top;
+        top = top->next;
+        delete temp;
+        size -= 1;
+        return topData;
+    }
+    int stackSize()
+    {
+        return size;
+    }
+    bool stackIsEmpty()
+    {
+        return top == nullptr;
+    }
+    int stackPeek()
+    {
+        if (top == NULL)
+            return -1;
+        return top->data;
+    }
+};
 int main()
 {
     cout << string(30, '-') << endl;
+    StackImpl *stk = new StackImpl();
+    stk->stackPush(2);
+    stk->stackPush(4);
+    stk->stackPush(6);
+    stk->stackPush(8);
+    cout << stk->stackPop() << endl;
+    cout << stk->stackPop() << endl;
+    cout << stk->stackPeek() << endl;
+    cout << stk->stackPop() << endl;
+    cout << stk->stackPop() << endl;
+    cout << stk->stackIsEmpty() << endl;
+    cout << stk->stackSize() << endl;
     cout << string(30, '-') << endl;
     return 1;
 }
