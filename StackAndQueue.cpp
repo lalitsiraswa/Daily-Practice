@@ -211,21 +211,58 @@ struct StackImpl
         return top->data;
     }
 };
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     StackImpl *stk = new StackImpl();
+//     stk->stackPush(2);
+//     stk->stackPush(4);
+//     stk->stackPush(6);
+//     stk->stackPush(8);
+//     cout << stk->stackPop() << endl;
+//     cout << stk->stackPop() << endl;
+//     cout << stk->stackPeek() << endl;
+//     cout << stk->stackPop() << endl;
+//     cout << stk->stackPop() << endl;
+//     cout << stk->stackIsEmpty() << endl;
+//     cout << stk->stackSize() << endl;
+//     cout << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------------ 155. Min Stack ---------------------------------------------------------------------------
+class MinStack
+{
+public:
+    // vector<pair<val, minElement>> s;
+    vector<pair<int, int>> s;
+    MinStack() {}
+    void push(int val)
+    {
+        if (s.empty())
+        {
+            s.push_back({val, val});
+        }
+        else
+        {
+            s.push_back({val, min(s.back().second, val)});
+        }
+    }
+    void pop()
+    {
+        s.pop_back();
+    }
+    int top()
+    {
+        return s.back().first;
+    }
+    int getMin()
+    {
+        return s.back().second;
+    }
+};
 int main()
 {
     cout << string(30, '-') << endl;
-    StackImpl *stk = new StackImpl();
-    stk->stackPush(2);
-    stk->stackPush(4);
-    stk->stackPush(6);
-    stk->stackPush(8);
-    cout << stk->stackPop() << endl;
-    cout << stk->stackPop() << endl;
-    cout << stk->stackPeek() << endl;
-    cout << stk->stackPop() << endl;
-    cout << stk->stackPop() << endl;
-    cout << stk->stackIsEmpty() << endl;
-    cout << stk->stackSize() << endl;
     cout << string(30, '-') << endl;
     return 1;
 }
