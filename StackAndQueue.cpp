@@ -440,11 +440,77 @@ string postfixToInfix(string &s)
     }
     return stk.top();
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string s = "AB-DE+F*/";
+//     cout << postfixToInfix(s) << endl;
+//     cout << string(30, '-') << endl;
+//     return 1;
+// }
+// --------------------------------------------------------------------------------- Prefix to Infix ------------------------------------------------------------------------------
+string preToInfix(string &s)
+{
+    // Convert prefix to postfix (reverse):
+    reverse(s.begin(), s.end());
+    stack<string> stk;
+    for (int i = 0; i < s.size(); i++)
+    {
+        if ((s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z') || (s[i] >= '0' && s[i] <= '9'))
+        {
+            string str(1, s[i]);
+            stk.push(str);
+        }
+        else
+        {
+            string secondOperand = stk.top();
+            stk.pop();
+            string firstOperand = stk.top();
+            stk.pop();
+            string temp = '(' + firstOperand + s[i] + secondOperand + ')';
+            stk.push(temp);
+        }
+    }
+    string result = stk.top();
+    reverse(result.begin(), result.end());
+    // Replace '(' with ')' and vice versa:
+    for (int i = 0; i < result.size(); i++)
+    {
+        if (result[i] == '(')
+            result[i] = ')';
+        else if (result[i] == ')')
+            result[i] = '(';
+    }
+    return result;
+}
+// -------- TUF --------
+string preToInfixTuf(string &s)
+{
+    stack<string> stk;
+    for (int i = s.size() - 1; i >= 0; i--)
+    {
+        if ((s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z') || (s[i] >= '0' && s[i] <= '9'))
+        {
+            string str(1, s[i]);
+            stk.push(str);
+        }
+        else
+        {
+            string firstOperand = stk.top();
+            stk.pop();
+            string secondOperand = stk.top();
+            stk.pop();
+            string temp = '(' + firstOperand + s[i] + secondOperand + ')';
+            stk.push(temp);
+        }
+    }
+    return stk.top();
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    string s = "AB-DE+F*/";
-    cout << postfixToInfix(s) << endl;
+    string s = "*-A/BC-/AKL";
+    cout << preToInfixTuf(s) << endl;
     cout << string(30, '-') << endl;
     return 1;
 }
