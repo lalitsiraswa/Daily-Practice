@@ -320,11 +320,89 @@ string infixToPostfix(string &s)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string s = "a+b*(c^d-e)^(f+g*h)-i";
+//     cout << infixToPostfix(s) << endl;
+//     cout << string(30, '-') << endl;
+//     return 1;
+// }
+// --------------------------------------------------------------------------------- Infix to Prefix ------------------------------------------------------------------------------
+// Step 1: Reverse the given Infix string:
+// Step 2: Infix to postfix conversion:
+// Step 3: Reverse the result string:
+// Function to return precedence of operators:
+int precedenceForInfixToPrefix(char ch)
+{
+    if (ch == '^')
+        return 3;
+    if (ch == '*' || ch == '/')
+        return 2;
+    if (ch == '+' || ch == '-')
+        return 1;
+    return -1;
+}
+string infixToPrefix(string &s)
+{
+    // Reverse the Infix string:
+    reverse(s.begin(), s.end());
+    // Make all the closing bracket to opening and vice versa:
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (s[i] == '(')
+            s[i] = ')';
+        else if (s[i] == ')')
+            s[i] = '(';
+    }
+    stack<char> stk;
+    string result;
+    // Infix to postfix conversion
+    for (int i = 0; i < s.size(); i++)
+    {
+        char ch = s[i];
+        // If the scanned character is an operand, add it to output string:
+        if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9'))
+            result.push_back(ch);
+        // If the scanned character is an ‘(‘, push it to the stack:
+        else if (ch == '(')
+            stk.push(ch);
+        // If the scanned character is an ‘)’, pop and to output string from the stack until an ‘(‘ is encountered:
+        else if (ch == ')')
+        {
+            while (!stk.empty() && stk.top() != '(')
+            {
+                result.push_back(stk.top());
+                stk.pop();
+            }
+            stk.pop();
+        }
+        // If an operator is scanned:
+        else
+        {
+            while (!stk.empty() && precedenceForInfixToPrefix(ch) < precedenceForInfixToPrefix(stk.top()))
+            {
+                result.push_back(stk.top());
+                stk.pop();
+            }
+            stk.push(ch);
+        }
+    }
+    // Pop all the remaining elements from the stack:
+    while (!stk.empty())
+    {
+        result.push_back(stk.top());
+        stk.pop();
+    }
+    // Reverse the result string
+    reverse(result.begin(), result.end());
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    string s = "a+b*(c^d-e)^(f+g*h)-i";
-    cout << infixToPostfix(s) << endl;
+    string s = "(A+B)*C-D+F";
+    cout << infixToPrefix(s) << endl;
     cout << string(30, '-') << endl;
     return 1;
 }
