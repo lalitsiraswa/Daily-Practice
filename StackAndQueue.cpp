@@ -409,11 +409,42 @@ string infixToPrefix(string &s)
     reverse(result.begin(), result.end());
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string s = "(A+B)*C-D+F";
+//     cout << infixToPrefix(s) << endl;
+//     cout << string(30, '-') << endl;
+//     return 1;
+// }
+// --------------------------------------------------------------------------------- Postfix to Infix ------------------------------------------------------------------------------
+string postfixToInfix(string &s)
+{
+    stack<string> stk;
+    for (int i = 0; i < s.size(); i++)
+    {
+        if ((s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z') || (s[i] >= '0' && s[i] <= '9'))
+        {
+            string str(1, s[i]);
+            stk.push(str);
+        }
+        else
+        {
+            string secondOperand = stk.top();
+            stk.pop();
+            string firstOperand = stk.top();
+            stk.pop();
+            string temp = '(' + firstOperand + s[i] + secondOperand + ')';
+            stk.push(temp);
+        }
+    }
+    return stk.top();
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    string s = "(A+B)*C-D+F";
-    cout << infixToPrefix(s) << endl;
+    string s = "AB-DE+F*/";
+    cout << postfixToInfix(s) << endl;
     cout << string(30, '-') << endl;
     return 1;
 }
