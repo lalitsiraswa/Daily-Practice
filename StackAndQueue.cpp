@@ -329,7 +329,7 @@ string infixToPostfix(string &s)
 //     return 1;
 // }
 // --------------------------------------------------------------------------------- Infix to Prefix ------------------------------------------------------------------------------
-// Step 1: Reverse the given Infix string:
+// Step 1: Reverse the given Infix string (Convert all the opening bracket to closing bracket and vice versa):
 // Step 2: Infix to postfix conversion:
 // Step 3: Reverse the result string:
 // Function to return precedence of operators:
@@ -380,10 +380,21 @@ string infixToPrefix(string &s)
         // If an operator is scanned:
         else
         {
-            while (!stk.empty() && precedenceForInfixToPrefix(ch) < precedenceForInfixToPrefix(stk.top()))
+            if (s[i] == '^')
             {
-                result.push_back(stk.top());
-                stk.pop();
+                while (!stk.empty() && precedenceForInfixToPrefix(ch) <= precedenceForInfixToPrefix(stk.top()))
+                {
+                    result.push_back(stk.top());
+                    stk.pop();
+                }
+            }
+            else
+            {
+                while (!stk.empty() && precedenceForInfixToPrefix(ch) < precedenceForInfixToPrefix(stk.top()))
+                {
+                    result.push_back(stk.top());
+                    stk.pop();
+                }
             }
             stk.push(ch);
         }
