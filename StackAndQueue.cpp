@@ -617,7 +617,7 @@ vector<int> nextGreaterElementTuf(vector<int> &nums1, vector<int> &nums2)
     stack<int> monotonicStack;
     for (int i = m - 1; i >= 0; i--)
     {
-        // Check if the stack holds any values and compare them with array values:
+        // Check if the stack holds any values and compare them with array value:
         while (!monotonicStack.empty() && monotonicStack.top() <= nums2[i])
         {
             // If the values in the stack are less than or equal to the array value remove them:
