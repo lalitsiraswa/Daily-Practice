@@ -506,11 +506,73 @@ string preToInfixTuf(string &s)
     }
     return stk.top();
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string s = "*-A/BC-/AKL";
+//     cout << preToInfixTuf(s) << endl;
+//     cout << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ Postfix to Prefix Conversion ------------------------------------------------------------------------------
+string postToPre(string &s)
+{
+    stack<string> stk;
+    for (int i = 0; i < s.size(); i++)
+    {
+        if ((s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z') || (s[i] >= '0' && s[i] <= '9'))
+        {
+            string str(1, s[i]);
+            stk.push(str);
+        }
+        else
+        {
+            string secondOperand = stk.top();
+            stk.pop();
+            string firstOperand = stk.top();
+            stk.pop();
+            string temp = s[i] + firstOperand + secondOperand;
+            stk.push(temp);
+        }
+    }
+    return stk.top();
+}
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string s = "ABC/-AK/L-*";
+//     cout << postToPre(s) << endl;
+//     cout << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ Prefix to Postfix Conversion ------------------------------------------------------------------------------
+string preToPost(string &s)
+{
+    stack<string> stk;
+    for (int i = s.size() - 1; i >= 0; i--)
+    {
+        if ((s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z') || (s[i] >= '0' && s[i] <= '9'))
+        {
+            string str(1, s[i]);
+            stk.push(str);
+        }
+        else
+        {
+            string firstOperand = stk.top();
+            stk.pop();
+            string secondOperand = stk.top();
+            stk.pop();
+            string temp = firstOperand + secondOperand + s[i];
+            stk.push(temp);
+        }
+    }
+    return stk.top();
+}
 int main()
 {
     cout << string(30, '-') << endl;
     string s = "*-A/BC-/AKL";
-    cout << preToInfixTuf(s) << endl;
+    cout << preToPost(s) << endl;
     cout << string(30, '-') << endl;
     return 1;
 }
