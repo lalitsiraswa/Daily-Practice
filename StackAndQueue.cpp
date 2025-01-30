@@ -568,11 +568,90 @@ string preToPost(string &s)
     }
     return stk.top();
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string s = "*-A/BC-/AKL";
+//     cout << preToPost(s) << endl;
+//     cout << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ 496. Next Greater Element I ------------------------------------------------------------------------------
+vector<int> nextGreaterElement(vector<int> &nums1, vector<int> &nums2)
+{
+    int n = nums1.size();
+    int m = nums2.size();
+    vector<int> result;
+    for (int i = 0; i < n; i++)
+    {
+        bool isGreaterFound = false;
+        bool isElementFound = false;
+        for (int j = 0; j < m; j++)
+        {
+            if (nums1[i] == nums2[j])
+            {
+                isElementFound = true;
+            }
+            if (isElementFound && nums2[j] > nums1[i])
+            {
+                result.push_back(nums2[j]);
+                isGreaterFound = true;
+                break;
+            }
+        }
+        if (!isGreaterFound)
+        {
+            result.push_back(-1);
+        }
+    }
+    return result;
+}
+// ---------------------
+// Monotonic Stack : Storing elements in a specific order:
+vector<int> nextGreaterElementTuf(vector<int> &nums1, vector<int> &nums2)
+{
+    int n = nums1.size();
+    int m = nums2.size();
+    unordered_map<int, int> mapGreater;
+    // We are soring the elements in the decreasing order:
+    stack<int> monotonicStack;
+    for (int i = m - 1; i >= 0; i--)
+    {
+        // Check if the stack holds any values and compare them with array values:
+        while (!monotonicStack.empty() && monotonicStack.top() <= nums2[i])
+        {
+            // If the values in the stack are less than or equal to the array value remove them:
+            monotonicStack.pop();
+        }
+        // If stack is not empty, set the value to the top:
+        if (!monotonicStack.empty())
+        {
+            mapGreater[nums2[i]] = monotonicStack.top();
+        }
+        else
+        {
+            mapGreater[nums2[i]] = -1;
+        }
+        monotonicStack.push(nums2[i]);
+    }
+    vector<int> result;
+    for (int i = 0; i < n; i++)
+    {
+        result.push_back(mapGreater[nums1[i]]);
+    }
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    string s = "*-A/BC-/AKL";
-    cout << preToPost(s) << endl;
-    cout << string(30, '-') << endl;
+    vector<int> nums1 = {1, 3, 5, 2, 4};
+    vector<int> nums2 = {6, 5, 4, 3, 2, 1, 7};
+    vector<int> result = nextGreaterElementTuf(nums1, nums2);
+    for (auto item : result)
+    {
+        cout << item << ", ";
+    }
+    cout << endl
+         << string(30, '-') << endl;
     return 1;
 }
