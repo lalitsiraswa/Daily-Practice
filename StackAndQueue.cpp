@@ -613,7 +613,7 @@ vector<int> nextGreaterElementTuf(vector<int> &nums1, vector<int> &nums2)
     int n = nums1.size();
     int m = nums2.size();
     unordered_map<int, int> mapGreater;
-    // We are soring the elements in the decreasing order:
+    // We are storing the elements in the decreasing order:
     stack<int> monotonicStack;
     for (int i = m - 1; i >= 0; i--)
     {
