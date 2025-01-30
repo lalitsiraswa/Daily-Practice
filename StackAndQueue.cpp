@@ -623,7 +623,7 @@ vector<int> nextGreaterElementTuf(vector<int> &nums1, vector<int> &nums2)
             // If the values in the stack are less than or equal to the array value remove them:
             monotonicStack.pop();
         }
-        // If stack is not empty, set the value to the top:
+        // If the stack is not empty, set the top element of the stack has the next greater element:
         if (!monotonicStack.empty())
         {
             mapGreater[nums2[i]] = monotonicStack.top();
