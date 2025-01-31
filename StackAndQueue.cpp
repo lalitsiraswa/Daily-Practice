@@ -641,12 +641,71 @@ vector<int> nextGreaterElementTuf(vector<int> &nums1, vector<int> &nums2)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums1 = {1, 3, 5, 2, 4};
+//     vector<int> nums2 = {6, 5, 4, 3, 2, 1, 7};
+//     vector<int> result = nextGreaterElementTuf(nums1, nums2);
+//     for (auto item : result)
+//     {
+//         cout << item << ", ";
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ 503. Next Greater Element II ------------------------------------------------------------------------------
+// Original arrays : {2, 10, 12, 1, 11}:
+// Immaginare arrays : {2, 10, 12, 1, 11, 2, 10, 12, 1, 11}:
+vector<int> nextGreaterElementsBruteForce(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> result(n, -1);
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = i + 1; j < (i + n - 1); j++)
+        {
+            int index = j % n;
+            if (nums[index] > nums[i])
+            {
+                result[i] = nums[index];
+                break;
+            }
+        }
+    }
+    return result;
+}
+// ----------------------------
+vector<int> nextGreaterElements(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> result(n);
+    stack<int> monotonicStack;
+    for (int i = (n * 2) - 1; i >= 0; i--)
+    {
+        int index = i % n;
+        while (!monotonicStack.empty() && monotonicStack.top() <= nums[index])
+        {
+            monotonicStack.pop();
+        }
+        if (monotonicStack.empty())
+        {
+            result[index] = -1;
+        }
+        else
+        {
+            result[index] = monotonicStack.top();
+        }
+        monotonicStack.push(nums[index]);
+    }
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums1 = {1, 3, 5, 2, 4};
-    vector<int> nums2 = {6, 5, 4, 3, 2, 1, 7};
-    vector<int> result = nextGreaterElementTuf(nums1, nums2);
+    vector<int> nums = {2, 10, 12, 1, 11};
+    vector<int> result = nextGreaterElementsBruteForce(nums);
     for (auto item : result)
     {
         cout << item << ", ";
