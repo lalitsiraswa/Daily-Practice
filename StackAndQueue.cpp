@@ -656,15 +656,45 @@ vector<int> nextGreaterElementTuf(vector<int> &nums1, vector<int> &nums2)
 //     return 1;
 // }
 // ------------------------------------------------------------------------ 503. Next Greater Element II ------------------------------------------------------------------------------
-// Original arrays : {2, 10, 12, 1, 11}:
-// Immaginare arrays : {2, 10, 12, 1, 11, 2, 10, 12, 1, 11}:
 vector<int> nextGreaterElementsBruteForce(vector<int> &nums)
 {
     int n = nums.size();
     vector<int> result(n, -1);
     for (int i = 0; i < n; i++)
     {
-        for (int j = i + 1; j < (i + n - 1); j++)
+        bool isGreaterFound = false;
+        // Check on the right hand side of the element for greater value:
+        for (int j = i + 1; j < n && !isGreaterFound; j++)
+        {
+            if (nums[j] > nums[i])
+            {
+                result[i] = nums[j];
+                isGreaterFound = true;
+            }
+        }
+        // Check on the left hand side of the element for greater value:
+        for (int j = 0; j < i && !isGreaterFound; j++)
+        {
+            if (nums[j] > nums[i])
+            {
+                result[i] = nums[j];
+                isGreaterFound = true;
+            }
+        }
+    }
+    return result;
+}
+// ----------------------------
+// Hypothetically double the array
+// Original arrays : {2, 10, 12, 1, 11}:
+// Immaginare arrays : {2, 10, 12, 1, 11, 2, 10, 12, 1, 11}:
+vector<int> nextGreaterElementsBruteForce2(vector<int> &nums)
+{
+    int n = nums.size();
+    vector<int> result(n, -1);
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = i + 1; j <= (i + n - 1); j++)
         {
             int index = j % n;
             if (nums[index] > nums[i])
@@ -677,7 +707,10 @@ vector<int> nextGreaterElementsBruteForce(vector<int> &nums)
     return result;
 }
 // ----------------------------
-vector<int> nextGreaterElements(vector<int> &nums)
+// Hypothetically double the array
+// Original arrays : {2, 10, 12, 1, 11}:
+// Immaginare arrays : {2, 10, 12, 1, 11, 2, 10, 12, 1, 11}:
+vector<int> nextGreaterElementsUsingMonotonicStack(vector<int> &nums)
 {
     int n = nums.size();
     vector<int> result(n);
