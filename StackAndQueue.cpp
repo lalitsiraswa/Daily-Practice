@@ -734,11 +734,45 @@ vector<int> nextGreaterElementsUsingMonotonicStack(vector<int> &nums)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {2, 10, 12, 1, 11};
+//     vector<int> result = nextGreaterElementsBruteForce(nums);
+//     for (auto item : result)
+//     {
+//         cout << item << ", ";
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ Nearest Smaller Element ------------------------------------------------------------------------------
+// https://www.interviewbit.com/problems/nearest-smaller-element/
+vector<int> immediateSmaller(vector<int> &nums)
+{
+    int n = nums.size();
+    stack<int> monotonicStack;
+    vector<int> result(n, -1);
+    for (int i = 0; i < n; i++)
+    {
+        while (!monotonicStack.empty() && monotonicStack.top() >= nums[i])
+        {
+            monotonicStack.pop();
+        }
+        if (!monotonicStack.empty())
+        {
+            result[i] = monotonicStack.top();
+        }
+        monotonicStack.push(nums[i]);
+    }
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {2, 10, 12, 1, 11};
-    vector<int> result = nextGreaterElementsBruteForce(nums);
+    vector<int> nums = {4, 5, 2, 10, 8};
+    vector<int> result = immediateSmaller(nums);
     for (auto item : result)
     {
         cout << item << ", ";
