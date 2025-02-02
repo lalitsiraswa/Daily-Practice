@@ -768,15 +768,73 @@ vector<int> immediateSmaller(vector<int> &nums)
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {4, 5, 2, 10, 8};
+//     vector<int> result = immediateSmaller(nums);
+//     for (auto item : result)
+//     {
+//         cout << item << ", ";
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ 42. Trapping Rain Water ------------------------------------------------------------------------------
+int trapByPrefixAndPostfix(vector<int> &height)
+{
+    int n = height.size();
+    int waterTrapped = 0;
+    int prefix[n], suffix[n];
+    prefix[0] = height[0];
+    for (int index = 1; index < n; index++)
+    {
+        prefix[index] = max(prefix[index - 1], height[index]);
+    }
+    suffix[n - 1] = height[n - 1];
+    for (int index = n - 2; index >= 0; index--)
+    {
+        suffix[index] = max(suffix[index + 1], height[index]);
+    }
+    for (int index = 0; index < n; index++)
+    {
+        waterTrapped += min(prefix[index], suffix[index]) - height[index];
+    }
+    return waterTrapped;
+}
+// --------------------------
+int trap(vector<int> &height)
+{
+    int n = height.size();
+    int left = 0, right = n - 1;
+    int leftMax = height[left];
+    int rightMax = height[right];
+    int totalWaterTrap = 0;
+    while (left < right)
+    {
+        int waterCanFillBetween = 0;
+        if (height[left] <= height[right])
+        {
+            leftMax = max(leftMax, height[left]);
+            waterCanFillBetween = leftMax - height[left];
+            left += 1;
+        }
+        else
+        {
+            rightMax = max(rightMax, height[right]);
+            waterCanFillBetween = rightMax - height[right];
+            right -= 1;
+        }
+        totalWaterTrap += waterCanFillBetween;
+    }
+    return totalWaterTrap;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {4, 5, 2, 10, 8};
-    vector<int> result = immediateSmaller(nums);
-    for (auto item : result)
-    {
-        cout << item << ", ";
-    }
+    vector<int> nums = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
+    cout << trap(nums) << endl;
     cout << endl
          << string(30, '-') << endl;
     return 1;
