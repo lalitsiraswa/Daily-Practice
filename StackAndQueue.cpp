@@ -830,11 +830,73 @@ int trap(vector<int> &height)
     }
     return totalWaterTrap;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
+//     cout << trap(nums) << endl;
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ Number of greater elements to the right ------------------------------------------------------------------------------
+vector<int> count_NGE_BruteForce(int n, vector<int> &arr, int queries, vector<int> &indices)
+{
+    vector<int> result;
+    for (int i = 0; i < indices.size(); i++)
+    {
+        int index = indices[i];
+        int countGreaterElements = 0;
+        for (int j = index + 1; j < n; j++)
+        {
+            if (arr[j] > arr[index])
+            {
+                countGreaterElements += 1;
+            }
+        }
+        result.push_back(countGreaterElements);
+    }
+    return result;
+}
+// ------------------
+vector<int> count_NGE(int n, vector<int> &arr, int queries, vector<int> &indices)
+{
+    vector<int> result;
+    stack<int> monotonicStackDescending;
+    stack<int> monotonicStackAscending;
+    unordered_map<int, int> indexToGreaterMap;
+    for (int i = n - 1; i >= 0; i--)
+    {
+        while (!monotonicStackDescending.empty() && monotonicStackDescending.top() <= arr[i])
+        {
+            monotonicStackAscending.push(monotonicStackDescending.top());
+            monotonicStackDescending.pop();
+        }
+        indexToGreaterMap[i] = monotonicStackDescending.size();
+        monotonicStackDescending.push(arr[i]);
+        while (!monotonicStackAscending.empty())
+        {
+            monotonicStackDescending.push(monotonicStackAscending.top());
+            monotonicStackAscending.pop();
+        }
+    }
+    for (int i = 0; i < indices.size(); i++)
+    {
+        int index = indices[i];
+        result.push_back(indexToGreaterMap[index]);
+    }
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
-    cout << trap(nums) << endl;
+    vector<int> arr = {3, 4, 2, 7, 5, 8, 10, 6};
+    vector<int> indices = {0, 5};
+    vector<int> result = count_NGE(arr.size(), arr, 2, indices);
+    for (int val : result)
+    {
+        cout << val << ", ";
+    }
     cout << endl
          << string(30, '-') << endl;
     return 1;
