@@ -887,16 +887,92 @@ vector<int> count_NGE(int n, vector<int> &arr, int queries, vector<int> &indices
     }
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {3, 4, 2, 7, 5, 8, 10, 6};
+//     vector<int> indices = {0, 5};
+//     vector<int> result = count_NGE(arr.size(), arr, 2, indices);
+//     for (int val : result)
+//     {
+//         cout << val << ", ";
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ 907. Sum of Subarray Minimums ------------------------------------------------------------------------------
+// -------------- TLE ----------------
+int sumSubarrayMins(vector<int> &arr)
+{
+    int MOD = (int)(1e9 + 7);
+    long long int totalMinElementSum = 0;
+    int n = arr.size();
+    for (int i = 0; i < n; i++)
+    {
+        long long int minElement = INT_MAX;
+        for (int j = i; j < n; j++)
+        {
+            if (minElement > arr[j])
+            {
+                minElement = arr[j];
+            }
+            totalMinElementSum += minElement;
+        }
+    }
+    return totalMinElementSum % MOD;
+}
+// ----------------- TUF ------------------
+vector<int> findNSE(vector<int> &arr, int &n)
+{
+    vector<int> nse(n);
+    stack<int> monotonicStack;
+    for (int i = n - 1; i >= 0; i--)
+    {
+        while (!monotonicStack.empty() && arr[monotonicStack.top()] >= arr[i])
+        {
+            monotonicStack.pop();
+        }
+        nse[i] = monotonicStack.empty() ? n : monotonicStack.top();
+        monotonicStack.push(i);
+    }
+    return nse;
+}
+vector<int> findPSE(vector<int> &arr, int &n)
+{
+    vector<int> pse(n);
+    stack<int> monotonicStack;
+    for (int i = 0; i < n; i++)
+    {
+        while (!monotonicStack.empty() && arr[monotonicStack.top()] > arr[i])
+        {
+            monotonicStack.pop();
+        }
+        pse[i] = monotonicStack.empty() ? -1 : monotonicStack.top();
+        monotonicStack.push(i);
+    }
+    return pse;
+}
+int sumSubarrayMinsTuf(vector<int> &arr)
+{
+    int n = arr.size();
+    int MOD = (int)(1e9 + 7);
+    int totalMinElementSum = 0;
+    vector<int> nse = findNSE(arr, n);
+    vector<int> pse = findPSE(arr, n);
+    for (int i = 0; i < n; i++)
+    {
+        int left = i - pse[i];
+        int right = nse[i] - i;
+        totalMinElementSum = (totalMinElementSum + (right * left * 1ll * arr[i]) % MOD) % MOD;
+    }
+    return totalMinElementSum;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr = {3, 4, 2, 7, 5, 8, 10, 6};
-    vector<int> indices = {0, 5};
-    vector<int> result = count_NGE(arr.size(), arr, 2, indices);
-    for (int val : result)
-    {
-        cout << val << ", ";
-    }
+    vector<int> arr = {3, 1, 2, 4};
+    cout << sumSubarrayMinsTuf(arr);
     cout << endl
          << string(30, '-') << endl;
     return 1;
