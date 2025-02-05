@@ -100,11 +100,49 @@ int minJumpsGreedy(vector<int> &arr)
     }
     return minJumps;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {2, 3, 1, 1, 4};
+//     cout << minJumpsGreedy(arr) << endl;
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ Sort 0s, 1s and 2s ------------------------------------------------------------------------------
+void sort012(vector<int> &arr)
+{
+    int n = arr.size();
+    int left = 0, right = n - 1;
+    int middle = 0;
+    while (middle <= right && left <= right)
+    {
+        if (arr[middle] == 0)
+        {
+            swap(arr[left], arr[middle]);
+            left += 1;
+            middle += 1;
+        }
+        else if (arr[middle] == 2)
+        {
+            swap(arr[middle], arr[right]);
+            right -= 1;
+        }
+        else
+        {
+            middle += 1;
+        }
+    }
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr = {2, 3, 1, 1, 4};
-    cout << minJumpsGreedy(arr) << endl;
+    vector<int> arr = {2, 0, 2};
+    sort012(arr);
+    for (int val : arr)
+    {
+        cout << val << ", ";
+    }
     cout << endl
          << string(30, '-') << endl;
     return 1;
