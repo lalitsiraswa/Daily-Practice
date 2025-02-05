@@ -403,6 +403,81 @@ vector<int> bottomView(Node *root)
     }
     return bottomView;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     Node *root = new Node(10);
+//     root->left = new Node(20);
+//     root->left->left = new Node(40);
+//     root->left->right = new Node(60);
+//     root->right = new Node(30);
+//     root->right->left = new Node(90);
+//     root->right->right = new Node(100);
+//     vector<int> result = topView(root);
+//     for (auto item : result)
+//     {
+//         cout << item << ", ";
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ Vertical Tree Traversal ------------------------------------------------------------------------------
+vector<int> verticalOrder(Node *root)
+{
+    map<int, map<int, multiset<int>>> visited;
+    queue<pair<Node *, pair<int, int>>> todo;
+    todo.push({root, {0, 0}});
+    while (!todo.empty())
+    {
+        auto p = todo.front();
+        todo.pop();
+        Node *temp = p.first;
+        int column = p.second.first;
+        int row = p.second.second;
+        visited[column][row].insert(temp->data);
+        if (temp->left)
+        {
+            todo.push({temp->left, {column - 1, row + 1}});
+        }
+        if (temp->right)
+        {
+            todo.push({temp->right, {column + 1, row + 1}});
+        }
+    }
+    vector<int> verticalOrder;
+    for (auto item : visited)
+    {
+        for (auto data : item.second)
+        {
+            verticalOrder.insert(verticalOrder.end(), data.second.begin(), data.second.end());
+        }
+    }
+    return verticalOrder;
+}
+// ---------------------------
+void verticalTraversalDFS(Node *root, map<int, map<int, multiset<int>>> &visited, int row, int column)
+{
+    if (root == nullptr)
+        return;
+    visited[column][row].insert(root->data);
+    verticalTraversalDFS(root->left, visited, row + 1, column - 1);
+    verticalTraversalDFS(root->right, visited, row + 1, column + 1);
+}
+vector<int> verticalTraversalDFS(Node *root)
+{
+    map<int, map<int, multiset<int>>> visited;
+    verticalTraversalDFS(root, visited, 0, 0);
+    vector<int> verticalOrder;
+    for (auto p : visited)
+    {
+        for (auto q : p.second)
+        {
+            verticalOrder.insert(verticalOrder.end(), q.second.begin(), q.second.end());
+        }
+    }
+    return verticalOrder;
+}
 int main()
 {
     cout << string(30, '-') << endl;
@@ -413,7 +488,7 @@ int main()
     root->right = new Node(30);
     root->right->left = new Node(90);
     root->right->right = new Node(100);
-    vector<int> result = topView(root);
+    vector<int> result = verticalTraversalDFS(root);
     for (auto item : result)
     {
         cout << item << ", ";
