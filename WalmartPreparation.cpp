@@ -134,15 +134,48 @@ void sort012(vector<int> &arr)
         }
     }
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {2, 0, 2};
+//     sort012(arr);
+//     for (int val : arr)
+//     {
+//         cout << val << ", ";
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ Parenthesis Checker ------------------------------------------------------------------------------
+bool isParenthesisBalanced(string &s)
+{
+    int n = s.size();
+    stack<char> stk;
+    for (int i = 0; i < n; i++)
+    {
+        char ch = s[i];
+        if (ch == '(' || ch == '{' || ch == '[')
+        {
+            stk.push(s[i]);
+            continue;
+        }
+        else if (stk.empty() || (ch == ')' && stk.top() != '(') || (ch == ']' && stk.top() != '[') || (ch == '}' && stk.top() != '{'))
+        {
+            return false;
+        }
+        else
+        {
+            stk.pop();
+        }
+    }
+    return stk.empty();
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr = {2, 0, 2};
-    sort012(arr);
-    for (int val : arr)
-    {
-        cout << val << ", ";
-    }
+    string s = "[{()}]";
+    cout << isParenthesisBalanced(s);
     cout << endl
          << string(30, '-') << endl;
     return 1;
