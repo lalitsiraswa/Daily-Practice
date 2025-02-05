@@ -244,7 +244,7 @@ void removeLoop(ListNode *head)
     }
 }
 // -----------------------------
-void removeLoop(ListNode *head)
+void removeLoopOptimize(ListNode *head)
 {
     // Same problem like : find the entry point in the loop in given linked list:
     // Optimised Approach : 2 steps
@@ -311,14 +311,65 @@ bool detectLoop(ListNode *head)
     }
     return false;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     ListNode *head = new ListNode(1);
+//     head->next = new ListNode(3);
+//     head->next->next = new ListNode(4);
+//     head->next->next->next = head->next;
+//     cout << detectLoop(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ Top View of Binary Tree ------------------------------------------------------------------------------
+vector<int> topView(Node *root)
+{
+    map<int, int> visited;
+    queue<pair<Node *, int>> todo;
+    todo.push({root, 0});
+    while (!todo.empty())
+    {
+        auto front = todo.front();
+        Node *node = front.first;
+        int column = front.second;
+        todo.pop();
+        if (visited.find(column) == visited.end())
+        {
+            visited[column] = node->data;
+        }
+        if (node->left != nullptr)
+        {
+            todo.push({node->left, column - 1});
+        }
+        if (node->right != nullptr)
+        {
+            todo.push({node->right, column + 1});
+        }
+    }
+    vector<int> topView;
+    for (auto item : visited)
+    {
+        topView.push_back(item.second);
+    }
+    return topView;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    ListNode *head = new ListNode(1);
-    head->next = new ListNode(3);
-    head->next->next = new ListNode(4);
-    head->next->next->next = head->next;
-    cout << detectLoop(head);
+    Node *root = new Node(10);
+    root->left = new Node(20);
+    root->left->left = new Node(40);
+    root->left->right = new Node(60);
+    root->right = new Node(30);
+    root->right->left = new Node(90);
+    root->right->right = new Node(100);
+    vector<int> result = topView(root);
+    for (auto item : result)
+    {
+        cout << item << ", ";
+    }
     cout << endl
          << string(30, '-') << endl;
     return 1;
