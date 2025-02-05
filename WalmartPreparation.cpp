@@ -283,6 +283,34 @@ void removeLoop(ListNode *head)
         }
     }
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     ListNode *head = new ListNode(1);
+//     head->next = new ListNode(3);
+//     head->next->next = new ListNode(4);
+//     head->next->next->next = head->next;
+//     removeLoop(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ Detect Loop in linked list ------------------------------------------------------------------------------
+bool detectLoop(ListNode *head)
+{
+    ListNode *slow = head;
+    ListNode *fast = head;
+    while (fast != nullptr && fast->next != nullptr)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+        if (slow == fast)
+        {
+            return true;
+        }
+    }
+    return false;
+}
 int main()
 {
     cout << string(30, '-') << endl;
@@ -290,7 +318,7 @@ int main()
     head->next = new ListNode(3);
     head->next->next = new ListNode(4);
     head->next->next->next = head->next;
-    removeLoop(head);
+    cout << detectLoop(head);
     cout << endl
          << string(30, '-') << endl;
     return 1;
