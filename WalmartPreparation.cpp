@@ -501,6 +501,65 @@ vector<int> verticalTraversalGFG(Node *root)
     }
     return verticalOrder;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     Node *root = new Node(10);
+//     root->left = new Node(20);
+//     root->left->left = new Node(40);
+//     root->left->right = new Node(60);
+//     root->right = new Node(30);
+//     root->right->left = new Node(90);
+//     root->right->right = new Node(100);
+//     vector<int> result = verticalTraversalGFG(root);
+//     for (auto item : result)
+//     {
+//         cout << item << ", ";
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ ZigZag Tree Traversal ------------------------------------------------------------------------------
+vector<int> zigZagTraversal(Node *root)
+{
+    vector<int> zigZagTraversal;
+    bool isLeftToRight = true;
+    queue<Node *> todo;
+    todo.push(root);
+    while (!todo.empty())
+    {
+        int size = todo.size();
+        vector<int> level(size);
+        for (int i = 0; i < size; i++)
+        {
+            Node *node = todo.front();
+            todo.pop();
+            if (isLeftToRight)
+            {
+                level[i] = node->data;
+            }
+            else
+            {
+                level[size - 1 - i] = node->data;
+            }
+            if (node->left != nullptr)
+            {
+                todo.push(node->left);
+            }
+            if (node->right != nullptr)
+            {
+                todo.push(node->right);
+            }
+        }
+        for (int i = 0; i < level.size(); i++)
+        {
+            zigZagTraversal.push_back(level[i]);
+        }
+        isLeftToRight = !isLeftToRight;
+    }
+    return zigZagTraversal;
+}
 int main()
 {
     cout << string(30, '-') << endl;
@@ -511,7 +570,7 @@ int main()
     root->right = new Node(30);
     root->right->left = new Node(90);
     root->right->right = new Node(100);
-    vector<int> result = verticalTraversalGFG(root);
+    vector<int> result = zigZagTraversal(root);
     for (auto item : result)
     {
         cout << item << ", ";
