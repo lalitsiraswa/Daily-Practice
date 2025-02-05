@@ -478,6 +478,29 @@ vector<int> verticalTraversalDFS(Node *root)
     }
     return verticalOrder;
 }
+// ---------------------------
+void verticalTraversalGFG(Node *root, map<int, map<int, vector<int>>> &visited, int row, int column)
+{
+    if (root == nullptr)
+        return;
+    visited[column][row].push_back(root->data);
+    verticalTraversalGFG(root->left, visited, row + 1, column - 1);
+    verticalTraversalGFG(root->right, visited, row + 1, column + 1);
+}
+vector<int> verticalTraversalGFG(Node *root)
+{
+    map<int, map<int, vector<int>>> visited;
+    verticalTraversalGFG(root, visited, 0, 0);
+    vector<int> verticalOrder;
+    for (auto item : visited)
+    {
+        for (auto data : item.second)
+        {
+            verticalOrder.insert(verticalOrder.end(), data.second.begin(), data.second.end());
+        }
+    }
+    return verticalOrder;
+}
 int main()
 {
     cout << string(30, '-') << endl;
@@ -488,7 +511,7 @@ int main()
     root->right = new Node(30);
     root->right->left = new Node(90);
     root->right->right = new Node(100);
-    vector<int> result = verticalTraversalDFS(root);
+    vector<int> result = verticalTraversalGFG(root);
     for (auto item : result)
     {
         cout << item << ", ";
