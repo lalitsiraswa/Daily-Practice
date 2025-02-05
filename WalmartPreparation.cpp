@@ -624,6 +624,60 @@ ListNode *reverseList(ListNode *head)
     }
     return head;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     ListNode *head = new ListNode(1);
+//     head->next = new ListNode(2);
+//     head->next->next = new ListNode(3);
+//     head->next->next->next = new ListNode(4);
+//     head->next->next->next->next = new ListNode(5);
+//     reverseList(head);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ Linked List Group Reverse ------------------------------------------------------------------------------
+ListNode *reverseKGroup(ListNode *head, int k)
+{
+    if (head->next == nullptr)
+        return head;
+    int listLength = 0;
+    ListNode *temp = head;
+    while (temp != nullptr)
+    {
+        listLength++;
+        temp = temp->next;
+    }
+    ListNode *newHead = nullptr;
+    ListNode *newPrevious = nullptr;
+    temp = head;
+    while (temp != nullptr)
+    {
+        ListNode *dummyHead = temp;
+        ListNode *previous = nullptr;
+        int count = 1;
+        while (count <= k && temp != nullptr)
+        {
+            ListNode *next = temp->next;
+            temp->next = previous;
+            previous = temp;
+            temp = next;
+            count++;
+        }
+        if (newHead == nullptr)
+        {
+            newHead = previous;
+            newPrevious = dummyHead;
+        }
+        else
+        {
+            newPrevious->next = previous;
+            newPrevious = dummyHead;
+        }
+    }
+    return newHead;
+}
 int main()
 {
     cout << string(30, '-') << endl;
@@ -632,7 +686,8 @@ int main()
     head->next->next = new ListNode(3);
     head->next->next->next = new ListNode(4);
     head->next->next->next->next = new ListNode(5);
-    reverseList(head);
+    head->next->next->next->next->next = new ListNode(6);
+    reverseKGroup(head, 3);
     cout << endl
          << string(30, '-') << endl;
     return 1;
