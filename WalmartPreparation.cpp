@@ -602,11 +602,37 @@ int longestConsecutive(vector<int> &arr)
     }
     return maxLength;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {1, 9, 3, 10, 4, 20, 2};
+//     cout << longestConsecutive(arr);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ Reverse a linked list ------------------------------------------------------------------------------
+ListNode *reverseList(ListNode *head)
+{
+    ListNode *current = head;
+    while (current != nullptr && current->next != nullptr)
+    {
+        ListNode *next = current->next;
+        current->next = next->next;
+        next->next = head;
+        head = next;
+    }
+    return head;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr = {1, 9, 3, 10, 4, 20, 2};
-    cout << longestConsecutive(arr);
+    ListNode *head = new ListNode(1);
+    head->next = new ListNode(2);
+    head->next->next = new ListNode(3);
+    head->next->next->next = new ListNode(4);
+    head->next->next->next->next = new ListNode(5);
+    reverseList(head);
     cout << endl
          << string(30, '-') << endl;
     return 1;
