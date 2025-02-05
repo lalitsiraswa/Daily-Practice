@@ -9,6 +9,13 @@ struct Node
     Node(int data) : data(data), left(nullptr), right(nullptr) {};
 };
 
+struct ListNode
+{
+    int data;
+    ListNode *next;
+    ListNode(int data) : data(data), next(nullptr) {};
+};
+
 // https://www.geeksforgeeks.org/explore?page=1&company=Walmart&sortBy=submissions&itm_source=geeksforgeeks&itm_medium=main_header&itm_campaign=practice_header
 // ------------------------------------------------------------------------ Kadane's Algorithm ------------------------------------------------------------------------------
 int maxSubarraySum(vector<int> &arr)
@@ -205,15 +212,85 @@ bool isBST(Node *root)
 {
     return isBST(root, nullptr, nullptr);
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     Node *root = new Node(10);
+//     root->left = new Node(5);
+//     root->right = new Node(20);
+//     root->right->left = new Node(9);
+//     root->right->right = new Node(25);
+//     cout << isBST(root);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ Remove loop in Linked List ------------------------------------------------------------------------------
+void removeLoop(ListNode *head)
+{
+    unordered_map<ListNode *, int> isVisited;
+    ListNode *previous = nullptr;
+    ListNode *current = head;
+    while (current != nullptr)
+    {
+        if (isVisited.count(current))
+        {
+            previous->next = nullptr;
+            return;
+        }
+        isVisited[current] = 1;
+        previous = current;
+        current = current->next;
+    }
+}
+// -----------------------------
+void removeLoop(ListNode *head)
+{
+    // Same problem like : find the entry point in the loop in given linked list:
+    // Optimised Approach : 2 steps
+    /* 1. Find the entry point of the loop in the list
+       2. now just update the prev node of entry point*/
+
+    // taking three pointers to traverse on the list:
+    ListNode *fast = head;
+    ListNode *slow = head;
+
+    // this node would point to the previous node of the slow:
+    ListNode *prev = nullptr;
+    // keep updating until you get the loop or the list finishes:
+    while (fast != nullptr && fast->next != nullptr)
+    {
+        // updating the fast by two places:
+        fast = fast->next->next;
+        // updating the prev pointer as the prev node of slow pointer:
+        prev = slow;
+        // updating the slow pointer by one move:
+        slow = slow->next;
+        // if fast and slow becomes equal, that means, you got the loop:
+        if (fast == slow)
+        {
+            ListNode *start = head;
+            // keep moving by one place until start and slow does not become equal:
+            while (start != slow)
+            {
+                prev = slow;
+                slow = slow->next;
+                start = start->next;
+            }
+            // at the moment they become equal, then make the next pointer of prev of slow as null:
+            prev->next = nullptr;
+            return;
+        }
+    }
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    Node *root = new Node(10);
-    root->left = new Node(5);
-    root->right = new Node(20);
-    root->right->left = new Node(9);
-    root->right->right = new Node(25);
-    cout << isBST(root);
+    ListNode *head = new ListNode(1);
+    head->next = new ListNode(3);
+    head->next->next = new ListNode(4);
+    head->next->next->next = head->next;
+    removeLoop(head);
     cout << endl
          << string(30, '-') << endl;
     return 1;
