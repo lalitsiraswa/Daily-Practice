@@ -1,6 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+struct Node
+{
+    int data;
+    Node *left;
+    Node *right;
+    Node(int data) : data(data), left(nullptr), right(nullptr) {};
+};
+
 // https://www.geeksforgeeks.org/explore?page=1&company=Walmart&sortBy=submissions&itm_source=geeksforgeeks&itm_medium=main_header&itm_campaign=practice_header
 // ------------------------------------------------------------------------ Kadane's Algorithm ------------------------------------------------------------------------------
 int maxSubarraySum(vector<int> &arr)
@@ -171,11 +179,41 @@ bool isParenthesisBalanced(string &s)
     }
     return stk.empty();
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     string s = "[{()}]";
+//     cout << isParenthesisBalanced(s);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ Check for BST ------------------------------------------------------------------------------
+bool isBST(Node *root, Node *minNode, Node *maxNode)
+{
+    if (root == nullptr)
+    {
+        return true;
+    }
+    if ((minNode && root->data <= minNode->data) || (maxNode && root->data >= maxNode->data))
+    {
+        return false;
+    }
+    return isBST(root->left, minNode, root) && isBST(root->right, root, maxNode);
+}
+bool isBST(Node *root)
+{
+    return isBST(root, nullptr, nullptr);
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    string s = "[{()}]";
-    cout << isParenthesisBalanced(s);
+    Node *root = new Node(10);
+    root->left = new Node(5);
+    root->right = new Node(20);
+    root->right->left = new Node(9);
+    root->right->right = new Node(25);
+    cout << isBST(root);
     cout << endl
          << string(30, '-') << endl;
     return 1;
