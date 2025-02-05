@@ -560,21 +560,53 @@ vector<int> zigZagTraversal(Node *root)
     }
     return zigZagTraversal;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     Node *root = new Node(10);
+//     root->left = new Node(20);
+//     root->left->left = new Node(40);
+//     root->left->right = new Node(60);
+//     root->right = new Node(30);
+//     root->right->left = new Node(90);
+//     root->right->right = new Node(100);
+//     vector<int> result = zigZagTraversal(root);
+//     for (auto item : result)
+//     {
+//         cout << item << ", ";
+//     }
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 1;
+// }
+// ------------------------------------------------------------------------ Longest Consecutive Subsequence ------------------------------------------------------------------------------
+int longestConsecutive(vector<int> &arr)
+{
+    int n = arr.size();
+    unordered_map<int, int> visited;
+    int maxLength = INT_MIN;
+    for (int i = 0; i < n; i++)
+    {
+        visited[arr[i]] = 1;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        int currentLength = 0;
+        int value = arr[i];
+        while (visited.find(value) != visited.end())
+        {
+            currentLength += 1;
+            value -= 1;
+        }
+        maxLength = max(maxLength, currentLength);
+    }
+    return maxLength;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    Node *root = new Node(10);
-    root->left = new Node(20);
-    root->left->left = new Node(40);
-    root->left->right = new Node(60);
-    root->right = new Node(30);
-    root->right->left = new Node(90);
-    root->right->right = new Node(100);
-    vector<int> result = zigZagTraversal(root);
-    for (auto item : result)
-    {
-        cout << item << ", ";
-    }
+    vector<int> arr = {1, 9, 3, 10, 4, 20, 2};
+    cout << longestConsecutive(arr);
     cout << endl
          << string(30, '-') << endl;
     return 1;
