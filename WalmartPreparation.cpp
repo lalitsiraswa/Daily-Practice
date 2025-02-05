@@ -89,7 +89,7 @@ int minJumpsGreedy(vector<int> &arr)
             minJumps += 1;
             currentEnd = currentFarthest;
         }
-        if (currentEnd > n - 1)
+        if (currentEnd >= n - 1)
         {
             break;
         }
