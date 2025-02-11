@@ -1,0 +1,73 @@
+Public int[] distribute(int[] orders, int supply)
+
+orders = [10, 20, 30]
+supply = 6
+
+result = [0, 0, 0];
+
+map<requiredQuantity, served> served;// 
+
+
+map<int, int> served;
+priority_queue<int, int>
+for(int i = 0; i < orders.size(); i++){
+    served[orders[i]] = 0;
+}
+
+[
+    10 : 0,
+    20 : 0,
+    30 : 0,
+]
+
+//----------------
+
+// 
+int count = supply;
+for(auto item : served){
+    served[item.key] += 1;
+    count -= 1;
+}
+
+
+// - supply : 3
+int assignOuantiy  = 1;
+while(true){
+    assignOuantiy += 1; // 2
+    for(auto item : served && assignOuantiy != 0){
+        served[item.key] += assignOuantiy;
+        assignOuantiy -= 1;
+    }
+}
+
+[10, 20, 30]
+{
+    10 : 0,
+
+}
+[
+    30 : 3,
+    20 : 2,
+    10 : 1,
+]
+
+// ------------------------------
+1 -> 2 -> 2 -> 3 -> null
+1 -> 1 -> null
+1 -> null
+current = head;
+while(current != null && current->next != null){
+    next = current->next;
+    if(current->data == next->data){
+        temp = next;
+        current->next = next->next;
+        delete temp;
+    }
+    else{
+        current = current->next;
+    }
+}
+return head;
+// ---------------------------------------------
+
+
