@@ -968,6 +968,92 @@ int sumSubarrayMinsTuf(vector<int> &arr)
     }
     return totalMinElementSum;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {3, 1, 2, 4};
+//     cout << sumSubarrayMinsTuf(arr);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 1;
+// }
+// --------------------------------------------------------------------------------- 146. LRU Cache ---------------------------------------------------------------------------------------
+class DLinkedNode
+{
+public:
+    int key, value;
+    DLinkedNode *previous;
+    DLinkedNode *next;
+    DLinkedNode() : key(0), value(0), previous(nullptr), next(nullptr) {};
+    DLinkedNode(int key, int value) : key(key), value(value), previous(nullptr), next(nullptr) {};
+};
+class LRUCache
+{
+public:
+    DLinkedNode *head, *tail, *helper;
+    unordered_map<int, DLinkedNode *> container;
+    int capacity;
+    LRUCache(int capacity)
+    {
+        this->capacity = capacity;
+        head = new DLinkedNode();
+        tail = new DLinkedNode();
+        head->next = tail;
+        tail->previous = head;
+    }
+
+    int get(int key)
+    {
+        if (container.count(key))
+        {
+            helper = container.at(key);
+            helper->previous->next = helper->next;
+            helper->next->previous = helper->previous;
+            DLinkedNode *temp = head->next;
+            head->next = helper;
+            helper->previous = head;
+            helper->next = temp;
+            temp->previous = helper;
+            return helper->value;
+        }
+        return -1;
+    }
+
+    void put(int key, int value)
+    {
+        if (!container.count(key))
+        {
+            if (container.size() == capacity)
+            {
+                DLinkedNode *temp = tail->previous;
+                helper = temp->previous;
+                helper->next = tail;
+                tail->previous = helper;
+                container.erase(temp->key);
+                delete temp;
+            }
+            DLinkedNode *newNode = new DLinkedNode(key, value);
+            helper = head->next;
+            head->next = newNode;
+            newNode->previous = head;
+            newNode->next = helper;
+            helper->previous = newNode;
+            container.insert(pair<int, DLinkedNode *>(key, newNode));
+        }
+        else
+        {
+            helper = container.at(key);
+            helper->value = value;
+            helper->previous->next = helper->next;
+            helper->next->previous = helper->previous;
+            DLinkedNode *temp = head->next;
+            head->next = helper;
+            helper->previous = head;
+            helper->next = temp;
+            temp->previous = helper;
+        }
+    }
+};
 int main()
 {
     cout << string(30, '-') << endl;
