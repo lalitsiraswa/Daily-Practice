@@ -1054,11 +1054,120 @@ public:
         }
     }
 };
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> arr = {3, 1, 2, 4};
+//     cout << sumSubarrayMinsTuf(arr);
+//     cout << endl
+//          << string(30, '-') << endl;
+//     return 1;
+// }
+// --------------------------------------------------------------------------------- 735. Asteroid Collision ---------------------------------------------------------------------------------------
+// -1000 <= asteroids[i] <= 1000
+vector<int> asteroidCollision(vector<int> &asteroids)
+{
+    int n = asteroids.size();
+    for (int i = 1; i < n; i++)
+    {
+        if (asteroids[i] < 0)
+        {
+            int absElement = abs(asteroids[i]);
+            for (int j = i - 1; j >= 0; j--)
+            {
+                if (asteroids[j] != 1e9 && asteroids[j] >= 0)
+                {
+                    if (asteroids[j] < absElement)
+                    {
+                        asteroids[j] = 1e9;
+                    }
+                    else if (absElement < asteroids[j])
+                    {
+                        asteroids[i] = 1e9;
+                        break;
+                    }
+                    else
+                    {
+                        asteroids[i] = 1e9;
+                        asteroids[j] = 1e9;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    vector<int> result;
+    for (auto item : asteroids)
+    {
+        if (item != 1e9)
+        {
+            result.push_back(item);
+        }
+    }
+    return result;
+}
+// ----------------------------
+vector<int> asteroidCollisionTuf(vector<int> &asteroids)
+{
+    int n = asteroids.size();
+    stack<int> stk;
+    for (int i = 0; i < n; i++)
+    {
+        if (asteroids[i] > 0)
+        {
+            stk.push(asteroids[i]);
+        }
+        else
+        {
+            int absElement = abs(asteroids[i]);
+            bool flag = true;
+            while (!stk.empty())
+            {
+                int top = stk.top();
+                if (top < 0)
+                {
+                    stk.push(asteroids[i]);
+                    break;
+                }
+                if (top < absElement)
+                {
+                    stk.pop();
+                }
+                else if (top == absElement)
+                {
+                    stk.pop();
+                    flag = false;
+                    break;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            if (flag && stk.empty())
+            {
+                stk.push(asteroids[i]);
+            }
+        }
+    }
+    n = stk.size();
+    vector<int> result(n);
+    while (!stk.empty())
+    {
+        result[--n] = stk.top();
+        stk.pop();
+    }
+    return result;
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> arr = {3, 1, 2, 4};
-    cout << sumSubarrayMinsTuf(arr);
+    vector<int> asteroids = {8, -8};
+    vector<int> result = asteroidCollisionTuf(asteroids);
+    for (auto item : result)
+    {
+        cout << item << ", ";
+    }
     cout << endl
          << string(30, '-') << endl;
     return 1;
