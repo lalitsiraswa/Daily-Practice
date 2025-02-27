@@ -94,8 +94,8 @@ int numOfSubarrays(vector<int> &arr)
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {1, 2, 3};
-    cout << subarraySum(nums, 3);
+    vector<int> nums = {3, 2, 4, 1, 2, 5};
+    cout << numOfSubarrays(nums);
     cout << endl
          << string(30, '-') << endl;
     return 1;
