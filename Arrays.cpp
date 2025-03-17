@@ -2374,14 +2374,82 @@ vector<int> majorityElementRevisionTuf(vector<int> &nums)
     // sort(ls.begin(), ls.end()); //TC --> O(2*log2) ~ O(1);
     return result;
 }
+// int main()
+// {
+//     cout << string(30, '-') << endl;
+//     vector<int> nums = {1, 2};
+//     vector<int> result = majorityElementRevisionTuf(nums);
+//     for (auto item : result)
+//     {
+//         cout << item << ", ";
+//     }
+//     cout << endl
+//          << string(30, '-');
+// }
+// ------------------------------------------------------------------------ 73. Set Matrix Zeroes Revision ------------------------------------------------------------------------------------
+void setZeroes_revision(vector<vector<int>> &matrix)
+{
+    int m = matrix.size();
+    int n = matrix[0].size();
+    int col_0 = 1;
+    for (int row = 0; row < m; row++)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            if (matrix[row][column] == 0)
+            {
+                matrix[row][0] = 0;
+                if (column == 0)
+                {
+                    col_0 = 0;
+                }
+                else
+                {
+                    matrix[0][column] = 0;
+                }
+            }
+        }
+    }
+    for (int row = 1; row < m; row++)
+    {
+        for (int column = 1; column < n; column++)
+        {
+            if (matrix[row][column] != 0)
+            {
+                if (matrix[row][0] == 0 || matrix[0][column] == 0)
+                {
+                    matrix[row][column] = 0;
+                }
+            }
+        }
+    }
+    if (matrix[0][0] == 0)
+    {
+        for (int column = 0; column < n; column++)
+        {
+            matrix[0][column] = 0;
+        }
+    }
+    if (col_0 == 0)
+    {
+        for (int row = 0; row < m; row++)
+        {
+            matrix[row][0] = 0;
+        }
+    }
+}
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {1, 2};
-    vector<int> result = majorityElementRevisionTuf(nums);
-    for (auto item : result)
+    vector<vector<int>> matrix = {{1, 1, 1, 1}, {1, 0, 1, 1}, {1, 1, 0, 1}, {0, 1, 1, 1}};
+    setZeroes_revision(matrix);
+    for (auto row : matrix)
     {
-        cout << item << ", ";
+        for (auto item : row)
+        {
+            cout << item << " ";
+        }
+        cout << endl;
     }
     cout << endl
          << string(30, '-');
