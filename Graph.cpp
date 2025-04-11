@@ -243,6 +243,41 @@ bool isCycleDFS(int V, vector<int> *adjacencyList)
     }
     return false;
 }
+// ------------------------------------
+bool isCycle(int V, vector<vector<int>> &edges)
+{
+    vector<vector<int>> adjacencyList(V);
+    for (auto edge : edges)
+    {
+        adjacencyList[edge[0]].push_back(edge[1]);
+        adjacencyList[edge[1]].push_back(edge[0]);
+    }
+    vector<int> isVisited(V, 0);
+    for (int i = 0; i < V; i++)
+    {
+        if (!isVisited[i])
+        {
+            if (DFS(i, -1, adjacencyList, isVisited))
+                return true;
+        }
+    }
+    return false;
+}
+bool DFS(int source, int parent, vector<vector<int>> &adjacencyList, vector<int> &isVisited)
+{
+    isVisited[source] = 1;
+    for (int neighbour : adjacencyList[source])
+    {
+        if (!isVisited[neighbour])
+        {
+            if (DFS(neighbour, source, adjacencyList, isVisited))
+                return true;
+        }
+        else if (neighbour != parent)
+            return true;
+    }
+    return false;
+}
 // int main()
 // {
 //     cout << string(35, '-') << endl;
