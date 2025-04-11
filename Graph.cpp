@@ -246,30 +246,40 @@ bool isCycleDirectedGraph(int V, vector<int> *adjacencyList)
     return false;
 }
 // ------------- GFG ---------------
-bool isCyclic(int V, vector<vector<int>> &edges) {
+bool isCyclic(int V, vector<vector<int>> &edges)
+{
     vector<vector<int>> adj(V);
-    for (auto& edge : edges) {
+    for (auto &edge : edges)
+    {
         adj[edge[0]].push_back(edge[1]);
     }
     vector<bool> visited(V, false);
     vector<bool> path(V, false);
 
-    for (int i = 0; i < V; ++i) {
-        if (dfs(i, visited, path, adj)) {
+    for (int i = 0; i < V; ++i)
+    {
+        if (dfs(i, visited, path, adj))
+        {
             return true;
         }
     }
     return false;
 }
-bool dfs(int s, vector<bool>& visited, vector<bool>& path, vector<vector<int>>& adj) {
+bool dfs(int s, vector<bool> &visited, vector<bool> &path, vector<vector<int>> &adj)
+{
     visited[s] = true;
     path[s] = true;
 
-    for (int neighbor : adj[s]) {
-        if (path[neighbor]) {
+    for (int neighbor : adj[s])
+    {
+        if (path[neighbor])
+        {
             return true;
-        } else if (!visited[neighbor]) {
-            if (dfs(neighbor, visited, path, adj)) {
+        }
+        else if (!visited[neighbor])
+        {
+            if (dfs(neighbor, visited, path, adj))
+            {
                 return true;
             }
         }
