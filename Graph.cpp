@@ -122,6 +122,50 @@ bool BFS(vector<int> *adjacencyList)
     return true;
 }
 // ------------------------------------
+bool isCycle(int V, vector<vector<int>> &edges)
+{
+    vector<vector<int>> adjacencyList(V);
+    for (auto edge : edges)
+    {
+        adjacencyList[edge[0]].push_back(edge[1]);
+        adjacencyList[edge[1]].push_back(edge[0]);
+    }
+    vector<int> isVisited(V, 0);
+    for (int i = 0; i < V; i++)
+    {
+        if (!isVisited[i])
+        {
+            if (detectCycle(i, adjacencyList, isVisited))
+                return true;
+        }
+    }
+    return false;
+}
+bool detectCycle(int source, vector<vector<int>> &adjacencyList, vector<int> &isVisited)
+{
+    isVisited[source] = 1;
+    queue<pair<int, int>> q;
+    q.push({source, -1});
+    while (!q.empty())
+    {
+        int node = q.front().first;
+        int parent = q.front().second;
+        q.pop();
+        for (int neighbour : adjacencyList[node])
+        {
+            if (!isVisited[neighbour])
+            {
+                isVisited[neighbour] = 1;
+                q.push({neighbour,
+                        node});
+            }
+            else if (parent != neighbour)
+                return true;
+        }
+    }
+    return false;
+}
+// ------------------------------------
 bool detectCycle(int source, vector<int> *adjacencyList, int *isVisited)
 {
     isVisited[source] = 1;
