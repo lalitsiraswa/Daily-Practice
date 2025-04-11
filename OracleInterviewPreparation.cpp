@@ -1,35 +1,46 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// -------------------------------------------------------------  -------------------------------------------------------------------
-int binarysearch(vector<int> &arr, int k)
+class Node
 {
-    int low = 0;
-    int high = arr.size() - 1;
-    while (low <= high)
+public:
+    int data;
+    Node *next;
+    Node() : data(0), next(nullptr) {};
+    Node(int data) : data(data), next(nullptr) {};
+};
+
+void removeLoop(Node *head)
+{
+    Node *slow = head, *fast = head;
+    bool hasCycle = false;
+    while (fast != nullptr && fast->next != nullptr)
     {
-        int mid = (low + high) / 2;
-        int element = arr.at(mid);
-        if (element == k)
+        slow = slow->next;
+        fast = fast->next->next;
+        if (slow == fast)
         {
-            return mid;
-        }
-        else if (element < k)
-        {
-            low = mid + 1;
-        }
-        else
-        {
-            high = mid - 1;
+            break;
+            hasCycle = true;
         }
     }
-    return -1;
+    if (hasCycle)
+    {
+        Node *temp = head;
+        Node *prev = slow;
+        while (1)
+        {
+            if (temp == slow)
+            {
+                prev->next = nullptr;
+                return;
+            }
+        }
+    }
 }
 int main()
 {
     cout << string(30, '-') << endl;
-    vector<int> nums = {1, 1, 1, 2, 2, 2, 3, 3, 3};
-    cout << binarysearch(nums, 7) << endl;
     cout << endl
          << string(30, '-');
 }
